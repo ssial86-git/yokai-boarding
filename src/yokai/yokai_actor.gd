@@ -41,6 +41,35 @@ func setup(id: String, texture: Texture2D, walk_speed: float, bob_px: float, bob
 	add_child(_sprite)
 
 
+## '또렷함' (어둑이): 스프라이트 투명도.
+func set_clarity(alpha: float) -> void:
+	if _sprite != null:
+		_sprite.modulate.a = clampf(alpha, 0.0, 1.0)
+
+
+func get_clarity() -> float:
+	return _sprite.modulate.a if _sprite != null else 1.0
+
+
+## 밤 등불지기 연출: 요괴 주변 빛. energy 0 이면 끈다.
+func set_glow(energy: float, radius_px: int, color: Color, texture: Texture2D) -> void:
+	var light := get_node_or_null("Glow") as PointLight2D
+	if energy <= 0.0:
+		if light != null:
+			light.queue_free()
+		return
+	if light == null:
+		light = PointLight2D.new()
+		light.name = "Glow"
+		light.texture = texture
+		light.blend_mode = Light2D.BLEND_MODE_ADD
+		add_child(light)
+	light.energy = energy
+	light.color = color
+	light.texture_scale = float(radius_px * 2) / float(texture.get_width()) if texture != null else 1.0
+	light.position = Vector2(0, -(_sprite.texture.get_height() * 0.5 if _sprite != null and _sprite.texture != null else 0.0))
+
+
 func place_at(cell: Vector2i, slot: int, then_state: State) -> void:
 	current_cell = cell
 	target_cell = cell

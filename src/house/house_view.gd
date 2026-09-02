@@ -81,6 +81,11 @@ func get_cell_count() -> int:
 	return _sprites.size()
 
 
+## 등불·요괴 빛이 공유하는 방사형 그라디언트.
+func lantern_texture() -> Texture2D:
+	return _lantern_texture
+
+
 # --- 갱신 ---
 
 func rebuild() -> void:

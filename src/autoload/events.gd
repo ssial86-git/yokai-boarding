@@ -43,7 +43,13 @@ signal weather_changed(weather: String)
 ## rent 는 {"money": int, "items": {id: n}, "condition_bonus": int, "mishap_money": int, "mishap_texts": [String], "departed": [Dictionary]}
 signal rent_settled(rent: Dictionary)
 signal dialogue_started(event_id: String)
+## 대사 노드가 화면에 나올 때마다 (효과음·연출용)
+signal dialogue_node_shown(event_id: String, speaker: String)
 signal dialogue_finished(event_id: String)
+## 성주 영감 안내 문구. 빈 문자열이면 안내 없음.
+signal hint_changed(text: String)
+## HUD 메시지 로그 한 줄. 시스템들이 사람용 문장을 보낼 때 쓴다.
+signal message_posted(text: String)
 signal quest_completed(quest_id: String)
 
 # --- 세이브 ---

@@ -77,6 +77,7 @@ func _enter(node: DialogueGraph.DialogueNode) -> void:
 	for effect in node.effects:
 		_apply_effect(effect)
 	node_entered.emit(node, current_event)
+	Events.dialogue_node_shown.emit(current_event.id, node.speaker)
 
 
 func _finish() -> void:

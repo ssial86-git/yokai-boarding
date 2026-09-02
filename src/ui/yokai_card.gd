@@ -40,6 +40,9 @@ func refresh() -> void:
 	if yokai == null:
 		return
 	_name_label.text = yokai.name_ko
+	var tuning := DataRegistry.tuning
+	_icon.modulate.a = Clarity.alpha_for(yokai, int(GameState.affinity.get(yokai_id, 0)),
+		tuning.get_float("clarity_alpha_min"), tuning.get_int("clarity_affinity_max"))
 	var cell := GameState.assignment.get_cell(yokai_id)
 	var place := DataRegistry.text("card_rest") if cell == Assignment.REST \
 		else DataRegistry.room_name(GameState.room_grid.get_room_id(cell))

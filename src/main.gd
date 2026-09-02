@@ -7,28 +7,39 @@ extends Node2D
 ##  ├ DayCycle               날씨, 저녁 정산(산출·하숙비·체크아웃), 배치 무효화 정리
 ##  ├ StorySystem            사연·튜토리얼 이벤트 진행
 ##  ├ IntakeSystem           저녁 방문자 추첨·심사 결정
+##  ├ TutorialSystem         첫 행동 플래그 + 성주 영감 안내 문구
+##  ├ AudioSystem            효과음·빗소리
 ##  ├ World (Node2D)
 ##  │   ├ HouseView          단면 렌더링 (RoomGrid 구독)
-##  │   ├ YokaiManager       요괴·손님 액터 스폰·이동 지시
+##  │   ├ YokaiManager       요괴·손님 액터 스폰·이동·또렷함·등불
 ##  │   ├ Lighting           CanvasModulate 페이즈 색조
 ##  │   └ Camera             줌·드래그·클릭 판정
 ##  └ UI (CanvasLayer)
 ##      ├ DropLayer          방 위에 카드 놓기 (투명)
-##      ├ DebugHud
+##      ├ Hud                상단 바·안내·창고
+##      ├ MessageLog         왼쪽 아래 메시지
 ##      ├ AssignmentPanel    아침 배치 카드
 ##      ├ BuildMenu
 ##      ├ LedgerPanel        손님 명부
+##      ├ RosterPanel        하숙부
 ##      ├ IntakePanel        심사 카드
-##      └ DialogueBox        대화창 (맨 위)
+##      ├ DialogueBox        대화창
+##      └ DebugOverlay       F1 (디버그 빌드 전용)
+
+const MESSAGE_LOG_MARGIN_PX := 4.0
 
 var house_controller: HouseController
 var assignment_controller: AssignmentController
 var day_cycle: DayCycle
 var story_system: StorySystem
 var intake_system: IntakeSystem
+var tutorial_system: TutorialSystem
+var audio_system: AudioSystem
 var house_view: HouseView
 var yokai_manager: YokaiManager
 var camera: HouseCamera
+var hud: Hud
+var message_log: MessageLog
 var build_menu: BuildMenu
 var assignment_panel: AssignmentPanel
 var dialogue_box: DialogueBox
@@ -55,6 +66,12 @@ func _ready() -> void:
 	intake_system.name = "IntakeSystem"
 	intake_system.is_dialogue_busy = story_system.is_busy
 	add_child(intake_system)
+	tutorial_system = TutorialSystem.new()
+	tutorial_system.name = "TutorialSystem"
+	add_child(tutorial_system)
+	audio_system = AudioSystem.new()
+	audio_system.name = "AudioSystem"
+	add_child(audio_system)
 
 	_build_world()
 	_build_ui()
@@ -64,6 +81,7 @@ func _ready() -> void:
 
 	Clock.start_day()
 	Events.game_started.emit()
+	tutorial_system.refresh(true)
 
 
 func _build_world() -> void:
@@ -108,19 +126,26 @@ func _build_ui() -> void:
 
 	var ledger_panel := LedgerPanel.new()
 	ledger_panel.name = "LedgerPanel"
+	var roster_panel := RosterPanel.new()
+	roster_panel.name = "RosterPanel"
 
-	var hud := DebugHud.new()
-	hud.name = "DebugHud"
+	hud = Hud.new()
+	hud.name = "Hud"
 	hud.ledger_panel = ledger_panel
+	hud.roster_panel = roster_panel
 	ui.add_child(hud)
+
+	message_log = MessageLog.new()
+	message_log.name = "MessageLog"
+	ui.add_child(message_log)
 
 	assignment_panel = AssignmentPanel.new()
 	assignment_panel.name = "AssignmentPanel"
 	assignment_panel.controller = assignment_controller
 	ui.add_child(assignment_panel)
-	# 아래 패널이 집을 가리지 않도록 카메라를 패널 높이의 절반만큼 위로 민다
-	assignment_panel.resized.connect(func() -> void:
-		camera.offset = Vector2(0, assignment_panel.size.y * 0.5))
+	# 위 바와 아래 패널 사이에 집이 오도록 카메라를 밀고, 메시지 로그는 패널 바로 위에 붙인다
+	assignment_panel.resized.connect(_layout_around_panels)
+	hud.resized.connect(_layout_around_panels)
 
 	build_menu = BuildMenu.new()
 	build_menu.name = "BuildMenu"
@@ -128,6 +153,7 @@ func _build_ui() -> void:
 	ui.add_child(build_menu)
 
 	ui.add_child(ledger_panel)
+	ui.add_child(roster_panel)
 
 	intake_panel = IntakePanel.new()
 	intake_panel.name = "IntakePanel"
@@ -138,6 +164,20 @@ func _build_ui() -> void:
 	dialogue_box.name = "DialogueBox"
 	dialogue_box.story = story_system
 	ui.add_child(dialogue_box)
+
+	if OS.is_debug_build():
+		var debug_overlay := DebugOverlay.new()
+		debug_overlay.name = "DebugOverlay"
+		ui.add_child(debug_overlay)
+
+
+func _layout_around_panels() -> void:
+	var top := hud.bar_height()
+	var bottom := assignment_panel.size.y
+	camera.offset = Vector2(0, (bottom - top) * 0.5)
+	var view_size := get_viewport().get_visible_rect().size
+	message_log.position = Vector2(MESSAGE_LOG_MARGIN_PX, view_size.y - bottom - MESSAGE_LOG_MARGIN_PX)
+	message_log.grow_vertical = Control.GROW_DIRECTION_BEGIN
 
 
 ## 창 크기를 뷰포트(640x360)의 정수 배로 맞춘다. tuning window_integer_scale 이 0 이면 화면에 맞는 최대 배율.

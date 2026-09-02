@@ -30,7 +30,30 @@ func _ready() -> void:
 	Events.guests_changed.connect(respawn)
 	Events.room_changed.connect(func(_coords: Vector2i, _room_id: String) -> void: dispatch_all(Clock.phase))
 	Events.floor_added.connect(func(_floor: int) -> void: dispatch_all(Clock.phase))
+	Events.affinity_changed.connect(func(yokai_id: String, _value: int) -> void: apply_presentation(yokai_id))
 	respawn()
+
+
+## 호감도에 따른 또렷함과 밤 등불지기 빛을 액터에 반영한다.
+func apply_presentation(yokai_id: String) -> void:
+	var actor := get_actor(yokai_id)
+	var yokai := DataRegistry.get_yokai(yokai_id)
+	if actor == null or yokai == null:
+		return
+	var tuning := DataRegistry.tuning
+	actor.set_clarity(Clarity.alpha_for(
+		yokai, int(GameState.affinity.get(yokai_id, 0)),
+		tuning.get_float("clarity_alpha_min"), tuning.get_int("clarity_affinity_max")))
+	var glow := 0.0
+	if yokai.night_worker and Clock.phase == Clock.Phase.NIGHT:
+		glow = tuning.get_float("night_worker_glow_energy")
+	actor.set_glow(glow, tuning.get_int("night_worker_glow_radius_px"),
+		Color.html(tuning.get_string("lantern_color")), house_view.lantern_texture())
+
+
+func apply_presentation_all() -> void:
+	for yokai_id in GameState.residents:
+		apply_presentation(yokai_id)
 
 
 func get_actor(yokai_id: String) -> YokaiActor:
@@ -73,10 +96,12 @@ func respawn() -> void:
 		slot += 1
 		guest_index += 1
 	dispatch_all(Clock.phase)
+	apply_presentation_all()
 
 
 ## 페이즈에 맞는 목적지로 전원 출발. 같은 칸을 향하는 요괴는 slot 으로 가로 위치를 나눈다.
 func dispatch_all(phase: int) -> void:
+	apply_presentation_all()
 	var grid := GameState.room_grid
 	var home := DaySettlement.rest_cell(grid)
 	var slots_used: Dictionary = {}  # cell -> count
