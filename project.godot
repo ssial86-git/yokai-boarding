@@ -40,13 +40,6 @@ enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
 
 settings/test/test_lookup_folder="test"
 
-[gui]
-
-theme/custom_font="res://assets/fonts/galmuri11.ttf"
-theme/default_font_antialiasing=0
-theme/default_font_hinting=0
-theme/default_font_subpixel_positioning=0
-
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

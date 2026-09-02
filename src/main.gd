@@ -49,16 +49,13 @@ func _ready() -> void:
 	ui.name = "UI"
 	add_child(ui)
 
-	var ui_theme := UiTheme.build()
 	var hud := DebugHud.new()
 	hud.name = "DebugHud"
-	hud.theme = ui_theme
 	ui.add_child(hud)
 
 	build_menu = BuildMenu.new()
 	build_menu.name = "BuildMenu"
 	build_menu.controller = house_controller
-	build_menu.theme = ui_theme
 	ui.add_child(build_menu)
 
 	camera.clicked.connect(_on_world_clicked)

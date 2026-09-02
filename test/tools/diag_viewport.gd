@@ -22,7 +22,4 @@ func _initialize() -> void:
 		print("[diag] font aa=", ff.antialiasing, " hinting=", ff.hinting, " subpixel=", ff.subpixel_positioning,
 			" oversampling=", ff.oversampling, " msdf=", ff.multichannel_signed_distance_field,
 			" fixed_size=", ff.fixed_size, " embedded_bitmaps_disabled=", ff.disable_embedded_bitmaps)
-	var hud := main.find_child("DebugHud", true, false) as Control
-	if hud != null and hud.theme != null:
-		print("[diag] ui theme font_size=", hud.theme.default_font_size, " font=", hud.theme.default_font)
 	quit(0)
