@@ -1,0 +1,121 @@
+class_name YokaiActor
+extends Node2D
+## 요괴 한 명의 화면 표현과 상태머신(이동 → 일 → 휴식). 규칙은 갖지 않는다.
+## 이동은 YokaiManager 가 넘겨준 칸 경로를 따라 직선으로 걷는다 (내비메시 없음).
+
+enum State { IDLE, WALKING, WORKING, RESTING }
+
+signal arrived(yokai_id: String, cell: Vector2i)
+
+var yokai_id: String = ""
+var current_cell: Vector2i = Vector2i.ZERO
+var target_cell: Vector2i = Vector2i.ZERO
+var slot_index: int = 0
+var state: State = State.IDLE
+
+## (cell: Vector2i, slot: int) -> Vector2 발 위치(월드). YokaiManager 가 넣는다.
+var anchor_for: Callable
+
+var _sprite: Sprite2D
+## 실수 위치. position 은 픽셀 스냅을 위해 여기서 반올림한 값만 받는다 (프레임당 이동량이 1px 미만이어도 누적되게).
+var _exact_position: Vector2 = Vector2.ZERO
+var _path: Array[Vector2i] = []
+var _state_after_arrival: State = State.IDLE
+var _walk_speed: float = 40.0
+var _bob_px: float = 2.0
+var _bob_seconds: float = 0.5
+var _time: float = 0.0
+
+
+func setup(id: String, texture: Texture2D, walk_speed: float, bob_px: float, bob_seconds: float) -> void:
+	yokai_id = id
+	name = "Yokai_%s" % id
+	_walk_speed = walk_speed
+	_bob_px = bob_px
+	_bob_seconds = bob_seconds
+	_sprite = Sprite2D.new()
+	_sprite.texture = texture
+	if texture != null:
+		# 발이 position 에 오도록 스프라이트를 위로 올린다
+		_sprite.position = Vector2(0, -texture.get_height() * 0.5)
+	add_child(_sprite)
+
+
+func place_at(cell: Vector2i, slot: int, then_state: State) -> void:
+	current_cell = cell
+	target_cell = cell
+	slot_index = slot
+	_path.clear()
+	_exact_position = _anchor(cell)
+	position = _exact_position
+	_set_state(then_state)
+
+
+## path 는 현재 칸을 포함한 칸 목록. 비어 있거나 한 칸이면 즉시 도착 처리.
+func walk_to(path: Array[Vector2i], slot: int, then_state: State) -> void:
+	slot_index = slot
+	_state_after_arrival = then_state
+	if path.size() <= 1:
+		var cell := path[0] if path.size() == 1 else current_cell
+		place_at(cell, slot, then_state)
+		arrived.emit(yokai_id, cell)
+		return
+	target_cell = path[path.size() - 1]
+	_path = path.duplicate()
+	_path.pop_front()  # 첫 칸은 지금 서 있는 칸
+	_set_state(State.WALKING)
+
+
+func _process(delta: float) -> void:
+	_time += delta
+	match state:
+		State.WALKING:
+			_step(delta)
+		State.WORKING:
+			if _sprite != null and _bob_seconds > 0.0:
+				var bob := absf(sin(_time * PI / _bob_seconds)) * _bob_px
+				_sprite.position.y = -_sprite.texture.get_height() * 0.5 - bob
+		_:
+			pass
+
+
+func _step(delta: float) -> void:
+	if _path.is_empty():
+		_finish_walk()
+		return
+	var next_cell: Vector2i = _path[0]
+	var goal := _anchor(next_cell)
+	var to_goal := goal - _exact_position
+	var step := _walk_speed * delta
+	if _sprite != null and absf(to_goal.x) > 0.5:
+		_sprite.flip_h = to_goal.x < 0.0
+	if to_goal.length() <= step:
+		_exact_position = goal
+		current_cell = next_cell
+		_path.pop_front()
+		if _path.is_empty():
+			_finish_walk()
+	else:
+		_exact_position += to_goal.normalized() * step
+	position = _exact_position.round()
+
+
+func _finish_walk() -> void:
+	current_cell = target_cell
+	_exact_position = _anchor(target_cell)
+	position = _exact_position
+	_set_state(_state_after_arrival)
+	arrived.emit(yokai_id, current_cell)
+
+
+func _set_state(new_state: State) -> void:
+	state = new_state
+	_time = 0.0
+	if _sprite != null and _sprite.texture != null:
+		_sprite.position.y = -_sprite.texture.get_height() * 0.5
+
+
+func _anchor(cell: Vector2i) -> Vector2:
+	if anchor_for.is_valid():
+		return (anchor_for.call(cell, slot_index) as Vector2).round()
+	return position

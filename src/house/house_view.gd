@@ -23,6 +23,12 @@ var _lantern_texture: GradientTexture2D
 var _lantern_scale: float = 1.0
 var _lantern_phases: Array[String] = []
 var _lanterns_enabled: bool = false
+## 드래그 중인 요괴 id. 비어 있지 않으면 칸마다 drop_check 결과로 색을 칠한다.
+var _drop_preview_id: String = ""
+## (yokai_id: String, cell: Vector2i) -> bool. main.gd 가 AssignmentController 에 연결한다.
+var drop_check: Callable
+var _drop_ok_color: Color = Color.GREEN
+var _drop_bad_color: Color = Color.RED
 
 
 func _ready() -> void:
@@ -34,6 +40,11 @@ func _ready() -> void:
 	_lantern_color = Color.html(tuning.get_string("lantern_color"))
 	for part: String in tuning.get_string("lantern_phases").split(","):
 		_lantern_phases.append(part.strip_edges())
+	var drop_alpha := tuning.get_float("drop_highlight_alpha")
+	_drop_ok_color = Color.html(tuning.get_string("drop_ok_color"))
+	_drop_ok_color.a = drop_alpha
+	_drop_bad_color = Color.html(tuning.get_string("drop_bad_color"))
+	_drop_bad_color.a = drop_alpha
 	_lantern_texture = _make_lantern_texture()
 	_lantern_scale = float(tuning.get_int("lantern_radius_px") * 2) / float(_lantern_texture.width)
 	_lanterns_enabled = _is_lantern_phase(Clock.phase)
@@ -93,6 +104,12 @@ func set_hover(world_pos: Vector2) -> void:
 		queue_redraw()
 
 
+func set_drop_preview(yokai_id: String) -> void:
+	if yokai_id != _drop_preview_id:
+		_drop_preview_id = yokai_id
+		queue_redraw()
+
+
 func _process(delta: float) -> void:
 	if _flash.is_empty():
 		return
@@ -117,6 +134,10 @@ func _draw() -> void:
 			draw_line(center + Vector2(-PLUS_HALF_SIZE, 0), center + Vector2(PLUS_HALF_SIZE, 0), locked_color)
 			draw_line(center + Vector2(0, -PLUS_HALF_SIZE), center + Vector2(0, PLUS_HALF_SIZE), locked_color)
 	draw_line(Vector2(0, 0), Vector2(g.columns * cell_size.x, 0), Color(1, 1, 1, LOCKED_OUTLINE_ALPHA))
+	if not _drop_preview_id.is_empty() and drop_check.is_valid():
+		for cell in g.get_built_cells():
+			var ok: bool = drop_check.call(_drop_preview_id, cell)
+			draw_rect(cell_rect(cell), _drop_ok_color if ok else _drop_bad_color)
 	if g.is_in_bounds(_hover_cell):
 		draw_rect(cell_rect(_hover_cell), Color(1, 1, 1, _hover_alpha))
 	for coords: Vector2i in _flash:

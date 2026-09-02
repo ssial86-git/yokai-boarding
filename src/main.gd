@@ -2,19 +2,28 @@ extends Node2D
 ## 메인 씬 루트. 씬 트리는 여기서 코드로 조립한다 (CLAUDE.md 5.2 — .tscn 은 이 루트 하나뿐).
 ##
 ## Main
-##  ├ HouseController        규칙 적용 + 돈 + Events
+##  ├ HouseController        방 규칙 적용 + 돈 + Events
+##  ├ AssignmentController   배치 규칙 적용 + Events
+##  ├ DayCycle               저녁 정산, 배치 무효화 정리
 ##  ├ World (Node2D)
 ##  │   ├ HouseView          단면 렌더링 (RoomGrid 구독)
+##  │   ├ YokaiManager       요괴 액터 스폰·이동 지시
 ##  │   ├ Lighting           CanvasModulate 페이즈 색조
 ##  │   └ Camera             줌·드래그·클릭 판정
 ##  └ UI (CanvasLayer)
+##      ├ DropLayer          방 위에 카드 놓기 (투명)
 ##      ├ DebugHud
+##      ├ AssignmentPanel    아침 배치 카드
 ##      └ BuildMenu
 
 var house_controller: HouseController
+var assignment_controller: AssignmentController
+var day_cycle: DayCycle
 var house_view: HouseView
+var yokai_manager: YokaiManager
 var camera: HouseCamera
 var build_menu: BuildMenu
+var assignment_panel: AssignmentPanel
 
 
 func _ready() -> void:
@@ -24,6 +33,12 @@ func _ready() -> void:
 	house_controller = HouseController.new()
 	house_controller.name = "HouseController"
 	add_child(house_controller)
+	assignment_controller = AssignmentController.new()
+	assignment_controller.name = "AssignmentController"
+	add_child(assignment_controller)
+	day_cycle = DayCycle.new()
+	day_cycle.name = "DayCycle"
+	add_child(day_cycle)
 
 	var world := Node2D.new()
 	world.name = "World"
@@ -31,7 +46,14 @@ func _ready() -> void:
 
 	house_view = HouseView.new()
 	house_view.name = "HouseView"
+	house_view.drop_check = func(yokai_id: String, cell: Vector2i) -> bool:
+		return assignment_controller.can_assign(yokai_id, cell) == AssignmentController.Outcome.OK
 	world.add_child(house_view)
+
+	yokai_manager = YokaiManager.new()
+	yokai_manager.name = "YokaiManager"
+	yokai_manager.house_view = house_view
+	world.add_child(yokai_manager)
 
 	var lighting := DayNightLighting.new()
 	lighting.name = "Lighting"
@@ -49,9 +71,23 @@ func _ready() -> void:
 	ui.name = "UI"
 	add_child(ui)
 
+	var drop_layer := DropLayer.new()
+	drop_layer.name = "DropLayer"
+	drop_layer.controller = assignment_controller
+	drop_layer.house_view = house_view
+	ui.add_child(drop_layer)
+
 	var hud := DebugHud.new()
 	hud.name = "DebugHud"
 	ui.add_child(hud)
+
+	assignment_panel = AssignmentPanel.new()
+	assignment_panel.name = "AssignmentPanel"
+	assignment_panel.controller = assignment_controller
+	ui.add_child(assignment_panel)
+	# 아래 패널이 집을 가리지 않도록 카메라를 패널 높이의 절반만큼 위로 민다
+	assignment_panel.resized.connect(func() -> void:
+		camera.offset = Vector2(0, assignment_panel.size.y * 0.5))
 
 	build_menu = BuildMenu.new()
 	build_menu.name = "BuildMenu"

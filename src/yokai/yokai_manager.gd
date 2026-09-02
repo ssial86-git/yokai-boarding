@@ -1,0 +1,89 @@
+class_name YokaiManager
+extends Node2D
+## 입주 하숙생마다 YokaiActor 를 만들고, 페이즈에 따라 일터/휴식처로 보낸다.
+## 낮(DAY)에는 배치된 칸으로 가서 일하고, 그 외 페이즈에는 휴식처(첫 객실)로 돌아온다.
+
+const SPRITE_PATH := "res://assets/art_generated/yokai_%s.png"
+
+## 칸 좌표 → 월드 사각형을 아는 뷰. main.gd 가 넣는다.
+var house_view: HouseView
+
+var _actors: Dictionary = {}  # yokai_id -> YokaiActor
+var _stair_column: int = 0
+var _slot_spacing: int = 12
+var _walk_speed: float = 40.0
+var _bob_px: float = 2.0
+var _bob_seconds: float = 0.5
+
+
+func _ready() -> void:
+	var tuning := DataRegistry.tuning
+	_stair_column = tuning.get_int("stair_column")
+	_slot_spacing = tuning.get_int("yokai_slot_spacing_px")
+	_walk_speed = tuning.get_float("yokai_walk_speed_px")
+	_bob_px = float(tuning.get_int("yokai_work_bob_px"))
+	_bob_seconds = tuning.get_float("yokai_work_bob_seconds")
+	Events.phase_changed.connect(func(phase: int, _day: int) -> void: dispatch_all(phase))
+	Events.game_loaded.connect(func(_slot: int) -> void: respawn())
+	Events.room_changed.connect(func(_coords: Vector2i, _room_id: String) -> void: dispatch_all(Clock.phase))
+	Events.floor_added.connect(func(_floor: int) -> void: dispatch_all(Clock.phase))
+	respawn()
+
+
+func get_actor(yokai_id: String) -> YokaiActor:
+	return _actors.get(yokai_id) as YokaiActor
+
+
+func actor_count() -> int:
+	return _actors.size()
+
+
+func respawn() -> void:
+	for actor: YokaiActor in _actors.values():
+		actor.queue_free()
+	_actors.clear()
+	var home := DaySettlement.rest_cell(GameState.room_grid)
+	var slot := 0
+	for yokai_id in GameState.residents:
+		var actor := YokaiActor.new()
+		var path := SPRITE_PATH % yokai_id
+		var texture: Texture2D = load(path) if ResourceLoader.exists(path) else null
+		actor.setup(yokai_id, texture, _walk_speed, _bob_px, _bob_seconds)
+		actor.anchor_for = _anchor_for
+		add_child(actor)
+		actor.place_at(home, slot, YokaiActor.State.RESTING)
+		_actors[yokai_id] = actor
+		slot += 1
+	dispatch_all(Clock.phase)
+
+
+## 페이즈에 맞는 목적지로 전원 출발. 같은 칸을 향하는 요괴는 slot 으로 가로 위치를 나눈다.
+func dispatch_all(phase: int) -> void:
+	var grid := GameState.room_grid
+	var home := DaySettlement.rest_cell(grid)
+	var slots_used: Dictionary = {}  # cell -> count
+	for yokai_id in GameState.residents:
+		var actor := get_actor(yokai_id)
+		if actor == null:
+			continue
+		var work_cell := GameState.assignment.get_cell(yokai_id)
+		var goes_to_work := phase == Clock.Phase.DAY and work_cell != Assignment.REST \
+			and grid.is_in_bounds(work_cell) and grid.is_floor_built(work_cell.y)
+		var target := work_cell if goes_to_work else home
+		var slot := int(slots_used.get(target, 0))
+		slots_used[target] = slot + 1
+		var then_state := YokaiActor.State.WORKING if goes_to_work else YokaiActor.State.RESTING
+		if actor.current_cell == target and actor.state != YokaiActor.State.WALKING:
+			actor.place_at(target, slot, then_state)
+			continue
+		var path := RoomGraph.find_path(grid, actor.current_cell, target, _stair_column)
+		if path.is_empty():
+			actor.place_at(target, slot, then_state)  # 닿을 수 없으면 순간이동 (그래프가 끊긴 비정상 상황)
+		else:
+			actor.walk_to(path, slot, then_state)
+
+
+func _anchor_for(cell: Vector2i, slot: int) -> Vector2:
+	var rect := house_view.cell_rect(cell)
+	var x := rect.position.x + rect.size.x * 0.5 + float(slot - 1) * _slot_spacing
+	return Vector2(x, rect.end.y)
