@@ -4,7 +4,10 @@ extends GdUnitTestSuite
 
 
 func test_registry_loaded_sample_rows() -> void:
-	assert_int(DataRegistry.yokai.size()).is_equal(3)
+	# 하숙생은 슬라이스 3명 + 파이프라인 검증용 데이터만 있는 행(Y04~)이 늘 수 있으므로 슬라이스 수만 고정한다
+	assert_int(DataRegistry.yokai.size()).is_greater_equal(3)
+	assert_int(DataRegistry.slice_yokai_ids().size()).is_equal(3)
+	assert_int(DataRegistry.starting_yokai_ids().size()).is_equal(2)
 	assert_int(DataRegistry.guest_species.size()).is_equal(4)
 	assert_int(DataRegistry.rooms.size()).is_equal(6)
 

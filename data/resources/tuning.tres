@@ -75,5 +75,6 @@ values = {
 "message_log_lines": 4,
 "message_fade_seconds": 4.0,
 "sfx_master_db": 0.0,
-"rest_zone_min_width_px": 96
+"rest_zone_min_width_px": 96,
+"playtest_log_enabled": true
 }

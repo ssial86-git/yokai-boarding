@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="YokaiData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/yokai_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "y04_bari"
+name_ko = "바리"
+species_ko = "새끼 강철이"
+preferred_room = "kitchen"
+work_bonus = 0.2
+noise = 1
+night_worker = false
+rent_type = "items"
+rent_note_ko = "비늘 1장(최고급 제작 재료)"
+rent_item = "scrap"
+rent_amount = 1
+rent_interval_days = 3
+join_mode = "intake"
+join_day = 0
+stat_strength = 3
+stat_skill = 1
+stat_sight = 2
+stat_courage = 4
+sprite_size = 32
+clarity_by_affinity = false
+in_slice = false

@@ -2,3 +2,4 @@ id,name_ko,species_ko,preferred_room,work_bonus,noise,night_worker,rent_type,ren
 y01_ttukttagi,뚝딱이,애기 도깨비,workshop,0.25,3,false,items,밤새 뚝딱 만든 잡동사니(랜덤 재료 상자),kind:material,1,1,start,0,4,2,1,3,32,false,true
 y02_eoduki,어둑이,어둑시니,gate,0.15,0,true,errand,그림자 심부름(밤 사이 방 정리·배달 대행 — 모두의 컨디션 회복),,10,1,start,0,1,2,4,2,32,true,true
 y03_dalgael,달갤,달걀귀신,guest_room,0.0,0,false,none,지불 불가(말소 미수). 회복 후 소급 지불,,0,1,intake,2,1,1,2,4,32,false,true
+y04_bari,바리,새끼 강철이,kitchen,0.2,1,false,items,비늘 1장(최고급 제작 재료),scrap,1,3,intake,0,3,1,2,4,32,false,false
