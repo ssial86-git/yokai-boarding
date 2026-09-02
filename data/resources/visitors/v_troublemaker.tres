@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="VisitorData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/visitor_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "v_troublemaker"
+kind = "troublemaker"
+weight = 10
+omen_min = 1
+omen_max = 3
+name_ko = "사고뭉치"
+intro_ko = "문 두드리는 소리. …냄새가 좀 이상한데. 액운은 아니고 사고 냄새."
+mishap_money = 25
+mishap_text_ko = "{name}이(가) 밤새 숟가락을 죄다 먹어 치웠다. 수리비가 나갔다."

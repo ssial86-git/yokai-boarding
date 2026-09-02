@@ -1,0 +1,14 @@
+id,kind,yokai_id,phase,day_min,day_max,min_affinity,requires_item,requires_flag,once,priority,dialogue_id,title_ko
+tut_morning,tutorial,,morning,1,1,0,,,true,100,d_tut_morning,성주 영감의 첫 인사
+tut_evening,tutorial,,evening,1,1,0,,,true,100,d_tut_evening,정산과 심사
+tut_night,tutorial,,night,1,1,0,,,true,100,d_tut_night,밤과 하숙부
+tut_arrival,tutorial,,evening,2,2,0,,joined_y03_dalgael,true,90,d_tut_arrival,빈 카드의 손님
+y01_act1,story,y01_ttukttagi,night,1,0,0,,,true,10,d_y01_act1,뚝딱이 1막 — 허풍
+y01_act2,story,y01_ttukttagi,night,3,0,1,,,true,10,d_y01_act2,뚝딱이 2막 — 반쪽 방망이
+y01_act3,story,y01_ttukttagi,night,5,0,2,,,true,10,d_y01_act3,뚝딱이 3막 — 부적 조각
+y02_act1,story,y02_eoduki,night,1,0,0,,,true,10,d_y02_act1,어둑이 1막 — 미움받을까 봐
+y02_act2,story,y02_eoduki,night,3,0,1,,,true,10,d_y02_act2,어둑이 2막 — 무섭지 않음 판정
+y02_act3,story,y02_eoduki,night,5,0,2,,,true,10,d_y02_act3,어둑이 3막 — 네 자리
+y03_act1,story,y03_dalgael,night,2,0,0,,,true,10,d_y03_act1,달갤 1막 — 김서림
+y03_act2,story,y03_dalgael,night,4,0,1,record_piece,,true,10,d_y03_act2,달갤 2막 — 찢긴 페이지
+y03_act3,story,y03_dalgael,night,6,0,2,record_piece,,true,10,d_y03_act3,달갤 3막 — 서명

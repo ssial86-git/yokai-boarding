@@ -53,5 +53,19 @@ values = {
 "drop_ok_color": "7fb2a6",
 "drop_bad_color": "c9503f",
 "drop_highlight_alpha": 0.35,
-"assignment_card_size_px": 32
+"assignment_card_size_px": 32,
+"visitor_chance": 0.6,
+"visitor_seed": 0,
+"guest_stay_nights": 1,
+"accept_reputation_gain": 1,
+"decline_reputation_penalty": 1,
+"decline_omen_threshold": 2,
+"story_affinity_per_event": 0,
+"portrait_size_px": 96,
+"dialogue_box_height_px": 96,
+"rain_chance": 0.3,
+"ui_panel_color": "2e2733",
+"ui_panel_alpha": 0.96,
+"ui_panel_border_color": "7a7180",
+"ui_panel_padding_px": 6
 }

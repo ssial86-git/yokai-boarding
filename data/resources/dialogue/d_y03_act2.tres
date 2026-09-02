@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y03_act2"
+nodes = [{
+"node": "start",
+"speaker": "y03_dalgael",
+"text_ko": "(찢긴 장부 페이지를 받아 들자 눈 하나가 돌아왔다.)",
+"portrait": "y03_dalgael",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y03_dalgael",
+"text_ko": "(페이지 귀퉁이에 서명이 있다. 익숙한 글씨.)",
+"portrait": "y03_dalgael",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;item:record_piece:-1"
+}]

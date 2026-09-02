@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SpiritData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/spirit_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "jowang"
+name_ko = "조왕 아주머니"
+role_ko = "주방과 정산 담당"
+room_id = "kitchen"

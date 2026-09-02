@@ -15,6 +15,15 @@ extends Resource
 ## money / items / errand / none
 @export var rent_type: String = "none"
 @export var rent_note_ko: String = ""
+## items 형: 아이템 id 또는 "kind:<item_kind>"(그 종류에서 무작위). 그 외 형: 빈 문자열.
+@export var rent_item: String = ""
+## money: 금액 / items: 개수 / errand: 모두의 컨디션 회복량
+@export var rent_amount: int = 0
+## 며칠마다 지불하는가 (1 = 매일)
+@export var rent_interval_days: int = 1
+## start = 새 게임부터 입주 / intake = join_day 저녁에 '빈 카드' 방문자로 도착
+@export var join_mode: String = "start"
+@export var join_day: int = 0
 @export var stat_strength: int = 0
 @export var stat_skill: int = 0
 @export var stat_sight: int = 0

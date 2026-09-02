@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SpiritData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/spirit_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "seongju"
+name_ko = "성주 영감"
+role_ko = "결계와 증축의 증인. 대들보에서 존다"
+room_id = ""

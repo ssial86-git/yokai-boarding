@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y02_act3"
+nodes = [{
+"node": "start",
+"speaker": "y02_eoduki",
+"text_ko": "그 지도 그린 사람… 네 아버지 같아. 글씨체가 하숙부랑 같아.",
+"portrait": "y02_eoduki",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "",
+"portrait": "",
+"next": "",
+"option1_ko": "여기 네 자리가 있어. 무섭지 않아도 돼.",
+"option1_next": "2a",
+"option2_ko": "지도 좀 보여 줘.",
+"option2_next": "2b",
+"effect": ""
+}, {
+"node": "2a",
+"speaker": "y02_eoduki",
+"text_ko": "(또렷해진다. 눈이 반짝인다) …응. 여기 적어 줘. 내 이름.",
+"portrait": "y02_eoduki",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y02"
+}, {
+"node": "2b",
+"speaker": "y02_eoduki",
+"text_ko": "(지도를 내민다) 마계 문서고 쪽으로 이어져. 나중에 같이 가 줄래?",
+"portrait": "y02_eoduki",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y02"
+}]

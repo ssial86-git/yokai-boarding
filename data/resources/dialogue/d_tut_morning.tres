@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_tut_morning"
+nodes = [{
+"node": "start",
+"speaker": "seongju",
+"text_ko": "…흠. 자네가 그 사람 자식인가. 대들보가 낡아서 눕기 불편하구먼.",
+"portrait": "seongju",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "seongju",
+"text_ko": "아침엔 하숙생을 방에 배치하게. 아래 카드를 방으로 끌어다 놓으면 돼. 쉬게 두면 기운을 되찾고.",
+"portrait": "seongju",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "seongju",
+"text_ko": "뚝딱이는 작업장에서 힘을 쓰지만 시끄럽지. 옆 객실에서 자는 녀석이 잠을 설쳐. 그런 걸 고민하는 게 자네 일이야.",
+"portrait": "seongju",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}]

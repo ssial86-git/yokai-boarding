@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SpiritData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/spirit_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "mundori"
+name_ko = "문돌이"
+role_ko = "대문간. 방문자 정보 카드를 물어다 준다"
+room_id = "gate"

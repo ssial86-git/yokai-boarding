@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y01_act1"
+nodes = [{
+"node": "start",
+"speaker": "y01_ttukttagi",
+"text_ko": "나 씨름에서 진 적 없어. 마계에서도 제일 셌다고. 방망이만 있으면 뭐든 뚝딱이야.",
+"portrait": "y01_ttukttagi",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y01_ttukttagi",
+"text_ko": "…방망이? 있어. 있는데. 오늘은 안 보여 줄 거야.",
+"portrait": "y01_ttukttagi",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "",
+"portrait": "",
+"next": "",
+"option1_ko": "그렇구나. 대단하네.",
+"option1_next": "3a",
+"option2_ko": "방망이 어디 있어?",
+"option2_next": "3b",
+"effect": ""
+}, {
+"node": "3a",
+"speaker": "y01_ttukttagi",
+"text_ko": "그치? 헤헤. 내일 밤에 잡동사니 하나 더 만들어 줄게.",
+"portrait": "y01_ttukttagi",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}, {
+"node": "3b",
+"speaker": "y01_ttukttagi",
+"text_ko": "…시끄러. 자.",
+"portrait": "y01_ttukttagi",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

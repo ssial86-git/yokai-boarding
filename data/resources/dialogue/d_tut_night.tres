@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_tut_night"
+nodes = [{
+"node": "start",
+"speaker": "seongju",
+"text_ko": "밤에는 하숙생이 사연을 꺼내지. 들어주고 하숙부에 적어 두게.",
+"portrait": "seongju",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "seongju",
+"text_ko": "저쪽 마계의 왕은 쓸모없다고 적힌 이름을 지워 버린다더군. 여기 장부에 적힌 이름은 지워지지 않아. 그게 이 집의 결계일세.",
+"portrait": "seongju",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}]

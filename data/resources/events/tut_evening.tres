@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "tut_evening"
+kind = "tutorial"
+yokai_id = ""
+phase = "evening"
+day_min = 1
+day_max = 1
+min_affinity = 0
+requires_item = ""
+requires_flag = ""
+once = true
+priority = 100
+dialogue_id = "d_tut_evening"
+title_ko = "정산과 심사"

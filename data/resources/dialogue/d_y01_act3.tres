@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y01_act3"
+nodes = [{
+"node": "start",
+"speaker": "y01_ttukttagi",
+"text_ko": "방망이 손잡이 안쪽에 종이가 끼어 있었어. 부적 조각이야.",
+"portrait": "y01_ttukttagi",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y01_ttukttagi",
+"text_ko": "집행관이 잡아당길 때 누가 뒤에서 이걸 끼워 넣었어. 그 뒤로 방망이가 더는 안 뽑혔어.",
+"portrait": "y01_ttukttagi",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y01_ttukttagi",
+"text_ko": "글씨가 있어. …네 아버지 이름이야.",
+"portrait": "y01_ttukttagi",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y01"
+}]

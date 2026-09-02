@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "y03_act2"
+kind = "story"
+yokai_id = "y03_dalgael"
+phase = "night"
+day_min = 4
+day_max = 0
+min_affinity = 1
+requires_item = "record_piece"
+requires_flag = ""
+once = true
+priority = 10
+dialogue_id = "d_y03_act2"
+title_ko = "달갤 2막 — 찢긴 페이지"

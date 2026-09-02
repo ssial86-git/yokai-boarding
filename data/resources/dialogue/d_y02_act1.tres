@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y02_act1"
+nodes = [{
+"node": "start",
+"speaker": "y02_eoduki",
+"text_ko": "…저기. 나 무섭지 않지? 장난 좀 쳐도 미워하지 않을 거지?",
+"portrait": "y02_eoduki",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "",
+"portrait": "",
+"next": "",
+"option1_ko": "안 무서워. 장난은 적당히만.",
+"option1_next": "2a",
+"option2_ko": "조금 무서운데?",
+"option2_next": "2b",
+"effect": ""
+}, {
+"node": "2a",
+"speaker": "y02_eoduki",
+"text_ko": "(조금 또렷해진다) …응. 적당히만.",
+"portrait": "y02_eoduki",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}, {
+"node": "2b",
+"speaker": "y02_eoduki",
+"text_ko": "(몸집이 커졌다가 곧 흐려진다) 그, 그래? 미안…",
+"portrait": "y02_eoduki",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

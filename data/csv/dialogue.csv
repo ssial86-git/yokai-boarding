@@ -1,0 +1,42 @@
+dialogue_id,node,speaker,text_ko,portrait,next,option1_ko,option1_next,option2_ko,option2_next,effect
+d_tut_morning,start,seongju,…흠. 자네가 그 사람 자식인가. 대들보가 낡아서 눕기 불편하구먼.,seongju,2,,,,,
+d_tut_morning,2,seongju,아침엔 하숙생을 방에 배치하게. 아래 카드를 방으로 끌어다 놓으면 돼. 쉬게 두면 기운을 되찾고.,seongju,3,,,,,
+d_tut_morning,3,seongju,뚝딱이는 작업장에서 힘을 쓰지만 시끄럽지. 옆 객실에서 자는 녀석이 잠을 설쳐. 그런 걸 고민하는 게 자네 일이야.,seongju,end,,,,,
+d_tut_evening,start,jowang,저녁이면 내가 정산을 맡아요. 낮에 만든 것과 하숙비가 창고로 들어오죠.,jowang,2,,,,,
+d_tut_evening,2,mundori,멍! 대문간은 내가 지켜. 손님이 오면 카드를 물어다 줄게. 받을지 말지는 네가 정해.,mundori,3,,,,,
+d_tut_evening,3,mundori,빈 침대가 없으면 못 받아. 객실을 더 지어야 해. 멍.,mundori,end,,,,,
+d_tut_night,start,seongju,밤에는 하숙생이 사연을 꺼내지. 들어주고 하숙부에 적어 두게.,seongju,2,,,,,
+d_tut_night,2,seongju,저쪽 마계의 왕은 쓸모없다고 적힌 이름을 지워 버린다더군. 여기 장부에 적힌 이름은 지워지지 않아. 그게 이 집의 결계일세.,seongju,end,,,,,
+d_tut_arrival,start,mundori,"멍… 저 손님, 카드가 비어 있어. 이름도 얼굴도 없어. 그래도 문턱은 넘었어.",mundori,2,,,,,
+d_tut_arrival,2,seongju,말소가 반쯤 진행된 채 도망친 게야. 사연을 되찾아 주면 얼굴이 하나씩 돌아올 걸세. 우선은 재우게.,seongju,end,,,,,
+d_y01_act1,start,y01_ttukttagi,나 씨름에서 진 적 없어. 마계에서도 제일 셌다고. 방망이만 있으면 뭐든 뚝딱이야.,y01_ttukttagi,2,,,,,
+d_y01_act1,2,y01_ttukttagi,…방망이? 있어. 있는데. 오늘은 안 보여 줄 거야.,y01_ttukttagi,3,,,,,
+d_y01_act1,3,player,,,,그렇구나. 대단하네.,3a,방망이 어디 있어?,3b,
+d_y01_act1,3a,y01_ttukttagi,그치? 헤헤. 내일 밤에 잡동사니 하나 더 만들어 줄게.,y01_ttukttagi,end,,,,,affinity:+1
+d_y01_act1,3b,y01_ttukttagi,…시끄러. 자.,y01_ttukttagi,end,,,,,affinity:+1
+d_y01_act2,start,y01_ttukttagi,저기. 그 방망이 말인데. 반쪽밖에 없어.,y01_ttukttagi,2,,,,,
+d_y01_act2,2,y01_ttukttagi,마계에서 '생산 할당'이라는 걸 시켰어. 하루에 몇 개씩 뚝딱 만들어 바치라고. 싫다고 했더니 회수 집행관이 와서 방망이를 잡아당겼어.,y01_ttukttagi,3,,,,,
+d_y01_act2,3,y01_ttukttagi,반은 뺏기고 반만 들고 도망쳤어. 그래서 자꾸 잡동사니만 나와. 미안.,y01_ttukttagi,4,,,,,
+d_y01_act2,4,player,,,,미안할 거 없어. 잡동사니도 쓸모 있어.,end,작업장을 키우면 고칠 수 있을까?,4b,affinity:+1
+d_y01_act2,4b,y01_ttukttagi,…그럴지도. 작업장이 커지면 해 볼게.,y01_ttukttagi,end,,,,,affinity:+1
+d_y01_act3,start,y01_ttukttagi,방망이 손잡이 안쪽에 종이가 끼어 있었어. 부적 조각이야.,y01_ttukttagi,2,,,,,
+d_y01_act3,2,y01_ttukttagi,집행관이 잡아당길 때 누가 뒤에서 이걸 끼워 넣었어. 그 뒤로 방망이가 더는 안 뽑혔어.,y01_ttukttagi,3,,,,,
+d_y01_act3,3,y01_ttukttagi,글씨가 있어. …네 아버지 이름이야.,y01_ttukttagi,end,,,,,affinity:+1;flag:clue_y01
+d_y02_act1,start,y02_eoduki,…저기. 나 무섭지 않지? 장난 좀 쳐도 미워하지 않을 거지?,y02_eoduki,2,,,,,
+d_y02_act1,2,player,,,,안 무서워. 장난은 적당히만.,2a,조금 무서운데?,2b,
+d_y02_act1,2a,y02_eoduki,(조금 또렷해진다) …응. 적당히만.,y02_eoduki,end,,,,,affinity:+1
+d_y02_act1,2b,y02_eoduki,"(몸집이 커졌다가 곧 흐려진다) 그, 그래? 미안…",y02_eoduki,end,,,,,affinity:+1
+d_y02_act2,start,y02_eoduki,마계에서는 공포 실적이라는 걸 매겨. 얼마나 무섭게 했나.,y02_eoduki,2,,,,,
+d_y02_act2,2,y02_eoduki,나는 '무섭지 않음' 판정을 받았어. 감가상각 대상이래. 이름을 지운다는 통보서가 왔어.,y02_eoduki,3,,,,,
+d_y02_act2,3,y02_eoduki,통보서 뒷면에 누가 지도를 그려 놨더라. 여기까지 오는 길. 그래서 왔어.,y02_eoduki,end,,,,,affinity:+1
+d_y02_act3,start,y02_eoduki,그 지도 그린 사람… 네 아버지 같아. 글씨체가 하숙부랑 같아.,y02_eoduki,2,,,,,
+d_y02_act3,2,player,,,,여기 네 자리가 있어. 무섭지 않아도 돼.,2a,지도 좀 보여 줘.,2b,
+d_y02_act3,2a,y02_eoduki,(또렷해진다. 눈이 반짝인다) …응. 여기 적어 줘. 내 이름.,y02_eoduki,end,,,,,affinity:+1;flag:clue_y02
+d_y02_act3,2b,y02_eoduki,(지도를 내민다) 마계 문서고 쪽으로 이어져. 나중에 같이 가 줄래?,y02_eoduki,end,,,,,affinity:+1;flag:clue_y02
+d_y03_act1,start,y03_dalgael,(매끈한 달걀이 김을 서린다. 말은 없다.),y03_dalgael,2,,,,,
+d_y03_act1,2,seongju,저 아이는 말소가 반쯤 끝난 채 도망쳤네. 얼굴이 지워졌으니 말도 못 해. 기록 조각을 되찾아 주면 하나씩 돌아올 걸세.,seongju,3,,,,,
+d_y03_act1,3,player,,,,천천히 해. 여기서 지내.,end,,,affinity:+1
+d_y03_act2,start,y03_dalgael,(찢긴 장부 페이지를 받아 들자 눈 하나가 돌아왔다.),y03_dalgael,2,,,,,
+d_y03_act2,2,y03_dalgael,(페이지 귀퉁이에 서명이 있다. 익숙한 글씨.),y03_dalgael,end,,,,,affinity:+1;item:record_piece:-1
+d_y03_act3,start,y03_dalgael,(두 번째 조각. 입이 돌아왔다.),y03_dalgael,2,,,,,
+d_y03_act3,2,y03_dalgael,"…고마워. 말소를 멈춘 사람이 있었어. 서명은 네 아버지야. 하숙비, 밀린 거 갚을게.",y03_dalgael,end,,,,,affinity:+1;money:+50;item:record_piece:-1;flag:clue_y03

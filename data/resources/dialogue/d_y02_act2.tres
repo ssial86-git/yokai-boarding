@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y02_act2"
+nodes = [{
+"node": "start",
+"speaker": "y02_eoduki",
+"text_ko": "마계에서는 공포 실적이라는 걸 매겨. 얼마나 무섭게 했나.",
+"portrait": "y02_eoduki",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y02_eoduki",
+"text_ko": "나는 '무섭지 않음' 판정을 받았어. 감가상각 대상이래. 이름을 지운다는 통보서가 왔어.",
+"portrait": "y02_eoduki",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y02_eoduki",
+"text_ko": "통보서 뒷면에 누가 지도를 그려 놨더라. 여기까지 오는 길. 그래서 왔어.",
+"portrait": "y02_eoduki",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

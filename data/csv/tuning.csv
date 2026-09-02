@@ -48,3 +48,17 @@ drop_ok_color,7fb2a6,string,드래그 중 배치 가능 칸 강조색(hex)
 drop_bad_color,c9503f,string,드래그 중 배치 불가 칸 강조색(hex)
 drop_highlight_alpha,0.35,float,드래그 중 칸 강조 투명도
 assignment_card_size_px,32,int,배치 패널 요괴 카드 한 변(px)
+visitor_chance,0.6,float,저녁마다 방문자가 올 확률 (0~1)
+visitor_seed,0,int,방문자 추첨 시드. 0 이면 무작위(시간 기반)
+guest_stay_nights,1,int,뜨내기 손님 체류 밤 수
+accept_reputation_gain,1,int,손님을 받으면 오르는 평판
+decline_reputation_penalty,1,int,정당하지 않은 거절(액운 0~1)로 내려가는 평판
+decline_omen_threshold,2,int,이 액운 이상인 손님은 거절해도 평판이 내려가지 않음
+story_affinity_per_event,0,int,사연 이벤트를 본 것만으로 오르는 호감도(효과와 별개)
+portrait_size_px,96,int,대화창 일러스트 표시 크기(px)
+dialogue_box_height_px,96,int,대화창 높이(px)
+rain_chance,0.3,float,아침마다 비가 올 확률 (우산손 등장 조건)
+ui_panel_color,2e2733,string,UI 패널 배경색(hex — 팔레트)
+ui_panel_alpha,0.96,float,UI 패널 배경 투명도
+ui_panel_border_color,7a7180,string,UI 패널 테두리색(hex — 팔레트)
+ui_panel_padding_px,6,int,UI 패널 안쪽 여백(px)

@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_tut_arrival"
+nodes = [{
+"node": "start",
+"speaker": "mundori",
+"text_ko": "멍… 저 손님, 카드가 비어 있어. 이름도 얼굴도 없어. 그래도 문턱은 넘었어.",
+"portrait": "mundori",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "seongju",
+"text_ko": "말소가 반쯤 진행된 채 도망친 게야. 사연을 되찾아 주면 얼굴이 하나씩 돌아올 걸세. 우선은 재우게.",
+"portrait": "seongju",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}]

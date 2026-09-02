@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="VisitorData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/visitor_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "v_erased"
+kind = "erased"
+weight = 0
+omen_min = 0
+omen_max = 0
+name_ko = "빈 카드"
+intro_ko = "문 앞에 누가 서 있는데… 카드가 비어 있어. 이름도 얼굴도 없어."
+mishap_money = 0
+mishap_text_ko = ""

@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y01_act2"
+nodes = [{
+"node": "start",
+"speaker": "y01_ttukttagi",
+"text_ko": "저기. 그 방망이 말인데. 반쪽밖에 없어.",
+"portrait": "y01_ttukttagi",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y01_ttukttagi",
+"text_ko": "마계에서 '생산 할당'이라는 걸 시켰어. 하루에 몇 개씩 뚝딱 만들어 바치라고. 싫다고 했더니 회수 집행관이 와서 방망이를 잡아당겼어.",
+"portrait": "y01_ttukttagi",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y01_ttukttagi",
+"text_ko": "반은 뺏기고 반만 들고 도망쳤어. 그래서 자꾸 잡동사니만 나와. 미안.",
+"portrait": "y01_ttukttagi",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "player",
+"text_ko": "",
+"portrait": "",
+"next": "",
+"option1_ko": "미안할 거 없어. 잡동사니도 쓸모 있어.",
+"option1_next": "end",
+"option2_ko": "작업장을 키우면 고칠 수 있을까?",
+"option2_next": "4b",
+"effect": "affinity:+1"
+}, {
+"node": "4b",
+"speaker": "y01_ttukttagi",
+"text_ko": "…그럴지도. 작업장이 커지면 해 볼게.",
+"portrait": "y01_ttukttagi",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

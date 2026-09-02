@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_tut_evening"
+nodes = [{
+"node": "start",
+"speaker": "jowang",
+"text_ko": "저녁이면 내가 정산을 맡아요. 낮에 만든 것과 하숙비가 창고로 들어오죠.",
+"portrait": "jowang",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "mundori",
+"text_ko": "멍! 대문간은 내가 지켜. 손님이 오면 카드를 물어다 줄게. 받을지 말지는 네가 정해.",
+"portrait": "mundori",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "mundori",
+"text_ko": "빈 침대가 없으면 못 받아. 객실을 더 지어야 해. 멍.",
+"portrait": "mundori",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}]

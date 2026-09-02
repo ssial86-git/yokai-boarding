@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y03_act1"
+nodes = [{
+"node": "start",
+"speaker": "y03_dalgael",
+"text_ko": "(매끈한 달걀이 김을 서린다. 말은 없다.)",
+"portrait": "y03_dalgael",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "seongju",
+"text_ko": "저 아이는 말소가 반쯤 끝난 채 도망쳤네. 얼굴이 지워졌으니 말도 못 해. 기록 조각을 되찾아 주면 하나씩 돌아올 걸세.",
+"portrait": "seongju",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "",
+"portrait": "",
+"next": "",
+"option1_ko": "천천히 해. 여기서 지내.",
+"option1_next": "end",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]
