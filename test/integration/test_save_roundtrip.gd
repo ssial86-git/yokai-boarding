@@ -20,6 +20,13 @@ func test_round_trip_through_file_is_identical() -> void:
 	GameState.conditions["y02_eoduki"] = 55
 	GameState.inventory.add("meal", 3)
 	GameState.inventory.add("trinket", 1)
+	GameState.guests.append({"species_id": "g_ibulnang", "visitor_id": "v_guest", "arrived_day": 4, "depart_day": 5, "omen": 1})
+	GameState.ledger["g_ibulnang"] = 2
+	GameState.flags["clue_y01"] = true
+	GameState.seen_events.append("y01_act1")
+	GameState.pending_visitor = {"visitor_id": "v_guest", "kind": "guest", "species_id": "g_mongdanggwi", "yokai_id": "", "omen": 0}
+	GameState.weather = "rain"
+	GameState.rng.seed = 777
 	var grid := GameState.room_grid
 	assert_int(grid.add_floor(GameState.money)).is_equal(RoomGrid.Outcome.OK)
 	assert_int(grid.add_floor(GameState.money)).is_equal(RoomGrid.Outcome.OK)
@@ -44,6 +51,12 @@ func test_round_trip_through_file_is_identical() -> void:
 	assert_that(GameState.assignment.get_cell("y01_ttukttagi")).is_equal(Vector2i(0, 2))
 	assert_int(GameState.inventory.get_count("meal")).is_equal(3)
 	assert_int(GameState.get_condition("y02_eoduki")).is_equal(55)
+	assert_int(GameState.guests.size()).is_equal(1)
+	assert_int(GameState.guests[0]["depart_day"]).is_equal(5)
+	assert_int(GameState.ledger["g_ibulnang"]).is_equal(2)
+	assert_bool(GameState.flags.has("clue_y01")).is_true()
+	assert_str(GameState.weather).is_equal("rain")
+	assert_str(str(GameState.pending_visitor.get("species_id"))).is_equal("g_mongdanggwi")
 
 
 func test_v1_save_migrates_to_default_house() -> void:
@@ -82,9 +95,9 @@ func test_unsupported_version_or_bad_grid_rejected() -> void:
 	assert_bool(SaveManager.apply_save_data({"version": 99})).is_false()
 	assert_bool(SaveManager.apply_save_data({"version": 0})).is_false()
 	var bad := {
-		"version": 3,
+		"version": 4,
 		"game_state": {"day": 1, "room_grid": {"floors": 1, "columns": 1, "built_floors": 1, "cells": ["x"]}},
 	}
 	assert_bool(SaveManager.apply_save_data(bad)).is_false()
-	var bad_inventory := {"version": 3, "game_state": {"day": 1, "inventory": {"meal": -3}}}
+	var bad_inventory := {"version": 4, "game_state": {"day": 1, "inventory": {"meal": -3}}}
 	assert_bool(SaveManager.apply_save_data(bad_inventory)).is_false()

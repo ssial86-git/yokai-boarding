@@ -32,8 +32,18 @@ signal item_removed(item_id: String, count: int)
 signal money_changed(amount: int)
 
 # --- 심사·서사 (M3) ---
-signal visitor_knocked(visitor_id: String)
-signal intake_decided(visitor_id: String, decision: String)
+## visitor 는 VisitorRoll.Visitor.to_dict() 형식.
+signal visitor_knocked(visitor: Dictionary)
+## outcome 은 Intake.Outcome 값.
+signal intake_decided(visitor: Dictionary, outcome: int)
+signal guests_changed
+signal ledger_changed(species_id: String, count: int)
+signal reputation_changed(value: int)
+signal weather_changed(weather: String)
+## rent 는 {"money": int, "items": {id: n}, "condition_bonus": int, "mishap_money": int, "mishap_texts": [String], "departed": [Dictionary]}
+signal rent_settled(rent: Dictionary)
+signal dialogue_started(event_id: String)
+signal dialogue_finished(event_id: String)
 signal quest_completed(quest_id: String)
 
 # --- 세이브 ---

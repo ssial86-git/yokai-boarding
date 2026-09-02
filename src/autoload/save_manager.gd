@@ -3,8 +3,9 @@ extends Node
 ## v1: game_state(day/money/reputation/affinity/residents) + clock
 ## v2: game_state.room_grid 추가 (M1)
 ## v3: game_state.conditions / inventory / assignment 추가 (M2)
+## v4: game_state.guests / ledger / flags / seen_events / pending_visitor / weather / rng_state 추가 (M3)
 
-const SAVE_VERSION := 3
+const SAVE_VERSION := 4
 const SAVE_DIR := "user://saves"
 const SLOT_FILE_FORMAT := "slot_%d.json"
 
@@ -74,8 +75,22 @@ func _migrate(data: Dictionary) -> Dictionary:
 		_migrate_1_to_2(result)
 	if version < 3:
 		_migrate_2_to_3(result)
+	if version < 4:
+		_migrate_3_to_4(result)
 	result["version"] = SAVE_VERSION
 	return result
+
+
+## v3 에는 손님·명부·서사 상태가 없다. 빈 값이면 GameState.from_dict 가 기본값(새 RNG 시드 포함)으로 채운다.
+func _migrate_3_to_4(data: Dictionary) -> void:
+	var game_state: Dictionary = data.get("game_state", {})
+	for key in ["guests", "seen_events"]:
+		if not game_state.has(key):
+			game_state[key] = []
+	for key in ["ledger", "flags", "pending_visitor"]:
+		if not game_state.has(key):
+			game_state[key] = {}
+	data["game_state"] = game_state
 
 
 ## v1 에는 room_grid 가 없다. 비워 두면 GameState.from_dict 가 시작 배치로 채운다.

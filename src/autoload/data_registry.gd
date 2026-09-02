@@ -10,6 +10,10 @@ var yokai: Dictionary = {}  # id -> YokaiData
 var guest_species: Dictionary = {}  # id -> GuestSpeciesData
 var rooms: Dictionary = {}  # id -> RoomData
 var items: Dictionary = {}  # id -> ItemData
+var visitors: Dictionary = {}  # id -> VisitorData
+var spirits: Dictionary = {}  # id -> SpiritData
+var events: Dictionary = {}  # id -> EventData
+var dialogues: Dictionary = {}  # id -> DialogueData
 var tuning: TuningData = TuningData.new()
 var strings: StringTableData = StringTableData.new()
 
@@ -23,6 +27,10 @@ func reload() -> void:
 	guest_species = _load_dir(RESOURCE_ROOT + "guest_species")
 	rooms = _load_dir(RESOURCE_ROOT + "rooms")
 	items = _load_dir(RESOURCE_ROOT + "items")
+	visitors = _load_dir(RESOURCE_ROOT + "visitors")
+	spirits = _load_dir(RESOURCE_ROOT + "spirits")
+	events = _load_dir(RESOURCE_ROOT + "events")
+	dialogues = _load_dir(RESOURCE_ROOT + "dialogue")
 	tuning = _load_single(TUNING_PATH, TuningData.new()) as TuningData
 	strings = _load_single(STRINGS_PATH, StringTableData.new()) as StringTableData
 
@@ -43,7 +51,29 @@ func get_item(id: String) -> ItemData:
 	return items.get(id) as ItemData
 
 
-## 표시용 이름. 데이터가 없으면 id 를 그대로 (누락이 눈에 띄도록).
+func get_visitor(id: String) -> VisitorData:
+	return visitors.get(id) as VisitorData
+
+
+func get_spirit(id: String) -> SpiritData:
+	return spirits.get(id) as SpiritData
+
+
+func get_event(id: String) -> EventData:
+	return events.get(id) as EventData
+
+
+func get_dialogue(id: String) -> DialogueData:
+	return dialogues.get(id) as DialogueData
+
+
+## UI 문자열. args 는 {name} 자리표시자를 채운다.
+func text(key: String, args: Dictionary = {}) -> String:
+	return strings.get_text(key).format(args)
+
+
+# --- 표시용 이름. 데이터가 없으면 id 를 그대로 (누락이 눈에 띄도록) ---
+
 func item_name(id: String) -> String:
 	var item := get_item(id)
 	return item.name_ko if item != null else id
@@ -55,23 +85,23 @@ func room_name(id: String) -> String:
 
 
 func yokai_name(id: String) -> String:
-	var yokai := get_yokai(id)
-	return yokai.name_ko if yokai != null else id
+	var yokai_data := get_yokai(id)
+	return yokai_data.name_ko if yokai_data != null else id
 
 
-## 슬라이스 등장 하숙생 id (in_slice=true), id 순.
-func slice_yokai_ids() -> Array[String]:
-	var result: Array[String] = []
-	for yokai: YokaiData in yokai.values():
-		if yokai.in_slice:
-			result.append(yokai.id)
-	result.sort()
-	return result
+func species_name(id: String) -> String:
+	var species := get_guest_species(id)
+	return species.name_ko if species != null else id
 
 
-## UI 문자열. args 는 {name} 자리표시자를 채운다.
-func text(key: String, args: Dictionary = {}) -> String:
-	return strings.get_text(key).format(args)
+## 대사 화자 이름: 하숙생 / 가택신 / 플레이어.
+func speaker_name(id: String) -> String:
+	if id == DialogueGraph.SPEAKER_PLAYER:
+		return text("speaker_player")
+	var spirit := get_spirit(id)
+	if spirit != null:
+		return spirit.name_ko
+	return yokai_name(id)
 
 
 ## 방 목록을 건설 비용 오름차순으로 (UI 메뉴용). 빈터(kind=empty)는 제외.
@@ -81,6 +111,16 @@ func rooms_buildable_sorted() -> Array[RoomData]:
 		if room.kind != RoomGrid.ROOM_KIND_EMPTY:
 			result.append(room)
 	result.sort_custom(func(a: RoomData, b: RoomData) -> bool: return a.build_cost < b.build_cost)
+	return result
+
+
+## 새 게임 시작부터 입주해 있는 하숙생 id (in_slice 이고 join_mode=start), id 순.
+func starting_yokai_ids() -> Array[String]:
+	var result: Array[String] = []
+	for yokai_data: YokaiData in yokai.values():
+		if yokai_data.in_slice and yokai_data.join_mode == "start":
+			result.append(yokai_data.id)
+	result.sort()
 	return result
 
 

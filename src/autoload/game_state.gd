@@ -3,6 +3,7 @@ extends Node
 ## 여기서는 상태를 들고 있다가 시그널로 알린다.
 
 const START_LAYOUT_SEPARATOR := ","
+const WEATHER_CLEAR := "clear"
 
 var day: int = 1
 var money: int = 0
@@ -15,6 +16,19 @@ var residents: Array[String] = []
 var conditions: Dictionary = {}
 var inventory: Inventory = Inventory.new()
 var assignment: Assignment = Assignment.new()
+## 체류 중인 뜨내기 손님 레코드 (Intake.Result.guest 형식)
+var guests: Array[Dictionary] = []
+## 손님 명부: species_id -> 방문 횟수
+var ledger: Dictionary = {}
+## 서사 플래그: name -> true
+var flags: Dictionary = {}
+## 본 이벤트 id 목록 (once 판정)
+var seen_events: Array[String] = []
+## 심사 대기 중인 방문자 (VisitorRoll.Visitor.to_dict 형식). 없으면 빈 Dictionary.
+var pending_visitor: Dictionary = {}
+var weather: String = WEATHER_CLEAR
+## 방문자·하숙비 추첨용 RNG. 상태를 세이브해 로드 후에도 같은 순서가 이어진다.
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 ## 하숙집 방 그리드. reset_new_game() 또는 from_dict() 전에는 null.
 var room_grid: RoomGrid
 
@@ -26,10 +40,16 @@ func reset_new_game() -> void:
 	affinity.clear()
 	inventory = Inventory.new()
 	assignment = Assignment.new()
+	guests.clear()
+	ledger.clear()
+	flags.clear()
+	seen_events.clear()
+	pending_visitor.clear()
+	weather = WEATHER_CLEAR
+	_reseed_rng()
 	room_grid = new_room_grid()
 	_apply_start_layout(room_grid)
-	# M2: 심사(M3) 전까지 슬라이스 하숙생 3명이 처음부터 입주해 있다.
-	residents = DataRegistry.slice_yokai_ids()
+	residents = DataRegistry.starting_yokai_ids()
 	conditions.clear()
 	for yokai_id in residents:
 		conditions[yokai_id] = DataRegistry.tuning.get_int("condition_max")
@@ -40,8 +60,31 @@ func add_money(amount: int) -> void:
 	Events.money_changed.emit(money)
 
 
+func add_reputation(delta: int) -> void:
+	if delta == 0:
+		return
+	reputation += delta
+	Events.reputation_changed.emit(reputation)
+
+
 func get_condition(yokai_id: String) -> int:
 	return int(conditions.get(yokai_id, DataRegistry.tuning.get_int("condition_max")))
+
+
+func add_affinity(yokai_id: String, delta: int) -> void:
+	affinity[yokai_id] = int(affinity.get(yokai_id, 0)) + delta
+	Events.affinity_changed.emit(yokai_id, int(affinity[yokai_id]))
+
+
+## 심사를 통과한 하숙생 입주.
+func add_resident(yokai_id: String) -> void:
+	if residents.has(yokai_id):
+		return
+	residents.append(yokai_id)
+	conditions[yokai_id] = DataRegistry.tuning.get_int("condition_max")
+	if not affinity.has(yokai_id):
+		affinity[yokai_id] = 0
+	Events.yokai_arrived.emit(yokai_id)
 
 
 ## DataRegistry 의 방 카탈로그·tuning 으로 빈 그리드를 만든다.
@@ -66,6 +109,14 @@ func to_dict() -> Dictionary:
 		"conditions": conditions.duplicate(),
 		"inventory": inventory.to_dict(),
 		"assignment": assignment.to_dict(),
+		"guests": guests.duplicate(true),
+		"ledger": ledger.duplicate(),
+		"flags": flags.duplicate(),
+		"seen_events": seen_events.duplicate(),
+		"pending_visitor": pending_visitor.duplicate(),
+		"weather": weather,
+		# JSON 은 64비트 정수를 double 로 바꿔 정밀도를 잃으므로 문자열로 보관
+		"rng_state": str(rng.state),
 		"room_grid": room_grid.to_dict() if room_grid != null else {},
 	}
 
@@ -95,7 +146,7 @@ func from_dict(data: Dictionary) -> bool:
 	for entry: Variant in (data.get("residents", []) as Array):
 		residents.append(str(entry))
 	if not data.has("residents"):
-		residents = DataRegistry.slice_yokai_ids()
+		residents = DataRegistry.starting_yokai_ids()
 	conditions = _int_dict(data.get("conditions", {}))
 	for yokai_id in residents:
 		if not conditions.has(yokai_id):
@@ -103,6 +154,23 @@ func from_dict(data: Dictionary) -> bool:
 	inventory = new_inventory
 	assignment = new_assignment
 	assignment.prune(grid, residents)
+	guests.clear()
+	for entry: Variant in (data.get("guests", []) as Array):
+		if entry is Dictionary:
+			guests.append(_int_dict_keep_strings(entry as Dictionary))
+	ledger = _int_dict(data.get("ledger", {}))
+	flags = (data.get("flags", {}) as Dictionary).duplicate()
+	seen_events.clear()
+	for entry: Variant in (data.get("seen_events", []) as Array):
+		seen_events.append(str(entry))
+	var raw_visitor: Dictionary = data.get("pending_visitor", {})
+	# JSON 을 거친 float 값(omen) 을 int 로 되돌리기 위해 Visitor 로 한 번 감쌌다 푼다
+	pending_visitor = VisitorRoll.Visitor.from_dict(raw_visitor).to_dict() if not raw_visitor.is_empty() else {}
+	weather = str(data.get("weather", WEATHER_CLEAR))
+	if data.has("rng_state"):
+		rng.state = str(data["rng_state"]).to_int()
+	else:
+		_reseed_rng()
 	room_grid = grid
 	return true
 
@@ -113,6 +181,22 @@ func _int_dict(source: Dictionary) -> Dictionary:
 	for key: Variant in source:
 		result[str(key)] = int(source[key])
 	return result
+
+
+func _int_dict_keep_strings(source: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	for key: Variant in source:
+		var value: Variant = source[key]
+		result[str(key)] = int(value) if value is float else value
+	return result
+
+
+func _reseed_rng() -> void:
+	var seed := DataRegistry.tuning.get_int("visitor_seed")
+	if seed == 0:
+		rng.randomize()
+	else:
+		rng.seed = seed
 
 
 func _apply_start_layout(grid: RoomGrid) -> void:
