@@ -1,0 +1,322 @@
+#!/usr/bin/env python3
+"""CSV -> Godot .tres 빌더 (data/csv -> data/resources).
+
+검증 순서: 필수 컬럼 존재 -> 타입 변환 -> 키 중복 -> 참조 무결성.
+하나라도 실패하면 어느 파일의 어느 행이 문제인지 출력하고 종료 코드 1로 중단한다.
+스키마는 docs/decisions/2026-09-02_csv_schema_v1.md 참조.
+
+사용:  python tools/data/build_resources.py [--check]   (--check 는 검증만, 파일 미생성)
+"""
+from __future__ import annotations
+
+import argparse
+import csv
+import shutil
+import sys
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Callable
+
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
+ROOT = Path(__file__).resolve().parents[2]
+CSV_DIR = ROOT / "data" / "csv"
+OUT_DIR = ROOT / "data" / "resources"
+SCRIPT_DIR = "res://src/core/resources/"
+
+ENUMS: dict[str, set[str]] = {
+    "rent_type": {"money", "items", "errand", "buff", "info", "none"},
+    "rarity": {"common", "uncommon", "rare"},
+    "room_kind": {"lodging", "production", "service", "gate", "storage", "empty"},
+    "tuning_type": {"int", "float", "bool", "string"},
+    "sprite_size": {"16", "32"},
+}
+
+
+class BuildError(Exception):
+    pass
+
+
+def parse_bool(value: str) -> bool:
+    v = value.strip().lower()
+    if v in ("true", "1", "yes"):
+        return True
+    if v in ("false", "0", "no", ""):
+        return False
+    raise ValueError(f"bool 값이 아님: {value!r}")
+
+
+def parse_enum(name: str) -> Callable[[str], str]:
+    def _parse(value: str) -> str:
+        v = value.strip()
+        if v not in ENUMS[name]:
+            raise ValueError(f"{name} 허용값 {sorted(ENUMS[name])} 밖: {value!r}")
+        return v
+
+    return _parse
+
+
+def parse_sprite_size(value: str) -> int:
+    return int(parse_enum("sprite_size")(value))
+
+
+def parse_str(value: str) -> str:
+    return value.strip()
+
+
+@dataclass
+class Column:
+    name: str
+    parse: Callable[[str], Any]
+    ref: str | None = None  # 참조 대상 테이블 이름 (빈 값은 '참조 없음'으로 허용)
+
+
+@dataclass
+class Table:
+    name: str
+    csv_file: str
+    columns: list[Column]
+    script_class: str
+    script_file: str
+    key: str = "id"
+    # "rows" = 행마다 .tres 하나, "dict" = 테이블 전체가 .tres 하나 (tuning)
+    mode: str = "rows"
+    rows: list[dict[str, Any]] = field(default_factory=list)
+
+    @property
+    def required(self) -> list[str]:
+        return [c.name for c in self.columns]
+
+
+TABLES: list[Table] = [
+    Table(
+        name="rooms",
+        csv_file="rooms.csv",
+        script_class="RoomData",
+        script_file="room_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("kind", parse_enum("room_kind")),
+            Column("build_cost", int),
+            Column("capacity", int),
+            Column("spirit_id", parse_str),  # spirits.csv 는 M3 — 아직 참조 검증 없음
+            Column("quiet", parse_bool),
+            Column("requires_room", parse_str, ref="rooms"),
+        ],
+    ),
+    Table(
+        name="yokai",
+        csv_file="yokai.csv",
+        script_class="YokaiData",
+        script_file="yokai_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("species_ko", parse_str),
+            Column("preferred_room", parse_str, ref="rooms"),
+            Column("work_bonus", float),
+            Column("noise", int),
+            Column("night_worker", parse_bool),
+            Column("rent_type", parse_enum("rent_type")),
+            Column("rent_note_ko", parse_str),
+            Column("stat_strength", int),
+            Column("stat_skill", int),
+            Column("stat_sight", int),
+            Column("stat_courage", int),
+            Column("sprite_size", parse_sprite_size),
+            Column("in_slice", parse_bool),
+        ],
+    ),
+    Table(
+        name="guest_species",
+        csv_file="guest_species.csv",
+        script_class="GuestSpeciesData",
+        script_file="guest_species_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("rarity", parse_enum("rarity")),
+            Column("flavor_ko", parse_str),
+            Column("rent_type", parse_enum("rent_type")),
+            Column("rent_note_ko", parse_str),
+            Column("appear_condition", parse_str),
+            Column("weight", int),
+            Column("promotable", parse_bool),
+            Column("sprite_size", parse_sprite_size),
+        ],
+    ),
+    Table(
+        name="tuning",
+        csv_file="tuning.csv",
+        script_class="TuningData",
+        script_file="tuning_data.gd",
+        key="key",
+        mode="dict",
+        columns=[
+            Column("key", parse_str),
+            Column("value", parse_str),
+            Column("type", parse_enum("tuning_type")),
+            Column("description", parse_str),
+        ],
+    ),
+]
+
+
+# ---------------------------------------------------------------- 읽기·검증
+
+
+def read_table(table: Table) -> None:
+    path = CSV_DIR / table.csv_file
+    if not path.exists():
+        raise BuildError(f"{table.csv_file}: 파일 없음 ({path})")
+    with path.open(encoding="utf-8-sig", newline="") as fh:
+        reader = csv.DictReader(fh)
+        header = reader.fieldnames or []
+        missing = [c for c in table.required if c not in header]
+        if missing:
+            raise BuildError(f"{table.csv_file}: 필수 컬럼 누락 {missing} (헤더: {header})")
+        for line_no, raw in enumerate(reader, start=2):
+            if not any((v or "").strip() for v in raw.values()):
+                continue  # 빈 줄
+            row: dict[str, Any] = {}
+            for col in table.columns:
+                raw_value = raw.get(col.name) or ""
+                try:
+                    row[col.name] = col.parse(raw_value)
+                except (ValueError, TypeError) as exc:
+                    raise BuildError(f"{table.csv_file} {line_no}행 컬럼 {col.name!r}: {exc}") from exc
+            if not row[table.key]:
+                raise BuildError(f"{table.csv_file} {line_no}행: {table.key} 가 비어 있음")
+            row["_line"] = line_no
+            table.rows.append(row)
+
+
+def check_duplicates(table: Table) -> None:
+    seen: dict[str, int] = {}
+    for row in table.rows:
+        key = row[table.key]
+        if key in seen:
+            raise BuildError(
+                f"{table.csv_file} {row['_line']}행: {table.key}={key!r} 중복 ({seen[key]}행과 동일)"
+            )
+        seen[key] = row["_line"]
+
+
+def check_references(tables: dict[str, Table]) -> None:
+    keys = {name: {r[t.key] for r in t.rows} for name, t in tables.items()}
+    for table in tables.values():
+        for col in table.columns:
+            if col.ref is None:
+                continue
+            target = tables[col.ref]
+            for row in table.rows:
+                value = row[col.name]
+                if value and value not in keys[col.ref]:
+                    raise BuildError(
+                        f"{table.csv_file} {row['_line']}행 컬럼 {col.name!r}: "
+                        f"{value!r} 가 {target.csv_file} 의 {target.key} 에 없음"
+                    )
+
+
+def convert_tuning_value(row: dict[str, Any]) -> Any:
+    kind, raw = row["type"], row["value"]
+    try:
+        if kind == "int":
+            return int(raw)
+        if kind == "float":
+            return float(raw)
+        if kind == "bool":
+            return parse_bool(raw)
+        return raw
+    except ValueError as exc:
+        raise BuildError(
+            f"tuning.csv {row['_line']}행 key={row['key']!r}: {kind} 변환 실패 ({raw!r})"
+        ) from exc
+
+
+# ---------------------------------------------------------------- .tres 출력
+
+
+def gd_literal(value: Any) -> str:
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, int):
+        return str(value)
+    if isinstance(value, float):
+        text = repr(value)
+        return text if ("." in text or "e" in text) else text + ".0"
+    if isinstance(value, str):
+        escaped = value.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+        return f'"{escaped}"'
+    if isinstance(value, dict):
+        items = ",\n".join(f"{gd_literal(k)}: {gd_literal(v)}" for k, v in value.items())
+        return "{\n" + items + "\n}" if items else "{}"
+    raise TypeError(f"직렬화 불가 타입: {type(value)}")
+
+
+def tres_text(table: Table, props: dict[str, Any]) -> str:
+    lines = [
+        f'[gd_resource type="Resource" script_class="{table.script_class}" load_steps=2 format=3]',
+        "",
+        f'[ext_resource type="Script" path="{SCRIPT_DIR}{table.script_file}" id="1_script"]',
+        "",
+        "[resource]",
+        'script = ExtResource("1_script")',
+    ]
+    for name, value in props.items():
+        lines.append(f"{name} = {gd_literal(value)}")
+    return "\n".join(lines) + "\n"
+
+
+def write_outputs(tables: dict[str, Table]) -> list[Path]:
+    written: list[Path] = []
+    for table in tables.values():
+        if table.mode == "rows":
+            out_dir = OUT_DIR / table.name
+            if out_dir.exists():
+                shutil.rmtree(out_dir)
+            out_dir.mkdir(parents=True)
+            for row in table.rows:
+                props = {c.name: row[c.name] for c in table.columns}
+                path = out_dir / f"{row[table.key]}.tres"
+                path.write_text(tres_text(table, props), encoding="utf-8", newline="\n")
+                written.append(path)
+        else:
+            values = {row["key"]: convert_tuning_value(row) for row in table.rows}
+            OUT_DIR.mkdir(parents=True, exist_ok=True)
+            path = OUT_DIR / f"{table.name}.tres"
+            path.write_text(tres_text(table, {"values": values}), encoding="utf-8", newline="\n")
+            written.append(path)
+    return written
+
+
+def main(argv: list[str]) -> int:
+    parser = argparse.ArgumentParser(description="CSV -> .tres 빌더")
+    parser.add_argument("--check", action="store_true", help="검증만 수행하고 파일을 쓰지 않음")
+    args = parser.parse_args(argv)
+
+    tables = {t.name: t for t in TABLES}
+    try:
+        for table in tables.values():
+            read_table(table)
+            check_duplicates(table)
+        check_references(tables)
+        for row in tables["tuning"].rows:
+            convert_tuning_value(row)
+        summary = ", ".join(f"{t.name}={len(t.rows)}" for t in tables.values())
+        print(f"[build_resources] 검증 통과: {summary}")
+        if args.check:
+            return 0
+        written = write_outputs(tables)
+        print(f"[build_resources] {len(written)}개 .tres 생성 -> {OUT_DIR.relative_to(ROOT)}")
+        return 0
+    except BuildError as exc:
+        print(f"[build_resources] 실패: {exc}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

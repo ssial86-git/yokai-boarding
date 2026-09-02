@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TuningData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/tuning_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+values = {
+"phase_morning_seconds": 0.0,
+"phase_day_seconds": 240.0,
+"phase_evening_seconds": 0.0,
+"phase_night_seconds": 0.0,
+"grid_floors": 3,
+"grid_columns": 4,
+"start_money": 200,
+"slice_target_days": 7
+}

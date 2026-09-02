@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GuestSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/guest_species_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_geumjuri"
+name_ko = "금줄이"
+rarity = "rare"
+flavor_ko = "새끼줄 요괴. 묵은 방에 액막이를 걸어 준다."
+rent_type = "buff"
+rent_note_ko = "결계 보너스"
+appear_condition = ""
+weight = 5
+promotable = true
+sprite_size = 16

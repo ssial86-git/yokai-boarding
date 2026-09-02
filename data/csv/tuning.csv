@@ -1,0 +1,9 @@
+key,value,type,description
+phase_morning_seconds,0,float,아침(배치) 페이즈 길이(초). 0 이하면 수동 진행
+phase_day_seconds,240,float,낮(가동) 페이즈 길이(초). docs/01 8절 기본값 4분
+phase_evening_seconds,0,float,저녁(정산·심사) 페이즈 길이(초). 0 이하면 수동 진행
+phase_night_seconds,0,float,밤(사연) 페이즈 길이(초). 0 이하면 수동 진행
+grid_floors,3,int,하숙집 최대 층수
+grid_columns,4,int,층당 방 슬롯 수
+start_money,200,int,새 게임 시작 자금
+slice_target_days,7,int,첫 플레이 목표 일수

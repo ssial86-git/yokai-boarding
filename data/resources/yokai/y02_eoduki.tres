@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="YokaiData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/yokai_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "y02_eoduki"
+name_ko = "어둑이"
+species_ko = "어둑시니"
+preferred_room = "gate"
+work_bonus = 0.15
+noise = 0
+night_worker = true
+rent_type = "errand"
+rent_note_ko = "그림자 심부름(밤 사이 방 정리·배달 대행)"
+stat_strength = 1
+stat_skill = 2
+stat_sight = 4
+stat_courage = 2
+sprite_size = 32
+in_slice = true

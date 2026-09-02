@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GuestSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/guest_species_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_ibulnang"
+name_ko = "이불낭"
+rarity = "common"
+flavor_ko = "이불을 뒤집어쓴 무언가. 체크아웃까지 정체 불명."
+rent_type = "buff"
+rent_note_ko = "따뜻한 온기(연료 절약)"
+appear_condition = ""
+weight = 40
+promotable = false
+sprite_size = 32

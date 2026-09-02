@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GuestSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/guest_species_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_usanson"
+name_ko = "우산손"
+rarity = "uncommon"
+flavor_ko = "버려진 우산 요괴. 비 오는 날만 찾아온다."
+rent_type = "info"
+rent_note_ko = "비 예보"
+appear_condition = "rain"
+weight = 15
+promotable = false
+sprite_size = 32

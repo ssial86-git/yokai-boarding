@@ -1,0 +1,7 @@
+id,name_ko,kind,build_cost,capacity,spirit_id,quiet,requires_room
+guest_room,객실,lodging,100,1,,true,
+kitchen,주방,production,150,1,jowang,false,
+workshop,작업장,production,150,1,,false,
+gate,대문간,gate,120,1,mundori,false,
+storage,창고,storage,80,0,,false,
+empty_lot,빈터,empty,0,0,,false,

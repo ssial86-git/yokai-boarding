@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="RoomData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/room_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "empty_lot"
+name_ko = "빈터"
+kind = "empty"
+build_cost = 0
+capacity = 0
+spirit_id = ""
+quiet = false
+requires_room = ""

@@ -1,0 +1,5 @@
+id,name_ko,rarity,flavor_ko,rent_type,rent_note_ko,appear_condition,weight,promotable,sprite_size
+g_mongdanggwi,몽당귀,common,몽당연필 요괴. 어디든 낙서를 남기고 간다.,items,낙서 한 장(장식 아이템),,40,false,16
+g_ibulnang,이불낭,common,이불을 뒤집어쓴 무언가. 체크아웃까지 정체 불명.,buff,따뜻한 온기(연료 절약),,40,false,32
+g_usanson,우산손,uncommon,버려진 우산 요괴. 비 오는 날만 찾아온다.,info,비 예보,rain,15,false,32
+g_geumjuri,금줄이,rare,새끼줄 요괴. 묵은 방에 액막이를 걸어 준다.,buff,결계 보너스,,5,true,16

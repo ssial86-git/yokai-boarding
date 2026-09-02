@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GuestSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/guest_species_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_mongdanggwi"
+name_ko = "몽당귀"
+rarity = "common"
+flavor_ko = "몽당연필 요괴. 어디든 낙서를 남기고 간다."
+rent_type = "items"
+rent_note_ko = "낙서 한 장(장식 아이템)"
+appear_condition = ""
+weight = 40
+promotable = false
+sprite_size = 16
