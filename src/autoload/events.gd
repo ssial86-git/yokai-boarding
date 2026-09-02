@@ -11,6 +11,9 @@ signal phase_changed(phase: int, day: int)
 
 # --- 하숙집 구조 (M1) ---
 signal room_changed(coords: Vector2i, room_id: String)
+signal floor_added(floor_index: int)
+## outcome 은 RoomGrid.Outcome 값.
+signal house_action_failed(outcome: int)
 
 # --- 요괴 (M2) ---
 signal yokai_arrived(yokai_id: String)
