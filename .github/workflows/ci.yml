@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+env:
+  GODOT_VERSION: "4.7-stable"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python deps
+        run: pip install pillow pandas
+
+      - name: Cache Godot
+        id: cache-godot
+        uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: godot-${{ env.GODOT_VERSION }}-linux-x86_64
+
+      - name: Download Godot
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/godot
+          curl -sSL -o godot.zip \
+            "https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_linux.x86_64.zip"
+          unzip -q godot.zip -d ~/godot
+          mv ~/godot/Godot_v${GODOT_VERSION}_linux.x86_64 ~/godot/godot
+          chmod +x ~/godot/godot
+
+      - name: Set GODOT_BIN
+        run: echo "GODOT_BIN=$HOME/godot/godot" >> "$GITHUB_ENV"
+
+      - name: Godot version
+        run: "$GODOT_BIN --version"
+
+      - name: Import assets
+        run: "$GODOT_BIN --headless --path . --import"
+
+      - name: Build resources (CSV -> .tres)
+        run: python tools/data/build_resources.py
+
+      - name: Validate art assets
+        run: python tools/art/validate_assets.py
+
+      - name: Check generated files are committed
+        run: git diff --exit-code -- data/resources
+
+      # runtest.sh 는 --headless 를 붙이지 않고, gdUnit4 는 headless 를 기본 거부(종료 코드 103)하므로
+      # CLI 툴을 직접 호출하고 --ignoreHeadlessMode 로 검사를 끈다. 이 프로젝트의 테스트는 InputEvent 를 쓰지 않는다.
+      # --remote-debug tcp://127.0.0.1:0 은 래퍼와 동일: 스크립트 파스 에러 시 대화형 디버거 루프 방지.
+      - name: Run gdUnit4 tests
+        run: >
+          "$GODOT_BIN" --headless --path . -s -d --remote-debug tcp://127.0.0.1:0
+          res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode -a res://test
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gdunit4-reports
+          path: reports/
+          if-no-files-found: ignore
