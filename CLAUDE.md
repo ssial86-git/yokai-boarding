@@ -41,6 +41,9 @@ $env:GODOT_BIN = "C:\dev\GODOT\Godot_v4.7-stable_win64_console.exe"
 # GODOT_BIN 없이:  .\addons\gdUnit4\runtest.cmd --godot_binary C:\dev\GODOT\Godot_v4.7-stable_win64_console.exe -a res://test
 # 특정 스위트 제외: -i TestExample   /  fail-fast 끄기: -c   /  단일 스위트: -a res://test/unit/test_example.gd
 
+# 스크린샷 (창이 잠깐 뜸): 메인 씬을 실제 렌더러로 띄워 저장. 인자: 출력 경로 [phase] [증축 층수] [돈]
+& $env:GODOT_BIN --path . -s res://test/tools/screenshot_runner.gd -- C:/tmp/shot.png night 2 5000
+
 # 데이터 파이프라인: CSV → .tres Resource 재생성 (--check 는 검증만)
 python tools/data/build_resources.py
 
