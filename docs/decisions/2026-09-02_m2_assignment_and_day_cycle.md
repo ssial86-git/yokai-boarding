@@ -7,6 +7,7 @@
 - **컨디션**: 요괴별 0~condition_max. 일하면 -work_condition_cost, 쉬면 +rest_condition_gain. 휴식처가 quiet 방이고 상하좌우 옆 칸에서 일하는 요괴의 noise 가 있으면 -noise × noise_condition_penalty_per_level. 이것이 M2 의 "아침 배치 퍼즐" 제약이다(뚝딱이 소음 3 vs 옆 객실 휴식자).
 - **이동**: `RoomGraph`(core) BFS. 같은 층 옆 칸 연결, `stair_column`(0) 에서만 층 이동. `YokaiActor` 는 칸 경로를 직선으로 걷고 실수 위치를 따로 들고 반올림해 픽셀 스냅한다(프레임당 1px 미만 이동이 누적되도록).
 - **드래그 배치 UI**: `YokaiCard`(`_get_drag_data`) → `DropLayer`(월드 위 투명 Control, `_can_drop_data`/`_drop_data`, 마우스는 PASS) 또는 `AssignmentPanel`/카드 위에 놓으면 휴식. 드래그 중 `HouseView` 가 칸마다 배치 가능 여부를 색으로 칠한다.
+- **코드 조립 UI 주의(사후 수정)**: 전체 화면을 덮는 Control 은 `set_anchors_and_offsets_preset(PRESET_FULL_RECT)` 로 만든다. `set_anchors_preset` 만 쓰면 offset 이 0×0 크기를 유지하도록 조정돼 DropLayer·BuildMenu 배경이 히트테스트에서 빠졌고, 실제 창에서 드래그 드롭이 무시됐다(headless 테스트로는 잡히지 않음). HouseView 의 방 스프라이트는 `z_index=-1` 로 두어 호버·드롭 색칠이 방 위에 보이게 한다. GUI 입력을 바꾸면 `test/tools/diag_drag.gd`(창 모드) 로 재현 확인한다.
 - **입주**: M3 심사 전까지 새 게임은 `yokai.csv` 의 `in_slice=true` 3명이 처음부터 입주. 침대(객실 정원) 제약은 M3 에서.
 - **세이브 v3**: game_state 에 conditions / inventory / assignment 추가. v2 → v3 는 빈 값으로 채우고 `GameState.from_dict` 가 기본값을 넣는다.
 

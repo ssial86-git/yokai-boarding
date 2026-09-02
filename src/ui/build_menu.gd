@@ -14,13 +14,14 @@ var _coords: Vector2i = Vector2i(-1, -1)
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	# anchors 와 offsets 를 함께 잡아야 실제로 화면 전체를 덮는다 (set_anchors_preset 만으로는 0x0)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	visible = false
 
 	_backdrop = Control.new()
 	_backdrop.name = "Backdrop"
-	_backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
 	_backdrop.gui_input.connect(_on_backdrop_input)
 	add_child(_backdrop)

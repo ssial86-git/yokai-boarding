@@ -152,6 +152,8 @@ func _set_cell(coords: Vector2i, room_id: String) -> void:
 	if sprite == null:
 		sprite = Sprite2D.new()
 		sprite.centered = false
+		# 자식은 부모의 _draw 위에 그려지므로, 호버·플래시·드롭 색칠이 방 위에 보이도록 스프라이트를 한 단계 뒤로
+		sprite.z_index = -1
 		sprite.position = cell_rect(coords).position
 		add_child(sprite)
 		_sprites[coords] = sprite

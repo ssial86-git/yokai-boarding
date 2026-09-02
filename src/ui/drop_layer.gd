@@ -8,7 +8,8 @@ var house_view: HouseView
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	# set_anchors_preset 만 쓰면 offset 이 현재(0x0) 크기를 유지하도록 조정돼 드롭 대상 영역이 0 이 된다
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_PASS
 
 

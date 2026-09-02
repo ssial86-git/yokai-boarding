@@ -19,7 +19,7 @@ var _message_timer: Timer
 
 
 func _ready() -> void:
-	set_anchors_preset(Control.PRESET_FULL_RECT)
+	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var top := VBoxContainer.new()
@@ -47,7 +47,6 @@ func _ready() -> void:
 	top.add_child(_progress)
 
 	_message_label = Label.new()
-	_message_label.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 	_message_label.position = Vector2(HUD_MARGIN_PX, get_viewport_rect().size.y - MESSAGE_BOTTOM_OFFSET_PX)
 	_message_label.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	add_child(_message_label)

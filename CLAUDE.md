@@ -44,6 +44,9 @@ $env:GODOT_BIN = "C:\dev\GODOT\Godot_v4.7-stable_win64_console.exe"
 # 스크린샷 (창이 잠깐 뜸): 메인 씬을 실제 렌더러로 띄워 저장. 인자: 출력 경로 [phase] [증축 층수] [돈]
 & $env:GODOT_BIN --path . -s res://test/tools/screenshot_runner.gd -- C:/tmp/shot.png night 2 5000
 
+# GUI 드래그 진단 (창이 뜸): 카드→주방 드래그를 입력 이벤트로 재현해 드롭 판정·배치 결과를 출력. headless 는 InputEvent 를 전달하지 않으므로 창 모드 전용
+& $env:GODOT_BIN --path . -s res://test/tools/diag_drag.gd
+
 # 데이터 파이프라인: CSV → .tres Resource 재생성 (--check 는 검증만)
 python tools/data/build_resources.py
 
