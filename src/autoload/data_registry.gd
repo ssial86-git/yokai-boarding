@@ -4,11 +4,13 @@ extends Node
 
 const RESOURCE_ROOT := "res://data/resources/"
 const TUNING_PATH := RESOURCE_ROOT + "tuning.tres"
+const STRINGS_PATH := RESOURCE_ROOT + "strings_ko.tres"
 
 var yokai: Dictionary = {}  # id -> YokaiData
 var guest_species: Dictionary = {}  # id -> GuestSpeciesData
 var rooms: Dictionary = {}  # id -> RoomData
 var tuning: TuningData = TuningData.new()
+var strings: StringTableData = StringTableData.new()
 
 
 func _ready() -> void:
@@ -19,10 +21,8 @@ func reload() -> void:
 	yokai = _load_dir(RESOURCE_ROOT + "yokai")
 	guest_species = _load_dir(RESOURCE_ROOT + "guest_species")
 	rooms = _load_dir(RESOURCE_ROOT + "rooms")
-	if ResourceLoader.exists(TUNING_PATH):
-		tuning = load(TUNING_PATH) as TuningData
-	else:
-		push_warning("DataRegistry: tuning.tres 없음 — build_resources.py 를 실행했는가?")
+	tuning = _load_single(TUNING_PATH, TuningData.new()) as TuningData
+	strings = _load_single(STRINGS_PATH, StringTableData.new()) as StringTableData
 
 
 func get_yokai(id: String) -> YokaiData:
@@ -35,6 +35,28 @@ func get_guest_species(id: String) -> GuestSpeciesData:
 
 func get_room(id: String) -> RoomData:
 	return rooms.get(id) as RoomData
+
+
+## UI 문자열. args 는 {name} 자리표시자를 채운다.
+func text(key: String, args: Dictionary = {}) -> String:
+	return strings.get_text(key).format(args)
+
+
+## 방 목록을 건설 비용 오름차순으로 (UI 메뉴용). 빈터(kind=empty)는 제외.
+func rooms_buildable_sorted() -> Array[RoomData]:
+	var result: Array[RoomData] = []
+	for room: RoomData in rooms.values():
+		if room.kind != RoomGrid.ROOM_KIND_EMPTY:
+			result.append(room)
+	result.sort_custom(func(a: RoomData, b: RoomData) -> bool: return a.build_cost < b.build_cost)
+	return result
+
+
+func _load_single(path: String, fallback: Resource) -> Resource:
+	if ResourceLoader.exists(path):
+		return load(path)
+	push_warning("DataRegistry: %s 없음 — build_resources.py 를 실행했는가?" % path)
+	return fallback
 
 
 func _load_dir(dir_path: String) -> Dictionary:

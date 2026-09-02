@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="StringTableData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/string_table_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+values = {
+"ui_next_phase": "다음 페이즈",
+"ui_debug_add_money": "돈 +{amount} (디버그)",
+"ui_save": "저장",
+"ui_load": "불러오기",
+"ui_close": "닫기",
+"ui_build_title_empty": "빈터 — 무엇을 지을까",
+"ui_build_title_locked": "{floor}층 증축",
+"ui_build_option": "{name} · {cost}",
+"ui_add_floor_option": "{floor}층 올리기 · {cost}",
+"ui_renovate_header": "개조",
+"ui_demolish_option": "철거 · 환불 {refund}",
+"hud_day": "{day}일차",
+"hud_money": "돈 {money}",
+"phase_morning": "아침",
+"phase_day": "낮",
+"phase_evening": "저녁",
+"phase_night": "밤",
+"msg_saved": "저장했다 (슬롯 {slot})",
+"msg_loaded": "불러왔다 (슬롯 {slot})",
+"msg_load_failed": "불러오기 실패",
+"msg_built": "{name} 설치 완료",
+"msg_demolished": "철거 완료",
+"msg_floor_added": "{floor}층 증축 완료",
+"outcome_out_of_bounds": "그 자리는 집 밖이다",
+"outcome_floor_locked": "아래층부터 증축해야 한다",
+"outcome_unknown_room": "알 수 없는 방",
+"outcome_same_room": "이미 그 방이다",
+"outcome_already_empty": "이미 빈터다",
+"outcome_cannot_place_empty": "빈터는 지을 수 없다",
+"outcome_requirement_missing": "먼저 필요한 방이 있다",
+"outcome_required_by_other": "다른 방이 이 방을 필요로 한다",
+"outcome_insufficient_funds": "돈이 부족하다",
+"outcome_max_floors_reached": "더는 올릴 수 없다"
+}

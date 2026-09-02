@@ -81,8 +81,10 @@ class Table:
     script_class: str
     script_file: str
     key: str = "id"
-    # "rows" = 행마다 .tres 하나, "dict" = 테이블 전체가 .tres 하나 (tuning)
+    # "rows" = 행마다 .tres 하나, "dict" = 테이블 전체가 .tres 하나 (tuning, strings)
     mode: str = "rows"
+    # dict 모드에서 행 -> 값 변환기. 검증 단계에서도 호출해 변환 오류를 잡는다.
+    dict_value: Callable[[dict[str, Any]], Any] | None = None
     rows: list[dict[str, Any]] = field(default_factory=list)
 
     @property
@@ -155,11 +157,25 @@ TABLES: list[Table] = [
         script_file="tuning_data.gd",
         key="key",
         mode="dict",
+        dict_value=lambda row: convert_tuning_value(row),
         columns=[
             Column("key", parse_str),
             Column("value", parse_str),
             Column("type", parse_enum("tuning_type")),
             Column("description", parse_str),
+        ],
+    ),
+    Table(
+        name="strings_ko",
+        csv_file="strings_ko.csv",
+        script_class="StringTableData",
+        script_file="string_table_data.gd",
+        key="key",
+        mode="dict",
+        dict_value=lambda row: row["text"],
+        columns=[
+            Column("key", parse_str),
+            Column("text", parse_str),
         ],
     ),
 ]
@@ -285,7 +301,8 @@ def write_outputs(tables: dict[str, Table]) -> list[Path]:
                 path.write_text(tres_text(table, props), encoding="utf-8", newline="\n")
                 written.append(path)
         else:
-            values = {row["key"]: convert_tuning_value(row) for row in table.rows}
+            assert table.dict_value is not None, f"{table.name}: dict 모드에는 dict_value 가 필요"
+            values = {row[table.key]: table.dict_value(row) for row in table.rows}
             OUT_DIR.mkdir(parents=True, exist_ok=True)
             path = OUT_DIR / f"{table.name}.tres"
             path.write_text(tres_text(table, {"values": values}), encoding="utf-8", newline="\n")
@@ -304,8 +321,10 @@ def main(argv: list[str]) -> int:
             read_table(table)
             check_duplicates(table)
         check_references(tables)
-        for row in tables["tuning"].rows:
-            convert_tuning_value(row)
+        for table in tables.values():
+            if table.dict_value is not None:
+                for row in table.rows:
+                    table.dict_value(row)
         summary = ", ".join(f"{t.name}={len(t.rows)}" for t in tables.values())
         print(f"[build_resources] 검증 통과: {summary}")
         if args.check:

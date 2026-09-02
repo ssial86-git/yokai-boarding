@@ -7,3 +7,27 @@ grid_floors,3,int,하숙집 최대 층수
 grid_columns,4,int,층당 방 슬롯 수
 start_money,200,int,새 게임 시작 자금
 slice_target_days,7,int,첫 플레이 목표 일수
+floor_build_cost,300,int,층 증축 기본 비용(2층). 층마다 growth 배씩 증가
+floor_build_cost_growth,1.5,float,층 증축 비용 증가 배율
+demolish_refund_ratio,0.5,float,철거 시 환불 비율 (build_cost 기준)
+start_layout_floor0,"gate,guest_room,kitchen,empty_lot",string,새 게임 1층 배치(왼쪽부터 room id)
+room_cell_width_px,64,int,방 1칸 가로(px). 16px 격자 4칸
+room_cell_height_px,48,int,방 1칸 세로(px). 16px 격자 3칸
+camera_zoom_min,1,int,카메라 최소 배율(정수 — 픽셀 스냅 유지)
+camera_zoom_max,3,int,카메라 최대 배율(정수)
+camera_zoom_step,1,int,휠 1칸당 배율 변화
+camera_drag_threshold_px,4,float,이 거리(화면 px) 넘게 움직이면 클릭이 아니라 드래그
+camera_bounds_margin_px,48,int,집 경계 바깥으로 보이는 여유(px)
+hover_highlight_alpha,0.25,float,마우스 올린 칸 강조 투명도
+build_flash_seconds,0.35,float,설치·철거 직후 칸 플래시 지속 시간
+hud_message_seconds,2.5,float,HUD 메시지 표시 시간
+light_transition_seconds,1.0,float,페이즈 전환 시 색조 트윈 시간
+light_color_morning,f7dfc4,string,아침 CanvasModulate 색(hex)
+light_color_day,ffffff,string,낮 CanvasModulate 색(hex)
+light_color_evening,e8a878,string,저녁 CanvasModulate 색(hex)
+light_color_night,4a5478,string,밤 CanvasModulate 색(hex)
+lantern_color,f2a65a,string,방 등불 색(hex — 팔레트)
+lantern_energy,1.1,float,방 등불 밝기
+lantern_radius_px,56,int,등불 반경(px)
+lantern_phases,"evening,night",string,등불이 켜지는 페이즈 목록
+debug_money_step,500,int,디버그 HUD 돈 추가량
