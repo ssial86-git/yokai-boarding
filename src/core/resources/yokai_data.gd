@@ -30,4 +30,6 @@ extends Resource
 @export var stat_courage: int = 0
 ## 32 또는 16. 스프라이트 규격(px).
 @export var sprite_size: int = 32
+## true 면 호감도가 낮을수록 흐리게 그린다 (어둑이 — '관심받으면 또렷해짐')
+@export var clarity_by_affinity: bool = false
 @export var in_slice: bool = false

@@ -23,4 +23,5 @@ stat_skill = 1
 stat_sight = 2
 stat_courage = 4
 sprite_size = 32
+clarity_by_affinity = false
 in_slice = true

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="HintData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/hint_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "hint_beds"
+phase = "any"
+day_min = 2
+day_max = 0
+requires_flag = ""
+blocked_by_flag = "first_extra_bed"
+priority = 35
+text_ko = "침대가 꽉 찼습니다. 객실을 하나 더 지으면 손님을 받을 수 있어요."

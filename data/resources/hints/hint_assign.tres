@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="HintData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/hint_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "hint_assign"
+phase = "morning"
+day_min = 1
+day_max = 0
+requires_flag = ""
+blocked_by_flag = "first_assignment_done"
+priority = 50
+text_ko = "아래 카드를 방으로 끌어 놓으면 일을 맡깁니다. 쉬게 두면 컨디션이 회복돼요."

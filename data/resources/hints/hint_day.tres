@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="HintData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/hint_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "hint_day"
+phase = "day"
+day_min = 1
+day_max = 1
+requires_flag = ""
+blocked_by_flag = ""
+priority = 20
+text_ko = "낮에는 배치된 요괴가 일합니다. 기다리거나 '낮 건너뛰기'를 누르세요."

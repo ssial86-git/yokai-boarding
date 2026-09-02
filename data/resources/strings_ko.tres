@@ -94,5 +94,11 @@ values = {
 "msg_story_started": "{title}",
 "speaker_player": "나",
 "weather_clear": "맑음",
-"weather_rain": "비"
+"weather_rain": "비",
+"ui_roster": "하숙부",
+"ui_roster_title": "하숙부 — 기록된 이름은 지워지지 않는다",
+"ui_roster_row": "{name} ({species}) · 호감도 {affinity} · 사연 {seen}/{total}막",
+"ui_roster_empty": "아직 기록된 하숙생이 없다",
+"ui_debug_title": "디버그 (F1)",
+"hud_hint_prefix": "성주 영감: {text}"
 }

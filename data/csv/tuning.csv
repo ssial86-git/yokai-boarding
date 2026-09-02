@@ -62,3 +62,10 @@ ui_panel_color,2e2733,string,UI 패널 배경색(hex — 팔레트)
 ui_panel_alpha,0.96,float,UI 패널 배경 투명도
 ui_panel_border_color,7a7180,string,UI 패널 테두리색(hex — 팔레트)
 ui_panel_padding_px,6,int,UI 패널 안쪽 여백(px)
+clarity_alpha_min,0.4,float,호감도 0 일 때 '흐린' 요괴(clarity_by_affinity)의 스프라이트 투명도
+clarity_affinity_max,3,int,이 호감도에서 완전히 또렷해진다
+night_worker_glow_energy,0.9,float,밤에 night_worker 요괴 주변에 켜지는 빛의 세기 (0 이면 끔)
+night_worker_glow_radius_px,40,int,밤 요괴 빛 반경(px)
+message_log_lines,4,int,메시지 로그 최대 줄 수
+message_fade_seconds,4.0,float,메시지가 사라지기까지의 시간
+sfx_master_db,0.0,float,효과음 전체 볼륨(dB)

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="HintData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/hint_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "hint_build"
+phase = "any"
+day_min = 1
+day_max = 3
+requires_flag = ""
+blocked_by_flag = "first_build_done"
+priority = 30
+text_ko = "빈터나 점선 칸을 클릭하면 건설·증축 메뉴가 열립니다. 침대가 모자라면 객실을 지으세요."

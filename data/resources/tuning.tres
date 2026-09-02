@@ -67,5 +67,12 @@ values = {
 "ui_panel_color": "2e2733",
 "ui_panel_alpha": 0.96,
 "ui_panel_border_color": "7a7180",
-"ui_panel_padding_px": 6
+"ui_panel_padding_px": 6,
+"clarity_alpha_min": 0.4,
+"clarity_affinity_max": 3,
+"night_worker_glow_energy": 0.9,
+"night_worker_glow_radius_px": 40,
+"message_log_lines": 4,
+"message_fade_seconds": 4.0,
+"sfx_master_db": 0.0
 }

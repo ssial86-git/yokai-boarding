@@ -1,0 +1,10 @@
+id,file,volume_db,loop
+click,click.wav,-6,false
+drop,drop.wav,-4,false
+build,build.wav,-4,false
+knock,knock.wav,-2,false
+blip,blip.wav,-10,false
+chime,chime.wav,-6,false
+coin,coin.wav,-6,false
+error,error.wav,-8,false
+rain,rain_loop.wav,-14,true

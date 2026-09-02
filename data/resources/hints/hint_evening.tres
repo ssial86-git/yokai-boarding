@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="HintData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/hint_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "hint_evening"
+phase = "evening"
+day_min = 1
+day_max = 0
+requires_flag = ""
+blocked_by_flag = "first_intake_done"
+priority = 45
+text_ko = "손님이 오면 문돌이가 카드를 물어 옵니다. 빈 침대가 있어야 받을 수 있어요."

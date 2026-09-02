@@ -14,6 +14,8 @@ var visitors: Dictionary = {}  # id -> VisitorData
 var spirits: Dictionary = {}  # id -> SpiritData
 var events: Dictionary = {}  # id -> EventData
 var dialogues: Dictionary = {}  # id -> DialogueData
+var hints: Dictionary = {}  # id -> HintData
+var sfx: Dictionary = {}  # id -> SfxData
 var tuning: TuningData = TuningData.new()
 var strings: StringTableData = StringTableData.new()
 
@@ -31,6 +33,8 @@ func reload() -> void:
 	spirits = _load_dir(RESOURCE_ROOT + "spirits")
 	events = _load_dir(RESOURCE_ROOT + "events")
 	dialogues = _load_dir(RESOURCE_ROOT + "dialogue")
+	hints = _load_dir(RESOURCE_ROOT + "hints")
+	sfx = _load_dir(RESOURCE_ROOT + "sfx")
 	tuning = _load_single(TUNING_PATH, TuningData.new()) as TuningData
 	strings = _load_single(STRINGS_PATH, StringTableData.new()) as StringTableData
 
@@ -65,6 +69,20 @@ func get_event(id: String) -> EventData:
 
 func get_dialogue(id: String) -> DialogueData:
 	return dialogues.get(id) as DialogueData
+
+
+func get_sfx(id: String) -> SfxData:
+	return sfx.get(id) as SfxData
+
+
+## 하숙생의 사연(story) 이벤트 id 목록, id 순.
+func story_event_ids(yokai_id: String) -> Array[String]:
+	var result: Array[String] = []
+	for event: EventData in events.values():
+		if event.kind == "story" and event.yokai_id == yokai_id:
+			result.append(event.id)
+	result.sort()
+	return result
 
 
 ## UI 문자열. args 는 {name} 자리표시자를 채운다.

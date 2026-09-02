@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="HintData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/hint_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "hint_night"
+phase = "night"
+day_min = 1
+day_max = 2
+requires_flag = ""
+blocked_by_flag = ""
+priority = 20
+text_ko = "밤에는 하숙생이 사연을 꺼냅니다. 들어주면 호감도가 오르고 하숙부에 기록됩니다."
