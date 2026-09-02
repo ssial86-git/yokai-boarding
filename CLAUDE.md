@@ -58,6 +58,9 @@ python tools/art/gen_placeholder.py
 
 # 아트 검증 (규격/팔레트/파일명)
 python tools/art/validate_assets.py
+
+# 임시 효과음 재생성 (표준 라이브러리 합성 → assets/audio/generated/). sfx.csv 의 file 과 이름을 맞춘다
+python tools/audio/gen_placeholder_audio.py
 ```
 
 작업 완료 전 반드시 `--import` → 데이터 빌드 → 아트 검증 → 테스트 순으로 실행하고 결과를 보고한다. 테스트를 돌리지 않고 "될 것이다"라고 보고하지 않는다.
