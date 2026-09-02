@@ -1,0 +1,18 @@
+# Godot
+.godot/
+*.tmp
+export_presets.cfg
+export/
+
+# gdUnit4 reports
+reports/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS / editor
+Thumbs.db
+.DS_Store
+*.swp
