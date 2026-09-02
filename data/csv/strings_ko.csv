@@ -32,3 +32,26 @@ outcome_requirement_missing,먼저 필요한 방이 있다
 outcome_required_by_other,다른 방이 이 방을 필요로 한다
 outcome_insufficient_funds,돈이 부족하다
 outcome_max_floors_reached,더는 올릴 수 없다
+ui_advance_morning,배치 끝 · 낮 시작
+ui_advance_day,낮 건너뛰기
+ui_advance_evening,밤으로
+ui_advance_night,하루 마감
+ui_rest_zone,휴식 (여기에 놓기)
+ui_assignment_title,아침 배치 — 카드를 방으로 끌어 놓으세요
+ui_assignment_locked,배치는 아침에만 바꿀 수 있다
+card_rest,휴식
+card_status,{place} · 컨디션 {condition}
+card_tooltip,{name} ({species})\n선호: {room} +{bonus}%\n소음 {noise} · 컨디션 {condition}
+hud_inventory_empty,창고: 비어 있음
+hud_inventory,창고: {list}
+hud_inventory_item,{name} {count}
+msg_settled,{day}일차 정산 — {summary}
+msg_settled_none,{day}일차 정산 — 오늘 산출 없음
+msg_noise_hit,{name}: 옆방 소음으로 잠을 설쳤다
+msg_assigned,{name} → {room}
+msg_rested,{name} → 휴식
+assign_outcome_not_built,아직 지어지지 않은 곳이다
+assign_outcome_not_workplace,일할 수 있는 방이 아니다
+assign_outcome_full,그 방은 자리가 없다
+assign_outcome_not_morning,배치는 아침에만 바꿀 수 있다
+assign_outcome_unknown_yokai,모르는 요괴다

@@ -12,3 +12,5 @@ capacity = 1
 spirit_id = "jowang"
 quiet = false
 requires_room = ""
+output_item = "meal"
+output_amount = 2

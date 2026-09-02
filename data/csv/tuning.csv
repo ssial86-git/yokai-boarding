@@ -33,3 +33,18 @@ lantern_phases,"evening,night",string,등불이 켜지는 페이즈 목록
 debug_money_step,500,int,디버그 HUD 돈 추가량
 window_integer_scale,2,int,창 배율(뷰포트 640x360 의 정수 배). 0 이면 화면에 맞는 최대 배율 자동
 window_auto_scale_fill,0.8,float,자동 배율 계산 시 화면 사용 가능 영역 중 채울 비율
+condition_max,100,int,요괴 컨디션 상한
+work_condition_cost,30,int,하루 일하면 줄어드는 컨디션
+rest_condition_gain,40,int,하루 쉬면 회복하는 컨디션
+noise_condition_penalty_per_level,10,int,휴식 중 옆방 소음 1레벨당 컨디션 감소
+low_condition_threshold,40,int,이 미만이면 산출이 low_condition_multiplier 배
+low_condition_multiplier,0.5,float,저컨디션 산출 배율
+stair_column,0,int,층을 오르내리는 계단이 있는 칸(열) 번호
+yokai_walk_speed_px,40,float,요괴 걷기 속도(px/초)
+yokai_slot_spacing_px,16,int,한 칸에 여럿 있을 때 가로 간격(px)
+yokai_work_bob_px,2,int,일할 때 위아래로 들썩이는 폭(px)
+yokai_work_bob_seconds,0.5,float,일할 때 들썩임 주기(초)
+drop_ok_color,7fb2a6,string,드래그 중 배치 가능 칸 강조색(hex)
+drop_bad_color,c9503f,string,드래그 중 배치 불가 칸 강조색(hex)
+drop_highlight_alpha,0.35,float,드래그 중 칸 강조 투명도
+assignment_card_size_px,32,int,배치 패널 요괴 카드 한 변(px)

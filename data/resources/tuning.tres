@@ -38,5 +38,20 @@ values = {
 "lantern_phases": "evening,night",
 "debug_money_step": 500,
 "window_integer_scale": 2,
-"window_auto_scale_fill": 0.8
+"window_auto_scale_fill": 0.8,
+"condition_max": 100,
+"work_condition_cost": 30,
+"rest_condition_gain": 40,
+"noise_condition_penalty_per_level": 10,
+"low_condition_threshold": 40,
+"low_condition_multiplier": 0.5,
+"stair_column": 0,
+"yokai_walk_speed_px": 40.0,
+"yokai_slot_spacing_px": 16,
+"yokai_work_bob_px": 2,
+"yokai_work_bob_seconds": 0.5,
+"drop_ok_color": "7fb2a6",
+"drop_bad_color": "c9503f",
+"drop_highlight_alpha": 0.35,
+"assignment_card_size_px": 32
 }

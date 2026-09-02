@@ -9,6 +9,7 @@ const STRINGS_PATH := RESOURCE_ROOT + "strings_ko.tres"
 var yokai: Dictionary = {}  # id -> YokaiData
 var guest_species: Dictionary = {}  # id -> GuestSpeciesData
 var rooms: Dictionary = {}  # id -> RoomData
+var items: Dictionary = {}  # id -> ItemData
 var tuning: TuningData = TuningData.new()
 var strings: StringTableData = StringTableData.new()
 
@@ -21,6 +22,7 @@ func reload() -> void:
 	yokai = _load_dir(RESOURCE_ROOT + "yokai")
 	guest_species = _load_dir(RESOURCE_ROOT + "guest_species")
 	rooms = _load_dir(RESOURCE_ROOT + "rooms")
+	items = _load_dir(RESOURCE_ROOT + "items")
 	tuning = _load_single(TUNING_PATH, TuningData.new()) as TuningData
 	strings = _load_single(STRINGS_PATH, StringTableData.new()) as StringTableData
 
@@ -35,6 +37,36 @@ func get_guest_species(id: String) -> GuestSpeciesData:
 
 func get_room(id: String) -> RoomData:
 	return rooms.get(id) as RoomData
+
+
+func get_item(id: String) -> ItemData:
+	return items.get(id) as ItemData
+
+
+## 표시용 이름. 데이터가 없으면 id 를 그대로 (누락이 눈에 띄도록).
+func item_name(id: String) -> String:
+	var item := get_item(id)
+	return item.name_ko if item != null else id
+
+
+func room_name(id: String) -> String:
+	var room := get_room(id)
+	return room.name_ko if room != null else id
+
+
+func yokai_name(id: String) -> String:
+	var yokai := get_yokai(id)
+	return yokai.name_ko if yokai != null else id
+
+
+## 슬라이스 등장 하숙생 id (in_slice=true), id 순.
+func slice_yokai_ids() -> Array[String]:
+	var result: Array[String] = []
+	for yokai: YokaiData in yokai.values():
+		if yokai.in_slice:
+			result.append(yokai.id)
+	result.sort()
+	return result
 
 
 ## UI 문자열. args 는 {name} 자리표시자를 채운다.

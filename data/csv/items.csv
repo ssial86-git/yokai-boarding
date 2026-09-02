@@ -1,0 +1,9 @@
+id,name_ko,kind,base_value
+meal,밥,food,5
+trinket,잡동사니,material,8
+wood,목재,material,6
+cloth,천,material,7
+charm,부적,misc,20
+scrap,쇠부스러기,material,10
+doodle,낙서,misc,3
+record_piece,기록 조각,key,0

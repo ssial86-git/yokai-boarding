@@ -12,3 +12,5 @@ capacity = 1
 spirit_id = ""
 quiet = true
 requires_room = ""
+output_item = ""
+output_amount = 0

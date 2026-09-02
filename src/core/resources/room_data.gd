@@ -16,3 +16,7 @@ extends Resource
 @export var quiet: bool = false
 ## 이 방을 지으려면 먼저 있어야 하는 방 id. 빈 문자열이면 조건 없음.
 @export var requires_room: String = ""
+## 낮 가동 산출 아이템 id (items.csv). 빈 문자열이면 산출 없음.
+@export var output_item: String = ""
+## 일꾼 1명이 하루에 만드는 기본 수량.
+@export var output_amount: int = 0

@@ -27,6 +27,7 @@ OUT_DIR = ROOT / "data" / "resources"
 SCRIPT_DIR = "res://src/core/resources/"
 
 ENUMS: dict[str, set[str]] = {
+    "item_kind": {"food", "material", "misc", "key"},
     "rent_type": {"money", "items", "errand", "buff", "info", "none"},
     "rarity": {"common", "uncommon", "rare"},
     "room_kind": {"lodging", "production", "service", "gate", "storage", "empty"},
@@ -94,6 +95,18 @@ class Table:
 
 TABLES: list[Table] = [
     Table(
+        name="items",
+        csv_file="items.csv",
+        script_class="ItemData",
+        script_file="item_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("kind", parse_enum("item_kind")),
+            Column("base_value", int),
+        ],
+    ),
+    Table(
         name="rooms",
         csv_file="rooms.csv",
         script_class="RoomData",
@@ -107,6 +120,8 @@ TABLES: list[Table] = [
             Column("spirit_id", parse_str),  # spirits.csv 는 M3 — 아직 참조 검증 없음
             Column("quiet", parse_bool),
             Column("requires_room", parse_str, ref="rooms"),
+            Column("output_item", parse_str, ref="items"),
+            Column("output_amount", int),
         ],
     ),
     Table(
@@ -172,7 +187,8 @@ TABLES: list[Table] = [
         script_file="string_table_data.gd",
         key="key",
         mode="dict",
-        dict_value=lambda row: row["text"],
+        # CSV 셀 안의 리터럴 \n 을 줄바꿈으로 (여러 줄 툴팁용)
+        dict_value=lambda row: row["text"].replace("\\n", "\n"),
         columns=[
             Column("key", parse_str),
             Column("text", parse_str),

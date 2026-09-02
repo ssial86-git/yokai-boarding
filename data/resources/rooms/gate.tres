@@ -12,3 +12,5 @@ capacity = 1
 spirit_id = "mundori"
 quiet = false
 requires_room = ""
+output_item = ""
+output_amount = 0
