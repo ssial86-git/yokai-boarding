@@ -4,6 +4,7 @@
 - 요괴·손님: sprite_size(32 또는 16) 정사각 색 블록 + 눈 2개 + 2글자 라벨(3x5 도트 폰트, 영문 약자).
   파일명 yokai_<id>.png / guest_<id>.png (validate_assets.py 의 캐릭터 규칙 대상).
 - 방: 방 1칸 = 64x48 (16px 격자 4x3 칸) 색 블록 + 테두리 + 영문 약자 라벨. 파일명 room_<id>.png
+- 일러스트 자리표시: 요괴·가택신마다 1024x1024 색 블록 + 큰 눈 + 라벨. 파일명 illust_<id>.png (대화창·도감용 임시)
 - 모든 색은 data/palette.hex 에서만 고른다 (팔레트 검증 통과 보장).
 
 한글 라벨을 도트로 찍지 않는 이유: 32px 안에 한글 2글자를 판독 가능하게 넣을 수 없어 영문 약자를 쓴다.
@@ -120,9 +121,45 @@ def make_room(color: tuple[int, int, int], label: str) -> Image.Image:
     return img
 
 
+ILLUST_SIZE = 1024
+
+
+def make_illust(color: tuple[int, int, int], label: str) -> Image.Image:
+    img = Image.new("RGBA", (ILLUST_SIZE, ILLUST_SIZE), ROOM_WALL + (255,))
+    draw = ImageDraw.Draw(img)
+    margin = ILLUST_SIZE // 8
+    draw.rounded_rectangle((margin, margin * 2, ILLUST_SIZE - margin, ILLUST_SIZE - margin), radius=ILLUST_SIZE // 5, fill=color, outline=OUTLINE, width=16)
+    eye_y = ILLUST_SIZE // 2
+    for ex in (ILLUST_SIZE * 3 // 8, ILLUST_SIZE * 5 // 8):
+        draw.ellipse((ex - 40, eye_y - 56, ex + 40, eye_y + 56), fill=DARK)
+    # 라벨은 3x5 도트 폰트를 32배로 확대
+    scale = 32
+    x0 = ILLUST_SIZE // 2 - len(label) * 2 * scale
+    y0 = ILLUST_SIZE - margin * 2 - 5 * scale
+    for ch in label:
+        glyph = FONT.get(ch, FONT["?"])
+        for row, bits in enumerate(glyph):
+            for col, bit in enumerate(bits):
+                if bit == "1":
+                    draw.rectangle((x0 + col * scale, y0 + row * scale, x0 + (col + 1) * scale - 1, y0 + (row + 1) * scale - 1), fill=DARK)
+        x0 += 4 * scale
+    return img
+
+
 def main() -> int:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []
+
+    for i, row in enumerate(read_rows("yokai.csv")):
+        img = make_illust(IDENT_COLORS[i % len(IDENT_COLORS)], label_from_id(row["id"]))
+        path = OUT_DIR / f"illust_{row['id']}.png"
+        img.save(path)
+        written.append(path)
+    for i, row in enumerate(read_rows("spirits.csv")):
+        img = make_illust(IDENT_COLORS[(i + 7) % len(IDENT_COLORS)], label_from_id(row["id"]))
+        path = OUT_DIR / f"illust_{row['id']}.png"
+        img.save(path)
+        written.append(path)
 
     for i, row in enumerate(read_rows("yokai.csv")):
         color = IDENT_COLORS[i % len(IDENT_COLORS)]
