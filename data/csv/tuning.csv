@@ -70,3 +70,4 @@ message_log_lines,4,int,메시지 로그 최대 줄 수
 message_fade_seconds,4.0,float,메시지가 사라지기까지의 시간
 sfx_master_db,0.0,float,효과음 전체 볼륨(dB)
 rest_zone_min_width_px,96,int,배치 패널 휴식 놓기 영역의 최소 너비(px)
+playtest_log_enabled,true,bool,플레이테스트 지표 로그(user://playtest/*.jsonl) 기록 여부

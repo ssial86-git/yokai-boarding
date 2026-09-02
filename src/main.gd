@@ -9,6 +9,7 @@ extends Node2D
 ##  ├ IntakeSystem           저녁 방문자 추첨·심사 결정
 ##  ├ TutorialSystem         첫 행동 플래그 + 성주 영감 안내 문구
 ##  ├ AudioSystem            효과음·빗소리
+##  ├ PlaytestLog            플레이테스트 지표 JSONL (M5)
 ##  ├ World (Node2D)
 ##  │   ├ HouseView          단면 렌더링 (RoomGrid 구독)
 ##  │   ├ YokaiManager       요괴·손님 액터 스폰·이동·또렷함·등불
@@ -72,6 +73,9 @@ func _ready() -> void:
 	audio_system = AudioSystem.new()
 	audio_system.name = "AudioSystem"
 	add_child(audio_system)
+	var playtest_log := PlaytestLog.new()
+	playtest_log.name = "PlaytestLog"
+	add_child(playtest_log)
 
 	_build_world()
 	_build_ui()

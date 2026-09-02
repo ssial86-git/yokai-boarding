@@ -1,7 +1,7 @@
 # Godot
 .godot/
 *.tmp
-export_presets.cfg
+build/
 export/
 
 # gdUnit4 reports

@@ -132,6 +132,16 @@ func rooms_buildable_sorted() -> Array[RoomData]:
 	return result
 
 
+## 슬라이스에 등장하는 하숙생 id (in_slice=true), id 순. 파이프라인 검증용 행(Y04~)은 제외된다.
+func slice_yokai_ids() -> Array[String]:
+	var result: Array[String] = []
+	for yokai_data: YokaiData in yokai.values():
+		if yokai_data.in_slice:
+			result.append(yokai_data.id)
+	result.sort()
+	return result
+
+
 ## 새 게임 시작부터 입주해 있는 하숙생 id (in_slice 이고 join_mode=start), id 순.
 func starting_yokai_ids() -> Array[String]:
 	var result: Array[String] = []
