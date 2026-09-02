@@ -11,6 +11,10 @@ var reputation: int = 0
 var affinity: Dictionary = {}
 ## 입주 중인 하숙생 id 목록
 var residents: Array[String] = []
+## yokai_id -> 컨디션 (0..condition_max)
+var conditions: Dictionary = {}
+var inventory: Inventory = Inventory.new()
+var assignment: Assignment = Assignment.new()
 ## 하숙집 방 그리드. reset_new_game() 또는 from_dict() 전에는 null.
 var room_grid: RoomGrid
 
@@ -20,14 +24,24 @@ func reset_new_game() -> void:
 	money = DataRegistry.tuning.get_int("start_money")
 	reputation = 0
 	affinity.clear()
-	residents.clear()
+	inventory = Inventory.new()
+	assignment = Assignment.new()
 	room_grid = new_room_grid()
 	_apply_start_layout(room_grid)
+	# M2: 심사(M3) 전까지 슬라이스 하숙생 3명이 처음부터 입주해 있다.
+	residents = DataRegistry.slice_yokai_ids()
+	conditions.clear()
+	for yokai_id in residents:
+		conditions[yokai_id] = DataRegistry.tuning.get_int("condition_max")
 
 
 func add_money(amount: int) -> void:
 	money += amount
 	Events.money_changed.emit(money)
+
+
+func get_condition(yokai_id: String) -> int:
+	return int(conditions.get(yokai_id, DataRegistry.tuning.get_int("condition_max")))
 
 
 ## DataRegistry 의 방 카탈로그·tuning 으로 빈 그리드를 만든다.
@@ -49,11 +63,15 @@ func to_dict() -> Dictionary:
 		"reputation": reputation,
 		"affinity": affinity.duplicate(),
 		"residents": residents.duplicate(),
+		"conditions": conditions.duplicate(),
+		"inventory": inventory.to_dict(),
+		"assignment": assignment.to_dict(),
 		"room_grid": room_grid.to_dict() if room_grid != null else {},
 	}
 
 
 ## 형식이 맞지 않으면 false 를 돌려주고 상태를 바꾸지 않는다.
+## 빠진 키는 새 게임 기본값으로 채운다 (구버전 세이브 마이그레이션의 마지막 단계).
 func from_dict(data: Dictionary) -> bool:
 	var grid := new_room_grid()
 	var grid_data: Variant = data.get("room_grid", {})
@@ -61,19 +79,40 @@ func from_dict(data: Dictionary) -> bool:
 		if not grid.from_dict(grid_data as Dictionary):
 			return false
 	else:
-		_apply_start_layout(grid)  # 그리드가 없는 구버전 세이브는 새 집으로 시작
+		_apply_start_layout(grid)
+	var new_inventory := Inventory.new()
+	if not new_inventory.from_dict(data.get("inventory", {})):
+		return false
+	var new_assignment := Assignment.new()
+	if not new_assignment.from_dict(data.get("assignment", {})):
+		return false
+
 	day = int(data.get("day", 1))
 	money = int(data.get("money", 0))
 	reputation = int(data.get("reputation", 0))
-	affinity.clear()
-	for yokai_id: Variant in (data.get("affinity", {}) as Dictionary):
-		# JSON 은 정수를 float 으로 돌려주므로 호감도는 int 로 되돌린다
-		affinity[str(yokai_id)] = int((data["affinity"] as Dictionary)[yokai_id])
+	affinity = _int_dict(data.get("affinity", {}))
 	residents.clear()
 	for entry: Variant in (data.get("residents", []) as Array):
 		residents.append(str(entry))
+	if not data.has("residents"):
+		residents = DataRegistry.slice_yokai_ids()
+	conditions = _int_dict(data.get("conditions", {}))
+	for yokai_id in residents:
+		if not conditions.has(yokai_id):
+			conditions[yokai_id] = DataRegistry.tuning.get_int("condition_max")
+	inventory = new_inventory
+	assignment = new_assignment
+	assignment.prune(grid, residents)
 	room_grid = grid
 	return true
+
+
+## JSON 은 정수를 float 으로 돌려주므로 값을 int 로 되돌린다.
+func _int_dict(source: Dictionary) -> Dictionary:
+	var result: Dictionary = {}
+	for key: Variant in source:
+		result[str(key)] = int(source[key])
+	return result
 
 
 func _apply_start_layout(grid: RoomGrid) -> void:

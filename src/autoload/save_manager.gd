@@ -2,8 +2,9 @@ extends Node
 ## JSON 한 파일 세이브. 스키마 변경 시 SAVE_VERSION 을 올리고 _migrate() 에 단계를 추가한다.
 ## v1: game_state(day/money/reputation/affinity/residents) + clock
 ## v2: game_state.room_grid 추가 (M1)
+## v3: game_state.conditions / inventory / assignment 추가 (M2)
 
-const SAVE_VERSION := 2
+const SAVE_VERSION := 3
 const SAVE_DIR := "user://saves"
 const SLOT_FILE_FORMAT := "slot_%d.json"
 
@@ -71,6 +72,8 @@ func _migrate(data: Dictionary) -> Dictionary:
 	var result := data.duplicate(true)
 	if version < 2:
 		_migrate_1_to_2(result)
+	if version < 3:
+		_migrate_2_to_3(result)
 	result["version"] = SAVE_VERSION
 	return result
 
@@ -79,4 +82,13 @@ func _migrate(data: Dictionary) -> Dictionary:
 func _migrate_1_to_2(data: Dictionary) -> void:
 	var game_state: Dictionary = data.get("game_state", {})
 	game_state.erase("room_grid")
+	data["game_state"] = game_state
+
+
+## v2 에는 컨디션·인벤토리·배치가 없다. 빈 값으로 두면 GameState.from_dict 가 기본값으로 채운다.
+func _migrate_2_to_3(data: Dictionary) -> void:
+	var game_state: Dictionary = data.get("game_state", {})
+	for key in ["conditions", "inventory", "assignment"]:
+		if not game_state.has(key):
+			game_state[key] = {}
 	data["game_state"] = game_state

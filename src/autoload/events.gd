@@ -17,8 +17,14 @@ signal house_action_failed(outcome: int)
 
 # --- 요괴 (M2) ---
 signal yokai_arrived(yokai_id: String)
-signal yokai_assigned(yokai_id: String, coords: Vector2i)
+## cell 이 Assignment.REST 면 휴식.
+signal assignment_changed(yokai_id: String, cell: Vector2i)
+## outcome 은 AssignmentController.Outcome 값.
+signal assignment_failed(yokai_id: String, outcome: int)
+signal condition_changed(yokai_id: String, value: int)
 signal affinity_changed(yokai_id: String, value: int)
+## 저녁 정산 결과 요약: {"day": int, "totals": {item_id: amount}, "noise_hits": {yokai_id: level}}
+signal day_settled(summary: Dictionary)
 
 # --- 경제 (M2~M3) ---
 signal item_added(item_id: String, count: int)
