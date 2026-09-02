@@ -32,6 +32,16 @@ func _initialize() -> void:
 
 	if money >= 0:
 		game_state.set("money", money)
+	# 튜토리얼 대화창이 집을 가리지 않도록 열린 대화를 끝까지 넘긴다
+	var story: Node = main.get("story_system")
+	for i in 50:
+		if not bool(story.call("is_busy")):
+			break
+		var node: RefCounted = story.call("current_node")
+		if node != null and bool(node.call("has_options")):
+			story.call("choose", 0)
+		else:
+			story.call("advance")
 	var controller: Node = main.get("house_controller")
 	var grid: RefCounted = game_state.get("room_grid")
 	for i in extra_floors:

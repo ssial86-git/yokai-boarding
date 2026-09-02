@@ -33,6 +33,24 @@ func test_build_and_expand_updates_view() -> void:
 	assert_int(controller.try_place_room(Vector2i(0, 2), "kitchen")).is_equal(RoomGrid.Outcome.INSUFFICIENT_FUNDS)
 
 
+## HUD·패널 레이아웃 뒤에도 집 전체가 카메라 화면 안에 있어야 한다 (M4 에서 오프셋이 -498px 로 튀어 집이 사라졌던 회귀).
+func test_house_stays_inside_camera_view_after_layout() -> void:
+	var runner := scene_runner("res://scenes/main.tscn")
+	await runner.simulate_frames(3)
+	var main: Node = runner.scene()
+	var view: HouseView = main.get("house_view")
+	var camera: HouseCamera = main.get("camera")
+	var view_size := main.get_viewport().get_visible_rect().size
+	var half := view_size / (2.0 * camera.zoom.x)
+	var center := camera.get_screen_center_position()
+	var visible := Rect2(center - half, half * 2.0)
+	var bounds: Rect2 = view.house_bounds()
+	assert_bool(visible.encloses(bounds)) \
+		.override_failure_message("집 %s 이 카메라 화면 %s 밖에 있다 (offset=%s)" % [bounds, visible, camera.offset]) \
+		.is_true()
+	assert_float(absf(camera.offset.y)).is_less(view_size.y * 0.5)
+
+
 func test_world_to_cell_matches_cell_rect() -> void:
 	var runner := scene_runner("res://scenes/main.tscn")
 	await runner.simulate_frames(1)

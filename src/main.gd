@@ -143,9 +143,11 @@ func _build_ui() -> void:
 	assignment_panel.name = "AssignmentPanel"
 	assignment_panel.controller = assignment_controller
 	ui.add_child(assignment_panel)
-	# 위 바와 아래 패널 사이에 집이 오도록 카메라를 밀고, 메시지 로그는 패널 바로 위에 붙인다
+	# 위 바와 아래 패널 사이에 집이 오도록 카메라를 밀고, 메시지 로그는 패널 바로 위에 붙인다.
+	# 크기는 레이아웃이 끝난 뒤에야 맞으므로 실제 바/패널의 resized 에 걸고, 첫 프레임 뒤 한 번 더 잡는다.
 	assignment_panel.resized.connect(_layout_around_panels)
-	hud.resized.connect(_layout_around_panels)
+	hud.bar_resized.connect(_layout_around_panels)
+	_layout_around_panels.call_deferred()
 
 	build_menu = BuildMenu.new()
 	build_menu.name = "BuildMenu"
@@ -172,10 +174,11 @@ func _build_ui() -> void:
 
 
 func _layout_around_panels() -> void:
-	var top := hud.bar_height()
-	var bottom := assignment_panel.size.y
-	camera.offset = Vector2(0, (bottom - top) * 0.5)
 	var view_size := get_viewport().get_visible_rect().size
+	# 레이아웃 전의 엉뚱한 크기(0 이나 화면보다 큰 값)로 카메라를 밀지 않는다
+	var top := clampf(hud.bar_height(), 0.0, view_size.y * 0.5)
+	var bottom := clampf(assignment_panel.size.y, 0.0, view_size.y * 0.5)
+	camera.offset = Vector2(0, (bottom - top) * 0.5)
 	message_log.position = Vector2(MESSAGE_LOG_MARGIN_PX, view_size.y - bottom - MESSAGE_LOG_MARGIN_PX)
 	message_log.grow_vertical = Control.GROW_DIRECTION_BEGIN
 

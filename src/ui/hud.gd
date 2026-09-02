@@ -3,6 +3,9 @@ extends Control
 ## 정식 HUD: 상단 바(날짜·페이즈·날씨·돈·평판·침대 / 행동 버튼), 성주 영감 안내 줄, 낮 진행 바, 창고 줄.
 ## 사람용 문장은 Events.message_posted 로 MessageLog 에 보낸다. 디버그 도구는 DebugOverlay 로 분리.
 
+## 상단 바의 실제 높이가 바뀔 때 (레이아웃 확정·안내 줄 표시/숨김). main.gd 가 카메라 오프셋을 다시 잡는다.
+signal bar_resized
+
 var ledger_panel: LedgerPanel
 var roster_panel: RosterPanel
 
@@ -21,6 +24,7 @@ func _ready() -> void:
 	_bar = PanelContainer.new()
 	_bar.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE)
 	UiStyles.apply_panel(_bar)
+	_bar.resized.connect(func() -> void: bar_resized.emit())
 	add_child(_bar)
 	var column := VBoxContainer.new()
 	_bar.add_child(column)
