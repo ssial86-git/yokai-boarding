@@ -36,5 +36,8 @@ values = {
 "lantern_energy": 1.1,
 "lantern_radius_px": 56,
 "lantern_phases": "evening,night",
-"debug_money_step": 500
+"debug_money_step": 500,
+"ui_font_size": 11,
+"window_integer_scale": 0,
+"window_auto_scale_fill": 0.8
 }

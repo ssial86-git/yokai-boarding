@@ -18,6 +18,7 @@ var build_menu: BuildMenu
 
 
 func _ready() -> void:
+	_apply_window_scale()
 	GameState.reset_new_game()
 
 	house_controller = HouseController.new()
@@ -48,13 +49,16 @@ func _ready() -> void:
 	ui.name = "UI"
 	add_child(ui)
 
+	var ui_theme := UiTheme.build()
 	var hud := DebugHud.new()
 	hud.name = "DebugHud"
+	hud.theme = ui_theme
 	ui.add_child(hud)
 
 	build_menu = BuildMenu.new()
 	build_menu.name = "BuildMenu"
 	build_menu.controller = house_controller
+	build_menu.theme = ui_theme
 	ui.add_child(build_menu)
 
 	camera.clicked.connect(_on_world_clicked)
@@ -62,6 +66,26 @@ func _ready() -> void:
 
 	Clock.start_day()
 	Events.game_started.emit()
+
+
+## 창 크기를 뷰포트(640x360)의 정수 배로 맞춘다. tuning window_integer_scale 이 0 이면 화면에 맞는 최대 배율.
+## 고해상도 모니터에서 2배(1280x720) 창이 너무 작게 보이는 문제를 피한다. 스크린샷 러너 등 창이 없는 실행은 건너뛴다.
+func _apply_window_scale() -> void:
+	if DisplayServer.get_name() == "headless":
+		return
+	var tuning := DataRegistry.tuning
+	var base := Vector2i(
+		ProjectSettings.get_setting("display/window/size/viewport_width"),
+		ProjectSettings.get_setting("display/window/size/viewport_height"),
+	)
+	var scale := tuning.get_int("window_integer_scale")
+	if scale <= 0:
+		var usable := Vector2(DisplayServer.screen_get_usable_rect().size) * tuning.get_float("window_auto_scale_fill")
+		scale = maxi(1, mini(floori(usable.x / base.x), floori(usable.y / base.y)))
+	var window_size := base * scale
+	var screen_rect := DisplayServer.screen_get_usable_rect()
+	DisplayServer.window_set_size(window_size)
+	DisplayServer.window_set_position(screen_rect.position + (screen_rect.size - window_size) / 2)
 
 
 func _on_world_clicked(world_pos: Vector2) -> void:
