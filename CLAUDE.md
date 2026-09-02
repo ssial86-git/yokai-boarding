@@ -47,6 +47,9 @@ $env:GODOT_BIN = "C:\dev\GODOT\Godot_v4.7-stable_win64_console.exe"
 # GUI 드래그 진단 (창이 뜸): 카드→주방 드래그를 입력 이벤트로 재현해 드롭 판정·배치 결과를 출력. headless 는 InputEvent 를 전달하지 않으므로 창 모드 전용
 & $env:GODOT_BIN --path . -s res://test/tools/diag_drag.gd
 
+# M3 UI 캡처 (창이 뜸): 튜토리얼 대화창·2일차 심사 카드·도착 대화·밤 사연을 지정 폴더에 PNG 로 저장
+& $env:GODOT_BIN --path . -s res://test/tools/diag_m3_shots.gd -- C:/tmp
+
 # 데이터 파이프라인: CSV → .tres Resource 재생성 (--check 는 검증만)
 python tools/data/build_resources.py
 
