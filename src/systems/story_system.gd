@@ -91,6 +91,9 @@ func _finish() -> void:
 	_runner = null
 	ended.emit(event)
 	Events.dialogue_finished.emit(event.id)
+	# 튜토리얼은 안내일 뿐이므로 같은 페이즈의 사연(story)이 뒤이어 나온다. 사연끼리는 하루 하나만.
+	if event.kind == "tutorial":
+		try_show(Clock.phase)
 
 
 func _apply_effect(effect: Dictionary) -> void:
