@@ -1,4 +1,4 @@
-key,value,type,description
+﻿key,value,type,description
 phase_morning_seconds,0,float,아침(배치) 페이즈 길이(초). 0 이하면 수동 진행
 phase_day_seconds,240,float,낮(가동) 페이즈 길이(초). docs/01 8절 기본값 4분
 phase_evening_seconds,0,float,저녁(정산·심사) 페이즈 길이(초). 0 이하면 수동 진행
@@ -31,6 +31,6 @@ lantern_energy,1.1,float,방 등불 밝기
 lantern_radius_px,56,int,등불 반경(px)
 lantern_phases,"evening,night",string,등불이 켜지는 페이즈 목록
 debug_money_step,500,int,디버그 HUD 돈 추가량
-ui_font_size,11,int,UI 기본 폰트 크기(px). Galmuri11 설계 크기 — 바꾸면 획이 깨진다
+ui_font_size,12,int,UI 기본 폰트 크기(px). Galmuri11 은 글리프 높이 11px + 여백 1px 이라 12 가 설계 크기 — 바꾸면 획이 깨진다
 window_integer_scale,0,int,창 배율(뷰포트 640x360 의 정수 배). 0 이면 화면에 맞는 최대 배율 자동
 window_auto_scale_fill,0.8,float,자동 배율 계산 시 화면 사용 가능 영역 중 채울 비율
