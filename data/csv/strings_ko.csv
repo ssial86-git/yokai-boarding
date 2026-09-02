@@ -95,3 +95,6 @@ ui_roster_row,{name} ({species}) · 호감도 {affinity} · 사연 {seen}/{total
 ui_roster_empty,아직 기록된 하숙생이 없다
 ui_debug_title,디버그 (F1)
 hud_hint_prefix,성주 영감: {text}
+card_guest_name,손님 · {name}
+card_guest_status,{nights}일 뒤 떠남 · 배치 불가
+card_guest_tooltip,{name}\n{flavor}\n하숙비: {rent}

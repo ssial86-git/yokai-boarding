@@ -27,7 +27,7 @@ light_color_day,ffffff,string,낮 CanvasModulate 색(hex)
 light_color_evening,e8a878,string,저녁 CanvasModulate 색(hex)
 light_color_night,4a5478,string,밤 CanvasModulate 색(hex)
 lantern_color,f2a65a,string,방 등불 색(hex — 팔레트)
-lantern_energy,1.1,float,방 등불 밝기
+lantern_energy,0.6,float,방 등불 밝기
 lantern_radius_px,56,int,등불 반경(px)
 lantern_phases,"evening,night",string,등불이 켜지는 페이즈 목록
 debug_money_step,500,int,디버그 HUD 돈 추가량
@@ -69,3 +69,4 @@ night_worker_glow_radius_px,40,int,밤 요괴 빛 반경(px)
 message_log_lines,4,int,메시지 로그 최대 줄 수
 message_fade_seconds,4.0,float,메시지가 사라지기까지의 시간
 sfx_master_db,0.0,float,효과음 전체 볼륨(dB)
+rest_zone_min_width_px,96,int,배치 패널 휴식 놓기 영역의 최소 너비(px)

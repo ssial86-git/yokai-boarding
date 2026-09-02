@@ -33,7 +33,7 @@ values = {
 "light_color_evening": "e8a878",
 "light_color_night": "4a5478",
 "lantern_color": "f2a65a",
-"lantern_energy": 1.1,
+"lantern_energy": 0.6,
 "lantern_radius_px": 56,
 "lantern_phases": "evening,night",
 "debug_money_step": 500,
@@ -74,5 +74,6 @@ values = {
 "night_worker_glow_radius_px": 40,
 "message_log_lines": 4,
 "message_fade_seconds": 4.0,
-"sfx_master_db": 0.0
+"sfx_master_db": 0.0,
+"rest_zone_min_width_px": 96
 }

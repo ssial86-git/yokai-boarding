@@ -1,15 +1,17 @@
 class_name AssignmentPanel
 extends PanelContainer
-## 화면 아래 배치 패널: 하숙생 카드 목록 + 휴식 놓기 영역. 카드를 방(DropLayer)이나 이 패널로 끌어 놓는다.
+## 화면 아래 배치 패널: 하숙생 카드(드래그) + 체류 중 손님 카드(정보만) + 휴식 놓기 영역.
 ## 아침이 아니면 카드 드래그를 잠근다.
 
 const SPRITE_PATH := "res://assets/art_generated/yokai_%s.png"
+const GUEST_SPRITE_PATH := "res://assets/art_generated/guest_%s.png"
 
 var controller: AssignmentController
 
 var _title: Label
 var _cards_box: HBoxContainer
-var _cards: Dictionary = {}  # yokai_id -> YokaiCard
+var _cards: Dictionary = {}  # yokai_id -> YokaiCard (하숙생)
+var _guest_cards: Array[YokaiCard] = []
 var _rest_zone: Label
 var _card_size: int = 40
 
@@ -34,6 +36,9 @@ func _ready() -> void:
 	_rest_zone.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_rest_zone.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_rest_zone.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	# 카드가 늘어 자리가 좁아지면 글자를 줄바꿈해 화면 밖으로 잘리지 않게 한다
+	_rest_zone.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_rest_zone.custom_minimum_size = Vector2(DataRegistry.tuning.get_int("rest_zone_min_width_px"), 0)
 	row.add_child(_rest_zone)
 
 	Events.assignment_changed.connect(func(_id: String, _cell: Vector2i) -> void: refresh())
@@ -43,21 +48,31 @@ func _ready() -> void:
 	Events.room_changed.connect(func(_coords: Vector2i, _room_id: String) -> void: refresh())
 	Events.game_loaded.connect(func(_slot: int) -> void: rebuild())
 	Events.yokai_arrived.connect(func(_id: String) -> void: rebuild())
+	Events.guests_changed.connect(rebuild)
 	rebuild()
 
 
+## 하숙생 + 손님 카드를 전부 다시 만든다. 카드 수 = 입주자 수 + 체류 손님 수.
 func rebuild() -> void:
 	for card: YokaiCard in _cards.values():
 		card.queue_free()
+	for card: YokaiCard in _guest_cards:
+		card.queue_free()
 	_cards.clear()
+	_guest_cards.clear()
 	for yokai_id in GameState.residents:
 		var card := YokaiCard.new()
-		var path := SPRITE_PATH % yokai_id
-		var texture: Texture2D = load(path) if ResourceLoader.exists(path) else null
-		card.setup(yokai_id, texture, _card_size)
+		card.setup(yokai_id, _texture(SPRITE_PATH % yokai_id), _card_size)
 		card.rest_requested.connect(_on_rest_requested)
 		_cards_box.add_child(card)
 		_cards[yokai_id] = card
+	var index := 0
+	for guest: Dictionary in GameState.guests:
+		var card := YokaiCard.new()
+		card.setup_guest(guest, index, _texture(GUEST_SPRITE_PATH % str(guest.get("species_id", ""))), _card_size)
+		_cards_box.add_child(card)
+		_guest_cards.append(card)
+		index += 1
 	refresh()
 
 
@@ -67,10 +82,24 @@ func refresh() -> void:
 	for card: YokaiCard in _cards.values():
 		card.drag_enabled = morning
 		card.refresh()
+	for card: YokaiCard in _guest_cards:
+		card.refresh()
 
 
 func get_card(yokai_id: String) -> YokaiCard:
 	return _cards.get(yokai_id) as YokaiCard
+
+
+func card_count() -> int:
+	return _cards.size() + _guest_cards.size()
+
+
+func guest_card_count() -> int:
+	return _guest_cards.size()
+
+
+func _texture(path: String) -> Texture2D:
+	return load(path) if ResourceLoader.exists(path) else null
 
 
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
