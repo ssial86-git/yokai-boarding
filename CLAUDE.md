@@ -50,6 +50,9 @@ $env:GODOT_BIN = "C:\dev\GODOT\Godot_v4.7-stable_win64_console.exe"
 # M3 UI 캡처 (창이 뜸): 튜토리얼 대화창·2일차 심사 카드·도착 대화·밤 사연을 지정 폴더에 PNG 로 저장
 & $env:GODOT_BIN --path . -s res://test/tools/diag_m3_shots.gd -- C:/tmp
 
+# 최종 검증 자동 플레이 (창이 뜸): 시드 고정 이틀 진행, 상태 검사 + 단계별 PNG + playthrough_report.json. 실패 시 종료 코드 1
+& $env:GODOT_BIN --path . -s res://test/tools/playthrough_check.gd -- C:/tmp/verify
+
 # 데이터 파이프라인: CSV → .tres Resource 재생성 (--check 는 검증만)
 python tools/data/build_resources.py
 
@@ -173,7 +176,9 @@ docs/
 ## 9. 세션 시작·종료 루틴
 
 시작: `docs/01` 4절 마일스톤에서 현재 위치 확인 → `docs/decisions/` 최신 3개 읽기 → `git status`, 테스트 실행 → 오늘 할 일 제안 후 착수.
-종료: 테스트 통과 확인 → 커밋 → 결정 사항이 있었으면 `docs/decisions/YYYY-MM-DD_제목.md` 작성 → 남은 일·막힌 일·사용자 결정 필요 항목을 3줄로 보고.
+종료: 테스트 통과 확인 → **검증 에이전트 실행**(아래) → FAIL 이 없을 때만 커밋 → 결정 사항이 있었으면 `docs/decisions/YYYY-MM-DD_제목.md` 작성 → 남은 일·막힌 일·사용자 결정 필요 항목을 3줄로 보고.
+
+**검증 에이전트 (완료 보고 전 필수)**: 작업한 본인이 아닌 별도 에이전트(Agent 도구, general-purpose)에게 `docs/verification_checklist.md` 를 주고 실행시킨다. 에이전트는 테스트·`test/tools/playthrough_check.gd`(창 모드 자동 플레이) 를 돌리고 `playthrough_report.json` 과 단계별 PNG 를 **직접 읽어** 체크리스트 표와 대조한 뒤 PASS/FAIL/판단불가 를 항목별로 보고한다. FAIL 이 하나라도 있으면 완료가 아니다. 이 단계는 "테스트는 통과했지만 화면이 비어 있는" 종류의 실수를 막기 위한 것이며 생략하지 않는다. 화면이 바뀌는 작업은 추가로 모달 없는 맨 화면을 실제 창에서 캡처해 확인한다.
 
 ## 10. 결정 기록 (ADR) 형식
 

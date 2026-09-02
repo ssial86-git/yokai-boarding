@@ -1,0 +1,38 @@
+# 완료 전 검증 체크리스트 (검증 에이전트용)
+
+작성일: 2026-09-02. CLAUDE.md 9절 종료 루틴의 "검증 에이전트" 단계가 이 문서를 기준으로 판정한다.
+원칙: **테스트 통과 ≠ 완료.** 플레이어가 보는 화면과 상태를 실제 창에서 확인한 뒤에만 완료라고 보고한다.
+
+## 0. 실행할 것 (전부 프로젝트 루트, 창이 뜨는 명령 포함)
+
+```powershell
+& $env:GODOT_BIN --headless --path . --import
+python tools/data/build_resources.py
+python tools/art/validate_assets.py
+& $env:GODOT_BIN --headless --path . -s -d --remote-debug tcp://127.0.0.1:0 res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode -a res://test
+& $env:GODOT_BIN --path . -s res://test/tools/playthrough_check.gd -- <출력 폴더>
+```
+
+`playthrough_check.gd` 는 시드를 고정하고 이틀을 실제로 진행하며 `playthrough_report.json` 과 단계별 PNG(01~08)를 남긴다. 종료 코드 1 이면 실패 항목이 있다.
+
+## 1. 리포트로 판정 (자동)
+
+`playthrough_report.json` 의 `failed` 가 0 이어야 한다. 항목: 튜토리얼 대화창 / 집이 화면 안 / 카드 수 = 하숙생 + 손님 / 객실 건설 / 배치 / 낮에 일터 도착 / 저녁 정산 / 심사 카드 → 받기 → 손님 카드·액터 표시 / 밤 사연 / 2일차 진입.
+
+## 2. PNG 로 판정 (사람 눈 대신 에이전트가 본다)
+
+| 파일 | 반드시 보여야 하는 것 | 보이면 안 되는 것 |
+|---|---|---|
+| 01_morning_tutorial | 성주 영감 대화창(초상·이름·대사·다음 버튼) | 깨진 글자, 빈 초상 |
+| 02_morning_plain | 상단 바(날짜·페이즈·날씨·돈·평판·침대), 안내 줄, 집 1층 4칸 + 잠긴 층 점선, 객실 앞 요괴 2명, 아래 배치 패널 카드 2장 | 회색 빈 화면, 집이 잘림, 카드 없음 |
+| 03_morning_assigned | 카드 상태 "주방 · 컨디션 …", 메시지 로그 "어둑이 → 주방", 새 객실(RO) 4번째 칸 | 카드가 "휴식" 그대로 |
+| 04_day_working | 어둑이가 주방 칸 앞에 서 있음, 진행 바 | 요괴가 객실에 그대로 |
+| 05_evening_intake | 심사 카드(문돌이 문구, 종족 스프라이트·첫마디·액운, 받기/거절) | 카드 뒤 글자가 비침 |
+| 06_evening_after_accept | 패널에 손님 카드("손님 · …", 드래그 불가 안내), 집에 손님 액터 추가, 상단 침대 n/4 증가 | 카드 수가 그대로 |
+| 07_night_story | 하숙생 대화창, 밤 색조(어두움), 어둑이 주변 빛 | 낮과 같은 밝기 |
+| 08_day2_morning | "2일차", 카드 수 = 하숙생 + 손님, 집이 화면 안 | |
+
+## 3. 판정 기록
+
+에이전트는 각 항목을 PASS / FAIL / 판단불가 로 적고, FAIL 은 파일명과 관찰 내용을 함께 적는다. FAIL 이 하나라도 있으면 완료 보고를 하지 않고 수정으로 돌아간다.
+"판단불가"(예: 소리, 조작감)는 사용자에게 명시적으로 넘긴다.
