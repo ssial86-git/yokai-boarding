@@ -1,6 +1,6 @@
 class_name DebugHud
 extends Control
-## M1~M2 검증용 최소 HUD: 날짜·페이즈·돈·창고 표시, 낮 진행 바, 페이즈 진행, 저장/불러오기,
+## M1~M3 검증용 최소 HUD: 날짜·페이즈·날씨·돈·평판·침대·창고, 낮 진행 바, 페이즈 진행, 명부, 저장/불러오기,
 ## (디버그 빌드) 돈 추가, 메시지 줄. 정식 HUD 는 M4 에서 src/ui/ 에 별도 구현하고 이 노드는 그때 제거한다.
 
 const SAVE_SLOT := 1
@@ -8,9 +8,9 @@ const HUD_MARGIN_PX := 4.0
 const PROGRESS_WIDTH_PX := 160.0
 const MESSAGE_BOTTOM_OFFSET_PX := 96.0
 
-var _day_label: Label
-var _phase_label: Label
-var _money_label: Label
+var ledger_panel: LedgerPanel
+
+var _status_label: Label
 var _inventory_label: Label
 var _advance_button: Button
 var _progress: ProgressBar
@@ -25,16 +25,15 @@ func _ready() -> void:
 	var top := VBoxContainer.new()
 	top.position = Vector2(HUD_MARGIN_PX, HUD_MARGIN_PX)
 	add_child(top)
-	var status := HBoxContainer.new()
-	top.add_child(status)
-	_day_label = _label(status)
-	_phase_label = _label(status)
-	_money_label = _label(status)
+	_status_label = _label(top)
 	_inventory_label = _label(top)
 
 	var buttons := HBoxContainer.new()
 	top.add_child(buttons)
 	_advance_button = _button(buttons, "", Clock.advance_phase)
+	_button(buttons, DataRegistry.text("ui_ledger"), func() -> void:
+		if ledger_panel != null:
+			ledger_panel.toggle())
 	_button(buttons, DataRegistry.text("ui_save"), _on_save_pressed)
 	_button(buttons, DataRegistry.text("ui_load"), _on_load_pressed)
 	if OS.is_debug_build():
@@ -56,10 +55,12 @@ func _ready() -> void:
 	_message_timer.timeout.connect(func() -> void: _message_label.text = "")
 	add_child(_message_timer)
 
-	Events.money_changed.connect(func(_amount: int) -> void: refresh())
-	Events.phase_changed.connect(func(_phase: int, _day: int) -> void: refresh())
-	Events.day_started.connect(func(_day: int) -> void: refresh())
-	Events.item_added.connect(func(_id: String, _count: int) -> void: refresh())
+	for refresh_signal: Signal in [
+		Events.money_changed, Events.phase_changed, Events.day_started, Events.item_added, Events.item_removed,
+		Events.reputation_changed, Events.weather_changed, Events.guests_changed, Events.yokai_arrived,
+		Events.room_changed, Events.floor_added,
+	]:
+		refresh_signal.connect(func(_a: Variant = null, _b: Variant = null) -> void: refresh())
 	Events.house_action_failed.connect(func(outcome: int) -> void:
 		show_message(DataRegistry.text(BuildMenu.outcome_text_key(outcome))))
 	Events.assignment_failed.connect(func(_id: String, outcome: int) -> void:
@@ -69,6 +70,12 @@ func _ready() -> void:
 	Events.floor_added.connect(func(floor: int) -> void:
 		show_message(DataRegistry.text("msg_floor_added", {"floor": floor + 1})))
 	Events.day_settled.connect(_on_day_settled)
+	Events.visitor_knocked.connect(func(visitor: Dictionary) -> void:
+		if visitor.is_empty():
+			show_message(DataRegistry.text("msg_visitor_none")))
+	Events.intake_decided.connect(_on_intake_decided)
+	Events.yokai_arrived.connect(func(yokai_id: String) -> void:
+		show_message(DataRegistry.text("msg_yokai_joined", {"name": DataRegistry.yokai_name(yokai_id)})))
 	Events.game_saved.connect(func(slot: int) -> void: show_message(DataRegistry.text("msg_saved", {"slot": slot})))
 	Events.game_loaded.connect(func(slot: int) -> void:
 		refresh()
@@ -82,25 +89,36 @@ func _process(_delta: float) -> void:
 
 func refresh() -> void:
 	var phase_name: String = Clock.Phase.keys()[Clock.phase].to_lower()
-	_day_label.text = DataRegistry.text("hud_day", {"day": GameState.day})
-	_phase_label.text = DataRegistry.text("phase_%s" % phase_name)
-	_money_label.text = DataRegistry.text("hud_money", {"money": GameState.money})
+	var beds_total := Lodging.total_beds(GameState.room_grid)
+	var beds_used := Lodging.used_beds(GameState.residents, GameState.guests)
+	_status_label.text = " · ".join([
+		DataRegistry.text("hud_day", {"day": GameState.day}),
+		DataRegistry.text("phase_%s" % phase_name),
+		DataRegistry.text("weather_%s" % GameState.weather),
+		DataRegistry.text("hud_money", {"money": GameState.money}),
+		DataRegistry.text("hud_reputation", {"value": GameState.reputation}),
+		DataRegistry.text("hud_beds", {"used": beds_used, "total": beds_total}),
+	])
 	_advance_button.text = DataRegistry.text("ui_advance_%s" % phase_name)
 	_progress.visible = Clock.get_phase_length(Clock.phase) > 0.0
 	var items := GameState.inventory.items()
 	if items.is_empty():
 		_inventory_label.text = DataRegistry.text("hud_inventory_empty")
 	else:
-		var parts: Array[String] = []
-		for item_id: String in items:
-			parts.append(DataRegistry.text("hud_inventory_item",
-				{"name": DataRegistry.item_name(item_id), "count": items[item_id]}))
-		_inventory_label.text = DataRegistry.text("hud_inventory", {"list": ", ".join(parts)})
+		_inventory_label.text = DataRegistry.text("hud_inventory", {"list": _item_list(items)})
 
 
 func show_message(text: String) -> void:
 	_message_label.text = text
 	_message_timer.start()
+
+
+func _item_list(items: Dictionary) -> String:
+	var parts: Array[String] = []
+	for item_id: String in items:
+		parts.append(DataRegistry.text("hud_inventory_item",
+			{"name": DataRegistry.item_name(item_id), "count": items[item_id]}))
+	return ", ".join(parts)
 
 
 func _on_room_changed(_coords: Vector2i, room_id: String) -> void:
@@ -121,19 +139,56 @@ func _on_assignment_changed(yokai_id: String, cell: Vector2i) -> void:
 
 
 func _on_day_settled(summary: Dictionary) -> void:
+	var day: int = summary.get("day", GameState.day)
 	var totals: Dictionary = summary.get("totals", {})
 	var lines: Array[String] = []
 	if totals.is_empty():
-		lines.append(DataRegistry.text("msg_settled_none", {"day": summary.get("day", GameState.day)}))
+		lines.append(DataRegistry.text("msg_settled_none", {"day": day}))
 	else:
-		var parts: Array[String] = []
-		for item_id: String in totals:
-			parts.append(DataRegistry.text("hud_inventory_item",
-				{"name": DataRegistry.item_name(item_id), "count": totals[item_id]}))
-		lines.append(DataRegistry.text("msg_settled", {"day": summary.get("day", GameState.day), "summary": ", ".join(parts)}))
+		lines.append(DataRegistry.text("msg_settled", {"day": day, "summary": _item_list(totals)}))
 	for yokai_id: String in summary.get("noise_hits", {}):
 		lines.append(DataRegistry.text("msg_noise_hit", {"name": DataRegistry.yokai_name(yokai_id)}))
+	lines.append_array(_rent_lines(summary.get("rent", {})))
 	show_message("\n".join(lines))
+	refresh()
+
+
+func _rent_lines(rent: Dictionary) -> Array[String]:
+	var lines: Array[String] = []
+	var parts: Array[String] = []
+	var money: int = rent.get("money", 0)
+	if money > 0:
+		parts.append(DataRegistry.text("msg_rent_money", {"amount": money}))
+	for item_id: String in rent.get("items", {}):
+		parts.append(DataRegistry.text("msg_rent_item", {"item": DataRegistry.item_name(item_id), "amount": rent["items"][item_id]}))
+	var bonus: int = rent.get("condition_bonus", 0)
+	if bonus > 0:
+		parts.append(DataRegistry.text("msg_rent_buff", {"amount": bonus}))
+	if not parts.is_empty():
+		lines.append(DataRegistry.text("msg_rent_summary", {"list": ", ".join(parts)}))
+	for guest: Dictionary in rent.get("departed", []):
+		var species_id := str(guest.get("species_id", ""))
+		var species := DataRegistry.get_guest_species(species_id)
+		lines.append(DataRegistry.text("msg_guest_checkout", {
+			"name": DataRegistry.species_name(species_id),
+			"rent": species.rent_note_ko if species != null else DataRegistry.text("msg_rent_none"),
+		}))
+	for mishap: String in rent.get("mishap_texts", []):
+		lines.append(mishap)
+	return lines
+
+
+func _on_intake_decided(visitor: Dictionary, outcome: int) -> void:
+	var name := DataRegistry.species_name(str(visitor.get("species_id", "")))
+	if str(visitor.get("kind", "")) == "erased":
+		name = DataRegistry.yokai_name(str(visitor.get("yokai_id", "")))
+	match outcome:
+		Intake.Outcome.ACCEPTED:
+			show_message(DataRegistry.text("msg_intake_accepted", {"name": name}))
+		Intake.Outcome.DECLINED:
+			show_message(DataRegistry.text("msg_intake_declined", {"name": name}))
+		Intake.Outcome.NO_BED:
+			show_message(DataRegistry.text("msg_intake_no_bed"))
 	refresh()
 
 

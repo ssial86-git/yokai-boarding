@@ -28,6 +28,7 @@ func _ready() -> void:
 
 	_panel = PanelContainer.new()
 	_panel.name = "Panel"
+	UiStyles.apply_panel(_panel)
 	add_child(_panel)
 	_box = VBoxContainer.new()
 	_panel.add_child(_box)

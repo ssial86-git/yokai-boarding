@@ -19,6 +19,7 @@ func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
 	grow_vertical = Control.GROW_DIRECTION_BEGIN
 	mouse_filter = Control.MOUSE_FILTER_STOP
+	UiStyles.apply_panel(self)
 
 	var box := VBoxContainer.new()
 	add_child(box)
@@ -40,6 +41,7 @@ func _ready() -> void:
 	Events.phase_changed.connect(func(_phase: int, _day: int) -> void: refresh())
 	Events.room_changed.connect(func(_coords: Vector2i, _room_id: String) -> void: refresh())
 	Events.game_loaded.connect(func(_slot: int) -> void: rebuild())
+	Events.yokai_arrived.connect(func(_id: String) -> void: rebuild())
 	rebuild()
 
 

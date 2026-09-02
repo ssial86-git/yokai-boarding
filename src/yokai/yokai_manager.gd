@@ -4,6 +4,7 @@ extends Node2D
 ## 낮(DAY)에는 배치된 칸으로 가서 일하고, 그 외 페이즈에는 휴식처(첫 객실)로 돌아온다.
 
 const SPRITE_PATH := "res://assets/art_generated/yokai_%s.png"
+const GUEST_SPRITE_PATH := "res://assets/art_generated/guest_%s.png"
 
 ## 칸 좌표 → 월드 사각형을 아는 뷰. main.gd 가 넣는다.
 var house_view: HouseView
@@ -25,6 +26,8 @@ func _ready() -> void:
 	_bob_seconds = tuning.get_float("yokai_work_bob_seconds")
 	Events.phase_changed.connect(func(phase: int, _day: int) -> void: dispatch_all(phase))
 	Events.game_loaded.connect(func(_slot: int) -> void: respawn())
+	Events.yokai_arrived.connect(func(_id: String) -> void: respawn())
+	Events.guests_changed.connect(respawn)
 	Events.room_changed.connect(func(_coords: Vector2i, _room_id: String) -> void: dispatch_all(Clock.phase))
 	Events.floor_added.connect(func(_floor: int) -> void: dispatch_all(Clock.phase))
 	respawn()
@@ -54,6 +57,21 @@ func respawn() -> void:
 		actor.place_at(home, slot, YokaiActor.State.RESTING)
 		_actors[yokai_id] = actor
 		slot += 1
+	# 체류 중인 뜨내기 손님은 휴식처에 머무는 액터로만 보여준다 (배치·이동 없음)
+	var guest_index := 0
+	for guest: Dictionary in GameState.guests:
+		var species_id := str(guest.get("species_id", ""))
+		var actor := YokaiActor.new()
+		var path := GUEST_SPRITE_PATH % species_id
+		var texture: Texture2D = load(path) if ResourceLoader.exists(path) else null
+		var actor_id := "guest_%d_%s" % [guest_index, species_id]
+		actor.setup(actor_id, texture, _walk_speed, _bob_px, _bob_seconds)
+		actor.anchor_for = _anchor_for
+		add_child(actor)
+		actor.place_at(home, slot, YokaiActor.State.RESTING)
+		_actors[actor_id] = actor
+		slot += 1
+		guest_index += 1
 	dispatch_all(Clock.phase)
 
 

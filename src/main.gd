@@ -4,26 +4,35 @@ extends Node2D
 ## Main
 ##  ├ HouseController        방 규칙 적용 + 돈 + Events
 ##  ├ AssignmentController   배치 규칙 적용 + Events
-##  ├ DayCycle               저녁 정산, 배치 무효화 정리
+##  ├ DayCycle               날씨, 저녁 정산(산출·하숙비·체크아웃), 배치 무효화 정리
+##  ├ StorySystem            사연·튜토리얼 이벤트 진행
+##  ├ IntakeSystem           저녁 방문자 추첨·심사 결정
 ##  ├ World (Node2D)
 ##  │   ├ HouseView          단면 렌더링 (RoomGrid 구독)
-##  │   ├ YokaiManager       요괴 액터 스폰·이동 지시
+##  │   ├ YokaiManager       요괴·손님 액터 스폰·이동 지시
 ##  │   ├ Lighting           CanvasModulate 페이즈 색조
 ##  │   └ Camera             줌·드래그·클릭 판정
 ##  └ UI (CanvasLayer)
 ##      ├ DropLayer          방 위에 카드 놓기 (투명)
 ##      ├ DebugHud
 ##      ├ AssignmentPanel    아침 배치 카드
-##      └ BuildMenu
+##      ├ BuildMenu
+##      ├ LedgerPanel        손님 명부
+##      ├ IntakePanel        심사 카드
+##      └ DialogueBox        대화창 (맨 위)
 
 var house_controller: HouseController
 var assignment_controller: AssignmentController
 var day_cycle: DayCycle
+var story_system: StorySystem
+var intake_system: IntakeSystem
 var house_view: HouseView
 var yokai_manager: YokaiManager
 var camera: HouseCamera
 var build_menu: BuildMenu
 var assignment_panel: AssignmentPanel
+var dialogue_box: DialogueBox
+var intake_panel: IntakePanel
 
 
 func _ready() -> void:
@@ -39,7 +48,25 @@ func _ready() -> void:
 	day_cycle = DayCycle.new()
 	day_cycle.name = "DayCycle"
 	add_child(day_cycle)
+	story_system = StorySystem.new()
+	story_system.name = "StorySystem"
+	add_child(story_system)
+	intake_system = IntakeSystem.new()
+	intake_system.name = "IntakeSystem"
+	intake_system.is_dialogue_busy = story_system.is_busy
+	add_child(intake_system)
 
+	_build_world()
+	_build_ui()
+
+	camera.clicked.connect(_on_world_clicked)
+	camera.hovered.connect(house_view.set_hover)
+
+	Clock.start_day()
+	Events.game_started.emit()
+
+
+func _build_world() -> void:
 	var world := Node2D.new()
 	world.name = "World"
 	add_child(world)
@@ -67,6 +94,8 @@ func _ready() -> void:
 	world.add_child(camera)
 	camera.clamp_to_bounds()
 
+
+func _build_ui() -> void:
 	var ui := CanvasLayer.new()
 	ui.name = "UI"
 	add_child(ui)
@@ -77,8 +106,12 @@ func _ready() -> void:
 	drop_layer.house_view = house_view
 	ui.add_child(drop_layer)
 
+	var ledger_panel := LedgerPanel.new()
+	ledger_panel.name = "LedgerPanel"
+
 	var hud := DebugHud.new()
 	hud.name = "DebugHud"
+	hud.ledger_panel = ledger_panel
 	ui.add_child(hud)
 
 	assignment_panel = AssignmentPanel.new()
@@ -94,11 +127,17 @@ func _ready() -> void:
 	build_menu.controller = house_controller
 	ui.add_child(build_menu)
 
-	camera.clicked.connect(_on_world_clicked)
-	camera.hovered.connect(house_view.set_hover)
+	ui.add_child(ledger_panel)
 
-	Clock.start_day()
-	Events.game_started.emit()
+	intake_panel = IntakePanel.new()
+	intake_panel.name = "IntakePanel"
+	intake_panel.intake = intake_system
+	ui.add_child(intake_panel)
+
+	dialogue_box = DialogueBox.new()
+	dialogue_box.name = "DialogueBox"
+	dialogue_box.story = story_system
+	ui.add_child(dialogue_box)
 
 
 ## 창 크기를 뷰포트(640x360)의 정수 배로 맞춘다. tuning window_integer_scale 이 0 이면 화면에 맞는 최대 배율.
