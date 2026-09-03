@@ -68,7 +68,7 @@ values = {
 "dialogue_box_height_px": 96,
 "rain_chance": 0.3,
 "ui_panel_color": "2e2733",
-"ui_panel_alpha": 0.96,
+"ui_panel_alpha": 1.0,
 "ui_panel_border_color": "7a7180",
 "ui_panel_padding_px": 6,
 "clarity_alpha_min": 0.4,
@@ -152,5 +152,16 @@ values = {
 "enemy_spawn_x_from": 0.35,
 "enemy_spawn_x_to": 0.95,
 "boss_spawn_x": 0.85,
-"expedition_retreat_region": "r_well"
+"expedition_retreat_region": "r_well",
+"ui_font_size": 13,
+"ui_header_font_size": 15,
+"ui_chip_color": "1a1620",
+"ui_accent_color": "f2a65a",
+"ui_button_color": "3f5c73",
+"ui_button_hover_color": "5f8090",
+"ui_button_disabled_color": "4a4352",
+"ui_text_color": "ede6dc",
+"ui_text_dim_color": "7a7180",
+"ui_margin_px": 4,
+"stamina_bar_width_px": 110
 }

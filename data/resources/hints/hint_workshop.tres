@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="HintData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/hint_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "hint_workshop"
+timeband = "any"
+day_min = 4
+day_max = 0
+requires_flag = ""
+blocked_by_flag = "first_workshop_built"
+priority = 42
+text_ko = "부적을 만들려면 작업장이 필요합니다. 빈터 앞에서 E → 작업장(150)."

@@ -208,3 +208,34 @@ msg_gather_buff,채집 부적: {seconds}초 동안 채집량 +{bonus}
 msg_boss_defeated,{name}을(를) 물리쳤다!
 msg_boss_rematch,{name}이(가) 더 강해져 돌아왔다
 hud_expedition_help,Q 투척 · R 귀환 · G 채집 부적
+hud_clock_line1,{time} {timeband} · {day}일차
+hud_clock_line2,{weather} · {region}
+chip_money,돈 {money}
+chip_reputation,평판 {value}
+chip_beds,침대 {used}/{total}
+ui_menu,메뉴
+key_hint_menu,[Tab]
+key_hint_sleep,[Z]
+key_hint_inventory,[I]
+key_hint_roster,[J]
+key_hint_ledger,[L]
+key_hint_panel,[B]
+tab_inventory,창고
+tab_roster,하숙부
+tab_ledger,명부
+ui_menu_title,장부
+ui_inventory_empty,창고가 비어 있다
+ui_inventory_row,{name} ×{count}
+ui_inventory_value,개당 {value}
+kind_food,요리·음식
+kind_material,재료
+kind_crop,수확물
+kind_seed,씨앗
+kind_fish,물고기
+kind_talisman,부적
+kind_misc,잡동사니
+kind_key,중요한 것
+ui_panel_collapse,접기
+ui_panel_expand,배치 펼치기
+hud_stamina_label,체력
+hud_expedition_chip,Q 투척 · R 귀환 · G 채집

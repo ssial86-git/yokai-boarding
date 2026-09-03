@@ -62,7 +62,7 @@ portrait_size_px,96,int,대화창 일러스트 표시 크기(px)
 dialogue_box_height_px,96,int,대화창 높이(px)
 rain_chance,0.3,float,아침마다 비가 올 확률 (우산손 등장 조건)
 ui_panel_color,2e2733,string,UI 패널 배경색(hex — 팔레트)
-ui_panel_alpha,0.96,float,UI 패널 배경 투명도
+ui_panel_alpha,1.0,float,UI 패널 배경 투명도 (1.0 = 불투명. 반투명은 뒤 글자가 비쳐 보였다)
 ui_panel_border_color,7a7180,string,UI 패널 테두리색(hex — 팔레트)
 ui_panel_padding_px,6,int,UI 패널 안쪽 여백(px)
 clarity_alpha_min,0.4,float,호감도 0 일 때 '흐린' 요괴(clarity_by_affinity)의 스프라이트 투명도
@@ -147,3 +147,14 @@ enemy_spawn_x_from,0.35,float,적이 놓이는 x 범위 시작 (구역 폭 비�
 enemy_spawn_x_to,0.95,float,적이 놓이는 x 범위 끝 (구역 폭 비율)
 boss_spawn_x,0.85,float,미니보스 자리 (구역 폭 비율)
 expedition_retreat_region,r_well,string,스태미너가 0 이 되면 물러나는 구역
+ui_font_size,13,int,UI 기본 글자 크기(px, 뷰포트 기준 — 창 2배면 26px)
+ui_header_font_size,15,int,패널 제목·시계 글자 크기(px)
+ui_chip_color,1a1620,string,상태 칩·바 배경색(hex — 팔레트)
+ui_accent_color,f2a65a,string,강조색: 제목·진행 바·눌린 버튼(hex)
+ui_button_color,3f5c73,string,버튼 배경(hex)
+ui_button_hover_color,5f8090,string,버튼 호버(hex)
+ui_button_disabled_color,4a4352,string,비활성 버튼(hex)
+ui_text_color,ede6dc,string,기본 글자색(hex)
+ui_text_dim_color,7a7180,string,보조 글자색 — 단축키 힌트·부제(hex)
+ui_margin_px,4,int,화면 가장자리와 HUD 사이 여백(px)
+stamina_bar_width_px,110,int,왼쪽 아래 체력 바 너비(px)

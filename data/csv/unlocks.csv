@@ -16,7 +16,7 @@ u_enemy_hound,3,3,day,unlock:u_ash_field,enemy,e_cinder_hound,재구렁 개가 �
 u_fishing,4,4,day,unlock:u_back_hill,verb,fish,개울에서 낚시를 할 수 있다.
 u_rod,4,4,day,unlock:u_fishing,tool,rod_1,대나무 낚싯대.
 u_dalgael_case,4,5,evening,,yokai,y03_dalgael,빈 카드의 손님 — 달갤 사건. 심사가 무엇인지 배운다.
-u_talisman_craft,5,5,any,unlock:u_back_hill,verb,craft,부적을 만들 수 있다. 천과 재료가 필요하다.
+u_talisman_craft,5,5,any,unlock:u_back_hill,verb,craft,부적을 만들 수 있다 — 작업장을 지어 그 앞에서 E. 천과 뒷산·잿빛 들 재료가 든다.
 u_t_throw,5,5,any,unlock:u_talisman_craft,talisman,t_throw,투척 부적 — 탐험 중 던져 적을 밀어낸다.
 u_t_gather,5,5,any,unlock:u_talisman_craft,talisman,t_gather,채집 부적 — 잠시 채집량이 는다.
 u_t_return,5,6,any,unlock:u_talisman_craft,talisman,t_return,귀환 부적 — 어디서든 집으로.

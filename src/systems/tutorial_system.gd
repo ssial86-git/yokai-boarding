@@ -9,6 +9,7 @@ const FLAG_FIRST_BUILD := "first_build_done"
 const FLAG_FIRST_INTAKE := "first_intake_done"
 const FLAG_EXTRA_BED := "first_extra_bed"
 const FLAG_FIRST_REGION_CHANGE := "first_region_change"
+const FLAG_WORKSHOP_BUILT := "first_workshop_built"
 
 var current_hint: HintData
 
@@ -26,7 +27,9 @@ func _ready() -> void:
 		if room != null and room.kind != RoomGrid.ROOM_KIND_EMPTY:
 			_set_flag(FLAG_FIRST_BUILD)
 		if room != null and room.kind == "lodging":
-			_set_flag(FLAG_EXTRA_BED))
+			_set_flag(FLAG_EXTRA_BED)
+		if room_id == "workshop":
+			_set_flag(FLAG_WORKSHOP_BUILT))
 	Events.floor_added.connect(func(_floor: int) -> void: _set_flag(FLAG_FIRST_BUILD))
 	Events.intake_decided.connect(func(_visitor: Dictionary, outcome: int) -> void:
 		if outcome != Intake.Outcome.NO_BED:
