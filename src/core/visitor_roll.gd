@@ -42,8 +42,10 @@ static func scripted(yokai_catalog: Dictionary, residents: Array[String], day: i
 
 
 ## chance 판정 후 유형·종족을 뽑는다. 아무도 안 오면 null.
+## realm_multipliers 는 {realm: 배율} — 날씨 음기가 이승/마계 손님 가중치를 늘리고 줄인다 (P2-S1). 비우면 원래 가중치.
 static func roll(
-	visitors: Dictionary, species: Dictionary, rng: RandomNumberGenerator, chance: float, weather: String
+	visitors: Dictionary, species: Dictionary, rng: RandomNumberGenerator, chance: float, weather: String,
+	realm_multipliers: Dictionary = {}
 ) -> Visitor:
 	if rng.randf() >= chance:
 		return null
@@ -54,7 +56,11 @@ static func roll(
 	for candidate: GuestSpeciesData in _sorted_values(species):
 		if candidate.appear_condition.is_empty() or candidate.appear_condition == weather:
 			eligible.append(candidate)
-	var species_data := _weighted(eligible, rng) as GuestSpeciesData
+	var species_data: GuestSpeciesData = null
+	if realm_multipliers.is_empty():
+		species_data = _weighted(eligible, rng) as GuestSpeciesData
+	else:
+		species_data = _weighted_by_realm(eligible, realm_multipliers, rng)
 	if species_data == null:
 		return null
 	var visitor := Visitor.new()
@@ -89,4 +95,27 @@ static func _weighted(entries: Array, rng: RandomNumberGenerator) -> Resource:
 		pick -= weight
 		if pick <= 0:
 			return entry
+	return null
+
+
+## 종족 가중치 × 갈래 배율(실수). 전부 0 이면 null.
+static func _weighted_by_realm(entries: Array, multipliers: Dictionary, rng: RandomNumberGenerator) -> GuestSpeciesData:
+	var weights: Array[float] = []
+	var total := 0.0
+	for entry: GuestSpeciesData in entries:
+		var weight := maxf(0.0, float(entry.weight) * float(multipliers.get(entry.realm, 1.0)))
+		weights.append(weight)
+		total += weight
+	if total <= 0.0:
+		return null
+	var pick := rng.randf() * total
+	for index in entries.size():
+		if weights[index] <= 0.0:
+			continue
+		pick -= weights[index]
+		if pick <= 0.0:
+			return entries[index]
+	for index in range(entries.size() - 1, -1, -1):
+		if weights[index] > 0.0:
+			return entries[index]
 	return null

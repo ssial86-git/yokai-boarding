@@ -7,6 +7,8 @@ enum Outcome { OK, OUT_OF_RANGE, TAKEN, NEED_TOOL, TOOL_TOO_WEAK }
 
 const RARITY_WEIGHTS: Dictionary = {"common": 3, "uncommon": 2, "rare": 1}
 const TOOL_NONE := "none"
+const YIN_HIGH := "high"
+const YIN_LOW := "low"
 
 var region_id: String = ""
 var material_ids: Array[String] = []
@@ -14,13 +16,15 @@ var taken: Array[bool] = []
 
 
 ## 구역의 gather_pool 에서 포인트마다 재료를 뽑는다. 풀이 비면 포인트가 없다.
-static func roll(region: RegionData, material_catalog: Dictionary, rng: RandomNumberGenerator) -> GatherPoints:
+## yin_high: 음기 짙은 날 — yin_condition=high 재료는 이날만, low 재료는 이날 빼고 나온다 (P2-S1).
+## 조건으로 풀이 다 빠지면 조건을 무시한다 (구역이 텅 비는 것보다 낫다).
+static func roll(region: RegionData, material_catalog: Dictionary, rng: RandomNumberGenerator, yin_high: bool = false) -> GatherPoints:
 	var points := GatherPoints.new()
 	points.region_id = region.id
 	var pool: Array[String] = []
 	var weights: Array[int] = []
 	var total := 0
-	for material_id: Variant in region.gather_pool:
+	for material_id: Variant in _filter_by_yin(region.gather_pool, material_catalog, yin_high):
 		var material := material_catalog.get(str(material_id)) as MaterialData
 		if material == null:
 			continue
@@ -41,6 +45,20 @@ static func roll(region: RegionData, material_catalog: Dictionary, rng: RandomNu
 		points.material_ids.append(chosen)
 		points.taken.append(false)
 	return points
+
+
+static func _filter_by_yin(ids: Array, material_catalog: Dictionary, yin_high: bool) -> Array:
+	var result: Array = []
+	for material_id: Variant in ids:
+		var material := material_catalog.get(str(material_id)) as MaterialData
+		if material == null:
+			continue
+		if material.yin_condition == YIN_HIGH and not yin_high:
+			continue
+		if material.yin_condition == YIN_LOW and yin_high:
+			continue
+		result.append(str(material_id))
+	return result if not result.is_empty() else Array(ids)
 
 
 static func from_state(region_id_value: String, materials: Array, taken_indices: Array) -> GatherPoints:

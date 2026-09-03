@@ -4,9 +4,10 @@ extends RefCounted
 ## 성장은 '물을 준 비율 × (1 + 음기 보너스)' 만큼 하루씩 쌓인다 — 요괴가 효율 0.6 으로 물을 주면 하루에 0.6일 자란다 (위임의 트레이드오프).
 
 enum PlotState { EMPTY, TILLED, GROWING, READY }
-enum Outcome { OK, OUT_OF_RANGE, NOT_EMPTY, NOT_TILLED, NO_SEED, UNKNOWN_CROP, NOT_GROWING, NOT_READY }
+enum Outcome { OK, OUT_OF_RANGE, NOT_EMPTY, NOT_TILLED, NO_SEED, UNKNOWN_CROP, NOT_GROWING, NOT_READY, OUT_OF_SEASON }
 
 const FULL_WATER := 1.0
+const SEASON_ANY := "any"
 
 
 class Plot:
@@ -61,8 +62,8 @@ func till(index: int) -> Outcome:
 	return Outcome.OK
 
 
-## 씨앗(crop.seed_item)을 인벤토리에서 하나 쓴다.
-func sow(index: int, crop: CropData, inventory: Inventory) -> Outcome:
+## 씨앗(crop.seed_item)을 인벤토리에서 하나 쓴다. season_key(절기 id)를 주면 제철이 아닌 작물은 심지 못한다 (P2-S1).
+func sow(index: int, crop: CropData, inventory: Inventory, season_key: String = "") -> Outcome:
 	var plot := get_plot(index)
 	if plot == null:
 		return Outcome.OUT_OF_RANGE
@@ -70,6 +71,8 @@ func sow(index: int, crop: CropData, inventory: Inventory) -> Outcome:
 		return Outcome.UNKNOWN_CROP
 	if plot.state != PlotState.TILLED:
 		return Outcome.NOT_TILLED
+	if not in_season(crop, season_key):
+		return Outcome.OUT_OF_SEASON
 	if not inventory.remove(crop.seed_item, 1):
 		return Outcome.NO_SEED
 	plot.state = PlotState.GROWING
@@ -77,6 +80,11 @@ func sow(index: int, crop: CropData, inventory: Inventory) -> Outcome:
 	plot.growth = 0.0
 	plot.water = 0.0
 	return Outcome.OK
+
+
+## 제철 판정. season_key 가 비면 계절 제한 없음.
+static func in_season(crop: CropData, season_key: String) -> bool:
+	return season_key.is_empty() or crop.season == SEASON_ANY or crop.season == season_key
 
 
 ## amount 1.0 = 플레이어 한 번. 요괴 자동 물주기는 효율 계수만큼.
