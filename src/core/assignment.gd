@@ -8,11 +8,27 @@ enum Outcome { OK, NOT_BUILT, NOT_WORKPLACE, FULL }
 const REST := Vector2i(-1, -1)
 ## 텃밭(마당) 자동화 슬롯 — 방이 아니라 가상 칸. 배치된 요괴가 낮에 효율 계수만큼 물을 준다 (docs/01 v3 2.2 자동화 층).
 const FIELD := Vector2i(-2, -2)
+## 탐험 동행 슬롯 — 가상 칸. 여기 놓인 요괴가 잿빛 들에 따라와 자동으로 싸운다 (P1-S4).
+const PARTY := Vector2i(-3, -3)
 ## 일할 수 있는 방 종류. lodging 은 휴식 장소, empty 는 일터가 아니다.
 const WORKPLACE_KINDS: Array[String] = ["production", "service", "gate", "storage"]
 
 ## 텃밭 슬롯 정원 (tuning field_workers_max). 0 이면 텃밭 배치 불가.
 var field_capacity: int = 1
+## 동행 슬롯 정원 (tuning party_max).
+var party_capacity: int = 2
+
+
+static func is_virtual(cell: Vector2i) -> bool:
+	return cell == FIELD or cell == PARTY
+
+
+func virtual_capacity(cell: Vector2i) -> int:
+	if cell == FIELD:
+		return field_capacity
+	if cell == PARTY:
+		return party_capacity
+	return 0
 
 var _slots: Dictionary = {}  # yokai_id -> Vector2i (REST 는 저장하지 않음)
 
@@ -45,10 +61,10 @@ func working_ids() -> Array[String]:
 
 
 func check(grid: RoomGrid, cell: Vector2i, yokai_id: String) -> Outcome:
-	if cell == FIELD:
-		if field_capacity <= 0:
+	if is_virtual(cell):
+		if virtual_capacity(cell) <= 0:
 			return Outcome.NOT_WORKPLACE
-		if get_cell(yokai_id) != FIELD and workers_at(FIELD).size() >= field_capacity:
+		if get_cell(yokai_id) != cell and workers_at(cell).size() >= virtual_capacity(cell):
 			return Outcome.FULL
 		return Outcome.OK
 	if not grid.is_in_bounds(cell) or not grid.is_floor_built(cell.y):
@@ -80,13 +96,13 @@ func prune(grid: RoomGrid, residents: Array[String]) -> Array[String]:
 	for yokai_id: String in _slots.keys():
 		var cell: Vector2i = _slots[yokai_id]
 		var valid := residents.has(yokai_id)
-		if valid and cell == FIELD:
-			var field_others := workers_at(FIELD)
-			field_others.erase(yokai_id)
-			valid = field_capacity > 0 and field_others.size() < field_capacity
+		if valid and is_virtual(cell):
+			var others_here := workers_at(cell)
+			others_here.erase(yokai_id)
+			valid = virtual_capacity(cell) > 0 and others_here.size() < virtual_capacity(cell)
 		elif valid:
 			valid = grid.is_in_bounds(cell) and grid.is_floor_built(cell.y) and is_workplace(grid.get_room(cell))
-		if valid and cell != FIELD:
+		if valid and not is_virtual(cell):
 			var others := workers_at(cell)
 			others.erase(yokai_id)
 			valid = others.size() < grid.get_room(cell).capacity
