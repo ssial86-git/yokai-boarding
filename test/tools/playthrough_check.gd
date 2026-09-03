@@ -177,6 +177,21 @@ func _initialize() -> void:
 	station_menu.call("close")
 	await _frames(1)
 
+	# --- 사용자가 잡은 회귀: 창고·상태 줄이 길어지면 상단 바가 화면을 넘어 취침 버튼이 사라졌다 ---
+	var hud: Control = main.get("hud")
+	for item_id in ["meal", "m_stone", "m_bamboo", "m_namul", "m_clay", "wood", "m_mushroom", "m_ore", "m_spring_water", "m_ember_stone", "doodle", "radish", "perilla", "seed_cabbage", "cloth", "scrap"]:
+		inventory.call("add", item_id, 3)
+	(root.get_node("Events") as Node).emit_signal("item_added", "meal", 3)
+	gs.set("money", 8750)
+	gs.set("reputation", 33)
+	(root.get_node("Events") as Node).emit_signal("money_changed", 8750)
+	await _frames(3)
+	var sleep_rect: Rect2 = hud.call("sleep_button_rect")
+	var view_width := root.get_visible_rect().size.x
+	_check("sleep_button_on_screen", sleep_rect.size.x > 0.0 and sleep_rect.end.x <= view_width + 0.5,
+		"창고 16종·돈 4자리에도 취침 버튼이 화면 안에 있다 (right=%.0f / %.0f)" % [sleep_rect.end.x, view_width])
+	await _shot("14_long_inventory_bar")
+
 	_write_report()
 
 

@@ -7,6 +7,7 @@ extends Control
 signal bar_resized
 
 const PROMPT_MARGIN_PX := 4.0
+const INVENTORY_MAX_LINES := 2
 
 var ledger_panel: LedgerPanel
 var roster_panel: RosterPanel
@@ -40,6 +41,8 @@ func _ready() -> void:
 	column.add_child(row)
 	_status_label = Label.new()
 	_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	# 글자가 길어져도 바가 화면 폭을 넘어 버튼(취침·하숙부·명부)이 밀려 나가지 않도록 줄바꿈한다
+	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	row.add_child(_status_label)
 	_sleep_button = Button.new()
 	_sleep_button.text = DataRegistry.text("ui_sleep")
@@ -49,6 +52,10 @@ func _ready() -> void:
 	_button(row, DataRegistry.text("ui_ledger"), func() -> void: ledger_panel.toggle())
 
 	_inventory_label = Label.new()
+	# 창고가 늘어도 두 줄까지만, 넘치면 … 으로 줄인다 (전체 목록은 뒤에 창고 화면이 맡는다)
+	_inventory_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_inventory_label.max_lines_visible = INVENTORY_MAX_LINES
+	_inventory_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	column.add_child(_inventory_label)
 	_hint_label = Label.new()
 	_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -102,6 +109,11 @@ func _process(_delta: float) -> void:
 
 func bar_height() -> float:
 	return _bar.size.y
+
+
+## 취침 버튼의 화면 사각형 (검증용 — 바가 화면을 넘지 않는지).
+func sleep_button_rect() -> Rect2:
+	return _sleep_button.get_global_rect()
 
 
 func refresh() -> void:
