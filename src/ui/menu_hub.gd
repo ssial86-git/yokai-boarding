@@ -128,9 +128,13 @@ func _build_roster() -> void:
 		for event_id in story_ids:
 			if GameState.seen_events.has(event_id):
 				seen += 1
-		add_row(DataRegistry.text("ui_roster_row", {
+		var text := DataRegistry.text("ui_roster_row", {
 			"name": yokai.name_ko, "species": yokai.species_ko,
-			"affinity": int(GameState.affinity.get(yokai_id, 0)), "seen": seen, "total": story_ids.size()}))
+			"affinity": int(GameState.affinity.get(yokai_id, 0)), "seen": seen, "total": story_ids.size()})
+		var blessing := DataRegistry.blessing_of_yokai(yokai_id)
+		if blessing != null:
+			text += DataRegistry.text("ui_roster_blessings", {"count": int(GameState.blessing_log.get(blessing.id, 0))})
+		add_row(text)
 
 
 ## 달력 (P2-S1): 절기 제목, 28일 격자(● 오늘 · ◆ 소절기), 다가오는 행사. 지난 날은 흐리게.

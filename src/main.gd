@@ -61,6 +61,14 @@ var fishing_system: FishingSystem
 var expedition_system: ExpeditionSystem
 var goal_system: GoalSystem
 var festival_system: FestivalSystem
+var blessing_system: BlessingSystem
+var market_system: MarketSystem
+var blessing_menu: BlessingMenu
+var market_menu: MarketMenu
+
+## 회색 장꾼 첫 인사 대화(events.csv kind npc)와 그 대화가 남기는 플래그
+const MERCHANT_GREET_EVENT := "ev_merchant_greet"
+const FLAG_MERCHANT_MET := "merchant_met"
 var station_menu: StationMenu
 var fishing_bar: FishingBar
 var region_manager: RegionManager
@@ -134,14 +142,25 @@ func _ready() -> void:
 	festival_system.name = "FestivalSystem"
 	festival_system.goal_system = goal_system
 	add_child(festival_system)
+	blessing_system = BlessingSystem.new()
+	blessing_system.name = "BlessingSystem"
+	blessing_system.unlock_system = unlock_system
+	add_child(blessing_system)
+	market_system = MarketSystem.new()
+	market_system.name = "MarketSystem"
+	add_child(market_system)
 
 	_build_world()
 	_build_ui()
 
 	house_region.open_room_menu = _open_room_menu
-	yokai_manager.talk_action = story_system.try_talk
-	player.blocked_check = func() -> bool: return build_menu.is_open() or station_menu.is_open() or menu_hub.is_open()
-	hud.modal_open_check = func() -> bool: return build_menu.is_open() or station_menu.is_open() or menu_hub.is_open() or intake_panel.visible
+	yokai_manager.talk_action = _on_yokai_talk
+	player.blocked_check = func() -> bool:
+		return build_menu.is_open() or station_menu.is_open() or menu_hub.is_open() or blessing_menu.is_open() or market_menu.is_open()
+	hud.modal_open_check = func() -> bool:
+		return build_menu.is_open() or station_menu.is_open() or menu_hub.is_open() or intake_panel.visible \
+			or blessing_menu.is_open() or market_menu.is_open()
+	region_manager.merchant_action = _on_merchant_talk
 	player.movement_locked_check = fishing_system.is_active
 	region_manager.fishing_system = fishing_system
 	expedition_system.region_manager = region_manager
@@ -255,6 +274,14 @@ func _build_ui() -> void:
 	station_menu.open_renovate = func(coords: Vector2i) -> void:
 		build_menu.open_for_cell(coords, _player_screen_position())
 	ui_root.add_child(station_menu)
+	blessing_menu = BlessingMenu.new()
+	blessing_menu.name = "BlessingMenu"
+	blessing_menu.blessing_system = blessing_system
+	ui_root.add_child(blessing_menu)
+	market_menu = MarketMenu.new()
+	market_menu.name = "MarketMenu"
+	market_menu.market_system = market_system
+	ui_root.add_child(market_menu)
 
 	fishing_bar = FishingBar.new()
 	fishing_bar.name = "FishingBar"
@@ -385,6 +412,24 @@ func _on_talisman_requested(kind: String) -> void:
 
 
 ## 방 앞에서 E: 주방 → 요리·배식, 작업장 → 제작·벼리기, 대문간 → 팔기, 그 외 → 건설·개조 메뉴.
+## 하숙생 앞에서 E: 조건 맞는 사연이 있으면 대화, 없으면(인사 한 줄 뒤) 가호 접붙이기 메뉴 (P2-S3, 해금 뒤).
+func _on_yokai_talk(yokai_id: String) -> void:
+	if story_system.try_talk(yokai_id):
+		return
+	if blessing_system.is_open() and blessing_system.blessing_for(yokai_id) != null:
+		blessing_menu.open_for(yokai_id)
+
+
+## 회색 장꾼 앞에서 E: 첫 만남은 인사 대화(플래그 merchant_met), 그 뒤로는 거래 메뉴.
+func _on_merchant_talk() -> void:
+	if not GameState.flags.has(FLAG_MERCHANT_MET):
+		var event := DataRegistry.get_event(MERCHANT_GREET_EVENT)
+		if event != null and not story_system.is_busy():
+			story_system.start_event(event)
+			return
+	market_menu.open()
+
+
 func _open_room_menu(coords: Vector2i) -> void:
 	var grid := house_view.grid()
 	var room_id := grid.get_room_id(coords) if grid.is_floor_built(coords.y) else ""

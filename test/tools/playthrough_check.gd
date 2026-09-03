@@ -234,6 +234,39 @@ func _initialize() -> void:
 	hub.call("close")
 	await _frames(1)
 
+	# --- P2-S3: 회색 시장 (음기 짙은 날에만 문이 열림) + 가호 접붙이기 ---
+	for unlock_id in ["u_well", "u_gray_market", "u_blessings"]:
+		(gs.get("unlocked") as Dictionary)[unlock_id] = int(gs.get("day"))
+	gs.set("yin", 0)
+	_check("market_closed_low_yin", not bool(region_manager.call("is_region_open", "r_gray_market")), "음기 0 낮에는 회색 시장이 닫혀 있다")
+	gs.set("yin", 3)
+	_check("market_open_high_yin", bool(region_manager.call("is_region_open", "r_gray_market")), "음기 3 이면 회색 시장이 열린다")
+	_check("travel_well_market", bool(region_manager.call("travel", "r_well")) and bool(region_manager.call("travel", "r_gray_market")),
+		"우물 아래 → 회색 시장")
+	await _frames(2)
+	var market_view: Node = region_manager.call("current_view")
+	_check("merchant_present", market_view.get_node_or_null("Merchant") != null, "회색 장꾼 자리표시가 있다")
+	var market_menu: Control = main.get("market_menu")
+	market_menu.call("open")
+	await _frames(2)
+	_check("market_menu_rows", market_menu.visible and int(market_menu.call("row_count")) >= 8, "시장 메뉴에 사기(재고)·팔기(시세) 줄이 보인다")
+	await _shot("19_gray_market")
+	market_menu.call("close")
+	_check("travel_home_from_market", bool(region_manager.call("travel", "r_house")), "회색 시장 → 집")
+	await _frames(2)
+	(gs.get("affinity") as Dictionary)["y01_ttukttagi"] = 1
+	var blessing_menu: Control = main.get("blessing_menu")
+	blessing_menu.call("open_for", "y01_ttukttagi")
+	await _frames(2)
+	_check("blessing_menu_rows", blessing_menu.visible and int(blessing_menu.call("row_count")) >= 2, "가호 메뉴에 설명과 대상 아이템 줄이 보인다")
+	await _shot("20_blessing_menu")
+	var blessing_system: Node = main.get("blessing_system")
+	_check("blessing_granted", bool(blessing_system.call("grant", "y01_ttukttagi", "seed_radish")), "뚝딱이가 무 씨앗에 가호를 붙였다")
+	_check("blessed_item_in_inventory", int(inventory.call("get_count", "seed_radish@b_ttukttagi")) == 1, "[뚝] 무 씨앗 1")
+	blessing_menu.call("close")
+	await _frames(1)
+	await _frames(1)
+
 	# --- P1-S4: 잿빛 들 — 동행 편성 → 적·동료 스폰 → 부적 투척 → 귀환 ---
 	var expedition: Node = main.get("expedition_system")
 	for unlock_id in ["u_well", "u_ash_field", "u_party"]:
