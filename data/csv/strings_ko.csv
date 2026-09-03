@@ -126,7 +126,7 @@ card_field,텃밭
 msg_assigned_field,{name} → 텃밭 물주기
 msg_gathered,{name} +{count}
 msg_harvested,{name} +{count}
-msg_sown,{name} 씨앗을 심었다
+msg_sown,{name}을(를) 심었다
 msg_watered,물을 줬다
 msg_tilled,밭을 갈았다
 msg_crop_ready,텃밭 {count}칸이 다 자랐다
@@ -274,3 +274,33 @@ msg_festival_today,{name}! 준비 {met}/{total}. 저녁 정산 때 채점한다.
 msg_festival_dishes,{name}을(를) {count}그릇 나눴다.
 msg_festival_scored,{name} {score}/{max}점 — {money}냥 · 평판 +{reputation}
 msg_festival_perfect,만점! 소문을 들은 귀한 손님이 오늘 밤 찾아온다.
+prompt_market_closed,{name} — 음기 짙은 날이나 밤에만 열린다
+prompt_merchant,E: 회색 장꾼 (거래)
+ui_market_title,회색 시장 — {weather} · 음기 {yin}
+ui_market_buy_header,사기 (하루 재고)
+ui_market_sell_header,팔기 (오늘 시세)
+ui_market_buy_row,{name} · {price}냥 · 남은 {stock}
+ui_market_sold_out,{name} · 오늘은 다 팔렸다
+ui_market_buy,사기
+ui_market_sell_row,{name} ×{count} · 개당 {price}냥 ({delta})
+ui_market_delta_up,대문간보다 +{percent}%
+ui_market_delta_down,대문간보다 {percent}%
+ui_market_delta_same,대문간과 같다
+msg_market_bought,{name} 을(를) {price}냥에 샀다
+msg_market_sold,{name} ×{count} 을(를) 회색 시장에 팔았다 +{money}
+msg_market_no_money,돈이 모자란다
+ui_blessing_title,{name}의 가호 — 오늘 {left}/{max}
+ui_blessing_locked,아직 가호를 붙일 수 없다 (호감도 {affinity}/{min})
+ui_blessing_none,붙일 것이 없다 — 씨앗·요리·부적을 가져오자
+ui_blessing_row,{name} ×{count} → {effect}
+ui_blessing_grant,부여
+ui_blessing_effect_seed,수확 +{bonus}
+ui_blessing_effect_dish,배식 버프 +{bonus}
+ui_blessing_effect_talisman,위력 +{bonus}
+ui_blessing_synergy, ({note})
+ui_blessing_done_today,오늘은 다 붙였다
+blessed_item_name,[{short}] {name}
+msg_blessing_granted,{yokai}이(가) {item}에 가호를 붙였다
+msg_fish_visitor,물에서 누가 올라왔다… 젖은 {name}이(가) 오늘 밤 문을 두드릴 것 같다
+ui_roster_blessings, · 가호 {count}회
+prompt_fish_spot_locked,아직 이곳에선 낚을 수 없다

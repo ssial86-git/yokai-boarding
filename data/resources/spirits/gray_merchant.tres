@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SpiritData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/spirit_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "gray_merchant"
+name_ko = "회색 장꾼"
+role_ko = "회색 시장의 마계 행상. 값을 매기고 소문을 판다"
+room_id = ""

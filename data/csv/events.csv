@@ -12,3 +12,4 @@ y02_act3,story,y02_eoduki,night,5,0,2,,,true,10,d_y02_act3,어둑이 3막 — �
 y03_act1,story,y03_dalgael,night,2,0,0,,,true,10,d_y03_act1,달갤 1막 — 김서림
 y03_act2,story,y03_dalgael,night,4,0,1,record_piece,,true,10,d_y03_act2,달갤 2막 — 찢긴 페이지
 y03_act3,story,y03_dalgael,night,6,0,2,record_piece,,true,10,d_y03_act3,달갤 3막 — 서명
+ev_merchant_greet,npc,,any,1,0,0,,,true,50,d_merchant_greet,회색 장꾼의 첫 인사

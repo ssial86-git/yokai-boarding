@@ -40,3 +40,6 @@ d_y03_act2,start,y03_dalgael,(찢긴 장부 페이지를 받아 들자 눈 하�
 d_y03_act2,2,y03_dalgael,(페이지 귀퉁이에 서명이 있다. 익숙한 글씨.),y03_dalgael,end,,,,,affinity:+1;item:record_piece:-1
 d_y03_act3,start,y03_dalgael,(두 번째 조각. 입이 돌아왔다.),y03_dalgael,2,,,,,
 d_y03_act3,2,y03_dalgael,"…고마워. 말소를 멈춘 사람이 있었어. 서명은 네 아버지야. 하숙비, 밀린 거 갚을게.",y03_dalgael,end,,,,,affinity:+1;money:+50;item:record_piece:-1;flag:clue_y03
+d_merchant_greet,start,gray_merchant,…이승 냄새. 하숙집 사람이군. 여긴 회색 시장이다 — 음기가 짙은 날과 밤에만 문이 열려.,gray_merchant,2,,,,,
+d_merchant_greet,2,gray_merchant,마계 재료·발효 음식은 후하게 사고 씨앗과 천은 판다. 값은 날마다 흔들리니 달력을 보고 오게.,gray_merchant,3,,,,,
+d_merchant_greet,3,gray_merchant,소문도 판다만… 그건 다음에. 자 — 볼 텐가?,gray_merchant,end,,,,,flag:merchant_met

@@ -43,3 +43,5 @@ goal_completed,day,goal;tier,goals.csv 목표 완료
 goals_opened,day,done;total,할 일 탭 열람 (P2 게이트: 계획 행동)
 festival_started,day,festival;met;total,명절 당일 아침 (준비 목표 충족 수)
 festival_scored,day,festival;score;max,명절 채점 결과
+blessing_granted,economy,blessing;item;kind,가호 부여
+market_trade,economy,kind;item;count;money,회색 시장 거래 (kind buy/sell)

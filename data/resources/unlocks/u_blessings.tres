@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_blessings"
+day_min = 16
+expected_day = 16
+timeband = "morning"
+condition = "affinity:y01_ttukttagi>=1"
+unlock_type = "feature"
+unlock_id = "blessings"
+hint_ko = "하숙생 앞에서 E — 가호 접붙이기. 씨앗·요리·부적에 하숙생의 힘을 붙인다."

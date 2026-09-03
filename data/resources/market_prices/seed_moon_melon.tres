@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MarketPriceData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/market_price_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "seed_moon_melon"
+item_id = "seed_moon_melon"
+sell_mult = 0.5
+buy_mult = 2.5
+swing = 0.3
+stock = 2
+note_ko = "마계 씨앗"

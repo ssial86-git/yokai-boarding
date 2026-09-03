@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_well_fishing"
+day_min = 19
+expected_day = 19
+timeband = "day"
+condition = "unlock:u_fishing"
+unlock_type = "feature"
+unlock_id = "fishing_r_well"
+hint_ko = "우물에 낚싯줄을 내릴 수 있다. 고물·기억 조각… 가끔 이상한 것."

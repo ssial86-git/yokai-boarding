@@ -38,3 +38,5 @@ extends Resource
 @export var fishing_x: int = 0
 ## 들어갈 때 enemy_pool 에서 뽑아 놓는 적 수 (탐험지, 미니보스 제외)
 @export var enemy_count: int = 0
+## 회색 장꾼 NPC 자리 x (0 = 없음). P2-S3
+@export var merchant_x: int = 0

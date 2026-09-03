@@ -1,0 +1,11 @@
+id,blessing_id,context_kind,context_id,delta,note_ko
+sy_ttuk_throw,b_ttukttagi,talisman_effect,throw,2,방망이 힘이 투척에 실린다
+sy_ttuk_strength,b_ttukttagi,recipe_stat,strength,1,힘 요리에 손재주가 붙는다
+sy_eoduk_gather,b_eoduki,talisman_effect,gather,1,그림자가 채집 부적을 오래 끌어준다
+sy_eoduk_ttuk,b_eoduki,yokai,y01_ttukttagi,1,어둑이 가호 요리를 뚝딱이가 먹으면 담이 커진다
+sy_dal_demon,b_dalgael,crop_realm,demon,1,달빛 가호는 마계 씨앗에 잘 붙는다
+sy_dal_sight,b_dalgael,recipe_stat,sight,1,눈 밝은 요리에 달빛이 고인다
+in_ttuk_demon,b_ttukttagi,crop_realm,demon,-1,도깨비불이 마계 씨앗을 그을린다
+in_eoduk_courage,b_eoduki,recipe_stat,courage,-1,그림자는 담력 요리를 눅인다
+in_dal_throw,b_dalgael,talisman_effect,throw,-1,달빛은 던지기엔 흐릿하다
+in_ttuk_dal,b_ttukttagi,yokai,y03_dalgael,-1,뚝딱이 가호 요리를 달갤이 먹으면 소란스럽다

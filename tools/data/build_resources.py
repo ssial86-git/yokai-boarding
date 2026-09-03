@@ -36,7 +36,7 @@ ENUMS: dict[str, set[str]] = {
     "sprite_size": {"16", "32"},
     "join_mode": {"start", "intake"},
     "visitor_kind": {"guest", "troublemaker", "erased"},
-    "event_kind": {"tutorial", "story", "arrival"},
+    "event_kind": {"tutorial", "story", "arrival", "npc"},
     "timeband": {"morning", "day", "evening", "night", "any"},
     # --- P1 신설 ---
     "realm": {"mortal", "demon", "both"},
@@ -46,14 +46,15 @@ ENUMS: dict[str, set[str]] = {
     "yin_condition": {"any", "low", "high"},
     "fish_kind": {"fish", "junk"},
     "talisman_effect": {"throw", "gather", "return"},
-    "region_kind": {"house", "yard", "wild", "gate", "expedition"},
+    "region_kind": {"house", "yard", "wild", "gate", "expedition", "market"},
     "enemy_tier": {"normal", "boss"},
     "unlock_type": {"region", "tool", "talisman", "enemy", "yokai", "event", "crop", "material", "fish", "verb", "feature",
                     "season_event", "festival", "recipe"},
     "goal_tier": {"today", "season", "long"},
     "verb": {"walk", "gather", "farm", "cook", "fish", "craft", "talk", "intake", "assign", "build", "explore", "fight", "sleep"},
-    "chain_content_type": {"material", "crop", "talisman", "fish", "recipe"},
-    "chain_use_kind": {"cook", "craft", "sell", "gift", "buff", "quest", "feed", "bait", "decor", "combat", "gather", "travel", "upgrade", "event"},
+    "chain_content_type": {"material", "crop", "talisman", "fish", "recipe", "blessing"},
+    "chain_use_kind": {"cook", "craft", "sell", "gift", "buff", "quest", "feed", "bait", "decor", "combat", "gather", "travel", "upgrade", "event", "farm"},
+    "synergy_context": {"yokai", "talisman_effect", "crop_realm", "recipe_stat"},
     "metrics_category": {"session", "day", "house", "economy", "intake", "story", "save", "verb"},
     "buff_stat": {"none", "strength", "skill", "sight", "courage"},
     # --- P2 신설 ---
@@ -95,9 +96,10 @@ def parse_goal_condition(value: str) -> str:
 # 사슬 대상 타입 -> 참조 테이블. recipes 테이블이 생기면 자동으로 검증 대상에 든다.
 CHAIN_REF_TABLES: dict[str, str] = {
     "material": "materials", "crop": "crops", "talisman": "talismans", "fish": "fish", "recipe": "recipes",
+    "blessing": "blessings",
 }
-# 사슬 행이 반드시 있어야 하는 콘텐츠 (docs/01 v3 5절: 재료·작물·요리·부적). fish 는 대상이 아니다.
-CHAIN_COVERED_TYPES: tuple[str, ...] = ("material", "crop", "talisman", "recipe")
+# 사슬 행이 반드시 있어야 하는 콘텐츠 (docs/01 v3 5절: 재료·작물·요리·부적 + P2-S3 가호). fish 는 대상이 아니다.
+CHAIN_COVERED_TYPES: tuple[str, ...] = ("material", "crop", "talisman", "recipe", "blessing")
 
 
 def parse_rent_item(value: str) -> str:
@@ -519,6 +521,8 @@ TABLES: list[Table] = [
             Column("weight", int),
             Column("timeband", parse_enum("timeband")),
             Column("min_rod_level", int),
+            # 낚이면 아이템 대신 그날 밤 이 종족이 문을 두드린다 (P2-S3 우물 낚시 1% 손님). 비우면 보통 어종
+            Column("visitor_species", parse_str, ref="guest_species"),
         ],
     ),
     Table(
@@ -581,6 +585,8 @@ TABLES: list[Table] = [
             Column("fishing_x", int),
             # 들어갈 때 enemy_pool 에서 뽑아 놓는 적 수 (탐험지). P1-S4
             Column("enemy_count", int),
+            # 회색 장꾼 NPC 자리 x (0 = 없음). P2-S3
+            Column("merchant_x", int),
         ],
     ),
     Table(
@@ -732,6 +738,53 @@ TABLES: list[Table] = [
             Column("rare_guest_species", parse_str, ref="guest_species"),
             Column("decor_goal", parse_str, ref="goals"),
             Column("hint_ko", parse_str),
+        ],
+    ),
+    # ------------------------------------------------------------ P2-S3: 가호·회색 시장
+    Table(
+        name="blessings",
+        csv_file="blessings.csv",
+        script_class="BlessingData",
+        script_file="blessing_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("yokai_id", parse_str, ref="yokai"),
+            Column("name_ko", parse_str),
+            Column("short_ko", parse_str),
+            Column("affinity_min", int),
+            Column("seed_yield_bonus", int),
+            Column("dish_buff_bonus", int),
+            Column("talisman_power_bonus", int),
+            Column("flavor_ko", parse_str),
+        ],
+    ),
+    Table(
+        name="synergies",
+        csv_file="synergies.csv",
+        script_class="SynergyData",
+        script_file="synergy_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("blessing_id", parse_str, ref="blessings"),
+            Column("context_kind", parse_enum("synergy_context")),
+            Column("context_id", parse_str),  # 종류별 참조는 check_synergies
+            Column("delta", int),
+            Column("note_ko", parse_str),
+        ],
+    ),
+    Table(
+        name="market_prices",
+        csv_file="market_prices.csv",
+        script_class="MarketPriceData",
+        script_file="market_price_data.gd",
+        key="item_id",
+        columns=[
+            Column("item_id", parse_str, ref="items"),
+            Column("sell_mult", float),
+            Column("buy_mult", float),
+            Column("swing", float),
+            Column("stock", int),
+            Column("note_ko", parse_str),
         ],
     ),
     Table(
@@ -928,6 +981,28 @@ def check_goals(tables: dict[str, Table]) -> None:
             raise BuildError(f"festivals.csv {row['_line']}행: decor_goal 은 goal_ids 안에 있어야 함")
 
 
+def check_synergies(tables: dict[str, Table]) -> None:
+    """시너지 문맥 id 가 종류별 테이블·열거에 실재하는지, 시세 배율·흔들림이 음수가 아닌지."""
+    keys = {name: t.key_values() for name, t in tables.items()}
+    for row in tables["synergies"].rows:
+        line, kind, target = row["_line"], row["context_kind"], row["context_id"]
+        ok = {
+            "yokai": target in keys["yokai"],
+            "talisman_effect": target in ENUMS["talisman_effect"],
+            "crop_realm": target in ENUMS["realm"],
+            "recipe_stat": target in ENUMS["buff_stat"],
+        }[kind]
+        if not ok:
+            raise BuildError(f"synergies.csv {line}행: {kind} 문맥의 {target!r} 가 없음")
+        if row["delta"] == 0:
+            raise BuildError(f"synergies.csv {line}행: delta 0 은 뜻이 없음")
+    for row in tables["market_prices"].rows:
+        if row["sell_mult"] < 0 or row["buy_mult"] < 0 or row["swing"] < 0 or row["stock"] < 0:
+            raise BuildError(f"market_prices.csv {row['_line']}행: 음수 값")
+        if row["swing"] >= 1.0:
+            raise BuildError(f"market_prices.csv {row['_line']}행: swing 은 1 미만 (가격이 0 이 되지 않도록)")
+
+
 def check_chains(tables: dict[str, Table]) -> None:
     """재미 원칙 3 의 기계 강제: 용도 3칸이 전부 차야 하고(서로 다른 갈래), 대상 콘텐츠 전부가 사슬 행을 가져야 한다."""
     chains = tables["chains"]
@@ -1065,6 +1140,7 @@ def main(argv: list[str]) -> int:
         check_unlocks(tables)
         check_seasons(tables)
         check_goals(tables)
+        check_synergies(tables)
         check_chains(tables)
         for table in tables.values():
             if table.dict_value is not None:

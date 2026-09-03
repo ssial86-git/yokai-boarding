@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_merchant_greet"
+nodes = [{
+"node": "start",
+"speaker": "gray_merchant",
+"text_ko": "…이승 냄새. 하숙집 사람이군. 여긴 회색 시장이다 — 음기가 짙은 날과 밤에만 문이 열려.",
+"portrait": "gray_merchant",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "gray_merchant",
+"text_ko": "마계 재료·발효 음식은 후하게 사고 씨앗과 천은 판다. 값은 날마다 흔들리니 달력을 보고 오게.",
+"portrait": "gray_merchant",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "gray_merchant",
+"text_ko": "소문도 판다만… 그건 다음에. 자 — 볼 텐가?",
+"portrait": "gray_merchant",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "flag:merchant_met"
+}]

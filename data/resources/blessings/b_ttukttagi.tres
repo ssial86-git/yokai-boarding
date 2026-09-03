@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BlessingData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/blessing_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "b_ttukttagi"
+yokai_id = "y01_ttukttagi"
+name_ko = "뚝딱이의 손재주"
+short_ko = "뚝"
+affinity_min = 1
+seed_yield_bonus = 1
+dish_buff_bonus = 1
+talisman_power_bonus = 2
+flavor_ko = "방망이를 한 번 두드려 붙인다. 던지는 것에 힘이 실린다."

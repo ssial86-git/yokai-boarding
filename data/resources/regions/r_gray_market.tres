@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="RegionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/region_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_gray_market"
+name_ko = "회색 시장"
+realm = "demon"
+kind = "market"
+parent_id = "r_well"
+gather_point_count = 0
+gather_pool = []
+enemy_pool = []
+boss_id = ""
+stamina_enter_cost = 0
+in_p1 = true
+width_px = 480
+ground = ["0:480:0"]
+doors = ["r_well:32"]
+gather_span = ""
+farm_x = 0
+sky_color = "3a2f4a"
+fishing_x = 0
+enemy_count = 0
+merchant_x = 300

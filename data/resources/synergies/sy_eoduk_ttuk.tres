@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SynergyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/synergy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "sy_eoduk_ttuk"
+blessing_id = "b_eoduki"
+context_kind = "yokai"
+context_id = "y01_ttukttagi"
+delta = 1
+note_ko = "어둑이 가호 요리를 뚝딱이가 먹으면 담이 커진다"

@@ -11,3 +11,4 @@ region_id = "r_stream"
 weight = 2
 timeband = "night"
 min_rod_level = 1
+visitor_species = ""

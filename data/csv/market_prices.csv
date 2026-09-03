@@ -1,0 +1,15 @@
+item_id,sell_mult,buy_mult,swing,stock,note_ko
+m_ash_grass,1.4,0.0,0.2,0,마계 재료는 마계 장터에서 비싸다
+m_ember_stone,1.5,0.0,0.2,0,
+m_shadow_moss,1.8,0.0,0.3,0,
+dish_kimchi,1.3,0.0,0.2,0,이승 발효 음식은 마계에서 귀하다
+dish_patjuk,1.5,0.0,0.2,0,액을 물리는 죽
+dish_shadow_stew,1.2,0.0,0.3,0,
+f_carp,1.4,0.0,0.3,0,
+seed_cabbage,0.5,2.0,0.2,3,씨앗은 사기만 한다
+seed_garlic,0.5,2.0,0.2,3,
+seed_sweet_potato,0.5,2.0,0.2,3,
+seed_moon_melon,0.5,2.5,0.3,2,마계 씨앗
+seed_ash_pepper,0.5,2.5,0.3,2,마계 씨앗
+cloth,0.6,2.0,0.2,4,부적 재료
+meal,0.6,2.0,0.1,5,

@@ -1,0 +1,4 @@
+id,yokai_id,name_ko,short_ko,affinity_min,seed_yield_bonus,dish_buff_bonus,talisman_power_bonus,flavor_ko
+b_ttukttagi,y01_ttukttagi,뚝딱이의 손재주,뚝,1,1,1,2,방망이를 한 번 두드려 붙인다. 던지는 것에 힘이 실린다.
+b_eoduki,y02_eoduki,어둑이의 그림자,어둑,1,1,1,1,그림자가 슬며시 스민다. 채집과 담력에 어울린다.
+b_dalgael,y03_dalgael,달갤의 달빛,달,1,2,2,0,달빛이 고인다. 마계 작물과 눈 밝은 요리에 잘 붙는다.

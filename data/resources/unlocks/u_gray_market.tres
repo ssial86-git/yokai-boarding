@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_gray_market"
+day_min = 12
+expected_day = 13
+timeband = "night"
+condition = "unlock:u_well"
+unlock_type = "region"
+unlock_id = "r_gray_market"
+hint_ko = "우물 아래에 회색 시장 문이 보인다. 음기 짙은 날이나 밤에만 열린다."

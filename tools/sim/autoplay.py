@@ -146,12 +146,18 @@ def economy_curve(tune: dict, unlocks, crops, items, materials, regions, species
     plots_initial = int(tune["farm_plots_initial"])
     plots_max = int(tune["farm_plots_max"])
     expand_day = unlock_day(unlocks, "u_farm_plots_12", 8)
+    # 회색 시장 (P2-S3): 열린 뒤로는 채집물을 시세 배율(market_prices.csv 재료 행 평균)로 판다고 가정
+    market_day = unlock_day(unlocks, "u_gray_market", 13)
+    market_rows = [r for r in read_rows("market_prices.csv") if r["item_id"].startswith("m_")]
+    market_mult = (sum(float(r["sell_mult"]) for r in market_rows) / len(market_rows)) if market_rows else 1.0
     curve: list[dict] = []
     for day in range(1, days + 1):
         plots = plots_max if day >= expand_day else plots_initial
         income_guest = visitor_chance * guest_rent
         income_farm = plots * crop_value
         income_gather = gather_points * gather_value if day >= hill_day else 0.0
+        if day >= market_day:
+            income_gather *= market_mult
         money += income_guest + income_farm + income_gather
         curve.append({"day": day, "guest": income_guest, "farm": income_farm, "gather": income_gather, "money": money})
     return curve

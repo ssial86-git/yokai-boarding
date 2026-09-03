@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FishData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/fish_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "record_piece"
+name_ko = "기억 조각"
+kind = "fish"
+region_id = "r_well"
+weight = 20
+timeband = "night"
+min_rod_level = 1
+visitor_species = ""
