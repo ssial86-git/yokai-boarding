@@ -130,6 +130,7 @@ func _ready() -> void:
 	house_region.open_room_menu = _open_room_menu
 	yokai_manager.talk_action = story_system.try_talk
 	player.blocked_check = func() -> bool: return build_menu.is_open() or station_menu.is_open() or menu_hub.is_open()
+	hud.modal_open_check = func() -> bool: return build_menu.is_open() or station_menu.is_open() or menu_hub.is_open() or intake_panel.visible
 	player.movement_locked_check = fishing_system.is_active
 	region_manager.fishing_system = fishing_system
 	expedition_system.region_manager = region_manager

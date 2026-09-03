@@ -6,7 +6,7 @@ extends SceneTree
 ## headless 에서는 렌더·입력이 없으므로 창 모드 전용이다. 검증 에이전트는 이 리포트와 PNG 를 읽는다.
 
 const SEED := 20260902
-const WALK_FRAMES_MAX := 600
+const WALK_SECONDS_MAX := 12.0
 
 var _checks: Array[Dictionary] = []
 var _out_dir: String = "user://"
@@ -63,12 +63,8 @@ func _initialize() -> void:
 	# --- 낮: 걸어가서 일하는지 --- (Clock.Band: 0 아침 / 1 낮 / 2 저녁 / 3 밤)
 	clock.call("advance_to_band", 1)
 	var actor: Node2D = manager.call("get_actor", "y02_eoduki")
-	var worked := false
-	for i in WALK_FRAMES_MAX:
-		await process_frame
-		if int(actor.get("state")) == 2:  # WORKING
-			worked = true
-			break
+	# 걷기는 실시간(px/초)이라 프레임 수가 아니라 초로 기다린다 — 창이 초점을 잃으면 수백 FPS 로 돌아 프레임 대기가 순식간에 끝난다
+	var worked := await _wait_until(func() -> bool: return int(actor.get("state")) == 2, WALK_SECONDS_MAX)  # WORKING
 	_check("worker_reaches_kitchen", worked and actor.get("current_cell") == Vector2i(2, 0), "어둑이가 주방에 도착해 일한다")
 	await _shot("04_day_working")
 
@@ -174,7 +170,7 @@ func _initialize() -> void:
 	if spot != null:
 		player.call("place", spot.position)  # 낚시 자리 앞에 서서 E
 	_check("fishing_started", bool(fishing_system.call("start", "r_stream")), "찌를 던졌다 (타이밍 바)")
-	await _frames(3)
+	await _physics_frames(3)  # 안내 문구는 물리 프레임에서 갱신된다
 	_check("fishing_prompt_strike", str(main.get("hud").call("prompt_text")) == "E: 지금!", "안내 문구가 'E: 지금!' 으로 바뀐다")
 	await _shot("12_fishing_bar")
 	var cast: RefCounted = fishing_system.get("cast")
@@ -309,6 +305,21 @@ func _shot(name: String) -> void:
 func _frames(count: int) -> void:
 	for i in count:
 		await process_frame
+
+
+func _physics_frames(count: int) -> void:
+	for i in count:
+		await physics_frame
+
+
+## 조건이 참이 될 때까지 실시간 seconds 만큼 기다린다. 참이 되면 true.
+func _wait_until(condition: Callable, seconds: float) -> bool:
+	var deadline := Time.get_ticks_msec() + int(seconds * 1000.0)
+	while Time.get_ticks_msec() < deadline:
+		if bool(condition.call()):
+			return true
+		await process_frame
+	return bool(condition.call())
 
 
 # --- 실제 입력 재현 (diag_drag.gd 와 같은 방식). Input.parse_input_event 의 좌표는 창 픽셀이므로 스트레치 배율을 곱한다 ---

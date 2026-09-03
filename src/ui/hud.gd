@@ -13,6 +13,9 @@ const STAMINA_BAR_HEIGHT := 6.0
 const EXPEDITION_KIND := "expedition"
 
 var menu_hub: MenuHub
+## () -> bool. 대화·심사·메뉴가 열려 있으면 안내 줄을 숨긴다 (겹쳐서 반쯤 잘려 보이던 문제). main.gd 가 넣는다.
+var modal_open_check: Callable
+var _hint_text: String = ""
 
 var _top: HBoxContainer
 var _clock_line1: Label
@@ -172,6 +175,9 @@ func _process(_delta: float) -> void:
 	_progress.value = Clock.get_day_progress()
 	if Clock.format_hour() != _last_hour_text:
 		refresh()
+	var show_hint := not _hint_text.is_empty() and not Clock.is_held() 		and not (modal_open_check.is_valid() and bool(modal_open_check.call()))
+	if show_hint != _hint_panel.visible:
+		_hint_panel.visible = show_hint
 
 
 ## 상단 카드 줄 높이 (카메라 오프셋용).
@@ -244,13 +250,17 @@ func _on_region_entered(region_id: String) -> void:
 
 
 func _on_hint_changed(text: String) -> void:
-	_hint_panel.visible = not text.is_empty()
+	_hint_text = text
+	_hint_panel.visible = not text.is_empty() and not Clock.is_held()
 	_hint_label.text = DataRegistry.text("hud_hint_prefix", {"text": text}) if not text.is_empty() else ""
 	_layout_hint()
 
 
 ## 안내 줄은 상단 카드 줄 바로 아래. 레이아웃 전에는 size 가 0 이라 최소 크기와 비교해 큰 쪽을 쓴다.
+## _top 의 resized 는 add_child 시점에 동기로 오므로 안내 패널이 아직 없을 수 있다 (검증 에이전트가 잡은 시작 시 오류).
 func _layout_hint() -> void:
+	if _hint_panel == null or _top == null:
+		return
 	var top_height := maxf(_top.size.y, _top.get_combined_minimum_size().y)
 	_hint_panel.offset_top = top_height + _margin * 2.0
 	_hint_panel.offset_bottom = _hint_panel.offset_top + _hint_panel.get_combined_minimum_size().y

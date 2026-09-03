@@ -4,9 +4,10 @@ extends Control
 ## 요리·제작·판매 메뉴가 이 위에 행만 채운다.
 
 const PANEL_WIDTH_RATIO := 0.7
-const PANEL_TOP_RATIO := 0.06
+## 상단 시계 카드·칩 줄(약 15%) 아래에서 시작해 HUD 를 덮지 않는다
+const PANEL_TOP_RATIO := 0.16
 ## 행 목록(스크롤)의 높이 — 뷰포트 높이 대비
-const ROWS_HEIGHT_RATIO := 0.6
+const ROWS_HEIGHT_RATIO := 0.5
 
 var _backdrop: Control
 var _panel: PanelContainer
@@ -32,7 +33,7 @@ func _ready() -> void:
 	add_child(_panel)
 	var column := VBoxContainer.new()
 	_panel.add_child(column)
-	_title = Label.new()
+	_title = UiStyles.header("")  # 배치 패널 제목과 같은 주황 강조
 	column.add_child(_title)
 	# 행이 많아도(레시피 12줄) 닫기 버튼이 화면 밖으로 밀리지 않도록 목록만 스크롤한다
 	var view_size := get_viewport_rect().size
