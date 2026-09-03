@@ -8,8 +8,8 @@ extends Resource
 @export var kind: String = "story"
 ## 사연 주인 하숙생. 빈 문자열이면 요괴 조건 없음.
 @export var yokai_id: String = ""
-## morning / day / evening / night / any
-@export var phase: String = "night"
+## 시간대: morning / day / evening / night / any
+@export var timeband: String = "night"
 @export var day_min: int = 1
 ## 0 이면 상한 없음
 @export var day_max: int = 0

@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_script")
 id = "hint_build"
-phase = "any"
+timeband = "any"
 day_min = 1
 day_max = 3
 requires_flag = ""

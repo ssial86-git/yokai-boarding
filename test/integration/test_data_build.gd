@@ -30,6 +30,6 @@ func test_reference_integrity_room_exists() -> void:
 
 
 func test_tuning_values() -> void:
-	assert_float(DataRegistry.tuning.get_float("phase_day_seconds")).is_equal(240.0)
+	assert_float(DataRegistry.tuning.get_float("day_length_seconds")).is_equal(720.0)
 	assert_int(DataRegistry.tuning.get_int("grid_floors")).is_equal(3)
 	assert_int(DataRegistry.tuning.get_int("grid_columns")).is_equal(4)

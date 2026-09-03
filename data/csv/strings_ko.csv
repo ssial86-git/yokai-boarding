@@ -1,5 +1,5 @@
 key,text
-ui_next_phase,다음 페이즈
+ui_sleep,취침
 ui_debug_add_money,돈 +{amount} (디버그)
 ui_save,저장
 ui_load,불러오기
@@ -12,10 +12,13 @@ ui_renovate_header,개조
 ui_demolish_option,철거 · 환불 {refund}
 hud_day,{day}일차
 hud_money,돈 {money}
-phase_morning,아침
-phase_day,낮
-phase_evening,저녁
-phase_night,밤
+hud_time,{time}
+timeband_morning,아침
+timeband_day,낮
+timeband_evening,저녁
+timeband_night,밤
+msg_slept,{day}일차를 마치고 잠들었다
+msg_slept_forced,너무 늦어 그대로 잠들었다 ({day}일차)
 msg_saved,저장했다 (슬롯 {slot})
 msg_loaded,불러왔다 (슬롯 {slot})
 msg_load_failed,불러오기 실패
@@ -32,10 +35,6 @@ outcome_requirement_missing,먼저 필요한 방이 있다
 outcome_required_by_other,다른 방이 이 방을 필요로 한다
 outcome_insufficient_funds,돈이 부족하다
 outcome_max_floors_reached,더는 올릴 수 없다
-ui_advance_morning,배치 끝 · 낮 시작
-ui_advance_day,낮 건너뛰기
-ui_advance_evening,밤으로
-ui_advance_night,하루 마감
 ui_rest_zone,휴식 (여기에 놓기)
 ui_assignment_title,아침 배치 — 카드를 방으로 끌어 놓으세요
 ui_assignment_locked,배치는 아침에만 바꿀 수 있다

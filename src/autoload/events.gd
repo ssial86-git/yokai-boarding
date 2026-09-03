@@ -6,8 +6,10 @@ extends Node
 signal game_started
 signal day_started(day: int)
 signal day_ended(day: int)
-## phase 는 Clock.Phase 값.
-signal phase_changed(phase: int, day: int)
+## band 는 Clock.Band 값. 시간대는 조명·이벤트 트리거일 뿐이고 하루를 끝내는 것은 취침(slept → day_ended)뿐이다.
+signal timeband_changed(band: int, day: int)
+## 취침. forced 는 시계가 다 흘러 자동으로 잠든 경우.
+signal slept(day: int, forced: bool)
 
 # --- 하숙집 구조 (M1) ---
 signal room_changed(coords: Vector2i, room_id: String)

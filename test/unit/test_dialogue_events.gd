@@ -50,7 +50,7 @@ func test_runner_walks_default_and_choice() -> void:
 func _event(id: String, phase: String, day_min: int, yokai: String = "", min_aff: int = 0, item: String = "", flag: String = "", priority: int = 0, once: bool = true, day_max: int = 0) -> EventData:
 	var e := EventData.new()
 	e.id = id
-	e.phase = phase
+	e.timeband = phase
 	e.day_min = day_min
 	e.day_max = day_max
 	e.yokai_id = yokai
@@ -73,7 +73,7 @@ func test_scheduler_conditions_and_priority() -> void:
 	}
 	var ctx := EventScheduler.Context.new()
 	ctx.day = 1
-	ctx.phase_name = "night"
+	ctx.timeband = "night"
 	ctx.residents = ["y1"]
 	assert_str(EventScheduler.pick(events, ctx).id).is_equal("a1")  # y2 미입주, k 는 아이템 없음, f 는 플래그 없음
 	ctx.seen = ["a1"]
@@ -86,7 +86,7 @@ func test_scheduler_conditions_and_priority() -> void:
 	assert_str(EventScheduler.pick(events, ctx).id).is_equal("k")
 	ctx.flags = {"flag_x": true}
 	assert_str(EventScheduler.pick(events, ctx).id).is_equal("f")
-	ctx.phase_name = "morning"
+	ctx.timeband = "morning"
 	ctx.day = 2
 	assert_str(EventScheduler.pick(events, ctx).id).is_equal("f")  # tut 은 day_max 1
 	ctx.day = 1

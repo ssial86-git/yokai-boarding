@@ -1,12 +1,12 @@
 class_name HintPicker
 extends RefCounted
-## hints.csv 조건(페이즈·날짜·필요 플래그·차단 플래그)을 평가해 지금 보여줄 안내 문구를 고른다.
+## hints.csv 조건(시간대·날짜·필요 플래그·차단 플래그)을 평가해 지금 보여줄 안내 문구를 고른다.
 
-const PHASE_ANY := "any"
+const TIMEBAND_ANY := "any"
 
 
-static func is_eligible(hint: HintData, phase_name: String, day: int, flags: Dictionary) -> bool:
-	if hint.phase != PHASE_ANY and hint.phase != phase_name:
+static func is_eligible(hint: HintData, timeband: String, day: int, flags: Dictionary) -> bool:
+	if hint.timeband != TIMEBAND_ANY and hint.timeband != timeband:
 		return false
 	if day < hint.day_min:
 		return false
@@ -20,10 +20,10 @@ static func is_eligible(hint: HintData, phase_name: String, day: int, flags: Dic
 
 
 ## priority 내림차순, 같으면 id 순. 없으면 null.
-static func pick(hints: Dictionary, phase_name: String, day: int, flags: Dictionary) -> HintData:
+static func pick(hints: Dictionary, timeband: String, day: int, flags: Dictionary) -> HintData:
 	var best: HintData = null
 	for hint: HintData in hints.values():
-		if not is_eligible(hint, phase_name, day, flags):
+		if not is_eligible(hint, timeband, day, flags):
 			continue
 		if best == null or hint.priority > best.priority or (hint.priority == best.priority and hint.id < best.id):
 			best = hint

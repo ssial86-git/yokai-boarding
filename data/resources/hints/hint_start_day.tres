@@ -5,10 +5,10 @@
 [resource]
 script = ExtResource("1_script")
 id = "hint_start_day"
-phase = "morning"
+timeband = "morning"
 day_min = 1
 day_max = 0
 requires_flag = "first_assignment_done"
 blocked_by_flag = "first_day_started"
 priority = 40
-text_ko = "배치가 끝났으면 '배치 끝 · 낮 시작'을 누르세요."
+text_ko = "배치가 끝났으면 그대로 두세요. 09:00이 되면 요괴들이 일하러 갑니다."

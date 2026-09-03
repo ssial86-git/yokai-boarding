@@ -1,6 +1,6 @@
 class_name TestSaveRoundtrip
 extends GdUnitTestSuite
-## 세이브 → 로드 왕복 동일성과 v1/v2 → v3 마이그레이션 (CLAUDE.md 6절 최소 통합 테스트 2번).
+## 세이브 → 로드 왕복 동일성과 구버전(v1/v2/v4) → v5 마이그레이션 (CLAUDE.md 6절 최소 통합 테스트 2번).
 
 const TEST_SLOT := 99
 
@@ -33,18 +33,19 @@ func test_round_trip_through_file_is_identical() -> void:
 	assert_int(grid.place_room(Vector2i(0, 2), "workshop", GameState.money)).is_equal(RoomGrid.Outcome.OK)
 	assert_int(grid.demolish_room(Vector2i(2, 0))).is_equal(RoomGrid.Outcome.OK)
 	assert_int(GameState.assignment.assign(grid, Vector2i(0, 2), "y01_ttukttagi")).is_equal(Assignment.Outcome.OK)
-	Clock.phase = Clock.Phase.EVENING
-	Clock.elapsed_in_phase = 12.5
+	Clock.restore(452.5)  # 저녁 시간대 한가운데
+	assert_int(Clock.band).is_equal(Clock.Band.EVENING)
 	var expected := SaveManager.build_save_data()
 
 	assert_int(SaveManager.save_slot(TEST_SLOT)).is_equal(OK)
 	GameState.reset_new_game()  # 상태를 완전히 바꿔 로드가 실제로 복원하는지 확인
-	Clock.phase = Clock.Phase.MORNING
-	Clock.elapsed_in_phase = 0.0
+	Clock.restore(0.0)
 	assert_dict(SaveManager.build_save_data()).is_not_equal(expected)
 
 	assert_int(SaveManager.load_slot(TEST_SLOT)).is_equal(OK)
 	assert_dict(SaveManager.build_save_data()).is_equal(expected)
+	assert_float(Clock.elapsed_seconds()).is_equal(452.5)
+	assert_int(Clock.band).is_equal(Clock.Band.EVENING)
 	assert_int(GameState.room_grid.built_floors).is_equal(3)
 	assert_str(GameState.room_grid.get_room_id(Vector2i(0, 2))).is_equal("workshop")
 	assert_bool(GameState.room_grid.is_empty(Vector2i(2, 0))).is_true()
@@ -63,10 +64,11 @@ func test_v1_save_migrates_to_default_house() -> void:
 	var v1 := {
 		"version": 1,
 		"game_state": {"day": 3, "money": 50, "reputation": 1, "affinity": {}, "residents": []},
-		"clock": {"phase": Clock.Phase.NIGHT, "elapsed_in_phase": 0.0},
+		"clock": {"phase": 3, "elapsed_in_phase": 0.0},  # v1~v4 의 페이즈 NIGHT
 	}
 	assert_bool(SaveManager.apply_save_data(v1)).is_true()
 	assert_int(GameState.day).is_equal(3)
+	assert_int(Clock.band).is_equal(Clock.Band.NIGHT)
 	assert_int(GameState.money).is_equal(50)
 	assert_int(GameState.room_grid.built_floors).is_equal(1)
 	# 시작 배치(tuning start_layout_floor0)가 적용된다
@@ -83,7 +85,7 @@ func test_v2_save_gets_default_inventory_assignment_conditions() -> void:
 			"residents": ["y01_ttukttagi", "y02_eoduki", "y03_dalgael"],
 			"room_grid": GameState.room_grid.to_dict(),
 		},
-		"clock": {"phase": Clock.Phase.MORNING, "elapsed_in_phase": 0.0},
+		"clock": {"phase": 0, "elapsed_in_phase": 0.0},
 	}
 	assert_bool(SaveManager.apply_save_data(v2)).is_true()
 	assert_bool(GameState.inventory.is_empty()).is_true()
@@ -101,3 +103,20 @@ func test_unsupported_version_or_bad_grid_rejected() -> void:
 	assert_bool(SaveManager.apply_save_data(bad)).is_false()
 	var bad_inventory := {"version": 4, "game_state": {"day": 1, "inventory": {"meal": -3}}}
 	assert_bool(SaveManager.apply_save_data(bad_inventory)).is_false()
+
+
+## v4 의 페이즈 시계는 그 시간대의 시작 시각으로 복원된다 (페이즈 안 경과는 길이 체계가 달라 버린다).
+func test_v4_phase_clock_migrates_to_timeband_start() -> void:
+	GameState.reset_new_game()
+	var v4 := {
+		"version": 4,
+		"game_state": GameState.to_dict(),
+		"clock": {"phase": 2, "elapsed_in_phase": 30.0},  # EVENING
+	}
+	assert_bool(SaveManager.apply_save_data(v4)).is_true()
+	assert_int(Clock.band).is_equal(Clock.Band.EVENING)
+	assert_float(Clock.elapsed_seconds()).is_equal(Clock.timeline.seconds_for_band(Clock.Band.EVENING))
+	var saved := SaveManager.build_save_data()
+	assert_int(saved["version"]).is_equal(5)
+	assert_bool((saved["clock"] as Dictionary).has("elapsed_seconds")).is_true()
+	assert_bool((saved["clock"] as Dictionary).has("phase")).is_false()

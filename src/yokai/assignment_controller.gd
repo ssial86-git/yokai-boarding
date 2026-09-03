@@ -1,6 +1,6 @@
 class_name AssignmentController
 extends Node
-## 아침 배치 조작: 페이즈·입주 여부를 검사한 뒤 Assignment(GameState 소유)에 반영하고 Events 로 알린다.
+## 아침 배치 조작: 시간대·입주 여부를 검사한 뒤 Assignment(GameState 소유)에 반영하고 Events 로 알린다.
 
 ## 앞 4개는 Assignment.Outcome 과 같은 순서·값이다.
 enum Outcome { OK, NOT_BUILT, NOT_WORKPLACE, FULL, NOT_MORNING, UNKNOWN_YOKAI }
@@ -41,6 +41,6 @@ static func outcome_text_key(outcome: int) -> String:
 func _gate(yokai_id: String) -> Outcome:
 	if not GameState.residents.has(yokai_id):
 		return Outcome.UNKNOWN_YOKAI
-	if Clock.phase != Clock.Phase.MORNING:
+	if Clock.band != Clock.Band.MORNING:
 		return Outcome.NOT_MORNING
 	return Outcome.OK

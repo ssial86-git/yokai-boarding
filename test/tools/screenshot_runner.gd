@@ -47,10 +47,9 @@ func _initialize() -> void:
 	for i in extra_floors:
 		game_state.set("money", maxi(int(game_state.get("money")), int(grid.call("get_next_floor_cost"))))
 		controller.call("try_add_floor")
-	var phases: Dictionary = clock.get_script().get_script_constant_map()["Phase"]
-	if phases.has(phase_name.to_upper()):
-		clock.set("phase", phases[phase_name.to_upper()])
-		events.emit_signal("phase_changed", clock.get("phase"), game_state.get("day"))
+	var bands: Dictionary = clock.get_script().get_script_constant_map()["Band"]
+	if bands.has(phase_name.to_upper()):
+		clock.call("advance_to_band", bands[phase_name.to_upper()])  # timeband_changed 는 Clock 이 쏜다
 
 	for i in WARMUP_FRAMES:
 		await process_frame

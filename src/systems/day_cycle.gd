@@ -1,13 +1,13 @@
 class_name DayCycle
 extends Node
 ## 하루 사이클의 시스템 측: 아침 날씨, 저녁 진입 시 정산(시설 산출 → 하숙비 → 손님 체크아웃 → 컨디션),
-## 방이 바뀌면 무효해진 배치 정리. 페이즈 진행 자체는 Clock 이 한다.
+## 방이 바뀌면 무효해진 배치 정리. 시간은 Clock 이 흘리고 여기서는 시간대 트리거만 받는다.
 
 const RAIN := "rain"
 
 
 func _ready() -> void:
-	Events.phase_changed.connect(_on_phase_changed)
+	Events.timeband_changed.connect(_on_timeband_changed)
 	Events.day_started.connect(_on_day_started)
 	Events.room_changed.connect(func(_coords: Vector2i, _room_id: String) -> void: prune_assignment())
 	Events.floor_added.connect(func(_floor: int) -> void: prune_assignment())
@@ -17,8 +17,8 @@ func _on_day_started(_day: int) -> void:
 	roll_weather()
 
 
-func _on_phase_changed(phase: int, _day: int) -> void:
-	if phase == Clock.Phase.EVENING:
+func _on_timeband_changed(band: int, _day: int) -> void:
+	if band == Clock.Band.EVENING:
 		settle()
 
 

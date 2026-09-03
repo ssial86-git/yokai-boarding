@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_script")
 id = "hint_assign"
-phase = "morning"
+timeband = "morning"
 day_min = 1
 day_max = 0
 requires_flag = ""

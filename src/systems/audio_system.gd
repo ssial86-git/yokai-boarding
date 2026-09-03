@@ -47,7 +47,7 @@ func _connect_events() -> void:
 		if not visitor.is_empty():
 			play("knock"))
 	Events.dialogue_node_shown.connect(func(_event_id: String, _speaker: String) -> void: play("blip"))
-	Events.phase_changed.connect(_on_phase_changed)
+	Events.timeband_changed.connect(_on_timeband_changed)
 	Events.money_changed.connect(_on_money_changed)
 	Events.weather_changed.connect(func(_weather: String) -> void: _update_ambient())
 	Events.game_loaded.connect(func(_slot: int) -> void:
@@ -77,7 +77,7 @@ func is_playing(sfx_id: String) -> bool:
 	return player != null and player.playing
 
 
-func _on_phase_changed(_phase: int, _day: int) -> void:
+func _on_timeband_changed(_band: int, _day: int) -> void:
 	play("chime")
 	_update_ambient()
 
@@ -93,7 +93,7 @@ func _update_ambient() -> void:
 	var player: AudioStreamPlayer = _players.get("rain")
 	if player == null:
 		return
-	var rainy := GameState.weather == DayCycle.RAIN and Clock.phase in [Clock.Phase.DAY, Clock.Phase.EVENING]
+	var rainy := GameState.weather == DayCycle.RAIN and Clock.band in [Clock.Band.DAY, Clock.Band.EVENING]
 	if rainy and not player.playing:
 		player.play()
 	elif not rainy and player.playing:

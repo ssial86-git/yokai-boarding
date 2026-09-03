@@ -5,7 +5,7 @@ extends GdUnitTestSuite
 func _hint(id: String, phase: String, day_min: int, day_max: int, requires: String, blocked: String, priority: int) -> HintData:
 	var hint := HintData.new()
 	hint.id = id
-	hint.phase = phase
+	hint.timeband = phase
 	hint.day_min = day_min
 	hint.day_max = day_max
 	hint.requires_flag = requires

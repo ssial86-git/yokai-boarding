@@ -1,7 +1,7 @@
 class_name YokaiManager
 extends Node2D
-## 입주 하숙생마다 YokaiActor 를 만들고, 페이즈에 따라 일터/휴식처로 보낸다.
-## 낮(DAY)에는 배치된 칸으로 가서 일하고, 그 외 페이즈에는 휴식처(첫 객실)로 돌아온다.
+## 입주 하숙생마다 YokaiActor 를 만들고, 시간대에 따라 일터/휴식처로 보낸다.
+## 낮(DAY)에는 배치된 칸으로 가서 일하고, 그 외 시간대에는 휴식처(첫 객실)로 돌아온다.
 
 const SPRITE_PATH := "res://assets/art_generated/yokai_%s.png"
 const GUEST_SPRITE_PATH := "res://assets/art_generated/guest_%s.png"
@@ -24,12 +24,12 @@ func _ready() -> void:
 	_walk_speed = tuning.get_float("yokai_walk_speed_px")
 	_bob_px = float(tuning.get_int("yokai_work_bob_px"))
 	_bob_seconds = tuning.get_float("yokai_work_bob_seconds")
-	Events.phase_changed.connect(func(phase: int, _day: int) -> void: dispatch_all(phase))
+	Events.timeband_changed.connect(func(band: int, _day: int) -> void: dispatch_all(band))
 	Events.game_loaded.connect(func(_slot: int) -> void: respawn())
 	Events.yokai_arrived.connect(func(_id: String) -> void: respawn())
 	Events.guests_changed.connect(respawn)
-	Events.room_changed.connect(func(_coords: Vector2i, _room_id: String) -> void: dispatch_all(Clock.phase))
-	Events.floor_added.connect(func(_floor: int) -> void: dispatch_all(Clock.phase))
+	Events.room_changed.connect(func(_coords: Vector2i, _room_id: String) -> void: dispatch_all(Clock.band))
+	Events.floor_added.connect(func(_floor: int) -> void: dispatch_all(Clock.band))
 	Events.affinity_changed.connect(func(yokai_id: String, _value: int) -> void: apply_presentation(yokai_id))
 	respawn()
 
@@ -45,7 +45,7 @@ func apply_presentation(yokai_id: String) -> void:
 		yokai, int(GameState.affinity.get(yokai_id, 0)),
 		tuning.get_float("clarity_alpha_min"), tuning.get_int("clarity_affinity_max")))
 	var glow := 0.0
-	if yokai.night_worker and Clock.phase == Clock.Phase.NIGHT:
+	if yokai.night_worker and Clock.band == Clock.Band.NIGHT:
 		glow = tuning.get_float("night_worker_glow_energy")
 	actor.set_glow(glow, tuning.get_int("night_worker_glow_radius_px"),
 		Color.html(tuning.get_string("lantern_color")), house_view.lantern_texture())
@@ -95,12 +95,12 @@ func respawn() -> void:
 		_actors[actor_id] = actor
 		slot += 1
 		guest_index += 1
-	dispatch_all(Clock.phase)
+	dispatch_all(Clock.band)
 	apply_presentation_all()
 
 
-## 페이즈에 맞는 목적지로 전원 출발. 같은 칸을 향하는 요괴는 slot 으로 가로 위치를 나눈다.
-func dispatch_all(phase: int) -> void:
+## 시간대에 맞는 목적지로 전원 출발. 같은 칸을 향하는 요괴는 slot 으로 가로 위치를 나눈다.
+func dispatch_all(band: int) -> void:
 	apply_presentation_all()
 	var grid := GameState.room_grid
 	var home := DaySettlement.rest_cell(grid)
@@ -110,7 +110,7 @@ func dispatch_all(phase: int) -> void:
 		if actor == null:
 			continue
 		var work_cell := GameState.assignment.get_cell(yokai_id)
-		var goes_to_work := phase == Clock.Phase.DAY and work_cell != Assignment.REST \
+		var goes_to_work := band == Clock.Band.DAY and work_cell != Assignment.REST \
 			and grid.is_in_bounds(work_cell) and grid.is_floor_built(work_cell.y)
 		var target := work_cell if goes_to_work else home
 		var slot := int(slots_used.get(target, 0))

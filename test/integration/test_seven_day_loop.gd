@@ -52,12 +52,12 @@ func test_seven_days_close_the_loop() -> void:
 	var accepted := 0
 	var declined := 0
 	for day in DAYS:
-		assert_int(Clock.phase).is_equal(Clock.Phase.MORNING)
+		assert_int(Clock.band).is_equal(Clock.Band.MORNING)
 		assert_int(GameState.day).is_equal(day + 1)
 		_drain_dialogue(story)
 		assign.try_assign("y02_eoduki", Vector2i(2, 0))  # 주방
-		Clock.advance_phase()  # DAY
-		Clock.advance_phase()  # EVENING: 정산 → (튜토리얼) → 심사
+		Clock.advance_to_band(Clock.Band.DAY)
+		Clock.advance_to_band(Clock.Band.EVENING)  # 정산 → (튜토리얼) → 심사
 		_drain_dialogue(story)
 		await runner.simulate_frames(1)
 		if intake.has_pending():
@@ -68,9 +68,9 @@ func test_seven_days_close_the_loop() -> void:
 				intake.decide(Intake.Decision.DECLINE)
 				declined += 1
 		_drain_dialogue(story)
-		Clock.advance_phase()  # NIGHT: 사연
+		Clock.advance_to_band(Clock.Band.NIGHT)  # 사연
 		_drain_dialogue(story)
-		Clock.advance_phase()  # 다음 날
+		Clock.sleep()  # 다음 날
 	Events.rent_settled.disconnect(rent_capture)
 	Events.dialogue_started.disconnect(dialogue_capture)
 

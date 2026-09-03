@@ -21,7 +21,7 @@ var _lantern_energy: float = 1.0
 var _lantern_color: Color = Color.WHITE
 var _lantern_texture: GradientTexture2D
 var _lantern_scale: float = 1.0
-var _lantern_phases: Array[String] = []
+var _lantern_bands: Array[String] = []
 var _lanterns_enabled: bool = false
 ## 드래그 중인 요괴 id. 비어 있지 않으면 칸마다 drop_check 결과로 색을 칠한다.
 var _drop_preview_id: String = ""
@@ -38,8 +38,8 @@ func _ready() -> void:
 	_flash_seconds = tuning.get_float("build_flash_seconds")
 	_lantern_energy = tuning.get_float("lantern_energy")
 	_lantern_color = Color.html(tuning.get_string("lantern_color"))
-	for part: String in tuning.get_string("lantern_phases").split(","):
-		_lantern_phases.append(part.strip_edges())
+	for part: String in tuning.get_string("lantern_timebands").split(","):
+		_lantern_bands.append(part.strip_edges())
 	var drop_alpha := tuning.get_float("drop_highlight_alpha")
 	_drop_ok_color = Color.html(tuning.get_string("drop_ok_color"))
 	_drop_ok_color.a = drop_alpha
@@ -47,12 +47,12 @@ func _ready() -> void:
 	_drop_bad_color.a = drop_alpha
 	_lantern_texture = _make_lantern_texture()
 	_lantern_scale = float(tuning.get_int("lantern_radius_px") * 2) / float(_lantern_texture.width)
-	_lanterns_enabled = _is_lantern_phase(Clock.phase)
+	_lanterns_enabled = _is_lantern_band(Clock.band)
 
 	Events.room_changed.connect(_on_room_changed)
 	Events.floor_added.connect(func(_floor: int) -> void: rebuild())
 	Events.game_loaded.connect(func(_slot: int) -> void: rebuild())
-	Events.phase_changed.connect(_on_phase_changed)
+	Events.timeband_changed.connect(_on_timeband_changed)
 	rebuild()
 
 
@@ -194,15 +194,14 @@ func _on_room_changed(coords: Vector2i, room_id: String) -> void:
 	queue_redraw()
 
 
-func _on_phase_changed(phase: int, _day: int) -> void:
-	_lanterns_enabled = _is_lantern_phase(phase)
+func _on_timeband_changed(band: int, _day: int) -> void:
+	_lanterns_enabled = _is_lantern_band(band)
 	for lantern: PointLight2D in _lanterns.values():
 		lantern.enabled = _lanterns_enabled
 
 
-func _is_lantern_phase(phase: int) -> bool:
-	var phase_name: String = Clock.Phase.keys()[phase].to_lower()
-	return _lantern_phases.has(phase_name)
+func _is_lantern_band(band: int) -> bool:
+	return _lantern_bands.has(DayTimeline.band_name(band))
 
 
 func _make_lantern_texture() -> GradientTexture2D:

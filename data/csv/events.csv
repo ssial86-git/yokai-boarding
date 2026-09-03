@@ -1,4 +1,4 @@
-id,kind,yokai_id,phase,day_min,day_max,min_affinity,requires_item,requires_flag,once,priority,dialogue_id,title_ko
+id,kind,yokai_id,timeband,day_min,day_max,min_affinity,requires_item,requires_flag,once,priority,dialogue_id,title_ko
 tut_morning,tutorial,,morning,1,1,0,,,true,100,d_tut_morning,성주 영감의 첫 인사
 tut_evening,tutorial,,evening,1,1,0,,,true,100,d_tut_evening,정산과 심사
 tut_night,tutorial,,night,1,1,0,,,true,100,d_tut_night,밤과 하숙부

@@ -37,7 +37,7 @@ ENUMS: dict[str, set[str]] = {
     "join_mode": {"start", "intake"},
     "visitor_kind": {"guest", "troublemaker", "erased"},
     "event_kind": {"tutorial", "story", "arrival"},
-    "event_phase": {"morning", "day", "evening", "night", "any"},
+    "timeband": {"morning", "day", "evening", "night", "any"},
 }
 
 # 대사 효과 문법: affinity:+1 / item:<id>:<±n> / flag:<name> / money:<±n>  (세미콜론으로 여러 개)
@@ -194,7 +194,7 @@ TABLES: list[Table] = [
         script_file="hint_data.gd",
         columns=[
             Column("id", parse_str),
-            Column("phase", parse_enum("event_phase")),
+            Column("timeband", parse_enum("timeband")),
             Column("day_min", int),
             Column("day_max", int),
             Column("requires_flag", parse_str),
@@ -298,7 +298,7 @@ TABLES: list[Table] = [
             Column("id", parse_str),
             Column("kind", parse_enum("event_kind")),
             Column("yokai_id", parse_str, ref="yokai"),
-            Column("phase", parse_enum("event_phase")),
+            Column("timeband", parse_enum("timeband")),
             Column("day_min", int),
             Column("day_max", int),
             Column("min_affinity", int),

@@ -1,7 +1,7 @@
 class_name Assignment
 extends RefCounted
 ## 아침 배치: 요괴 id -> 일할 칸 (또는 REST). 순수 로직.
-## 정원(RoomData.capacity)과 일터 종류만 검증한다. 페이즈 제한은 호출자(AssignmentController) 몫.
+## 정원(RoomData.capacity)과 일터 종류만 검증한다. 시간대 제한은 호출자(AssignmentController) 몫.
 
 enum Outcome { OK, NOT_BUILT, NOT_WORKPLACE, FULL }
 

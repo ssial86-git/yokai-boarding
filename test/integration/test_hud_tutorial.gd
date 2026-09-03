@@ -33,7 +33,7 @@ func test_hints_follow_first_actions() -> void:
 	assert_int(house.try_place_room(Vector2i(3, 0), "guest_room")).is_equal(RoomGrid.Outcome.OK)
 	assert_bool(GameState.flags.has(TutorialSystem.FLAG_FIRST_BUILD)).is_true()
 	assert_bool(GameState.flags.has(TutorialSystem.FLAG_EXTRA_BED)).is_true()
-	Clock.advance_phase()  # DAY
+	Clock.advance_to_band(Clock.Band.DAY)
 	assert_bool(GameState.flags.has(TutorialSystem.FLAG_FIRST_DAY)).is_true()
 	assert_str(tutorial.current_hint.id).is_equal("hint_day")
 
@@ -46,13 +46,13 @@ func test_story_follows_tutorial_on_first_night() -> void:
 	var story: StorySystem = main.get("story_system")
 	var intake: IntakeSystem = main.get("intake_system")
 	_drain(story)
-	Clock.advance_phase()  # DAY
-	Clock.advance_phase()  # EVENING
+	Clock.advance_to_band(Clock.Band.DAY)
+	Clock.advance_to_band(Clock.Band.EVENING)
 	_drain(story)
 	if intake.has_pending():
 		intake.decide(Intake.Decision.DECLINE)
 	_drain(story)
-	Clock.advance_phase()  # NIGHT
+	Clock.advance_to_band(Clock.Band.NIGHT)
 	assert_bool(story.is_busy()).is_true()
 	assert_str(story.current_event.kind).is_equal("tutorial")
 	while story.is_busy() and story.current_event.kind == "tutorial":

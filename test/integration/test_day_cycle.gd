@@ -18,7 +18,7 @@ func test_assign_three_then_settle() -> void:
 	GameState.add_resident("y03_dalgael")
 	await runner.simulate_frames(1)
 	assert_int(manager.actor_count()).is_equal(3)
-	assert_int(Clock.phase).is_equal(Clock.Phase.MORNING)
+	assert_int(Clock.band).is_equal(Clock.Band.MORNING)
 
 	GameState.money = 10_000
 	assert_int(house.try_place_room(Vector2i(3, 0), "workshop")).is_equal(RoomGrid.Outcome.OK)
@@ -29,8 +29,8 @@ func test_assign_three_then_settle() -> void:
 	assert_int(assign.try_assign("nobody", Vector2i(2, 0))).is_equal(AssignmentController.Outcome.UNKNOWN_YOKAI)
 
 	# 낮: 뚝딱이가 작업장까지 걸어가서 일한다
-	Clock.advance_phase()
-	assert_int(Clock.phase).is_equal(Clock.Phase.DAY)
+	Clock.advance_to_band(Clock.Band.DAY)
+	assert_int(Clock.band).is_equal(Clock.Band.DAY)
 	var worker := manager.get_actor("y01_ttukttagi")
 	assert_that(worker.target_cell).is_equal(Vector2i(3, 0))
 	assert_int(worker.state).is_equal(YokaiActor.State.WALKING)
@@ -48,9 +48,9 @@ func test_assign_three_then_settle() -> void:
 	var summaries: Array[Dictionary] = []
 	var capture := func(summary: Dictionary) -> void: summaries.append(summary)
 	Events.day_settled.connect(capture)
-	Clock.advance_phase()
+	Clock.advance_to_band(Clock.Band.EVENING)
 	Events.day_settled.disconnect(capture)
-	assert_int(Clock.phase).is_equal(Clock.Phase.EVENING)
+	assert_int(Clock.band).is_equal(Clock.Band.EVENING)
 	assert_int(summaries.size()).is_equal(1)
 	assert_dict(summaries[0].get("totals", {})).is_equal({"trinket": 1, "meal": 2})
 	assert_int(GameState.inventory.get_count("trinket")).is_greater_equal(1)
@@ -64,13 +64,13 @@ func test_assign_three_then_settle() -> void:
 	var story: StorySystem = main.get("story_system")
 	var intake: IntakeSystem = main.get("intake_system")
 	_drain(story, intake)
-	# 밤 → 다음 날 아침: 날짜가 넘어가고 배치는 유지된다
-	Clock.advance_phase()
+	# 밤 → 취침 → 다음 날 아침: 날짜가 넘어가고 배치는 유지된다
+	Clock.advance_to_band(Clock.Band.NIGHT)
 	_drain(story, intake)
-	Clock.advance_phase()
+	Clock.sleep()
 	_drain(story, intake)
 	assert_int(GameState.day).is_equal(2)
-	assert_int(Clock.phase).is_equal(Clock.Phase.MORNING)
+	assert_int(Clock.band).is_equal(Clock.Band.MORNING)
 	assert_that(GameState.assignment.get_cell("y01_ttukttagi")).is_equal(Vector2i(3, 0))
 
 

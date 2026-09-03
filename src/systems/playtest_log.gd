@@ -23,7 +23,7 @@ func _ready() -> void:
 		return
 	record("session_start", {"version": ProjectSettings.get_setting("application/config/name", ""), "seed": GameState.rng.seed})
 	Events.day_started.connect(func(day: int) -> void: record("day_started", {"beds_total": Lodging.total_beds(GameState.room_grid)}))
-	Events.phase_changed.connect(func(phase: int, _day: int) -> void: record("phase", {"phase": _phase_name(phase)}))
+	Events.timeband_changed.connect(func(band: int, _day: int) -> void: record("timeband", {"timeband": DayTimeline.band_name(band)}))
 	Events.assignment_changed.connect(func(yokai_id: String, cell: Vector2i) -> void:
 		record("assignment", {"yokai": yokai_id, "cell": [cell.x, cell.y], "rest": cell == Assignment.REST}))
 	Events.room_changed.connect(func(coords: Vector2i, room_id: String) -> void:
@@ -55,7 +55,7 @@ func record(kind: String, data: Dictionary = {}) -> void:
 	var line := {
 		"t": (Time.get_ticks_msec() - _started_msec) / 1000.0,
 		"day": GameState.day,
-		"phase": _phase_name(Clock.phase),
+		"timeband": Clock.band_name(),
 		"kind": kind,
 		"data": data,
 	}
@@ -68,6 +68,3 @@ func _exit_tree() -> void:
 		record("session_end", {"money": GameState.money, "residents": GameState.residents.size()})
 		_file.close()
 
-
-func _phase_name(phase: int) -> String:
-	return (Clock.Phase.keys()[phase] as String).to_lower()

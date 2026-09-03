@@ -5,10 +5,10 @@
 [resource]
 script = ExtResource("1_script")
 id = "hint_day"
-phase = "day"
+timeband = "day"
 day_min = 1
 day_max = 1
 requires_flag = ""
 blocked_by_flag = ""
 priority = 20
-text_ko = "낮에는 배치된 요괴가 일합니다. 기다리거나 '낮 건너뛰기'를 누르세요."
+text_ko = "낮에는 배치된 요괴가 일합니다. 저녁(17:00)이 되면 정산하고 손님이 옵니다."

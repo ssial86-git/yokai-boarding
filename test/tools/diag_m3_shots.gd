@@ -21,13 +21,13 @@ func _initialize() -> void:
 	_drain(story, intake)
 	game_state.set("money", 1000)
 	house.call("try_place_room", Vector2i(3, 0), "guest_room")
-	for i in 3:
-		clock.call("advance_phase")  # DAY, EVENING, NIGHT
+	for band in [1, 2, 3]:  # Clock.Band DAY, EVENING, NIGHT
+		clock.call("advance_to_band", band)
 		_drain(story, intake)
-	clock.call("advance_phase")  # 2일차 아침
+	clock.call("sleep")  # 2일차 아침
 	_drain(story, intake)
-	clock.call("advance_phase")  # 낮
-	clock.call("advance_phase")  # 2일차 저녁: 빈 카드 방문자
+	clock.call("advance_to_band", 1)  # 낮
+	clock.call("advance_to_band", 2)  # 2일차 저녁: 빈 카드 방문자
 	await _frames(WARMUP)
 	await _shot(out_dir.path_join("m3_intake.png"))
 	if bool(intake.call("has_pending")):
@@ -35,7 +35,7 @@ func _initialize() -> void:
 	await _frames(WARMUP)
 	await _shot(out_dir.path_join("m3_arrival.png"))  # 도착 튜토리얼 대화창
 	_drain(story, intake)
-	clock.call("advance_phase")  # 밤: 사연
+	clock.call("advance_to_band", 3)  # 밤: 사연
 	await _frames(WARMUP)
 	await _shot(out_dir.path_join("m3_night.png"))
 	quit(0)

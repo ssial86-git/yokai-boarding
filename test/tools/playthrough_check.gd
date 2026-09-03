@@ -47,8 +47,8 @@ func _initialize() -> void:
 	await _frames(2)
 	await _shot("03_morning_assigned")
 
-	# --- 낮: 걸어가서 일하는지 ---
-	clock.call("advance_phase")
+	# --- 낮: 걸어가서 일하는지 --- (Clock.Band: 0 아침 / 1 낮 / 2 저녁 / 3 밤)
+	clock.call("advance_to_band", 1)
 	var actor: Node2D = manager.call("get_actor", "y02_eoduki")
 	var worked := false
 	for i in WALK_FRAMES_MAX:
@@ -60,7 +60,7 @@ func _initialize() -> void:
 	await _shot("04_day_working")
 
 	# --- 저녁: 정산 + 심사 ---
-	clock.call("advance_phase")
+	clock.call("advance_to_band", 2)
 	await _frames(2)
 	var inventory: RefCounted = gs.get("inventory")
 	_check("settlement_meal", int(inventory.call("get_count", "meal")) >= 2, "저녁 정산으로 밥이 들어왔다")
@@ -88,7 +88,7 @@ func _initialize() -> void:
 	_drain(story, intake)
 
 	# --- 밤: 사연 ---
-	clock.call("advance_phase")
+	clock.call("advance_to_band", 3)
 	await _frames(2)
 	# 1일차 밤은 튜토리얼이 먼저 뜬다. 튜토리얼만 넘기고 나면 하숙생 사연(kind=story) 이 이어져야 한다.
 	for i in 50:
@@ -104,8 +104,8 @@ func _initialize() -> void:
 	await _shot("07_night_story")
 	_drain(story, intake)
 
-	# --- 2일차 아침 ---
-	clock.call("advance_phase")
+	# --- 취침 → 2일차 아침 ---
+	clock.call("sleep")
 	await _frames(2)
 	_check("day_advanced", int(gs.get("day")) == 2, "2일차가 되었다")
 	_check("assignment_kept", assign.call("can_assign", "y02_eoduki", Vector2i(2, 0)) == 0, "배치 규칙이 아침에 다시 열린다")

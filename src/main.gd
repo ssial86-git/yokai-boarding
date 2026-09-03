@@ -13,7 +13,7 @@ extends Node2D
 ##  ├ World (Node2D)
 ##  │   ├ HouseView          단면 렌더링 (RoomGrid 구독)
 ##  │   ├ YokaiManager       요괴·손님 액터 스폰·이동·또렷함·등불
-##  │   ├ Lighting           CanvasModulate 페이즈 색조
+##  │   ├ Lighting           CanvasModulate 시간대 색조
 ##  │   └ Camera             줌·드래그·클릭 판정
 ##  └ UI (CanvasLayer)
 ##      ├ DropLayer          방 위에 카드 놓기 (투명)

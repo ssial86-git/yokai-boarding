@@ -44,7 +44,7 @@ func _ready() -> void:
 	Events.assignment_changed.connect(func(_id: String, _cell: Vector2i) -> void: refresh())
 	Events.condition_changed.connect(func(_id: String, _value: int) -> void: refresh())
 	Events.affinity_changed.connect(func(_id: String, _value: int) -> void: refresh())
-	Events.phase_changed.connect(func(_phase: int, _day: int) -> void: refresh())
+	Events.timeband_changed.connect(func(_band: int, _day: int) -> void: refresh())
 	Events.room_changed.connect(func(_coords: Vector2i, _room_id: String) -> void: refresh())
 	Events.game_loaded.connect(func(_slot: int) -> void: rebuild())
 	Events.yokai_arrived.connect(func(_id: String) -> void: rebuild())
@@ -77,7 +77,7 @@ func rebuild() -> void:
 
 
 func refresh() -> void:
-	var morning := Clock.phase == Clock.Phase.MORNING
+	var morning := Clock.band == Clock.Band.MORNING
 	_title.text = DataRegistry.text("ui_assignment_title" if morning else "ui_assignment_locked")
 	for card: YokaiCard in _cards.values():
 		card.drag_enabled = morning

@@ -5,10 +5,13 @@
 [resource]
 script = ExtResource("1_script")
 values = {
-"phase_morning_seconds": 0.0,
-"phase_day_seconds": 240.0,
-"phase_evening_seconds": 0.0,
-"phase_night_seconds": 0.0,
+"day_length_seconds": 720.0,
+"clock_start_hour": 6.0,
+"clock_end_hour": 24.0,
+"timeband_day_hour": 9.0,
+"timeband_evening_hour": 17.0,
+"timeband_night_hour": 20.0,
+"sleep_earliest_hour": 17.0,
 "grid_floors": 3,
 "grid_columns": 4,
 "start_money": 200,
@@ -35,7 +38,7 @@ values = {
 "lantern_color": "f2a65a",
 "lantern_energy": 0.6,
 "lantern_radius_px": 56,
-"lantern_phases": "evening,night",
+"lantern_timebands": "evening,night",
 "debug_money_step": 500,
 "window_integer_scale": 2,
 "window_auto_scale_fill": 0.8,

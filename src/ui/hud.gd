@@ -1,6 +1,6 @@
 class_name Hud
 extends Control
-## 정식 HUD: 상단 바(날짜·페이즈·날씨·돈·평판·침대 / 행동 버튼), 성주 영감 안내 줄, 낮 진행 바, 창고 줄.
+## 정식 HUD: 상단 바(날짜·시각·시간대·날씨·돈·평판·침대 / 취침 버튼), 성주 영감 안내 줄, 하루 진행 바, 창고 줄.
 ## 사람용 문장은 Events.message_posted 로 MessageLog 에 보낸다. 디버그 도구는 DebugOverlay 로 분리.
 
 ## 상단 바의 실제 높이가 바뀔 때 (레이아웃 확정·안내 줄 표시/숨김). main.gd 가 카메라 오프셋을 다시 잡는다.
@@ -12,9 +12,11 @@ var roster_panel: RosterPanel
 var _status_label: Label
 var _inventory_label: Label
 var _hint_label: Label
-var _advance_button: Button
+var _sleep_button: Button
 var _progress: ProgressBar
 var _bar: PanelContainer
+## 시계는 매 프레임 흐르므로 표시 분이 바뀔 때만 상태 줄을 다시 그린다.
+var _last_hour_text: String = ""
 
 
 func _ready() -> void:
@@ -34,9 +36,10 @@ func _ready() -> void:
 	_status_label = Label.new()
 	_status_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(_status_label)
-	_advance_button = Button.new()
-	_advance_button.pressed.connect(Clock.advance_phase)
-	row.add_child(_advance_button)
+	_sleep_button = Button.new()
+	_sleep_button.text = DataRegistry.text("ui_sleep")
+	_sleep_button.pressed.connect(func() -> void: Clock.sleep())
+	row.add_child(_sleep_button)
 	_button(row, DataRegistry.text("ui_roster"), func() -> void: roster_panel.toggle())
 	_button(row, DataRegistry.text("ui_ledger"), func() -> void: ledger_panel.toggle())
 
@@ -52,7 +55,7 @@ func _ready() -> void:
 	column.add_child(_progress)
 
 	for refresh_signal: Signal in [
-		Events.money_changed, Events.phase_changed, Events.day_started, Events.item_added, Events.item_removed,
+		Events.money_changed, Events.timeband_changed, Events.day_started, Events.item_added, Events.item_removed,
 		Events.reputation_changed, Events.weather_changed, Events.guests_changed, Events.yokai_arrived,
 		Events.room_changed, Events.floor_added, Events.game_loaded,
 	]:
@@ -63,7 +66,9 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	_progress.value = Clock.get_phase_progress()
+	_progress.value = Clock.get_day_progress()
+	if Clock.format_hour() != _last_hour_text:
+		refresh()
 
 
 func bar_height() -> float:
@@ -71,10 +76,11 @@ func bar_height() -> float:
 
 
 func refresh() -> void:
-	var phase_name: String = Clock.Phase.keys()[Clock.phase].to_lower()
+	_last_hour_text = Clock.format_hour()
 	_status_label.text = " · ".join([
 		DataRegistry.text("hud_day", {"day": GameState.day}),
-		DataRegistry.text("phase_%s" % phase_name),
+		DataRegistry.text("hud_time", {"time": _last_hour_text}),
+		DataRegistry.text("timeband_%s" % Clock.band_name()),
 		DataRegistry.text("weather_%s" % GameState.weather),
 		DataRegistry.text("hud_money", {"money": GameState.money}),
 		DataRegistry.text("hud_reputation", {"value": GameState.reputation}),
@@ -82,8 +88,7 @@ func refresh() -> void:
 			"used": Lodging.used_beds(GameState.residents, GameState.guests),
 			"total": Lodging.total_beds(GameState.room_grid)}),
 	])
-	_advance_button.text = DataRegistry.text("ui_advance_%s" % phase_name)
-	_progress.visible = Clock.get_phase_length(Clock.phase) > 0.0
+	_sleep_button.disabled = not Clock.can_sleep()
 	var items := GameState.inventory.items()
 	_inventory_label.text = DataRegistry.text("hud_inventory_empty") if items.is_empty() \
 		else DataRegistry.text("hud_inventory", {"list": HudText.item_list(items)})
@@ -117,9 +122,8 @@ func _connect_messages() -> void:
 		var event := DataRegistry.get_event(event_id)
 		if event != null and event.kind == "story":
 			_post(DataRegistry.text("msg_story_started", {"title": event.title_ko})))
-	Events.phase_changed.connect(func(phase: int, _day: int) -> void:
-		if phase == Clock.Phase.NIGHT and not get_tree().get_first_node_in_group("story_busy"):
-			pass)
+	Events.slept.connect(func(day: int, forced: bool) -> void:
+		_post(DataRegistry.text("msg_slept_forced" if forced else "msg_slept", {"day": day})))
 	Events.game_saved.connect(func(slot: int) -> void: _post(DataRegistry.text("msg_saved", {"slot": slot})))
 	Events.game_loaded.connect(func(slot: int) -> void: _post(DataRegistry.text("msg_loaded", {"slot": slot})))
 

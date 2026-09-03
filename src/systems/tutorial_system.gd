@@ -16,8 +16,8 @@ func _ready() -> void:
 	Events.assignment_changed.connect(func(_id: String, cell: Vector2i) -> void:
 		if cell != Assignment.REST:
 			_set_flag(FLAG_FIRST_ASSIGNMENT))
-	Events.phase_changed.connect(func(phase: int, _day: int) -> void:
-		if phase == Clock.Phase.DAY:
+	Events.timeband_changed.connect(func(band: int, _day: int) -> void:
+		if band == Clock.Band.DAY:
 			_set_flag(FLAG_FIRST_DAY)
 		refresh())
 	Events.room_changed.connect(func(_coords: Vector2i, room_id: String) -> void:
@@ -37,8 +37,7 @@ func _ready() -> void:
 
 ## force: 바뀌지 않았어도 다시 알린다 (HUD 가 나중에 만들어졌을 때 초기 문구를 받도록).
 func refresh(force: bool = false) -> void:
-	var phase_name: String = (Clock.Phase.keys()[Clock.phase] as String).to_lower()
-	var hint := HintPicker.pick(DataRegistry.hints, phase_name, GameState.day, GameState.flags)
+	var hint := HintPicker.pick(DataRegistry.hints, Clock.band_name(), GameState.day, GameState.flags)
 	if hint == current_hint and not force:
 		return
 	current_hint = hint

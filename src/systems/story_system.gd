@@ -1,6 +1,6 @@
 class_name StorySystem
 extends Node
-## 사연·튜토리얼 이벤트 진행: 페이즈가 바뀌거나 상태가 바뀌면 EventScheduler 로 이벤트를 골라
+## 사연·튜토리얼 이벤트 진행: 시간대가 바뀌거나 상태가 바뀌면 EventScheduler 로 이벤트를 골라
 ## DialogueGraph.Runner 를 돌리고, 노드에 들어갈 때 효과를 적용한다. 표시는 DialogueBox 가 한다.
 
 signal node_entered(node: DialogueGraph.DialogueNode, event: EventData)
@@ -11,9 +11,9 @@ var _runner: DialogueGraph.Runner
 
 
 func _ready() -> void:
-	Events.phase_changed.connect(func(phase: int, _day: int) -> void: try_show(phase))
-	Events.intake_decided.connect(func(_visitor: Dictionary, _outcome: int) -> void: try_show(Clock.phase))
-	Events.yokai_arrived.connect(func(_id: String) -> void: try_show(Clock.phase))
+	Events.timeband_changed.connect(func(band: int, _day: int) -> void: try_show(band))
+	Events.intake_decided.connect(func(_visitor: Dictionary, _outcome: int) -> void: try_show(Clock.band))
+	Events.yokai_arrived.connect(func(_id: String) -> void: try_show(Clock.band))
 
 
 func is_busy() -> bool:
@@ -25,20 +25,20 @@ func current_node() -> DialogueGraph.DialogueNode:
 
 
 ## 지금 조건에 맞는 이벤트가 있으면 시작. 이미 대화 중이면 무시.
-func try_show(phase: int) -> bool:
+func try_show(band: int) -> bool:
 	if is_busy():
 		return false
-	var event := EventScheduler.pick(DataRegistry.events, build_context(phase))
+	var event := EventScheduler.pick(DataRegistry.events, build_context(band))
 	if event == null:
 		return false
 	start_event(event)
 	return true
 
 
-func build_context(phase: int) -> EventScheduler.Context:
+func build_context(band: int) -> EventScheduler.Context:
 	var ctx := EventScheduler.Context.new()
 	ctx.day = GameState.day
-	ctx.phase_name = (Clock.Phase.keys()[phase] as String).to_lower()
+	ctx.timeband = DayTimeline.band_name(band)
 	ctx.residents = GameState.residents
 	ctx.affinity = GameState.affinity
 	ctx.flags = GameState.flags
@@ -91,9 +91,9 @@ func _finish() -> void:
 	_runner = null
 	ended.emit(event)
 	Events.dialogue_finished.emit(event.id)
-	# 튜토리얼은 안내일 뿐이므로 같은 페이즈의 사연(story)이 뒤이어 나온다. 사연끼리는 하루 하나만.
+	# 튜토리얼은 안내일 뿐이므로 같은 시간대의 사연(story)이 뒤이어 나온다. 사연끼리는 하루 하나만.
 	if event.kind == "tutorial":
-		try_show(Clock.phase)
+		try_show(Clock.band)
 
 
 func _apply_effect(effect: Dictionary) -> void:

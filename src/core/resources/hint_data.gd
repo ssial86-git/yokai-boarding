@@ -4,8 +4,8 @@ extends Resource
 ## build_resources.py 가 생성한다. 손으로 편집하지 않는다.
 
 @export var id: String = ""
-## morning / day / evening / night / any
-@export var phase: String = "any"
+## 시간대: morning / day / evening / night / any
+@export var timeband: String = "any"
 @export var day_min: int = 1
 ## 0 이면 상한 없음
 @export var day_max: int = 0

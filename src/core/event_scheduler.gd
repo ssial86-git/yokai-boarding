@@ -1,14 +1,14 @@
 class_name EventScheduler
 extends RefCounted
-## events.csv 조건(페이즈·날짜·입주·호감도·소지품·플래그·1회) 을 평가해 지금 띄울 이벤트를 고른다.
+## events.csv 조건(시간대·날짜·입주·호감도·소지품·플래그·1회) 을 평가해 지금 띄울 이벤트를 고른다.
 
-const PHASE_ANY := "any"
+const TIMEBAND_ANY := "any"
 
 
 class Context:
 	extends RefCounted
 	var day: int = 1
-	var phase_name: String = "night"
+	var timeband: String = "night"
 	var residents: Array[String] = []
 	var affinity: Dictionary = {}
 	var flags: Dictionary = {}
@@ -17,7 +17,7 @@ class Context:
 
 
 static func is_eligible(event: EventData, ctx: Context) -> bool:
-	if event.phase != PHASE_ANY and event.phase != ctx.phase_name:
+	if event.timeband != TIMEBAND_ANY and event.timeband != ctx.timeband:
 		return false
 	if ctx.day < event.day_min:
 		return false
