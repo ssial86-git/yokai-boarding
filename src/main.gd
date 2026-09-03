@@ -24,12 +24,11 @@ extends Node2D
 ##  │   └ Camera             플레이어 추적·줌·클릭 판정
 ##  └ UI (CanvasLayer)
 ##      ├ DropLayer          방 위에 카드 놓기 (투명)
-##      ├ Hud                상단 바·안내·체력·상호작용 문구·창고
+##      ├ Hud                시계 카드·상태 칩·안내·체력 바·상호작용 알약
 ##      ├ MessageLog         왼쪽 아래 메시지
 ##      ├ AssignmentPanel    아침 배치 카드 (집 안에서만)
 ##      ├ BuildMenu
-##      ├ LedgerPanel        손님 명부
-##      ├ RosterPanel        하숙부
+##      ├ MenuHub            장부 탭 메뉴: 창고 · 하숙부 · 명부 (Tab / I·J·L)
 ##      ├ IntakePanel        심사 카드
 ##      ├ StationMenu        요리·제작·판매 메뉴 (방 앞 E)
 ##      ├ FishingBar         낚시 타이밍 바
@@ -37,6 +36,13 @@ extends Node2D
 ##      └ DebugOverlay       F1 (디버그 빌드 전용)
 
 const MESSAGE_LOG_MARGIN_PX := 4.0
+## 단축키 (UI 정리): Tab 메뉴 · I/J/L 탭 · Z 취침 · B 배치 접기. 코드로 등록한다.
+const ACTION_MENU := &"ui_menu_toggle"
+const ACTION_TAB_INVENTORY := &"ui_tab_inventory"
+const ACTION_TAB_ROSTER := &"ui_tab_roster"
+const ACTION_TAB_LEDGER := &"ui_tab_ledger"
+const ACTION_SLEEP := &"ui_sleep"
+const ACTION_PANEL := &"ui_panel_toggle"
 
 var house_controller: HouseController
 var assignment_controller: AssignmentController
@@ -60,6 +66,7 @@ var house_view: HouseView
 var yokai_manager: YokaiManager
 var camera: HouseCamera
 var hud: Hud
+var menu_hub: MenuHub
 var message_log: MessageLog
 var build_menu: BuildMenu
 var assignment_panel: AssignmentPanel
@@ -122,7 +129,7 @@ func _ready() -> void:
 
 	house_region.open_room_menu = _open_room_menu
 	yokai_manager.talk_action = story_system.try_talk
-	player.blocked_check = func() -> bool: return build_menu.is_open() or station_menu.is_open()
+	player.blocked_check = func() -> bool: return build_menu.is_open() or station_menu.is_open() or menu_hub.is_open()
 	player.movement_locked_check = fishing_system.is_active
 	region_manager.fishing_system = fishing_system
 	expedition_system.region_manager = region_manager
@@ -179,23 +186,26 @@ func _build_ui() -> void:
 	var ui := CanvasLayer.new()
 	ui.name = "UI"
 	add_child(ui)
+	# 모든 UI 는 테마를 가진 루트 Control 아래에 둔다 — 패널·버튼·칩이 같은 결이 되도록 (UiStyles.make_theme)
+	var ui_root := Control.new()
+	ui_root.name = "UiRoot"
+	ui_root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	ui_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ui_root.theme = UiStyles.make_theme()
+	ui.add_child(ui_root)
 
 	var drop_layer := DropLayer.new()
 	drop_layer.name = "DropLayer"
 	drop_layer.controller = assignment_controller
 	drop_layer.house_view = house_view
-	ui.add_child(drop_layer)
+	ui_root.add_child(drop_layer)
 
-	var ledger_panel := LedgerPanel.new()
-	ledger_panel.name = "LedgerPanel"
-	var roster_panel := RosterPanel.new()
-	roster_panel.name = "RosterPanel"
-
+	menu_hub = MenuHub.new()
+	menu_hub.name = "MenuHub"
 	hud = Hud.new()
 	hud.name = "Hud"
-	hud.ledger_panel = ledger_panel
-	hud.roster_panel = roster_panel
-	ui.add_child(hud)
+	hud.menu_hub = menu_hub
+	ui_root.add_child(hud)
 
 	message_log = MessageLog.new()
 	message_log.name = "MessageLog"
@@ -203,12 +213,12 @@ func _build_ui() -> void:
 	message_log.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	message_log.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	message_log.alignment = BoxContainer.ALIGNMENT_END  # 줄이 적어도 아래에 붙는다
-	ui.add_child(message_log)
+	ui_root.add_child(message_log)
 
 	assignment_panel = AssignmentPanel.new()
 	assignment_panel.name = "AssignmentPanel"
 	assignment_panel.controller = assignment_controller
-	ui.add_child(assignment_panel)
+	ui_root.add_child(assignment_panel)
 	# 위 바와 아래 패널 사이에 집이 오도록 카메라를 밀고, 메시지 로그는 패널 바로 위에 붙인다.
 	# 크기는 레이아웃이 끝난 뒤에야 맞으므로 실제 바/패널의 resized 에 걸고, 첫 프레임 뒤 한 번 더 잡는다.
 	assignment_panel.resized.connect(_layout_around_panels)
@@ -219,37 +229,36 @@ func _build_ui() -> void:
 	build_menu = BuildMenu.new()
 	build_menu.name = "BuildMenu"
 	build_menu.controller = house_controller
-	ui.add_child(build_menu)
-
-	ui.add_child(ledger_panel)
-	ui.add_child(roster_panel)
+	ui_root.add_child(build_menu)
 
 	intake_panel = IntakePanel.new()
 	intake_panel.name = "IntakePanel"
 	intake_panel.intake = intake_system
-	ui.add_child(intake_panel)
+	ui_root.add_child(intake_panel)
 
 	station_menu = StationMenu.new()
 	station_menu.name = "StationMenu"
 	station_menu.station_system = station_system
 	station_menu.open_renovate = func(coords: Vector2i) -> void:
 		build_menu.open_for_cell(coords, _player_screen_position())
-	ui.add_child(station_menu)
+	ui_root.add_child(station_menu)
 
 	fishing_bar = FishingBar.new()
 	fishing_bar.name = "FishingBar"
 	fishing_bar.fishing_system = fishing_system
-	ui.add_child(fishing_bar)
+	ui_root.add_child(fishing_bar)
+
+	ui_root.add_child(menu_hub)  # 장부 메뉴는 작업 메뉴보다 위, 대화창보다 아래
 
 	dialogue_box = DialogueBox.new()
 	dialogue_box.name = "DialogueBox"
 	dialogue_box.story = story_system
-	ui.add_child(dialogue_box)
+	ui_root.add_child(dialogue_box)
 
 	if OS.is_debug_build():
 		var debug_overlay := DebugOverlay.new()
 		debug_overlay.name = "DebugOverlay"
-		ui.add_child(debug_overlay)
+		ui_root.add_child(debug_overlay)
 
 
 func _layout_around_panels() -> void:
@@ -259,7 +268,7 @@ func _layout_around_panels() -> void:
 	var bottom := clampf(assignment_panel.size.y if assignment_panel.visible else 0.0, 0.0, view_size.y * 0.5)
 	camera.offset = Vector2(0, (bottom - top) * 0.5)
 	message_log.offset_left = MESSAGE_LOG_MARGIN_PX
-	message_log.offset_bottom = -(bottom + MESSAGE_LOG_MARGIN_PX)
+	message_log.offset_bottom = -hud.log_bottom_inset(bottom)  # 체력 바 위
 	message_log.offset_top = message_log.offset_bottom - maxf(message_log.size.y, message_log.get_minimum_size().y)
 	hud.set_prompt_bottom(bottom + MESSAGE_LOG_MARGIN_PX)
 
@@ -297,6 +306,12 @@ func _ensure_input_actions() -> void:
 		PlayerController.ACTION_THROW: [KEY_Q],
 		PlayerController.ACTION_RETURN: [KEY_R],
 		PlayerController.ACTION_GATHER: [KEY_G],
+		ACTION_MENU: [KEY_TAB],
+		ACTION_TAB_INVENTORY: [KEY_I],
+		ACTION_TAB_ROSTER: [KEY_J],
+		ACTION_TAB_LEDGER: [KEY_L],
+		ACTION_SLEEP: [KEY_Z],
+		ACTION_PANEL: [KEY_B],
 	}
 	for action: StringName in bindings:
 		if InputMap.has_action(action):
@@ -306,6 +321,28 @@ func _ensure_input_actions() -> void:
 			var event := InputEventKey.new()
 			event.physical_keycode = keycode
 			InputMap.action_add_event(action, event)
+
+
+## HUD 단축키. 대화·심사 중(Clock hold)에는 듣지 않는다.
+func _unhandled_input(event: InputEvent) -> void:
+	if Clock.is_held():
+		return
+	if event.is_action_pressed(ACTION_MENU):
+		menu_hub.toggle()
+	elif event.is_action_pressed(ACTION_TAB_INVENTORY):
+		menu_hub.toggle(MenuHub.Tab.INVENTORY)
+	elif event.is_action_pressed(ACTION_TAB_ROSTER):
+		menu_hub.toggle(MenuHub.Tab.ROSTER)
+	elif event.is_action_pressed(ACTION_TAB_LEDGER):
+		menu_hub.toggle(MenuHub.Tab.LEDGER)
+	elif event.is_action_pressed(ACTION_SLEEP):
+		if Clock.can_sleep():
+			Clock.sleep()
+	elif event.is_action_pressed(ACTION_PANEL):
+		assignment_panel.toggle_collapsed()
+	else:
+		return
+	get_viewport().set_input_as_handled()
 
 
 func _player_screen_position() -> Vector2:

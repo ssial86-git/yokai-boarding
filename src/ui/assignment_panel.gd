@@ -9,6 +9,10 @@ const GUEST_SPRITE_PATH := "res://assets/art_generated/guest_%s.png"
 var controller: AssignmentController
 
 var _title: Label
+var _collapse_button: Button
+var _body: VBoxContainer
+## B 로 접으면 제목 줄만 남는다 (야외·낮에 화면을 비우기 위해)
+var collapsed: bool = false
 var _cards_box: HBoxContainer
 var _cards_scroll: ScrollContainer
 var _cards: Dictionary = {}  # yokai_id -> YokaiCard (하숙생)
@@ -52,19 +56,26 @@ func _ready() -> void:
 
 	var box := VBoxContainer.new()
 	add_child(box)
-	_title = Label.new()
-	box.add_child(_title)
+	var title_row := HBoxContainer.new()
+	box.add_child(title_row)
+	_title = UiStyles.header("")
+	_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_row.add_child(_title)
+	_collapse_button = UiStyles.key_button(title_row, DataRegistry.text("ui_panel_collapse"), DataRegistry.text("key_hint_panel"),
+		toggle_collapsed)
+	_body = VBoxContainer.new()
+	box.add_child(_body)
 	# 카드 줄은 가로 스크롤 — 하숙생·손님이 늘어도 아래 드롭존이 화면 밖으로 밀리지 않는다
 	_cards_scroll = ScrollContainer.new()
 	_cards_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_cards_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	_cards_scroll.custom_minimum_size = Vector2(0, _card_size + CARD_ROW_EXTRA_PX)
-	box.add_child(_cards_scroll)
+	_body.add_child(_cards_scroll)
 	_cards_box = HBoxContainer.new()
 	_cards_scroll.add_child(_cards_box)
 	# 드롭존 줄: 휴식 · 텃밭 · 동행 — 셋이 폭을 나눠 쓴다
 	var row := HBoxContainer.new()
-	box.add_child(row)
+	_body.add_child(row)
 	_rest_zone = Label.new()
 	_rest_zone.text = DataRegistry.text("ui_rest_zone")
 	_rest_zone.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -144,6 +155,14 @@ func _fit_cards_row() -> void:
 	var needed := _cards_box.get_combined_minimum_size().y
 	if needed > 0.0:
 		_cards_scroll.custom_minimum_size = Vector2(0, needed)
+
+
+## B: 카드·드롭존을 접거나 펼친다. 접혀도 제목 줄은 남아 다시 펼 수 있다.
+func toggle_collapsed() -> void:
+	collapsed = not collapsed
+	_body.visible = not collapsed
+	_collapse_button.text = "%s  %s" % [
+		DataRegistry.text("ui_panel_expand" if collapsed else "ui_panel_collapse"), DataRegistry.text("key_hint_panel")]
 
 
 func refresh() -> void:

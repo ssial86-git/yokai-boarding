@@ -205,7 +205,13 @@ func _initialize() -> void:
 	var view_width := root.get_visible_rect().size.x
 	_check("sleep_button_on_screen", sleep_rect.size.x > 0.0 and sleep_rect.end.x <= view_width + 0.5,
 		"창고 16종·돈 4자리에도 취침 버튼이 화면 안에 있다 (right=%.0f / %.0f)" % [sleep_rect.end.x, view_width])
-	await _shot("14_long_inventory_bar")
+	var hub: Control = main.get("menu_hub")
+	hub.call("open_tab", 0)  # 창고 탭
+	await _frames(2)
+	_check("inventory_tab_rows", hub.visible and int(hub.call("row_count")) >= 16, "장부 메뉴 창고 탭에 종류별 소제목과 16종 이상이 보인다")
+	await _shot("14_inventory_menu")
+	hub.call("close")
+	await _frames(1)
 
 	# --- P1-S4: 잿빛 들 — 동행 편성 → 적·동료 스폰 → 부적 투척 → 귀환 ---
 	var expedition: Node = main.get("expedition_system")
