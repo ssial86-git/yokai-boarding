@@ -120,5 +120,14 @@ values = {
 "door_color": "d9b384",
 "door_locked_color": "4a4352",
 "gather_point_size_px": 12,
-"prompt_offset_px": 20
+"prompt_offset_px": 20,
+"guest_dish_bonus_money": 20,
+"sell_price_ratio": 1.0,
+"serve_stamina_cost": 0.0,
+"fishing_bar_cycles_per_second": 0.8,
+"fishing_window_ratio": 0.35,
+"fishing_stamina_cost": 3.0,
+"fishing_max_seconds": 6.0,
+"fishing_miss_junk_chance": 0.5,
+"region_water_color": "5f8090"
 }

@@ -34,3 +34,5 @@ extends Resource
 @export var farm_x: int = 0
 ## 배경색 hex (팔레트)
 @export var sky_color: String = "8fb0b8"
+## 낚시 자리 x (0 = 없음). fish.csv 에서 region_id 가 이 구역인 어종이 낚인다
+@export var fishing_x: int = 0

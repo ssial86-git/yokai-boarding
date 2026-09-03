@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/recipe_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_ash_pepper_stew"
+name_ko = "잿빛 고추찜"
+tier = 2
+output_item = "dish_ash_pepper_stew"
+output_count = 1
+ingredients = ["ash_pepper:1", "meal:1", "m_ash_grass:1"]
+cook_seconds = 50.0
+buff_stat = "strength"
+buff_amount = 2

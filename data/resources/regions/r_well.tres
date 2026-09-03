@@ -21,3 +21,4 @@ doors = ["r_yard:32", "r_ash_field:288"]
 gather_span = ""
 farm_x = 0
 sky_color = "2b3f55"
+fishing_x = 0

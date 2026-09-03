@@ -19,3 +19,4 @@ appear_condition = "rain"
 weight = 15
 promotable = false
 sprite_size = 32
+liked_recipe = "r_mushroom_soup"

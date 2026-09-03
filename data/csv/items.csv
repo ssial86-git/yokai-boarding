@@ -37,3 +37,21 @@ garlic,마늘,crop,12
 sweet_potato,고구마,crop,11
 moon_melon,달무리 참외,crop,30
 ash_pepper,잿빛 고추,crop,26
+dish_namul_muchim,나물무침,food,14
+dish_mushroom_soup,버섯국,food,18
+dish_radish_soup,뭇국,food,16
+dish_perilla_wrap,깻잎쌈,food,18
+dish_herb_tea,약초차,food,20
+dish_acorn_jelly,도토리묵,food,16
+dish_kimchi,김치,food,30
+dish_garlic_stew,마늘찜,food,34
+dish_roasted_sweet_potato,군고구마,food,24
+dish_moon_melon_slice,달무리 화채,food,48
+dish_ash_pepper_stew,잿빛 고추찜,food,52
+dish_shadow_stew,그늘탕,food,60
+f_minnow,피라미,fish,6
+f_crucian,붕어,fish,10
+f_catfish,메기,fish,18
+f_sweetfish,은어,fish,24
+j_straw_shoe,낡은 짚신,misc,1
+j_clay_bottle,흙병,misc,3

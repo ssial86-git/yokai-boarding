@@ -1,0 +1,13 @@
+id,name_ko,tier,output_item,output_count,ingredients,cook_seconds,buff_stat,buff_amount
+r_namul_muchim,나물무침,1,dish_namul_muchim,1,m_namul:2,20,none,0
+r_mushroom_soup,버섯국,1,dish_mushroom_soup,1,m_mushroom:2;m_spring_water:1,30,sight,1
+r_radish_soup,뭇국,1,dish_radish_soup,1,radish:1;m_spring_water:1,30,courage,1
+r_perilla_wrap,깻잎쌈,1,dish_perilla_wrap,1,perilla:2;meal:1,25,strength,1
+r_herb_tea,약초차,1,dish_herb_tea,1,m_herb:1;m_spring_water:1,15,skill,1
+r_acorn_jelly,도토리묵,1,dish_acorn_jelly,1,m_acorn:3,40,none,0
+r_kimchi,김치,2,dish_kimchi,2,cabbage:2;garlic:1,60,courage,2
+r_garlic_stew,마늘찜,2,dish_garlic_stew,1,garlic:2;meal:1,45,strength,2
+r_roasted_sweet_potato,군고구마,2,dish_roasted_sweet_potato,2,sweet_potato:2,30,none,0
+r_moon_melon_slice,달무리 화채,2,dish_moon_melon_slice,1,moon_melon:1;m_spring_water:1,20,sight,2
+r_ash_pepper_stew,잿빛 고추찜,2,dish_ash_pepper_stew,1,ash_pepper:1;meal:1;m_ash_grass:1,50,strength,2
+r_shadow_stew,그늘탕,2,dish_shadow_stew,1,m_shadow_moss:1;m_mushroom:1,60,skill,2

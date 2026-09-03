@@ -115,3 +115,12 @@ door_color,d9b384,string,문 자리표시 색(hex)
 door_locked_color,4a4352,string,잠긴 문 색(hex)
 gather_point_size_px,12,int,채집 포인트 자리표시 크기(px)
 prompt_offset_px,20,int,안내 문구가 플레이어 머리 위에서 떨어진 거리(px)
+guest_dish_bonus_money,20,int,체크아웃하는 손님이 좋아하는 요리를 먹었을 때 더 내는 돈
+sell_price_ratio,1.0,float,판매가 = 아이템 base_value × 이 비율
+serve_stamina_cost,0,float,배식 비용 (0 = 없음)
+fishing_bar_cycles_per_second,0.8,float,낚시 타이밍 바 마커가 왕복하는 속도(초당 주기)
+fishing_window_ratio,0.35,float,타이밍 바에서 성공 구간의 폭(0~1). 클수록 관대
+fishing_stamina_cost,3,float,낚시 한 번 비용
+fishing_max_seconds,6.0,float,이 시간 안에 E 를 누르지 않으면 놓친다
+fishing_miss_junk_chance,0.5,float,놓쳤을 때 고물이라도 낚일 확률
+region_water_color,5f8090,string,낚시 자리 물 자리표시 색(hex — 팔레트)

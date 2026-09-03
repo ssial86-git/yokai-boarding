@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/recipe_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_kimchi"
+name_ko = "김치"
+tier = 2
+output_item = "dish_kimchi"
+output_count = 2
+ingredients = ["cabbage:2", "garlic:1"]
+cook_seconds = 60.0
+buff_stat = "courage"
+buff_amount = 2

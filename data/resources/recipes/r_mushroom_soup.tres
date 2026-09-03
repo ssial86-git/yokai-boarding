@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/recipe_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_mushroom_soup"
+name_ko = "버섯국"
+tier = 1
+output_item = "dish_mushroom_soup"
+output_count = 1
+ingredients = ["m_mushroom:2", "m_spring_water:1"]
+cook_seconds = 30.0
+buff_stat = "sight"
+buff_amount = 1

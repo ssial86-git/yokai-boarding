@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/recipe_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_perilla_wrap"
+name_ko = "깻잎쌈"
+tier = 1
+output_item = "dish_perilla_wrap"
+output_count = 1
+ingredients = ["perilla:2", "meal:1"]
+cook_seconds = 25.0
+buff_stat = "strength"
+buff_amount = 1

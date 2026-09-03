@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/recipe_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_herb_tea"
+name_ko = "약초차"
+tier = 1
+output_item = "dish_herb_tea"
+output_count = 1
+ingredients = ["m_herb:1", "m_spring_water:1"]
+cook_seconds = 15.0
+buff_stat = "skill"
+buff_amount = 1

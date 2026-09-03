@@ -19,3 +19,4 @@ appear_condition = ""
 weight = 5
 promotable = true
 sprite_size = 16
+liked_recipe = "r_kimchi"

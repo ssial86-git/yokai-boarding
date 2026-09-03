@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/recipe_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_roasted_sweet_potato"
+name_ko = "군고구마"
+tier = 2
+output_item = "dish_roasted_sweet_potato"
+output_count = 2
+ingredients = ["sweet_potato:2"]
+cook_seconds = 30.0
+buff_stat = "none"
+buff_amount = 0

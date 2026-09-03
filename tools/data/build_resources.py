@@ -53,6 +53,7 @@ ENUMS: dict[str, set[str]] = {
     "chain_content_type": {"material", "crop", "talisman", "fish", "recipe"},
     "chain_use_kind": {"cook", "craft", "sell", "gift", "buff", "quest", "feed", "bait", "decor", "combat", "gather", "travel", "upgrade", "event"},
     "metrics_category": {"session", "day", "house", "economy", "intake", "story", "save", "verb"},
+    "buff_stat": {"none", "strength", "skill", "sight", "courage"},
 }
 
 # 대사 효과 문법: affinity:+1 / item:<id>:<±n> / flag:<name> / money:<±n>  (세미콜론으로 여러 개)
@@ -354,6 +355,8 @@ TABLES: list[Table] = [
             Column("weight", int),
             Column("promotable", parse_bool),
             Column("sprite_size", parse_sprite_size),
+            # 손님 만족 (P1-S3): 체크아웃 때 이 요리가 창고에 있으면 먹고 돈을 더 낸다
+            Column("liked_recipe", parse_str, ref="recipes"),
         ],
     ),
     Table(
@@ -429,6 +432,23 @@ TABLES: list[Table] = [
         ],
     ),
     # ------------------------------------------------------------ P1 신설 (docs/01 v3 5절)
+    Table(
+        name="recipes",
+        csv_file="recipes.csv",
+        script_class="RecipeData",
+        script_file="recipe_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("tier", int),
+            Column("output_item", parse_str, ref="items"),
+            Column("output_count", int),
+            Column("ingredients", parse_cost_list, ref="items", ref_ids=cost_ids),
+            Column("cook_seconds", float),
+            Column("buff_stat", parse_enum("buff_stat")),
+            Column("buff_amount", int),
+        ],
+    ),
     Table(
         name="materials",
         csv_file="materials.csv",
@@ -536,6 +556,8 @@ TABLES: list[Table] = [
             Column("gather_span", parse_span),
             Column("farm_x", int),
             Column("sky_color", parse_str),
+            # 낚시 자리 x (0 = 없음). P1-S3
+            Column("fishing_x", int),
         ],
     ),
     Table(

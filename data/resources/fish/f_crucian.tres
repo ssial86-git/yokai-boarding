@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="FishData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/fish_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "f_crucian"
+name_ko = "붕어"
+kind = "fish"
+region_id = "r_stream"
+weight = 4
+timeband = "any"
+min_rod_level = 1

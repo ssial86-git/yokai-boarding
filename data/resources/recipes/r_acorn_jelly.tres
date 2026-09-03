@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/recipe_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_acorn_jelly"
+name_ko = "도토리묵"
+tier = 1
+output_item = "dish_acorn_jelly"
+output_count = 1
+ingredients = ["m_acorn:3"]
+cook_seconds = 40.0
+buff_stat = "none"
+buff_amount = 0

@@ -33,3 +33,6 @@ enemy_defeated,verb,enemy;region,적 처치
 talisman_used,verb,talisman,부적 사용
 stamina,verb,value,스태미너가 문턱(tuning)을 넘음
 region_entered,day,region,구역 진입 (하숙집·마당·뒷산 등 모든 구역)
+sell,economy,item;count;money,판매
+serve,verb,recipe;yokai;stat,배식 (동료 버프)
+upgrade,verb,tool;level,도구 벼리기
