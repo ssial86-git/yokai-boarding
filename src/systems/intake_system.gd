@@ -4,6 +4,7 @@ extends Node
 ## visitor_knocked 를 쏜다. 대화창이 열려 있으면 닫힐 때까지 미룬다. 결정은 decide() 로 받는다.
 
 const ERASED_VISITOR_ID := "v_erased"
+const GUEST_VISITOR_ID := "v_guest"
 const JOINED_FLAG_FORMAT := "joined_%s"
 
 ## 대화 진행 중 여부를 묻는 콜백 (StorySystem.is_busy). main.gd 가 넣는다.
@@ -27,6 +28,8 @@ func has_pending() -> bool:
 func roll_visitor() -> void:
 	var visitor := VisitorRoll.scripted(DataRegistry.yokai, GameState.residents, GameState.day, ERASED_VISITOR_ID)
 	if visitor == null:
+		visitor = _festival_rare_visitor()
+	if visitor == null:
 		# 음기 배율 (P2-S1): 날씨의 이승/마계 손님 배율 × 소절기 이벤트의 마계 배율
 		var multipliers := WeatherRoll.guest_multipliers(
 			DataRegistry.get_weather(GameState.weather),
@@ -42,6 +45,23 @@ func roll_visitor() -> void:
 	GameState.pending_visitor = visitor.to_dict()
 	_knock_pending = true
 	_try_knock()
+
+
+## 명절 만점 보상 (P2-S2): 그날 밤 희귀 손님이 반드시 문을 두드린다. FestivalSystem 이 플래그 값에 종족 id 를 남긴다.
+func _festival_rare_visitor() -> VisitorRoll.Visitor:
+	var species_id := str(GameState.flags.get(FestivalSystem.FLAG_RARE_PENDING, ""))
+	if species_id.is_empty():
+		return null
+	GameState.flags.erase(FestivalSystem.FLAG_RARE_PENDING)
+	var species := DataRegistry.get_guest_species(species_id)
+	if species == null:
+		return null
+	var visitor := VisitorRoll.Visitor.new()
+	visitor.visitor_id = GUEST_VISITOR_ID
+	visitor.kind = "guest"
+	visitor.species_id = species_id
+	visitor.omen = species.omen
+	return visitor
 
 
 func free_beds() -> int:

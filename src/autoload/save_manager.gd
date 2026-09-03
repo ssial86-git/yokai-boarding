@@ -7,8 +7,9 @@ extends Node
 ## v5: clock 이 페이즈(phase/elapsed_in_phase)에서 실시간 경과 초(elapsed_seconds)로 바뀜,
 ##     game_state.player(구역·위치) / regions(탐험지 상태) 추가 (P1-S1)
 ## v6: game_state.calendar(절기·절기 안 날짜) / yin(음기 지수) 추가 (P2-S1)
+## v7: game_state.counters(활동 누계) / goals_done(완료 목표) / festival_results(명절 점수) 추가 (P2-S2)
 
-const SAVE_VERSION := 6
+const SAVE_VERSION := 7
 const SAVE_DIR := "user://saves"
 const SLOT_FILE_FORMAT := "slot_%d.json"
 
@@ -83,8 +84,19 @@ func _migrate(data: Dictionary) -> Dictionary:
 		_migrate_4_to_5(result)
 	if version < 6:
 		_migrate_5_to_6(result)
+	if version < 7:
+		_migrate_6_to_7(result)
 	result["version"] = SAVE_VERSION
 	return result
+
+
+## v6 에는 활동 누계·목표·명절 기록이 없다. 비워 두면 새 게임과 같은 빈 상태.
+func _migrate_6_to_7(data: Dictionary) -> void:
+	var game_state: Dictionary = data.get("game_state", {})
+	for key in ["counters", "goals_done", "festival_results"]:
+		if not game_state.has(key):
+			game_state[key] = {}
+	data["game_state"] = game_state
 
 
 ## v5 에는 절기 달력·음기가 없다. 달력을 비워 두면 GameState.from_dict 가 통산 일차에서 계산한다.

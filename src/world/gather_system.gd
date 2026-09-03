@@ -108,6 +108,7 @@ func gather(region_id: String, index: int) -> bool:
 	Events.item_added.emit(material_id, count)
 	Events.message_posted.emit(DataRegistry.text("msg_gathered", {"name": DataRegistry.item_name(material_id), "count": count}))
 	Metrics.record("gather", {"material": material_id, "region": region_id, "tool": tool_kind})
+	Events.activity_done.emit("gather", material_id, count)
 	Events.gather_point_changed.emit(region_id, index)
 	return true
 

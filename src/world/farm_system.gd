@@ -125,6 +125,7 @@ func act(index: int) -> bool:
 			Events.message_posted.emit(DataRegistry.text("msg_harvested", {"name": DataRegistry.item_name(item_id), "count": count}))
 	GameState.stamina.spend(_stamina_cost)
 	Metrics.record("farm", {"action": action, "plot": index, "crop": crop_id})
+	Events.activity_done.emit("farm.%s" % action, crop_id, 1)
 	Events.farm_changed.emit(index)
 	return true
 

@@ -4,6 +4,7 @@ extends Node
 ## 대화·심사 중(Clock hold)에는 바가 멈춘다. 순수 계산은 Fishing.
 
 const VERB_FISH := "fish"
+const UNLOCK_TYPE_FISH := "fish"
 const TOOL_ROD := "rod"
 
 var unlock_system: UnlockSystem
@@ -98,6 +99,9 @@ func _finish(hit: bool) -> String:
 	var finished_region := region_id
 	var rod_level := int(GameState.tools.get(TOOL_ROD, 0))
 	var pool := Fishing.candidates(DataRegistry.fish, finished_region, Clock.band_name(), rod_level)
+	if unlock_system != null:
+		# unlocks.csv 가 가리키는 어종(fish 타입)은 열려야 걸린다 (P2-S2 잉어)
+		pool = pool.filter(func(fish: FishData) -> bool: return unlock_system.is_target_open(UNLOCK_TYPE_FISH, fish.id))
 	var caught: FishData = null
 	if hit:
 		caught = Fishing.roll(pool, GameState.rng)
@@ -110,6 +114,8 @@ func _finish(hit: bool) -> String:
 		Events.item_added.emit(item_id, 1)
 		var key := "msg_fish_caught" if caught.kind != Fishing.KIND_JUNK else "msg_fish_junk"
 		Events.message_posted.emit(DataRegistry.text(key, {"name": caught.name_ko}))
+		if caught.kind != Fishing.KIND_JUNK:
+			Events.activity_done.emit("fish", item_id, 1)
 	else:
 		Events.message_posted.emit(DataRegistry.text("msg_fish_missed"))
 	Metrics.record("fish", {"result": item_id if not item_id.is_empty() else "miss", "region": finished_region})

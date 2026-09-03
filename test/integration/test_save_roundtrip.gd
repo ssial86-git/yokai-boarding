@@ -28,6 +28,10 @@ func test_round_trip_through_file_is_identical() -> void:
 	GameState.weather = "rain"
 	GameState.yin = 2
 	assert_bool(GameState.calendar.from_dict({"season": "spring", "day_of_season": 12}, DataRegistry.seasons)).is_true()
+	GameState.counters["gather"] = 7
+	GameState.counters["cook.r_patjuk"] = 1
+	GameState.goals_done["g_t_till"] = 2
+	GameState.festival_results["f_dongji"] = 9
 	GameState.rng.seed = 777
 	var grid := GameState.room_grid
 	assert_int(grid.add_floor(GameState.money)).is_equal(RoomGrid.Outcome.OK)
@@ -83,7 +87,26 @@ func test_round_trip_through_file_is_identical() -> void:
 	assert_int(GameState.yin).is_equal(2)
 	assert_str(GameState.calendar.season_id).is_equal("spring")
 	assert_int(GameState.calendar.day_of_season).is_equal(12)
+	assert_int(int(GameState.counters["gather"])).is_equal(7)
+	assert_int(int(GameState.counters["cook.r_patjuk"])).is_equal(1)
+	assert_int(int(GameState.goals_done["g_t_till"])).is_equal(2)
+	assert_int(int(GameState.festival_results["f_dongji"])).is_equal(9)
 	assert_str(str(GameState.pending_visitor.get("species_id"))).is_equal("g_mongdanggwi")
+
+
+## v6 에는 활동 누계·목표·명절 기록이 없다 → 빈 상태로 채워진다 (P2-S2).
+func test_v6_save_gets_empty_goal_state() -> void:
+	GameState.reset_new_game()
+	GameState.counters["gather"] = 3
+	var v6 := {"version": 6, "game_state": GameState.to_dict(), "clock": {"elapsed_seconds": 10.0}}
+	var state := v6["game_state"] as Dictionary
+	for key in ["counters", "goals_done", "festival_results"]:
+		state.erase(key)
+	assert_bool(SaveManager.apply_save_data(v6)).is_true()
+	assert_bool(GameState.counters.is_empty()).is_true()
+	assert_bool(GameState.goals_done.is_empty()).is_true()
+	assert_bool(GameState.festival_results.is_empty()).is_true()
+	assert_int(SaveManager.build_save_data()["version"]).is_equal(SaveManager.SAVE_VERSION)
 
 
 ## v5 에는 절기 달력·음기가 없다. 통산 30일차 → 여름 2일, 음기 0 으로 채워진다 (P2-S1).
@@ -99,7 +122,7 @@ func test_v5_save_gets_calendar_from_absolute_day() -> void:
 	assert_str(GameState.calendar.season_id).is_equal("summer")
 	assert_int(GameState.calendar.day_of_season).is_equal(2)
 	assert_int(GameState.yin).is_equal(0)
-	assert_int(SaveManager.build_save_data()["version"]).is_equal(6)
+	assert_int(SaveManager.build_save_data()["version"]).is_equal(SaveManager.SAVE_VERSION)
 
 
 func test_v1_save_migrates_to_default_house() -> void:

@@ -58,6 +58,29 @@ func test_p2_season_tables_loaded_and_typed() -> void:
 	assert_str(DataRegistry.tuning.get_string("season_start_id")).is_equal("spring")
 
 
+## P2-S2 목표·명절 스키마: 목표 3층위, 동지(봄 28일) 준비 목표 3·팥죽·희귀 손님, 티어 3 레시피·잉어.
+func test_p2_goal_and_festival_tables_loaded_and_typed() -> void:
+	assert_int(DataRegistry.goals.size()).is_greater_equal(20)
+	var tiers := {}
+	for goal: GoalData in DataRegistry.goals.values():
+		tiers[goal.tier] = true
+	assert_bool(tiers.has("today") and tiers.has("season") and tiers.has("long")).is_true()
+	var patjuk_goal := DataRegistry.get_goal("g_s_patjuk")
+	assert_str(patjuk_goal.condition).is_equal("item:dish_patjuk>=3")
+	assert_str(patjuk_goal.festival_id).is_equal("f_dongji")
+	assert_int(DataRegistry.festivals.size()).is_equal(1)
+	var dongji := DataRegistry.get_festival("f_dongji")
+	assert_str(dongji.season).is_equal("spring")
+	assert_int(dongji.day_of_season).is_equal(28)
+	assert_array(dongji.goal_ids).contains_exactly(["g_s_patjuk", "g_s_guests", "g_s_rooms"])
+	assert_str(dongji.dish_recipe).is_equal("r_patjuk")
+	assert_str(dongji.rare_guest_species).is_equal("g_geumjuri")
+	assert_int(FestivalRules.max_score(dongji)).is_equal(11)
+	assert_int(DataRegistry.get_recipe("r_patjuk").tier).is_equal(3)
+	assert_int(DataRegistry.get_fish("f_carp").min_rod_level).is_equal(2)
+	assert_int(DataRegistry.get_unlock("u_festival_dongji").expected_day).is_equal(28)
+
+
 ## P1 신설 스키마 10종이 로드되고 타입이 맞는지 (행 수는 콘텐츠 수를 고정하지 않도록 최소치만 본다).
 func test_p1_tables_loaded_and_typed() -> void:
 	assert_int(DataRegistry.talismans.size()).is_equal(3)

@@ -276,6 +276,7 @@ func _on_enemy_defeated(enemy: EnemyActor) -> void:
 		Events.item_added.emit(drop, 1)
 		Events.message_posted.emit(DataRegistry.text("msg_loot", {"name": DataRegistry.item_name(drop)}))
 	Metrics.record("enemy_defeated", {"enemy": enemy.enemy.id, "region": _region.id})
+	Events.activity_done.emit("fight", enemy.enemy.id, 1)
 	enemies.erase(enemy)
 	enemy.queue_free()
 

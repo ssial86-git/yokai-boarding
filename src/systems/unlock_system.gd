@@ -5,7 +5,9 @@ extends Node
 ## 30분 규칙 시뮬레이터(tools/sim)는 P1-S4.
 
 ## 열릴 때 안내 문구를 띄우는 타입. 사연·입주는 다른 시스템이 연출하므로 조용히 기록만 한다.
-const HINTED_TYPES: Array[String] = ["region", "tool", "talisman", "enemy", "crop", "material", "fish", "verb", "feature"]
+const HINTED_TYPES: Array[String] = [
+	"region", "tool", "talisman", "enemy", "crop", "material", "fish", "verb", "feature", "season_event", "festival", "recipe",
+]
 const TYPE_REGION := "region"
 const TYPE_TOOL := "tool"
 

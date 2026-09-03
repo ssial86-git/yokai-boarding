@@ -8,6 +8,12 @@ const LOCKED_DASH_LENGTH := 4.0
 const LOCKED_OUTLINE_ALPHA := 0.35
 const PLUS_HALF_SIZE := 5.0
 const FLASH_PEAK_ALPHA := 0.8
+const DECOR_SPACING_PX := 16.0
+const DECOR_HALF_WIDTH_PX := 2.0
+const DECOR_HEIGHT_PX := 6.0
+
+var _festival_decor: bool = false
+var _decor_color: Color = Color.ORANGE
 
 var cell_size: Vector2i = Vector2i(64, 48)
 
@@ -48,6 +54,14 @@ func _ready() -> void:
 	_lantern_texture = _make_lantern_texture()
 	_lantern_scale = float(tuning.get_int("lantern_radius_px") * 2) / float(_lantern_texture.width)
 	_lanterns_enabled = _is_lantern_band(Clock.band)
+	# 명절 장식 (P2-S2): 당일 아침 festival_started 의 decorated 로 켜고, 하루가 끝나면 내린다
+	_decor_color = UiStyles.color("ui_accent_color", "f2a65a")
+	Events.festival_started.connect(func(_id: String, decorated: bool) -> void:
+		_festival_decor = decorated
+		queue_redraw())
+	Events.day_ended.connect(func(_day: int) -> void:
+		_festival_decor = false
+		queue_redraw())
 
 	Events.room_changed.connect(_on_room_changed)
 	Events.floor_added.connect(func(_floor: int) -> void: rebuild())
@@ -82,6 +96,11 @@ func get_cell_count() -> int:
 
 
 ## 등불·요괴 빛이 공유하는 방사형 그라디언트.
+## 명절 장식이 걸려 있는가 (검증용).
+func festival_decorated() -> bool:
+	return _festival_decor
+
+
 func lantern_texture() -> Texture2D:
 	return _lantern_texture
 
@@ -139,6 +158,12 @@ func _draw() -> void:
 			draw_line(center + Vector2(-PLUS_HALF_SIZE, 0), center + Vector2(PLUS_HALF_SIZE, 0), locked_color)
 			draw_line(center + Vector2(0, -PLUS_HALF_SIZE), center + Vector2(0, PLUS_HALF_SIZE), locked_color)
 	draw_line(Vector2(0, 0), Vector2(g.columns * cell_size.x, 0), Color(1, 1, 1, LOCKED_OUTLINE_ALPHA))
+	if _festival_decor:
+		# 지붕선 위에 등을 줄지어 건다 (자리표시 — docs/02 아트 트랙 전까지 팔레트 색 사각)
+		var x := DECOR_SPACING_PX * 0.5
+		while x < g.columns * cell_size.x:
+			draw_rect(Rect2(x - DECOR_HALF_WIDTH_PX, -DECOR_HEIGHT_PX - DECOR_HALF_WIDTH_PX, DECOR_HALF_WIDTH_PX * 2.0, DECOR_HEIGHT_PX), _decor_color)
+			x += DECOR_SPACING_PX
 	if not _drop_preview_id.is_empty() and drop_check.is_valid():
 		for cell in g.get_built_cells():
 			var ok: bool = drop_check.call(_drop_preview_id, cell)

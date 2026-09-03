@@ -32,6 +32,9 @@ var recipes: Dictionary = {}  # id -> RecipeData
 var seasons: Dictionary = {}  # id -> SeasonData
 var weather: Dictionary = {}  # id -> WeatherData
 var season_events: Dictionary = {}  # id -> SeasonEventData
+# --- P2-S2: 목표·명절 ---
+var goals: Dictionary = {}  # id -> GoalData
+var festivals: Dictionary = {}  # id -> FestivalData
 var tuning: TuningData = TuningData.new()
 var strings: StringTableData = StringTableData.new()
 
@@ -65,6 +68,8 @@ func reload() -> void:
 	seasons = _load_dir(RESOURCE_ROOT + "seasons")
 	weather = _load_dir(RESOURCE_ROOT + "weather")
 	season_events = _load_dir(RESOURCE_ROOT + "season_events")
+	goals = _load_dir(RESOURCE_ROOT + "goals")
+	festivals = _load_dir(RESOURCE_ROOT + "festivals")
 	tuning = _load_single(TUNING_PATH, TuningData.new()) as TuningData
 	strings = _load_single(STRINGS_PATH, StringTableData.new()) as StringTableData
 
@@ -159,6 +164,14 @@ func get_weather(id: String) -> WeatherData:
 
 func get_season_event(id: String) -> SeasonEventData:
 	return season_events.get(id) as SeasonEventData
+
+
+func get_goal(id: String) -> GoalData:
+	return goals.get(id) as GoalData
+
+
+func get_festival(id: String) -> FestivalData:
+	return festivals.get(id) as FestivalData
 
 
 ## 날씨 표시 이름. weather.csv 에 없으면 strings 의 weather_<id> 로.

@@ -4,6 +4,7 @@ extends Node
 ## 실시간으로 작업을 익히되 대화·심사 중(Clock hold)에는 멈춘다. 순수 계산은 WorkStation/Market.
 
 const FEATURE_TIER_FORMAT := "recipes_tier%d"
+const UNLOCK_TYPE_RECIPE := "recipe"
 const BUFF_NONE := "none"
 const TYPE_TALISMAN := "talisman"
 const TYPE_TOOL := "tool"
@@ -45,16 +46,22 @@ func _finish(station_id: String, station: WorkStation) -> void:
 		Events.message_posted.emit(DataRegistry.text("msg_cook_done", {"name": name}))
 		var recipe := DataRegistry.get_recipe(str(result["id"]))
 		Metrics.record("cook", {"recipe": str(result["id"]), "seconds": recipe.cook_seconds if recipe != null else 0.0})
+		Events.activity_done.emit("cook", str(result["id"]), count)
 	else:
 		Events.message_posted.emit(DataRegistry.text("msg_craft_done", {"name": name}))
 		Metrics.record("craft", {"item": item_id, "count": count})
+		Events.activity_done.emit("craft", item_id, count)
 	Events.station_changed.emit(station_id)
 
 
 # --- 요리 ---
 
+## 티어 해금(feature recipes_tierN) + 개별 레시피 해금(unlock_type recipe, 가리키는 행이 없으면 열림).
 func is_recipe_unlocked(recipe: RecipeData) -> bool:
-	return unlock_system == null or unlock_system.is_feature_open(FEATURE_TIER_FORMAT % recipe.tier)
+	if unlock_system == null:
+		return true
+	return unlock_system.is_feature_open(FEATURE_TIER_FORMAT % recipe.tier) \
+		and unlock_system.is_target_open(UNLOCK_TYPE_RECIPE, recipe.id)
 
 
 func available_recipes() -> Array[RecipeData]:
@@ -152,6 +159,7 @@ func upgrade_tool(tool_id: String) -> bool:
 	Events.message_posted.emit(DataRegistry.text("msg_tool_upgraded", {
 		"tool": DataRegistry.text("tool_%s" % tool.kind), "level": tool.level}))
 	Metrics.record("upgrade", {"tool": tool.id, "level": tool.level})
+	Events.activity_done.emit("upgrade", tool.id, 1)
 	return true
 
 
@@ -181,6 +189,7 @@ func serve(dish_item_id: String, yokai_id: String) -> bool:
 		"yokai": DataRegistry.yokai_name(yokai_id), "name": recipe.name_ko,
 		"stat": DataRegistry.text("stat_%s" % recipe.buff_stat), "amount": recipe.buff_amount}))
 	Metrics.record("serve", {"recipe": recipe.id, "yokai": yokai_id, "stat": recipe.buff_stat})
+	Events.activity_done.emit("serve", recipe.id, 1)
 	return true
 
 
@@ -203,6 +212,7 @@ func sell(item_id: String, count: int) -> int:
 	Events.message_posted.emit(DataRegistry.text("msg_sold", {
 		"name": DataRegistry.item_name(item_id), "count": count, "money": money}))
 	Metrics.record("sell", {"item": item_id, "count": count, "money": money})
+	Events.activity_done.emit("sell", item_id, count)
 	return money
 
 

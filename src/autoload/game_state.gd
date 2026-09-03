@@ -63,6 +63,14 @@ var stations: Dictionary = {}
 ## 오늘의 배식 버프: yokai_id -> {stat: amount}. 하루 시작에 비운다
 var buffs: Dictionary = {}
 
+# --- P2-S2: 목표·명절 ---
+## 활동 카운터: "gather" / "cook.r_patjuk" 같은 키 -> 누계 (goals.csv 의 count: 절이 읽는다)
+var counters: Dictionary = {}
+## 완료한 목표 goal_id -> 완료한 날
+var goals_done: Dictionary = {}
+## 명절 채점 결과 festival_id -> 점수
+var festival_results: Dictionary = {}
+
 
 func reset_new_game() -> void:
 	day = 1
@@ -89,6 +97,9 @@ func reset_new_game() -> void:
 	unlocked.clear()
 	_reset_stations()
 	buffs.clear()
+	counters.clear()
+	goals_done.clear()
+	festival_results.clear()
 	var start_items := _parse_levels(DataRegistry.tuning.get_string("start_items"))
 	for item_id: String in start_items:
 		inventory.add(item_id, int(start_items[item_id]))
@@ -111,6 +122,12 @@ func advance_day() -> void:
 ## 오늘이 음기 짙은 날인가 (마계 작물 가속·마계 손님↑·음기 조건 재료).
 func is_yin_high() -> bool:
 	return WeatherRoll.is_yin_high(yin, DataRegistry.tuning.get_int("yin_high_threshold"))
+
+
+## 활동 카운터를 올리고 누계를 돌려준다 (GoalSystem 이 activity_done 마다 부른다).
+func bump_counter(key: String, amount: int = 1) -> int:
+	counters[key] = int(counters.get(key, 0)) + amount
+	return int(counters[key])
 
 
 func add_money(amount: int) -> void:
@@ -186,6 +203,9 @@ func to_dict() -> Dictionary:
 		"unlocked": unlocked.duplicate(),
 		"stations": _stations_to_dict(),
 		"buffs": buffs.duplicate(true),
+		"counters": counters.duplicate(),
+		"goals_done": goals_done.duplicate(),
+		"festival_results": festival_results.duplicate(),
 	}
 
 
@@ -390,6 +410,9 @@ func from_dict(data: Dictionary) -> bool:
 			var raw: Variant = (buffs_data as Dictionary)[yokai_id]
 			if raw is Dictionary:
 				buffs[str(yokai_id)] = _int_dict(raw as Dictionary)
+	counters = _int_dict(data.get("counters", {}))
+	goals_done = _int_dict(data.get("goals_done", {}))
+	festival_results = _int_dict(data.get("festival_results", {}))
 	if data.has("rng_state"):
 		rng.state = str(data["rng_state"]).to_int()
 	else:

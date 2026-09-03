@@ -85,6 +85,14 @@ signal weather_rolled(weather: String, yin: int)
 ## 소절기 이벤트(season_events.csv)가 오늘 시작했다.
 signal season_event_started(event_id: String)
 
+# --- 목표·명절 (P2-S2) ---
+## 플레이어의 활동 하나가 끝났다. verb 는 "gather" / "farm.harvest" / "cook" 같은 카운터 키, detail 은 대상 id (없으면 빈 문자열).
+signal activity_done(verb: String, detail: String, amount: int)
+signal goal_completed(goal_id: String)
+## 명절 당일 아침. decorated 는 장식 목표가 충족돼 집에 등이 걸리는지.
+signal festival_started(festival_id: String, decorated: bool)
+signal festival_scored(festival_id: String, score: int, max_score: int)
+
 # --- 세이브 ---
 signal game_saved(slot: int)
 signal game_loaded(slot: int)
