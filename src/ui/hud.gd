@@ -56,7 +56,7 @@ func _ready() -> void:
 	Events.hint_changed.connect(_on_hint_changed)
 	for refresh_signal: Signal in [
 		Events.money_changed, Events.timeband_changed, Events.day_started,
-		Events.reputation_changed, Events.weather_changed, Events.guests_changed, Events.yokai_arrived,
+		Events.reputation_changed, Events.weather_changed, Events.weather_rolled, Events.guests_changed, Events.yokai_arrived,
 		Events.room_changed, Events.floor_added, Events.game_loaded,
 	]:
 		refresh_signal.connect(func(_a: Variant = null, _b: Variant = null) -> void: refresh())
@@ -193,10 +193,13 @@ func sleep_button_rect() -> Rect2:
 func refresh() -> void:
 	_last_hour_text = Clock.format_hour()
 	var region := DataRegistry.get_region(GameState.player_region)
+	var calendar := GameState.calendar
 	_clock_line1.text = DataRegistry.text("hud_clock_line1", {
-		"time": _last_hour_text, "timeband": DataRegistry.text("timeband_%s" % Clock.band_name()), "day": GameState.day})
+		"time": _last_hour_text, "timeband": DataRegistry.text("timeband_%s" % Clock.band_name()), "day": GameState.day,
+		"season": calendar.season_name(), "day_of_season": calendar.day_of_season})
 	_clock_line2.text = DataRegistry.text("hud_clock_line2", {
-		"weather": DataRegistry.text("weather_%s" % GameState.weather),
+		"weather": DataRegistry.weather_name(GameState.weather),
+		"yin": DataRegistry.text("yin_level_%d" % clampi(GameState.yin, WeatherRoll.YIN_MIN, WeatherRoll.YIN_MAX)),
 		"region": region.name_ko if region != null else GameState.player_region})
 	_money_chip.text = DataRegistry.text("chip_money", {"money": GameState.money})
 	_reputation_chip.text = DataRegistry.text("chip_reputation", {"value": GameState.reputation})

@@ -172,9 +172,11 @@ func test_message_log_and_clarity_react_to_events() -> void:
 	var story: StorySystem = main.get("story_system")
 	_drain(story)
 
-	var before := log.line_count()
+	# 토스트 더미는 줄 수·높이 상한이 있어(오래된 줄부터 지움) 개수 대신 "새 줄이 맨 아래에 붙었는가" 를 본다
 	Events.message_posted.emit("테스트 메시지")
-	assert_int(log.line_count()).is_equal(before + 1)
+	assert_int(log.line_count()).is_between(1, DataRegistry.tuning.get_int("message_log_lines"))
+	var newest := log.get_child(log.get_child_count() - 1) as Control
+	assert_str((newest.get_child(0) as Label).text).is_equal("테스트 메시지")
 
 	# 어둑이는 호감도 0 에서 흐리고, 호감도가 오르면 또렷해진다
 	var eoduki := manager.get_actor("y02_eoduki")

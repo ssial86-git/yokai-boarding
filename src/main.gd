@@ -41,6 +41,7 @@ const ACTION_MENU := &"ui_menu_toggle"
 const ACTION_TAB_INVENTORY := &"ui_tab_inventory"
 const ACTION_TAB_ROSTER := &"ui_tab_roster"
 const ACTION_TAB_LEDGER := &"ui_tab_ledger"
+const ACTION_TAB_CALENDAR := &"ui_tab_calendar"
 const ACTION_SLEEP := &"ui_sleep"
 const ACTION_PANEL := &"ui_panel_toggle"
 
@@ -271,6 +272,9 @@ func _layout_around_panels() -> void:
 	message_log.offset_left = MESSAGE_LOG_MARGIN_PX
 	message_log.offset_bottom = -hud.log_bottom_inset(bottom)  # 체력 바 위
 	message_log.offset_top = message_log.offset_bottom - maxf(message_log.size.y, message_log.get_minimum_size().y)
+	# 토스트 더미가 시계 카드·안내 줄까지 올라오지 않도록 (tuning message_log_top_ratio 아래에서만 쌓인다)
+	message_log.max_height = maxf(
+		view_size.y - hud.log_bottom_inset(bottom) - view_size.y * DataRegistry.tuning.get_float("message_log_top_ratio", 0.36), 0.0)
 	hud.set_prompt_bottom(bottom + MESSAGE_LOG_MARGIN_PX)
 
 
@@ -311,6 +315,7 @@ func _ensure_input_actions() -> void:
 		ACTION_TAB_INVENTORY: [KEY_I],
 		ACTION_TAB_ROSTER: [KEY_J],
 		ACTION_TAB_LEDGER: [KEY_L],
+		ACTION_TAB_CALENDAR: [KEY_K],
 		ACTION_SLEEP: [KEY_Z],
 		ACTION_PANEL: [KEY_B],
 	}
@@ -336,6 +341,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		menu_hub.toggle(MenuHub.Tab.ROSTER)
 	elif event.is_action_pressed(ACTION_TAB_LEDGER):
 		menu_hub.toggle(MenuHub.Tab.LEDGER)
+	elif event.is_action_pressed(ACTION_TAB_CALENDAR):
+		menu_hub.toggle(MenuHub.Tab.CALENDAR)
 	elif event.is_action_pressed(ACTION_SLEEP):
 		if Clock.can_sleep():
 			Clock.sleep()

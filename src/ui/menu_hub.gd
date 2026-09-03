@@ -3,10 +3,14 @@ extends ListMenu
 ## 장부 메뉴 (UI 정리 2026-09-04): 창고 · 하숙부 · 명부를 탭 하나로 묶는다. Tab 으로 열고 닫고, I/J/L 로 탭을 바로 연다.
 ## 유사 게임의 관행(스타듀밸리의 탭 메뉴)을 따라 "메뉴 열기 → 탭" 두 단계 이상 들어가지 않게 한다. ESC 는 닫기.
 
-enum Tab { INVENTORY, ROSTER, LEDGER }
+enum Tab { INVENTORY, ROSTER, LEDGER, CALENDAR }
 
-const TAB_KEYS: Array[String] = ["tab_inventory", "tab_roster", "tab_ledger"]
-const TAB_HINT_KEYS: Array[String] = ["key_hint_inventory", "key_hint_roster", "key_hint_ledger"]
+const TAB_KEYS: Array[String] = ["tab_inventory", "tab_roster", "tab_ledger", "tab_calendar"]
+const TAB_HINT_KEYS: Array[String] = ["key_hint_inventory", "key_hint_roster", "key_hint_ledger", "key_hint_calendar"]
+## 달력 격자 표식: 오늘 · 소절기 (명절 ★ 은 P2-S2)
+const MARK_TODAY := "●"
+const MARK_EVENT := "◆"
+const PAST_DAY_ALPHA := 0.45
 ## 창고 표시 순서 (items.kind)
 const KIND_ORDER: Array[String] = ["food", "crop", "material", "fish", "seed", "talisman", "misc", "key"]
 
@@ -48,6 +52,8 @@ func open_tab(tab: Tab) -> void:
 		_tab_buttons[index].button_pressed = index == tab
 	open_with_title(DataRegistry.text("ui_menu_title"))
 	refresh()
+	if tab == Tab.CALENDAR:
+		Metrics.record("calendar_opened", {"season": GameState.calendar.season_id, "day_of_season": GameState.calendar.day_of_season})
 
 
 func refresh() -> void:
@@ -59,6 +65,8 @@ func refresh() -> void:
 			_build_roster()
 		Tab.LEDGER:
 			_build_ledger()
+		Tab.CALENDAR:
+			_build_calendar()
 
 
 func _refresh_if_open() -> void:
@@ -108,6 +116,44 @@ func _build_roster() -> void:
 		add_row(DataRegistry.text("ui_roster_row", {
 			"name": yokai.name_ko, "species": yokai.species_ko,
 			"affinity": int(GameState.affinity.get(yokai_id, 0)), "seen": seen, "total": story_ids.size()}))
+
+
+## 달력 (P2-S1): 절기 제목, 28일 격자(● 오늘 · ◆ 소절기), 다가오는 행사. 지난 날은 흐리게.
+func _build_calendar() -> void:
+	var calendar := GameState.calendar
+	var events := DataRegistry.season_events
+	add_header(DataRegistry.text("ui_calendar_title", {
+		"season": calendar.season_name(), "day_of_season": calendar.day_of_season,
+		"length": calendar.length(), "day": GameState.day}))
+	var grid := GridContainer.new()
+	grid.columns = maxi(DataRegistry.tuning.get_int("calendar_days_per_row", 7), 1)
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("v_separation", 0)  # 4줄 격자가 행사 2줄과 함께 스크롤 없이 들어가도록
+	var accent := UiStyles.color("ui_accent_color", "f2a65a")
+	for day in range(1, calendar.length() + 1):
+		var cell := Label.new()
+		cell.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var marker := MARK_EVENT if not calendar.events_on(events, day).is_empty() else ""
+		if day == calendar.day_of_season:
+			marker = MARK_TODAY + marker
+			cell.add_theme_color_override("font_color", accent)
+		elif day < calendar.day_of_season:
+			cell.modulate = Color(1.0, 1.0, 1.0, PAST_DAY_ALPHA)
+		cell.text = "%d%s" % [day, marker]
+		grid.add_child(cell)
+	add_control(grid)
+	# 범례와 소제목을 한 줄에 — 행사 2줄까지 스크롤 없이 보이도록 (검증 에이전트가 잡은 잘림)
+	add_header("%s   %s" % [DataRegistry.text("ui_calendar_upcoming"), DataRegistry.text("ui_calendar_legend")])
+	var upcoming := 0
+	for event in calendar.events_in_season(events):
+		if event.day_of_season + event.duration_days - 1 < calendar.day_of_season:
+			continue
+		upcoming += 1
+		add_row(DataRegistry.text("ui_calendar_event_row", {
+			"day": event.day_of_season, "name": event.name_ko, "days": event.duration_days}))
+	if upcoming == 0:
+		add_header(DataRegistry.text("ui_calendar_none"))
 
 
 func _build_ledger() -> void:

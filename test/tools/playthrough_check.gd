@@ -206,6 +206,23 @@ func _initialize() -> void:
 	await _frames(2)
 	_check("inventory_tab_rows", hub.visible and int(hub.call("row_count")) >= 16, "장부 메뉴 창고 탭에 종류별 소제목과 16종 이상이 보인다")
 	await _shot("14_inventory_menu")
+	# --- P2-S1: 달력 탭 ---
+	hub.call("open_tab", 3)
+	await _frames(2)
+	var calendar_obj: RefCounted = gs.get("calendar")
+	_check("calendar_tab_rows", hub.visible and int(hub.call("row_count")) >= 4, "달력 탭에 제목·격자·범례·다가오는 행사가 보인다")
+	_check("calendar_day_matches", int(calendar_obj.get("day_of_season")) == int(gs.get("day")) and str(calendar_obj.get("season_id")) == "spring",
+		"달력 = 봄 %d일 (통산 %d일차)" % [int(calendar_obj.get("day_of_season")), int(gs.get("day"))])
+	_check("yin_in_range", int(gs.get("yin")) >= 0 and int(gs.get("yin")) <= 3, "오늘 음기 %d (0~3)" % int(gs.get("yin")))
+	_check("calendar_rows_fit", bool(hub.call("rows_fit")), "달력 탭의 행이 스크롤 없이 전부 보인다 (만월 줄이 잘리지 않음)")
+	var panel_rect: Rect2 = hub.call("panel_rect")
+	var bar_height := float(main.get("hud").call("bar_height"))
+	_check("menu_below_clock_card", panel_rect.position.y >= bar_height - 0.5,
+		"장부 패널 위쪽(%.0f)이 시계 카드 줄(%.0f) 아래에 있다" % [panel_rect.position.y, bar_height])
+	var view_height := root.get_visible_rect().size.y
+	_check("menu_close_on_screen", panel_rect.end.y <= view_height + 0.5,
+		"장부 패널 아래쪽(%.0f)이 화면(%.0f) 안에 있다 — 닫기 버튼이 잘리지 않음" % [panel_rect.end.y, view_height])
+	await _shot("17_calendar_tab")
 	hub.call("close")
 	await _frames(1)
 
