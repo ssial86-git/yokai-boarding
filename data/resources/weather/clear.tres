@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WeatherData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/weather_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "clear"
+name_ko = "맑음"
+season = "any"
+weight = 50
+yin_min = 0
+yin_max = 1
+mortal_guest_multiplier = 1.0
+demon_guest_multiplier = 0.6
+crop_water_bonus = 0.0

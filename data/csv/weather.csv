@@ -1,0 +1,5 @@
+id,name_ko,season,weight,yin_min,yin_max,mortal_guest_multiplier,demon_guest_multiplier,crop_water_bonus
+clear,맑음,any,50,0,1,1.0,0.6,0.0
+rain,비,any,25,1,2,0.8,1.0,1.0
+fog,안개,spring,15,2,3,0.4,1.6,0.0
+moon_haze,달무리,any,10,3,3,0.2,2.0,0.0

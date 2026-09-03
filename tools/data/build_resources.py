@@ -54,6 +54,9 @@ ENUMS: dict[str, set[str]] = {
     "chain_use_kind": {"cook", "craft", "sell", "gift", "buff", "quest", "feed", "bait", "decor", "combat", "gather", "travel", "upgrade", "event"},
     "metrics_category": {"session", "day", "house", "economy", "intake", "story", "save", "verb"},
     "buff_stat": {"none", "strength", "skill", "sight", "courage"},
+    # --- P2 신설 ---
+    "guest_realm": {"mortal", "demon"},
+    "season_or_any": {"any", "spring", "summer", "autumn", "winter"},
 }
 
 # 대사 효과 문법: affinity:+1 / item:<id>:<±n> / flag:<name> / money:<±n>  (세미콜론으로 여러 개)
@@ -357,6 +360,8 @@ TABLES: list[Table] = [
             Column("sprite_size", parse_sprite_size),
             # 손님 만족 (P1-S3): 체크아웃 때 이 요리가 창고에 있으면 먹고 돈을 더 낸다
             Column("liked_recipe", parse_str, ref="recipes"),
+            # 이승/마계 손님 갈래 — 날씨 음기 배율의 대상 (P2-S1)
+            Column("realm", parse_enum("guest_realm")),
         ],
     ),
     Table(
@@ -622,6 +627,54 @@ TABLES: list[Table] = [
             Column("description", parse_str),
         ],
     ),
+    # ------------------------------------------------------------ P2 신설 (docs/04 P2-S1: 절기·음기 날씨)
+    Table(
+        name="seasons",
+        csv_file="seasons.csv",
+        script_class="SeasonData",
+        script_file="season_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("order", int),
+            Column("length_days", int),
+            Column("next_id", parse_str, ref="seasons"),
+        ],
+    ),
+    Table(
+        name="weather",
+        csv_file="weather.csv",
+        script_class="WeatherData",
+        script_file="weather_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("season", parse_enum("season_or_any")),
+            Column("weight", int),
+            Column("yin_min", int),
+            Column("yin_max", int),
+            Column("mortal_guest_multiplier", float),
+            Column("demon_guest_multiplier", float),
+            Column("crop_water_bonus", float),
+        ],
+    ),
+    Table(
+        name="season_events",
+        csv_file="season_events.csv",
+        script_class="SeasonEventData",
+        script_file="season_event_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("season", parse_str, ref="seasons"),
+            Column("day_of_season", int),
+            Column("duration_days", int),
+            Column("weather_override", parse_str, ref="weather"),
+            Column("gather_multiplier", float),
+            Column("demon_guest_multiplier", float),
+            Column("hint_ko", parse_str),
+        ],
+    ),
     Table(
         name="tuning",
         csv_file="tuning.csv",
@@ -770,6 +823,28 @@ def check_unlocks(tables: dict[str, Table]) -> None:
                 raise BuildError(f"unlocks.csv {line}행: 조건의 아이템 {ref_id!r} 가 items.csv 에 없음")
 
 
+def check_seasons(tables: dict[str, Table]) -> None:
+    """음기 0~3, 절기 이벤트가 절기 길이 안에 들고, 절기 길이·순서가 양수인지."""
+    seasons = {r["id"]: r for r in tables["seasons"].rows}
+    for row in tables["seasons"].rows:
+        if row["length_days"] <= 0 or row["order"] <= 0:
+            raise BuildError(f"seasons.csv {row['_line']}행: length_days·order 는 1 이상")
+    for row in tables["weather"].rows:
+        for col in ("yin_min", "yin_max"):
+            if not 0 <= row[col] <= 3:
+                raise BuildError(f"weather.csv {row['_line']}행: {col}={row[col]} 은 0~3 이어야 함")
+        if row["yin_min"] > row["yin_max"]:
+            raise BuildError(f"weather.csv {row['_line']}행: yin_min > yin_max")
+    for row in tables["season_events"].rows:
+        length = seasons[row["season"]]["length_days"]
+        if row["duration_days"] <= 0:
+            raise BuildError(f"season_events.csv {row['_line']}행: duration_days 는 1 이상")
+        if not 1 <= row["day_of_season"] <= length:
+            raise BuildError(f"season_events.csv {row['_line']}행: day_of_season={row['day_of_season']} 이 절기 길이 {length} 밖")
+        if row["day_of_season"] + row["duration_days"] - 1 > length:
+            raise BuildError(f"season_events.csv {row['_line']}행: 이벤트가 절기 끝을 넘어감")
+
+
 def check_chains(tables: dict[str, Table]) -> None:
     """재미 원칙 3 의 기계 강제: 용도 3칸이 전부 차야 하고(서로 다른 갈래), 대상 콘텐츠 전부가 사슬 행을 가져야 한다."""
     chains = tables["chains"]
@@ -905,6 +980,7 @@ def main(argv: list[str]) -> int:
         check_references(tables)
         check_dialogue(tables)
         check_unlocks(tables)
+        check_seasons(tables)
         check_chains(tables)
         for table in tables.values():
             if table.dict_value is not None:

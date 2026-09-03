@@ -1,0 +1,5 @@
+id,name_ko,order,length_days,next_id
+spring,봄,1,28,summer
+summer,여름,2,28,autumn
+autumn,가을,3,28,winter
+winter,겨울,4,28,spring

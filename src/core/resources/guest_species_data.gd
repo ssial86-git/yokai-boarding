@@ -30,3 +30,5 @@ extends Resource
 @export var sprite_size: int = 32
 ## 좋아하는 요리(recipes.csv id). 체크아웃 때 창고에 있으면 먹고 tuning guest_dish_bonus_money 를 더 낸다. 비어 있으면 없음
 @export var liked_recipe: String = ""
+## mortal(이승 손님) / demon(마계 손님). 날씨의 음기 배율(weather.csv)이 갈래별로 가중치에 곱해진다 (P2-S1)
+@export var realm: String = "mortal"

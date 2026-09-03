@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SeasonEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/season_event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "se_rain_start"
+name_ko = "장마 시작"
+season = "spring"
+day_of_season = 10
+duration_days = 2
+weather_override = "rain"
+gather_multiplier = 1.0
+demon_guest_multiplier = 1.0
+hint_ko = "장마가 시작됐다. 이틀 동안 비 — 텃밭은 절로 젖고 우산손이 찾아온다."

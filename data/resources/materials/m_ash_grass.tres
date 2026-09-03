@@ -11,5 +11,5 @@ source = "gather"
 tool_kind = "none"
 min_tool_level = 0
 season = "any"
-yin_condition = "high"
+yin_condition = "any"
 rarity = "common"

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SeasonEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/season_event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "se_full_moon"
+name_ko = "만월"
+season = "spring"
+day_of_season = 20
+duration_days = 2
+weather_override = "moon_haze"
+gather_multiplier = 1.2
+demon_guest_multiplier = 1.5
+hint_ko = "달무리가 떴다. 이틀 동안 음기가 짙어 마계 손님이 늘고 채집물이 많다."

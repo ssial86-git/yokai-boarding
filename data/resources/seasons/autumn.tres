@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="SeasonData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/season_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "autumn"
+name_ko = "가을"
+order = 3
+length_days = 28
+next_id = "winter"

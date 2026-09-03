@@ -36,3 +36,6 @@ region_entered,day,region,구역 진입 (하숙집·마당·뒷산 등 모든 �
 sell,economy,item;count;money,판매
 serve,verb,recipe;yokai;stat,배식 (동료 버프)
 upgrade,verb,tool;level,도구 벼리기
+calendar_opened,day,season;day_of_season,달력 탭 열람 (P2 게이트: 달력 확인 행동)
+weather,day,weather;yin;season,아침 날씨·음기 추첨 결과
+season_event,day,event;season,소절기 이벤트 시작
