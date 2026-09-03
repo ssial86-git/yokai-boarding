@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""플레이테스트 로그 집계: user://playtest/session_*.jsonl -> 세션별 지표 표 + Go/No-Go 자동 항목.
+"""내장 지표 로그 집계: user://metrics/session_*.jsonl (Metrics autoload, metrics_events.csv 정의) -> 세션별 지표 표 + Go/No-Go 자동 항목.
 
 자동으로 판정할 수 있는 것만 계산한다 (docs/01 6절):
   2번 "증축 없이는 5일차 이후 막힘"  -> 빈 침대 0 인 저녁에 방문자가 왔는지, 객실을 지었는지
   (1·5·6번은 설문·관찰 시트에서 사람이 판정)
-사용: python tools/playtest/summarize.py [로그 폴더]   (기본: %APPDATA%/Godot/app_userdata/yokai-boarding/playtest)
+사용: python tools/playtest/summarize.py [로그 폴더]   (기본: %APPDATA%/Godot/app_userdata/yokai-boarding/metrics)
 """
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ from pathlib import Path
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-DEFAULT_DIR = Path(os.environ.get("APPDATA", "")) / "Godot" / "app_userdata" / "yokai-boarding" / "playtest"
+DEFAULT_DIR = Path(os.environ.get("APPDATA", "")) / "Godot" / "app_userdata" / "yokai-boarding" / "metrics"
 EODUKI = "y02_eoduki"
 
 

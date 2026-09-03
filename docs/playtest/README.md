@@ -7,7 +7,7 @@
 
 1. 빌드: `build/yokai-boarding.exe` (내보내기 방법은 아래). 테스터 PC 에 폴더째 복사.
 2. 테스터마다 새 세션으로 시작한다 (기존 세이브 슬롯 1 은 F1 디버그에서만 접근되므로 그대로 둬도 됨).
-3. 로그는 자동으로 `%APPDATA%\Godot\app_userdata\yokai-boarding\playtest\session_<시각>.jsonl` 에 남는다. 세션이 끝나면 이 파일을 회수한다.
+3. 로그는 자동으로 `%APPDATA%\Godot\app_userdata\yokai-boarding\metrics\session_<시각>.jsonl` 에 남는다. 세션이 끝나면 이 파일을 회수한다.
 4. 관찰자는 `observer_sheet.md` 를 옆에서 채운다. 15분 시점 질문(1번 기준)은 반드시 정해진 문장으로만 묻는다.
 5. 끝나면 `questionnaire.md` 를 테스터가 직접 적는다.
 

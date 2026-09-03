@@ -22,6 +22,7 @@ GameState="*res://src/autoload/game_state.gd"
 DataRegistry="*res://src/autoload/data_registry.gd"
 Clock="*res://src/autoload/clock.gd"
 SaveManager="*res://src/autoload/save_manager.gd"
+Metrics="*res://src/autoload/metrics.gd"
 
 [display]
 
