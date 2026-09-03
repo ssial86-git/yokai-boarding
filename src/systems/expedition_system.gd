@@ -5,6 +5,7 @@ extends Node
 ## 부적 사용(Q 투척 · R 귀환 · G 채집)도 여기서 처리한다. 순수 계산은 Combat.
 
 const KIND_EXPEDITION := "expedition"
+const KIND_HOUSE := "house"
 const BOSS_SPAWN_ID := "boss"
 const FEATURE_BOSS_REMATCH := "boss_rematch"
 const TALISMAN_THROW := "t_throw"
@@ -134,23 +135,30 @@ func _consume(talisman: TalismanData) -> bool:
 
 # --- 구역 진입·이탈 ---
 
+## 동행 요괴는 집 밖 어디든 따라온다(슬롯에 놓은 것이 바로 보이도록). 적·전투·후퇴는 탐험지(expedition)에서만.
 func _on_region_entered(new_region_id: String) -> void:
-	if is_active() and new_region_id != _region.id:
+	if is_expedition() and new_region_id != _region.id:
 		Metrics.record("explore_exit", {"region": _region.id, "reason": _pending_exit_reason if not _pending_exit_reason.is_empty() else EXIT_NORMAL})
 	_pending_exit_reason = ""
 	_clear()
 	var region := DataRegistry.get_region(new_region_id)
-	if region == null or region.kind != KIND_EXPEDITION:
+	if region == null or region.kind == KIND_HOUSE:
 		_region = null
 		return
 	_region = region
-	_spawn_enemies()
+	if region.kind == KIND_EXPEDITION:
+		_spawn_enemies()
 	_spawn_companions()
-	if companions.is_empty():
-		Events.message_posted.emit(DataRegistry.text("msg_expedition_alone"))
-	else:
+	if not companions.is_empty():
 		Events.message_posted.emit(DataRegistry.text("msg_expedition_enter", {"name": region.name_ko, "count": companions.size()}))
-	Events.message_posted.emit(DataRegistry.text("msg_expedition_controls"))
+	elif region.kind == KIND_EXPEDITION:
+		Events.message_posted.emit(DataRegistry.text("msg_expedition_alone"))
+	if region.kind == KIND_EXPEDITION:
+		Events.message_posted.emit(DataRegistry.text("msg_expedition_controls"))
+
+
+func is_expedition() -> bool:
+	return _region != null and _region.kind == KIND_EXPEDITION
 
 
 func _clear() -> void:

@@ -54,8 +54,17 @@ func test_party_fights_loots_and_boss_rematch() -> void:
 	assert_int(assign.try_assign("y02_eoduki", Assignment.PARTY)).is_equal(AssignmentController.Outcome.OK)
 	assert_int(assign.try_assign("y03_dalgael", Assignment.PARTY)).is_equal(AssignmentController.Outcome.FULL)
 
-	var stamina_before := GameState.stamina.value
+	# 사용자가 잡은 문제: 동행은 잿빛 들에서만 나타나 슬롯에 놓아도 아무 변화가 없어 보였다 → 집 밖 어디든 따라온다 (싸움은 탐험지에서만)
 	var enters_before := Metrics.count("explore_enter")
+	assert_bool(region_manager.travel("r_yard")).is_true()
+	await runner.simulate_frames(1)
+	assert_int(expedition.companions.size()).is_equal(2)
+	assert_int(expedition.enemies.size()).is_equal(0)
+	assert_bool(expedition.is_active()).is_true()
+	assert_bool(expedition.is_expedition()).is_false()
+	assert_int(Metrics.count("explore_enter")).is_equal(enters_before)
+
+	var stamina_before := GameState.stamina.value
 	var exits_before := Metrics.count("explore_exit")
 	assert_bool(region_manager.travel("r_well")).is_true()
 	assert_bool(region_manager.travel("r_ash_field")).is_true()

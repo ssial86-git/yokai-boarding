@@ -2,7 +2,7 @@
 날짜: 2026-09-03
 결정:
 - **탐험지는 regions.csv 로만 조립한다.** `enemy_count`(신설 컬럼)만큼 `enemy_pool` 에서 뽑아 구역 폭의 `enemy_spawn_x_from~to` 비율에 고르게 놓고, `boss_id` 는 `boss_spawn_x` 자리에 둔다. 추첨 RNG 는 `시드:날짜:구역` 해시로 파생해 방문자 RNG 를 소모하지 않는다. 처치한 적은 그날 다시 나오지 않고(`region_states[*].enemies_defeated`, 하루 시작에 비움) 미니보스는 `boss_defeated` 로 남는다. 재도전(feature `boss_rematch`, 11일차)이 열리면 `boss_rematch_multiplier` 배 체력으로 다시 나온다.
-- **동료는 아침 배치의 '동행' 슬롯이다.** `Assignment.PARTY`(가상 칸, 정원 `party_max`=2) — 텃밭(FIELD)과 같은 방식이라 검증·직렬화·정산(일한 것으로 컨디션 차감)을 그대로 쓴다. 탐험지에 들어가면 `CompanionActor` 로 소환되어 플레이어 반경(`companion_leash_px`) 안의 가장 가까운 적과 자동 교전하고, 적이 없으면 플레이어 뒤로 돌아온다. 체력·피해·간격은 `Combat`(core)이 능력치 + 배식 버프에서 계산한다(담력→체력, 힘→피해, 솜씨→간격). 쓰러지면 이번 탐험에서 빠진다.
+- **동료는 아침 배치의 '동행' 슬롯이다.** `Assignment.PARTY`(가상 칸, 정원 `party_max`=2) — 텃밭(FIELD)과 같은 방식이라 검증·직렬화·정산(일한 것으로 컨디션 차감)을 그대로 쓴다. 집 밖 어느 구역에서든 `CompanionActor` 로 따라오고(2026-09-04: 처음엔 탐험지에서만 소환해 "슬롯에 놨는데 안 된다" 는 혼란이 있었다), 탐험지에서는 플레이어 반경(`companion_leash_px`) 안의 가장 가까운 적과 자동 교전하고, 적이 없으면 플레이어 뒤로 돌아온다. 체력·피해·간격은 `Combat`(core)이 능력치 + 배식 버프에서 계산한다(담력→체력, 힘→피해, 솜씨→간격). 쓰러지면 이번 탐험에서 빠진다.
 - **플레이어는 체력이 없다.** 적의 공격은 스태미너를 깎고(`enemy_hit_stamina_per_attack`) 밀어낸다. 0 이 되면 우물로 물러난다(`expedition_retreat_region`) — 강제 기절·게임오버 없음(docs/01 v3 2.1 벌 최소화). 탐험지 진입에도 스태미너가 든다(`regions.stamina_enter_cost`).
 - **부적은 Q/R/G 다.** 투척(Q): 바라보는 쪽으로 `TalismanProjectile` 이 날아가 첫 적을 맞히고 밀어낸다, 쿨다운 `cooldown_seconds`. 귀환(R): 어디서든 집으로. 채집(G): `gather_talisman_duration_seconds` 동안 채집마다 `power` 개 추가. 셋 다 창고에서 하나씩 쓴다. 입력 액션은 main.gd 가 코드로 등록한다.
 - **전리품이 사슬을 닫는다.** 잿불 도깨비불→잿빛 풀(0.7), 재구렁 개→잿불돌(0.6), 잿빛 파수꾼→그늘이끼(1.0). 투척 부적 재료를 `천 + 잿불돌`, 채집 부적을 `천 + 나뭇가지` 로 바꿔 탐험 전리품 → 제작, 잿빛 풀·그늘이끼 → 티어 2 요리로 이어진다(chains.csv 검증 통과).
