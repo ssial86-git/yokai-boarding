@@ -36,3 +36,5 @@ extends Resource
 @export var sky_color: String = "8fb0b8"
 ## 낚시 자리 x (0 = 없음). fish.csv 에서 region_id 가 이 구역인 어종이 낚인다
 @export var fishing_x: int = 0
+## 들어갈 때 enemy_pool 에서 뽑아 놓는 적 수 (탐험지, 미니보스 제외)
+@export var enemy_count: int = 0

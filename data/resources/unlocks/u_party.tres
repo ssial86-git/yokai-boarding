@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_party"
+day_min = 3
+expected_day = 3
+timeband = "day"
+condition = "unlock:u_ash_field"
+unlock_type = "feature"
+unlock_id = "party"
+hint_ko = "아침 배치의 '동행'에 하숙생을 놓으면 잿빛 들에 함께 간다. 동료가 알아서 싸운다."

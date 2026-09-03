@@ -35,3 +35,4 @@ u_eoduki_act3,10,12,night,affinity:y02_eoduki>=2,event,y02_act3,어둑이의 마
 u_warden_rematch,11,12,day,unlock:u_ash_warden,feature,boss_rematch,잿빛 파수꾼이 다시 나타났다. 더 강하다.
 u_dalgael_act3,12,13,night,affinity:y03_dalgael>=2;item:record_piece>=1,event,y03_act3,달갤의 마지막 사연.
 u_rare_visitor,12,14,evening,,feature,rare_visitor_species,희귀한 뜨내기가 소문을 듣고 온다.
+u_party,3,3,day,unlock:u_ash_field,feature,party,아침 배치의 '동행'에 하숙생을 놓으면 잿빛 들에 함께 간다. 동료가 알아서 싸운다.

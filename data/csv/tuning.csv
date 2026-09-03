@@ -124,3 +124,26 @@ fishing_stamina_cost,3,float,낚시 한 번 비용
 fishing_max_seconds,6.0,float,이 시간 안에 E 를 누르지 않으면 놓친다
 fishing_miss_junk_chance,0.5,float,놓쳤을 때 고물이라도 낚일 확률
 region_water_color,5f8090,string,낚시 자리 물 자리표시 색(hex — 팔레트)
+party_max,2,int,아침 배치에서 탐험 동행으로 묶을 수 있는 하숙생 수 (docs/01 v3: 동료 2)
+companion_follow_offset_px,24,float,동료가 플레이어 뒤에 서는 간격(px)
+companion_leash_px,140,float,동료가 플레이어에게서 이 이상 멀어지면 교전을 끊고 돌아온다
+companion_speed_px,90,float,동료 이동 속도(px/초)
+companion_attack_range_px,18,float,동료 공격 사거리(px)
+companion_attack_interval_seconds,1.0,float,동료 공격 간격(초). 솜씨(skill) 1당 companion_skill_interval_bonus 만큼 짧아진다
+companion_skill_interval_bonus,0.08,float,솜씨 1당 공격 간격 감소(초)
+companion_hp_base,20,int,동료 전투 체력 기본
+companion_hp_per_courage,4,int,담력 1당 체력 추가
+companion_damage_base,1,int,동료 기본 피해. 힘(strength)이 더해진다
+enemy_attack_range_px,16,float,적 공격 사거리(px)
+enemy_attack_interval_seconds,1.2,float,적 공격 간격(초)
+enemy_hit_stamina_per_attack,6,float,적 공격 1당 플레이어 스태미너 피해 (적 attack × 이 값)
+enemy_knockback_px,24,float,맞았을 때 밀리는 거리(px)
+player_hurt_invulnerable_seconds,0.6,float,플레이어가 맞은 뒤 무적 시간(초)
+talisman_throw_speed_px,220,float,투척 부적 속도(px/초)
+talisman_hit_radius_px,12,float,투척 부적 명중 반경(px)
+gather_talisman_duration_seconds,60,float,채집 부적 효과 시간(초)
+boss_rematch_multiplier,1.5,float,미니보스 재도전 시 체력 배율 (feature boss_rematch)
+enemy_spawn_x_from,0.35,float,적이 놓이는 x 범위 시작 (구역 폭 비율)
+enemy_spawn_x_to,0.95,float,적이 놓이는 x 범위 끝 (구역 폭 비율)
+boss_spawn_x,0.85,float,미니보스 자리 (구역 폭 비율)
+expedition_retreat_region,r_well,string,스태미너가 0 이 되면 물러나는 구역

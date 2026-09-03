@@ -10,5 +10,5 @@ effect = "throw"
 cooldown_seconds = 3.0
 power = 2
 range_px = 96
-craft_cost = ["cloth:1", "scrap:1"]
+craft_cost = ["cloth:1", "m_ember_stone:1"]
 craft_seconds = 30.0

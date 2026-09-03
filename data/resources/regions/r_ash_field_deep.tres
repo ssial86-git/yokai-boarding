@@ -22,3 +22,4 @@ gather_span = ""
 farm_x = 0
 sky_color = "4a4352"
 fishing_x = 0
+enemy_count = 3

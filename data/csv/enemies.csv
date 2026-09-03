@@ -1,4 +1,4 @@
 id,name_ko,tier,hp,attack,speed_px,aggro_radius_px,drop_material,drop_chance,sprite_size
-e_ash_wisp,잿불 도깨비불,normal,6,1,45,80,,0.0,16
-e_cinder_hound,재구렁 개,normal,12,2,60,96,,0.0,32
-e_ash_warden,잿빛 파수꾼,boss,60,4,35,128,,0.0,32
+e_ash_wisp,잿불 도깨비불,normal,6,1,45,80,m_ash_grass,0.7,16
+e_cinder_hound,재구렁 개,normal,12,2,60,96,m_ember_stone,0.6,32
+e_ash_warden,잿빛 파수꾼,boss,60,4,35,128,m_shadow_moss,1.0,32

@@ -558,6 +558,8 @@ TABLES: list[Table] = [
             Column("sky_color", parse_str),
             # 낚시 자리 x (0 = 없음). P1-S3
             Column("fishing_x", int),
+            # 들어갈 때 enemy_pool 에서 뽑아 놓는 적 수 (탐험지). P1-S4
+            Column("enemy_count", int),
         ],
     ),
     Table(
