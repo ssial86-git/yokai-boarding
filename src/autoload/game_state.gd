@@ -31,6 +31,14 @@ var weather: String = WEATHER_CLEAR
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 ## 하숙집 방 그리드. reset_new_game() 또는 from_dict() 전에는 null.
 var room_grid: RoomGrid
+## 플레이어가 있는 구역(regions.csv id)과 그 안의 위치 (세이브 v5). 새 게임은 tuning player_start_*.
+var player_region: String = ""
+var player_position: Vector2 = Vector2.ZERO
+## 탐험지 상태: region_id -> {"visited": bool, "gather_taken": [point_id], "enemies_defeated": [enemy_id], "boss_defeated": bool}
+## JSON 왕복이 값을 바꾸지 않도록 bool·문자열·문자열 목록만 넣는다 (정수는 float 으로 돌아온다).
+var region_states: Dictionary = {}
+
+const REGION_STATE_KEYS: Array[String] = ["visited", "gather_taken", "enemies_defeated", "boss_defeated"]
 
 
 func reset_new_game() -> void:
@@ -46,6 +54,8 @@ func reset_new_game() -> void:
 	seen_events.clear()
 	pending_visitor.clear()
 	weather = WEATHER_CLEAR
+	_reset_player()
+	region_states.clear()
 	_reseed_rng()
 	room_grid = new_room_grid()
 	_apply_start_layout(room_grid)
@@ -118,6 +128,46 @@ func to_dict() -> Dictionary:
 		# JSON 은 64비트 정수를 double 로 바꿔 정밀도를 잃으므로 문자열로 보관
 		"rng_state": str(rng.state),
 		"room_grid": room_grid.to_dict() if room_grid != null else {},
+		"player": {"region": player_region, "x": player_position.x, "y": player_position.y},
+		"regions": region_states.duplicate(true),
+	}
+
+
+## 구역 상태. 없으면 기본값으로 만들어 돌려준다 (반환값은 region_states 안의 그 Dictionary 자체).
+func region_state(region_id: String) -> Dictionary:
+	if not region_states.has(region_id):
+		region_states[region_id] = {"visited": false, "gather_taken": [], "enemies_defeated": [], "boss_defeated": false}
+	return region_states[region_id]
+
+
+func set_player_location(region_id: String, position: Vector2) -> void:
+	player_region = region_id
+	player_position = position
+	region_state(region_id)["visited"] = true
+
+
+func _reset_player() -> void:
+	var tuning := DataRegistry.tuning
+	player_region = tuning.get_string("player_start_region")
+	player_position = Vector2(tuning.get_float("player_start_x"), tuning.get_float("player_start_y"))
+
+
+## 세이브의 구역 상태 하나를 검사·정규화한다. 형식이 틀리면 빈 Dictionary.
+func _region_state_from(source: Variant) -> Dictionary:
+	if not source is Dictionary:
+		return {}
+	var raw := source as Dictionary
+	var gather: Array = []
+	for entry: Variant in (raw.get("gather_taken", []) as Array):
+		gather.append(str(entry))
+	var defeated: Array = []
+	for entry: Variant in (raw.get("enemies_defeated", []) as Array):
+		defeated.append(str(entry))
+	return {
+		"visited": bool(raw.get("visited", false)),
+		"gather_taken": gather,
+		"enemies_defeated": defeated,
+		"boss_defeated": bool(raw.get("boss_defeated", false)),
 	}
 
 
@@ -167,6 +217,20 @@ func from_dict(data: Dictionary) -> bool:
 	# JSON 을 거친 float 값(omen) 을 int 로 되돌리기 위해 Visitor 로 한 번 감쌌다 푼다
 	pending_visitor = VisitorRoll.Visitor.from_dict(raw_visitor).to_dict() if not raw_visitor.is_empty() else {}
 	weather = str(data.get("weather", WEATHER_CLEAR))
+	var player: Variant = data.get("player", {})
+	if player is Dictionary and not (player as Dictionary).is_empty():
+		var player_data := player as Dictionary
+		player_region = str(player_data.get("region", ""))
+		player_position = Vector2(float(player_data.get("x", 0.0)), float(player_data.get("y", 0.0)))
+	else:
+		_reset_player()
+	region_states.clear()
+	var regions: Variant = data.get("regions", {})
+	if regions is Dictionary:
+		for region_id: Variant in (regions as Dictionary):
+			var state := _region_state_from((regions as Dictionary)[region_id])
+			if not state.is_empty():
+				region_states[str(region_id)] = state
 	if data.has("rng_state"):
 		rng.state = str(data["rng_state"]).to_int()
 	else:

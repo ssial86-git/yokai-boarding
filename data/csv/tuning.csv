@@ -73,4 +73,7 @@ message_log_lines,4,int,메시지 로그 최대 줄 수
 message_fade_seconds,4.0,float,메시지가 사라지기까지의 시간
 sfx_master_db,0.0,float,효과음 전체 볼륨(dB)
 rest_zone_min_width_px,96,int,배치 패널 휴식 놓기 영역의 최소 너비(px)
-playtest_log_enabled,true,bool,플레이테스트 지표 로그(user://playtest/*.jsonl) 기록 여부
+metrics_enabled,true,bool,내장 지표 JSONL(user://metrics/session_*.jsonl) 기록 여부. headless 에서는 파일을 열지 않는다
+player_start_region,r_yard,string,새 게임 플레이어 시작 구역(regions.csv id)
+player_start_x,0,float,시작 구역 안 플레이어 x(px) — S2 플레이어 컨트롤러가 사용
+player_start_y,0,float,시작 구역 안 플레이어 y(px)

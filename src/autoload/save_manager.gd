@@ -4,7 +4,8 @@ extends Node
 ## v2: game_state.room_grid 추가 (M1)
 ## v3: game_state.conditions / inventory / assignment 추가 (M2)
 ## v4: game_state.guests / ledger / flags / seen_events / pending_visitor / weather / rng_state 추가 (M3)
-## v5: clock 이 페이즈(phase/elapsed_in_phase)에서 실시간 경과 초(elapsed_seconds)로 바뀜 (P1-S1)
+## v5: clock 이 페이즈(phase/elapsed_in_phase)에서 실시간 경과 초(elapsed_seconds)로 바뀜,
+##     game_state.player(구역·위치) / regions(탐험지 상태) 추가 (P1-S1)
 
 const SAVE_VERSION := 5
 const SAVE_DIR := "user://saves"
@@ -92,6 +93,12 @@ func _migrate_4_to_5(data: Dictionary) -> void:
 	clock_data.erase("phase")
 	clock_data.erase("elapsed_in_phase")
 	data["clock"] = clock_data
+	# v4 에는 플레이어 위치·탐험지 상태가 없다. 비워 두면 GameState.from_dict 가 시작 위치·빈 상태로 채운다.
+	var game_state: Dictionary = data.get("game_state", {})
+	for key in ["player", "regions"]:
+		if not game_state.has(key):
+			game_state[key] = {}
+	data["game_state"] = game_state
 
 
 ## v3 에는 손님·명부·서사 상태가 없다. 빈 값이면 GameState.from_dict 가 기본값(새 RNG 시드 포함)으로 채운다.

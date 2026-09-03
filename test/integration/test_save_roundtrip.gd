@@ -35,6 +35,11 @@ func test_round_trip_through_file_is_identical() -> void:
 	assert_int(GameState.assignment.assign(grid, Vector2i(0, 2), "y01_ttukttagi")).is_equal(Assignment.Outcome.OK)
 	Clock.restore(452.5)  # 저녁 시간대 한가운데
 	assert_int(Clock.band).is_equal(Clock.Band.EVENING)
+	GameState.set_player_location("r_back_hill", Vector2(120.0, -16.0))
+	var ash := GameState.region_state("r_ash_field")
+	ash["visited"] = true
+	ash["gather_taken"] = ["gp_1", "gp_5"]
+	ash["enemies_defeated"] = ["e_ash_wisp"]
 	var expected := SaveManager.build_save_data()
 
 	assert_int(SaveManager.save_slot(TEST_SLOT)).is_equal(OK)
@@ -46,6 +51,12 @@ func test_round_trip_through_file_is_identical() -> void:
 	assert_dict(SaveManager.build_save_data()).is_equal(expected)
 	assert_float(Clock.elapsed_seconds()).is_equal(452.5)
 	assert_int(Clock.band).is_equal(Clock.Band.EVENING)
+	assert_str(GameState.player_region).is_equal("r_back_hill")
+	assert_that(GameState.player_position).is_equal(Vector2(120.0, -16.0))
+	assert_bool(GameState.region_state("r_back_hill")["visited"]).is_true()
+	assert_array(GameState.region_state("r_ash_field")["gather_taken"]).contains_exactly(["gp_1", "gp_5"])
+	assert_array(GameState.region_state("r_ash_field")["enemies_defeated"]).contains_exactly(["e_ash_wisp"])
+	assert_bool(GameState.region_state("r_ash_field")["boss_defeated"]).is_false()
 	assert_int(GameState.room_grid.built_floors).is_equal(3)
 	assert_str(GameState.room_grid.get_room_id(Vector2i(0, 2))).is_equal("workshop")
 	assert_bool(GameState.room_grid.is_empty(Vector2i(2, 0))).is_true()
@@ -113,9 +124,16 @@ func test_v4_phase_clock_migrates_to_timeband_start() -> void:
 		"game_state": GameState.to_dict(),
 		"clock": {"phase": 2, "elapsed_in_phase": 30.0},  # EVENING
 	}
+	(v4["game_state"] as Dictionary).erase("player")  # v4 세이브에는 이 키들이 없다
+	(v4["game_state"] as Dictionary).erase("regions")
+	GameState.set_player_location("r_ash_field", Vector2(9.0, 9.0))  # 로드가 v4 기본값으로 덮는지 확인
 	assert_bool(SaveManager.apply_save_data(v4)).is_true()
 	assert_int(Clock.band).is_equal(Clock.Band.EVENING)
 	assert_float(Clock.elapsed_seconds()).is_equal(Clock.timeline.seconds_for_band(Clock.Band.EVENING))
+	# v4 에는 플레이어·탐험지 상태가 없으므로 시작 위치와 빈 상태로 채워진다
+	assert_str(GameState.player_region).is_equal(DataRegistry.tuning.get_string("player_start_region"))
+	assert_that(GameState.player_position).is_equal(Vector2.ZERO)
+	assert_bool(GameState.region_states.is_empty()).is_true()
 	var saved := SaveManager.build_save_data()
 	assert_int(saved["version"]).is_equal(5)
 	assert_bool((saved["clock"] as Dictionary).has("elapsed_seconds")).is_true()

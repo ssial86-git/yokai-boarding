@@ -79,5 +79,8 @@ values = {
 "message_fade_seconds": 4.0,
 "sfx_master_db": 0.0,
 "rest_zone_min_width_px": 96,
-"playtest_log_enabled": true
+"metrics_enabled": true,
+"player_start_region": "r_yard",
+"player_start_x": 0.0,
+"player_start_y": 0.0
 }
