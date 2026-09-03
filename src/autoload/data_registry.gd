@@ -35,6 +35,10 @@ var season_events: Dictionary = {}  # id -> SeasonEventData
 # --- P2-S2: 목표·명절 ---
 var goals: Dictionary = {}  # id -> GoalData
 var festivals: Dictionary = {}  # id -> FestivalData
+# --- P2-S3: 가호·회색 시장 ---
+var blessings: Dictionary = {}  # id -> BlessingData
+var synergies: Dictionary = {}  # id -> SynergyData
+var market_prices: Dictionary = {}  # item_id -> MarketPriceData
 var tuning: TuningData = TuningData.new()
 var strings: StringTableData = StringTableData.new()
 
@@ -70,6 +74,9 @@ func reload() -> void:
 	season_events = _load_dir(RESOURCE_ROOT + "season_events")
 	goals = _load_dir(RESOURCE_ROOT + "goals")
 	festivals = _load_dir(RESOURCE_ROOT + "festivals")
+	blessings = _load_dir(RESOURCE_ROOT + "blessings")
+	synergies = _load_dir(RESOURCE_ROOT + "synergies")
+	market_prices = _load_dir(RESOURCE_ROOT + "market_prices")
 	tuning = _load_single(TUNING_PATH, TuningData.new()) as TuningData
 	strings = _load_single(STRINGS_PATH, StringTableData.new()) as StringTableData
 
@@ -86,8 +93,25 @@ func get_room(id: String) -> RoomData:
 	return rooms.get(id) as RoomData
 
 
+## 가호가 붙은 합성 id("item@blessing")도 기본 아이템 데이터를 돌려준다 (P2-S3).
 func get_item(id: String) -> ItemData:
-	return items.get(id) as ItemData
+	return items.get(BlessingRules.base_id(id)) as ItemData
+
+
+func get_blessing(id: String) -> BlessingData:
+	return blessings.get(id) as BlessingData
+
+
+## 하숙생의 가호. 없으면 null.
+func blessing_of_yokai(yokai_id: String) -> BlessingData:
+	for blessing: BlessingData in blessings.values():
+		if blessing.yokai_id == yokai_id:
+			return blessing
+	return null
+
+
+func get_market_price(item_id: String) -> MarketPriceData:
+	return market_prices.get(BlessingRules.base_id(item_id)) as MarketPriceData
 
 
 func get_visitor(id: String) -> VisitorData:
@@ -192,10 +216,11 @@ func recipes_sorted() -> Array[RecipeData]:
 	return result
 
 
-## 요리(output_item) → 레시피. 배식·손님 만족은 창고의 아이템에서 레시피를 거꾸로 찾는다.
+## 요리(output_item) → 레시피. 배식·손님 만족은 창고의 아이템에서 레시피를 거꾸로 찾는다. 가호 합성 id 도 기본 요리로 찾는다.
 func recipe_for_dish(item_id: String) -> RecipeData:
+	var base := BlessingRules.base_id(item_id)
 	for recipe: RecipeData in recipes.values():
-		if recipe.output_item == item_id:
+		if recipe.output_item == base:
 			return recipe
 	return null
 
@@ -231,9 +256,14 @@ func text(key: String, args: Dictionary = {}) -> String:
 
 # --- 표시용 이름. 데이터가 없으면 id 를 그대로 (누락이 눈에 띄도록) ---
 
+## 가호가 붙은 아이템은 "[뚝] 무 씨앗" 처럼 가호 표시를 앞에 붙인다.
 func item_name(id: String) -> String:
 	var item := get_item(id)
-	return item.name_ko if item != null else id
+	var base := item.name_ko if item != null else BlessingRules.base_id(id)
+	var blessing := get_blessing(BlessingRules.blessing_of(id))
+	if blessing == null:
+		return base
+	return text("blessed_item_name", {"short": blessing.short_ko, "name": base})
 
 
 func room_name(id: String) -> String:

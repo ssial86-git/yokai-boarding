@@ -5,6 +5,7 @@ extends Node2D
 
 const HOUSE_REGION_ID := HouseRegion.REGION_ID
 const EXPEDITION_KIND := "expedition"
+const REGION_KIND_MARKET := "market"
 
 var player: PlayerController
 var house_region: HouseRegion
@@ -13,6 +14,8 @@ var gather_system: GatherSystem
 var unlock_system: UnlockSystem
 var fishing_system: FishingSystem
 var camera: HouseCamera
+## () -> void. 회색 장꾼 앞에서 E (P2-S3). main.gd 가 넣는다.
+var merchant_action: Callable
 
 var current_region_id: String = ""
 var _outdoor: RegionView
@@ -35,7 +38,17 @@ func bounds() -> Rect2:
 
 
 func is_region_open(region_id: String) -> bool:
-	return unlock_system == null or unlock_system.is_region_open(region_id)
+	if unlock_system != null and not unlock_system.is_region_open(region_id):
+		return false
+	return is_region_open_now(region_id)
+
+
+## 시간·날씨 조건 (P2-S3): 회색 시장(kind market)은 음기 짙은 날 또는 밤에만 문이 열린다.
+func is_region_open_now(region_id: String) -> bool:
+	var region := DataRegistry.get_region(region_id)
+	if region == null or region.kind != REGION_KIND_MARKET:
+		return true
+	return MarketPrices.is_open(GameState.yin, DataRegistry.tuning.get_int("market_yin_threshold", 2), Clock.band == Clock.Band.NIGHT)
 
 
 ## region_id 로 이동. 잠겨 있으면 false. at 이 주어지면 그 발 위치에, 아니면 from 쪽 문 앞에 선다.
@@ -62,6 +75,7 @@ func travel(region_id: String, from_region_id: String = "", at: Vector2 = Vector
 		_outdoor.name = "Region_%s" % region_id
 		_outdoor.is_region_open = is_region_open
 		_outdoor.fishing_system = fishing_system
+		_outdoor.merchant_action = merchant_action
 		_outdoor.setup(region, func(target: String) -> void: travel(target), farm_system, gather_system)
 		add_child(_outdoor)
 		move_child(_outdoor, 0)  # 플레이어보다 뒤에 그린다

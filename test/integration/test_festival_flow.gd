@@ -23,6 +23,10 @@ func before_test() -> void:
 
 func after_test() -> void:
 	Clock.running = false
+	# 심사 카드(visitor_knocked)가 Clock 을 hold 한 채 남지 않도록 — 다음 스위트의 플레이어가 멈춘다
+	Clock.release(Clock.HOLD_INTAKE)
+	Clock.release(Clock.HOLD_DIALOGUE)
+	GameState.pending_visitor = {}
 
 
 func test_activity_counters_complete_goals_with_rewards() -> void:
@@ -100,6 +104,7 @@ func test_dongji_day_scores_perfect_and_books_rare_guest() -> void:
 	assert_bool(_goal_system.is_done("g_l_festival")).is_true()
 	# 같은 날 두 번 채점하지 않는다
 	assert_int(_festival_system.score_today()).is_equal(-1)
+	_intake_system.decide(Intake.Decision.DECLINE)  # 카드를 닫아 Clock hold 를 푼다
 
 
 func test_dongji_partial_score_no_rare_guest() -> void:

@@ -93,6 +93,12 @@ signal goal_completed(goal_id: String)
 signal festival_started(festival_id: String, decorated: bool)
 signal festival_scored(festival_id: String, score: int, max_score: int)
 
+# --- 가호·회색 시장 (P2-S3) ---
+## 하숙생이 아이템에 가호를 붙였다. item_id 는 가호가 붙은 합성 id.
+signal blessing_granted(yokai_id: String, item_id: String)
+## 회색 시장 거래. kind 는 "buy" / "sell".
+signal market_traded(kind: String, item_id: String, count: int, money: int)
+
 # --- 세이브 ---
 signal game_saved(slot: int)
 signal game_loaded(slot: int)

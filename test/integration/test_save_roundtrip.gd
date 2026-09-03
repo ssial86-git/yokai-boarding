@@ -32,6 +32,10 @@ func test_round_trip_through_file_is_identical() -> void:
 	GameState.counters["cook.r_patjuk"] = 1
 	GameState.goals_done["g_t_till"] = 2
 	GameState.festival_results["f_dongji"] = 9
+	GameState.blessings_today["y01_ttukttagi"] = 1
+	GameState.blessing_log["b_ttukttagi"] = 4
+	GameState.market_bought["seed_cabbage"] = 2
+	GameState.inventory.add("seed_radish@b_ttukttagi", 1)  # 가호 합성 id 도 창고에 그대로 남는다
 	GameState.rng.seed = 777
 	var grid := GameState.room_grid
 	assert_int(grid.add_floor(GameState.money)).is_equal(RoomGrid.Outcome.OK)
@@ -91,7 +95,25 @@ func test_round_trip_through_file_is_identical() -> void:
 	assert_int(int(GameState.counters["cook.r_patjuk"])).is_equal(1)
 	assert_int(int(GameState.goals_done["g_t_till"])).is_equal(2)
 	assert_int(int(GameState.festival_results["f_dongji"])).is_equal(9)
+	assert_int(int(GameState.blessings_today["y01_ttukttagi"])).is_equal(1)
+	assert_int(int(GameState.blessing_log["b_ttukttagi"])).is_equal(4)
+	assert_int(int(GameState.market_bought["seed_cabbage"])).is_equal(2)
+	assert_int(GameState.inventory.get_count("seed_radish@b_ttukttagi")).is_equal(1)
 	assert_str(str(GameState.pending_visitor.get("species_id"))).is_equal("g_mongdanggwi")
+
+
+## v7 에는 가호·시장 기록이 없다 → 빈 상태 (P2-S3).
+func test_v7_save_gets_empty_blessing_market_state() -> void:
+	GameState.reset_new_game()
+	var v7 := {"version": 7, "game_state": GameState.to_dict(), "clock": {"elapsed_seconds": 10.0}}
+	var state := v7["game_state"] as Dictionary
+	for key in ["blessings_today", "blessing_log", "market_bought"]:
+		state.erase(key)
+	assert_bool(SaveManager.apply_save_data(v7)).is_true()
+	assert_bool(GameState.blessings_today.is_empty()).is_true()
+	assert_bool(GameState.blessing_log.is_empty()).is_true()
+	assert_bool(GameState.market_bought.is_empty()).is_true()
+	assert_int(SaveManager.build_save_data()["version"]).is_equal(SaveManager.SAVE_VERSION)
 
 
 ## v6 에는 활동 누계·목표·명절 기록이 없다 → 빈 상태로 채워진다 (P2-S2).

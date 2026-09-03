@@ -183,11 +183,13 @@ func serve(dish_item_id: String, yokai_id: String) -> bool:
 	if not GameState.inventory.remove(dish_item_id, 1):
 		return false
 	Events.item_removed.emit(dish_item_id, 1)
-	GameState.add_buff(yokai_id, recipe.buff_stat, recipe.buff_amount)
+	# 요리 가호 (P2-S3): 기본 + 시너지(먹는 하숙생·버프 능력치)
+	var amount := recipe.buff_amount + BlessingSystem.dish_bonus(BlessingRules.blessing_of(dish_item_id), recipe, yokai_id)
+	GameState.add_buff(yokai_id, recipe.buff_stat, amount)
 	GameState.stamina.spend(DataRegistry.tuning.get_float("serve_stamina_cost", 0.0))
 	Events.message_posted.emit(DataRegistry.text("msg_served", {
-		"yokai": DataRegistry.yokai_name(yokai_id), "name": recipe.name_ko,
-		"stat": DataRegistry.text("stat_%s" % recipe.buff_stat), "amount": recipe.buff_amount}))
+		"yokai": DataRegistry.yokai_name(yokai_id), "name": DataRegistry.item_name(dish_item_id),
+		"stat": DataRegistry.text("stat_%s" % recipe.buff_stat), "amount": amount}))
 	Metrics.record("serve", {"recipe": recipe.id, "yokai": yokai_id, "stat": recipe.buff_stat})
 	Events.activity_done.emit("serve", recipe.id, 1)
 	return true

@@ -88,11 +88,13 @@ func throw_talisman() -> bool:
 	if _throw_cooldown > 0.0:
 		Events.message_posted.emit(DataRegistry.text("msg_talisman_cooldown"))
 		return false
-	if not _consume(talisman):
+	var used := _consume(talisman)
+	if used.is_empty():
 		return false
 	var player := region_manager.player
 	var projectile := TalismanProjectile.new()
 	projectile.setup(player.global_position + Vector2(float(player.facing) * 14.0, -12.0), player.facing, talisman)
+	projectile.damage += BlessingSystem.talisman_bonus(BlessingRules.blessing_of(used), talisman)  # 부적 가호 (P2-S3)
 	projectile.hit.connect(func(enemy: EnemyActor, damage: int) -> void:
 		Metrics.record("combat_hit", {"enemy": enemy.enemy.id, "source": "talisman", "damage": damage}))
 	region_manager.current_view().add_child(projectile)
@@ -105,7 +107,7 @@ func throw_talisman() -> bool:
 ## R: 귀환 부적. 어디서든 집으로.
 func use_return_talisman() -> bool:
 	var talisman := DataRegistry.get_talisman(TALISMAN_RETURN)
-	if talisman == null or not _consume(talisman):
+	if talisman == null or _consume(talisman).is_empty():
 		return false
 	_pending_exit_reason = EXIT_RETURN
 	Events.message_posted.emit(DataRegistry.text("msg_return_home"))
@@ -116,21 +118,27 @@ func use_return_talisman() -> bool:
 ## G: 채집 부적. 잠시 채집량이 는다.
 func use_gather_talisman() -> bool:
 	var talisman := DataRegistry.get_talisman(TALISMAN_GATHER)
-	if talisman == null or gather_system == null or not _consume(talisman):
+	if talisman == null or gather_system == null:
+		return false
+	var used := _consume(talisman)
+	if used.is_empty():
 		return false
 	var seconds := DataRegistry.tuning.get_float("gather_talisman_duration_seconds", 60.0)
-	gather_system.apply_bonus(talisman.power, seconds)
-	Events.message_posted.emit(DataRegistry.text("msg_gather_buff", {"seconds": roundi(seconds), "bonus": talisman.power}))
+	var power := talisman.power + BlessingSystem.talisman_bonus(BlessingRules.blessing_of(used), talisman)
+	gather_system.apply_bonus(power, seconds)
+	Events.message_posted.emit(DataRegistry.text("msg_gather_buff", {"seconds": roundi(seconds), "bonus": power}))
 	return true
 
 
-func _consume(talisman: TalismanData) -> bool:
-	if not GameState.inventory.remove(talisman.id, 1):
+## 부적 하나를 쓴다 — 가호가 붙은 것이 있으면 그것부터. 쓴 아이템 id(합성 id 가능)를 돌려주고 없으면 빈 문자열.
+func _consume(talisman: TalismanData) -> String:
+	var variants := BlessingRules.variants_in(GameState.inventory, talisman.id)
+	if variants.is_empty() or not GameState.inventory.remove(variants[0], 1):
 		Events.message_posted.emit(DataRegistry.text("msg_talisman_none", {"name": talisman.name_ko}))
-		return false
-	Events.item_removed.emit(talisman.id, 1)
+		return ""
+	Events.item_removed.emit(variants[0], 1)
 	Metrics.record("talisman_used", {"talisman": talisman.id})
-	return true
+	return variants[0]
 
 
 # --- 구역 진입·이탈 ---

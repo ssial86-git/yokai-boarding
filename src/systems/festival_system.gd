@@ -3,7 +3,7 @@ extends Node
 ## festivals.csv 의 런타임 측 (P2-S2 동지). 당일 아침: 알림 + 장식(festival_started). 저녁: 하숙비 정산 직후(rent_settled — 심사 추첨보다 앞)
 ## 팥죽을 나누고 채점·보상하며, 만점이면 그날 밤 희귀 손님을 예약한다(플래그에 종족 id). 순수 채점은 FestivalRules.
 
-const FLAG_RARE_PENDING := "festival_rare_pending"
+const FLAG_RARE_PENDING := IntakeSystem.FLAG_FORCED_VISITOR
 
 var goal_system: GoalSystem
 ## 오늘 집에 있었던 손님의 최대 수 (채점의 '손님' 항)

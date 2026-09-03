@@ -5,6 +5,7 @@ extends Node
 
 const VERB_FISH := "fish"
 const UNLOCK_TYPE_FISH := "fish"
+const FEATURE_SPOT_FORMAT := "fishing_%s"
 const TOOL_ROD := "rod"
 
 var unlock_system: UnlockSystem
@@ -51,8 +52,11 @@ func is_verb_unlocked() -> bool:
 	return unlock_system == null or unlock_system.is_target_open("verb", VERB_FISH)
 
 
+## 낚시 자리가 있고(fishing_x) 그 구역의 자리가 해금됐는가 (unlocks feature fishing_<region>, 가리키는 행이 없으면 열림).
 func has_spot(region: RegionData) -> bool:
-	return region != null and region.fishing_x > 0
+	if region == null or region.fishing_x <= 0:
+		return false
+	return unlock_system == null or unlock_system.is_feature_open(FEATURE_SPOT_FORMAT % region.id)
 
 
 ## 낚시 자리에서 보이는 안내 문구.
@@ -109,7 +113,12 @@ func _finish(hit: bool) -> String:
 		caught = Fishing.roll(Fishing.junk_only(pool), GameState.rng)
 	cancel()
 	var item_id := caught.id if caught != null else ""
-	if caught != null:
+	if caught != null and not caught.visitor_species.is_empty():
+		# 우물의 1%: 아이템 대신 그날 밤 손님이 문을 두드린다 (P2-S3)
+		GameState.flags[IntakeSystem.FLAG_FORCED_VISITOR] = caught.visitor_species
+		Events.message_posted.emit(DataRegistry.text("msg_fish_visitor", {"name": DataRegistry.species_name(caught.visitor_species)}))
+		Events.activity_done.emit("fish", item_id, 1)
+	elif caught != null:
 		GameState.inventory.add(item_id, 1)
 		Events.item_added.emit(item_id, 1)
 		var key := "msg_fish_caught" if caught.kind != Fishing.KIND_JUNK else "msg_fish_junk"

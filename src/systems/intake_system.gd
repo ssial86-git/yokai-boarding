@@ -5,6 +5,8 @@ extends Node
 
 const ERASED_VISITOR_ID := "v_erased"
 const GUEST_VISITOR_ID := "v_guest"
+## 오늘 밤 반드시 오는 손님 종족 (플래그 값 = guest_species id). 명절 만점·우물 낚시가 심는다. 심사 추첨이 소모한다
+const FLAG_FORCED_VISITOR := "forced_visitor_species"
 const JOINED_FLAG_FORMAT := "joined_%s"
 
 ## 대화 진행 중 여부를 묻는 콜백 (StorySystem.is_busy). main.gd 가 넣는다.
@@ -47,12 +49,12 @@ func roll_visitor() -> void:
 	_try_knock()
 
 
-## 명절 만점 보상 (P2-S2): 그날 밤 희귀 손님이 반드시 문을 두드린다. FestivalSystem 이 플래그 값에 종족 id 를 남긴다.
+## 예약된 손님 (P2-S2 명절 만점 · P2-S3 우물 낚시): 그날 밤 그 종족이 반드시 문을 두드린다. 플래그 값이 종족 id.
 func _festival_rare_visitor() -> VisitorRoll.Visitor:
-	var species_id := str(GameState.flags.get(FestivalSystem.FLAG_RARE_PENDING, ""))
+	var species_id := str(GameState.flags.get(FLAG_FORCED_VISITOR, ""))
 	if species_id.is_empty():
 		return null
-	GameState.flags.erase(FestivalSystem.FLAG_RARE_PENDING)
+	GameState.flags.erase(FLAG_FORCED_VISITOR)
 	var species := DataRegistry.get_guest_species(species_id)
 	if species == null:
 		return null

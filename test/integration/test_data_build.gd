@@ -81,6 +81,36 @@ func test_p2_goal_and_festival_tables_loaded_and_typed() -> void:
 	assert_int(DataRegistry.get_unlock("u_festival_dongji").expected_day).is_equal(28)
 
 
+## P2-S3 가호·시너지·시세 스키마, 회색 시장 구역, 우물 어종(손님 낚임 포함), NPC 대화.
+func test_p2_blessing_market_tables_loaded_and_typed() -> void:
+	assert_int(DataRegistry.blessings.size()).is_equal(3)
+	var ttuk := DataRegistry.blessing_of_yokai("y01_ttukttagi")
+	assert_str(ttuk.id).is_equal("b_ttukttagi")
+	assert_int(ttuk.talisman_power_bonus).is_equal(2)
+	assert_int(DataRegistry.synergies.size()).is_equal(10)
+	var positive := 0
+	var negative := 0
+	for synergy: SynergyData in DataRegistry.synergies.values():
+		if synergy.delta > 0:
+			positive += 1
+		else:
+			negative += 1
+	assert_int(positive).is_equal(6)  # 시너지 6쌍
+	assert_int(negative).is_equal(4)  # 간섭 4쌍
+	assert_int(DataRegistry.market_prices.size()).is_greater_equal(10)
+	assert_float(DataRegistry.get_market_price("seed_cabbage").buy_mult).is_equal(2.0)
+	assert_int(DataRegistry.get_market_price("seed_cabbage").stock).is_equal(3)
+	var market := DataRegistry.get_region("r_gray_market")
+	assert_str(market.kind).is_equal("market")
+	assert_int(market.merchant_x).is_greater(0)
+	assert_int(DataRegistry.get_region("r_well").fishing_x).is_greater(0)
+	assert_str(DataRegistry.get_fish("f_wet_visitor").visitor_species).is_equal("g_usanson")
+	assert_str(DataRegistry.get_fish("f_carp").visitor_species).is_equal("")
+	assert_str(DataRegistry.get_event("ev_merchant_greet").kind).is_equal("npc")
+	assert_str(DataRegistry.item_name("seed_radish@b_ttukttagi")).is_equal("[뚝] 무 씨앗")
+	assert_str(DataRegistry.get_item("seed_radish@b_ttukttagi").kind).is_equal("seed")
+
+
 ## P1 신설 스키마 10종이 로드되고 타입이 맞는지 (행 수는 콘텐츠 수를 고정하지 않도록 최소치만 본다).
 func test_p1_tables_loaded_and_typed() -> void:
 	assert_int(DataRegistry.talismans.size()).is_equal(3)

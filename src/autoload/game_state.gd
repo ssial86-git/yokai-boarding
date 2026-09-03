@@ -71,6 +71,14 @@ var goals_done: Dictionary = {}
 ## 명절 채점 결과 festival_id -> 점수
 var festival_results: Dictionary = {}
 
+# --- P2-S3: 가호·회색 시장 ---
+## 오늘 가호를 붙여 준 횟수 yokai_id -> n (하루 시작에 비운다)
+var blessings_today: Dictionary = {}
+## 가호 부여 누계 blessing_id -> n (하숙부 기록)
+var blessing_log: Dictionary = {}
+## 오늘 회색 시장에서 산 수 item_id -> n (하루 재고, 하루 시작에 비운다)
+var market_bought: Dictionary = {}
+
 
 func reset_new_game() -> void:
 	day = 1
@@ -100,6 +108,9 @@ func reset_new_game() -> void:
 	counters.clear()
 	goals_done.clear()
 	festival_results.clear()
+	blessings_today.clear()
+	blessing_log.clear()
+	market_bought.clear()
 	var start_items := _parse_levels(DataRegistry.tuning.get_string("start_items"))
 	for item_id: String in start_items:
 		inventory.add(item_id, int(start_items[item_id]))
@@ -115,6 +126,8 @@ func reset_new_game() -> void:
 ## 하루를 넘긴다 (취침 — Clock.sleep 만 부른다). 절기의 마지막 날을 넘기면 season_changed.
 func advance_day() -> void:
 	day += 1
+	blessings_today.clear()
+	market_bought.clear()
 	if calendar.advance_day():
 		Events.season_changed.emit(calendar.season_id)
 
@@ -206,6 +219,9 @@ func to_dict() -> Dictionary:
 		"counters": counters.duplicate(),
 		"goals_done": goals_done.duplicate(),
 		"festival_results": festival_results.duplicate(),
+		"blessings_today": blessings_today.duplicate(),
+		"blessing_log": blessing_log.duplicate(),
+		"market_bought": market_bought.duplicate(),
 	}
 
 
@@ -413,6 +429,9 @@ func from_dict(data: Dictionary) -> bool:
 	counters = _int_dict(data.get("counters", {}))
 	goals_done = _int_dict(data.get("goals_done", {}))
 	festival_results = _int_dict(data.get("festival_results", {}))
+	blessings_today = _int_dict(data.get("blessings_today", {}))
+	blessing_log = _int_dict(data.get("blessing_log", {}))
+	market_bought = _int_dict(data.get("market_bought", {}))
 	if data.has("rng_state"):
 		rng.state = str(data["rng_state"]).to_int()
 	else:

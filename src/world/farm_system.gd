@@ -38,11 +38,19 @@ func seed_choice() -> CropData:
 	for crop: CropData in DataRegistry.crops.values():
 		if not Farm.in_season(crop, GameState.calendar.season_id):
 			continue
-		var count := GameState.inventory.get_count(crop.seed_item)
+		var count := BlessingRules.count_variants(GameState.inventory, crop.seed_item)  # 가호 붙은 씨앗 포함
 		if count > best_count or (count == best_count and count > 0 and crop.id < best.id):
 			best = crop
 			best_count = count
 	return best
+
+
+## 이 작물을 심을 때 쓸 씨앗 아이템 id — 가호가 붙은 것이 있으면 그것부터.
+func seed_item_for(crop: CropData) -> String:
+	if crop == null:
+		return ""
+	var variants := BlessingRules.variants_in(GameState.inventory, crop.seed_item)
+	return variants[0] if not variants.is_empty() else crop.seed_item
 
 
 func prompt_for(index: int) -> String:
@@ -56,8 +64,9 @@ func prompt_for(index: int) -> String:
 			var crop := seed_choice()
 			if crop == null:
 				return DataRegistry.text("prompt_sow_none")
+			var seed_id := seed_item_for(crop)
 			return DataRegistry.text("prompt_sow", {
-				"seed": DataRegistry.item_name(crop.seed_item), "count": GameState.inventory.get_count(crop.seed_item)})
+				"seed": DataRegistry.item_name(seed_id), "count": BlessingRules.count_variants(GameState.inventory, crop.seed_item)})
 		Farm.PlotState.GROWING:
 			if plot.water >= Farm.FULL_WATER:
 				var crop := DataRegistry.get_crop(plot.crop_id)
@@ -102,19 +111,22 @@ func act(index: int) -> bool:
 			Events.message_posted.emit(DataRegistry.text("msg_tilled"))
 		Farm.PlotState.TILLED:
 			var crop := seed_choice()
-			if farm().sow(index, crop, GameState.inventory, GameState.calendar.season_id) != Farm.Outcome.OK:
+			var seed_id := seed_item_for(crop)  # 가호가 붙은 씨앗을 먼저 심는다
+			if farm().sow(index, crop, GameState.inventory, GameState.calendar.season_id, seed_id) != Farm.Outcome.OK:
 				return false
 			action = "sow"
 			crop_id = crop.id
-			Events.item_removed.emit(crop.seed_item, 1)
-			Events.message_posted.emit(DataRegistry.text("msg_sown", {"name": crop.name_ko}))
+			Events.item_removed.emit(seed_id, 1)
+			Events.message_posted.emit(DataRegistry.text("msg_sown", {"name": DataRegistry.item_name(seed_id)}))
 		Farm.PlotState.GROWING:
 			if farm().water(index) != Farm.Outcome.OK:
 				return false
 			action = "water"
 			Events.message_posted.emit(DataRegistry.text("msg_watered"))
 		Farm.PlotState.READY:
-			var result := farm().harvest(index, DataRegistry.crops, GameState.rng)
+			# 씨앗 가호의 수확 보너스 (시너지: 작물 갈래)
+			var bonus := BlessingSystem.seed_bonus(plot.blessing_id, DataRegistry.get_crop(plot.crop_id))
+			var result := farm().harvest(index, DataRegistry.crops, GameState.rng, bonus)
 			if result.is_empty():
 				return false
 			action = "harvest"
