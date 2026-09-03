@@ -223,6 +223,14 @@ func _initialize() -> void:
 	_check("menu_close_on_screen", panel_rect.end.y <= view_height + 0.5,
 		"장부 패널 아래쪽(%.0f)이 화면(%.0f) 안에 있다 — 닫기 버튼이 잘리지 않음" % [panel_rect.end.y, view_height])
 	await _shot("17_calendar_tab")
+	# --- P2-S2: 할 일 탭 + HUD 칩 ---
+	hub.call("open_tab", 4)
+	await _frames(2)
+	_check("goals_tab_rows", hub.visible and int(hub.call("row_count")) >= 8, "할 일 탭에 오늘·이번 절기(동지 준비)·장기 목표가 보인다")
+	var chip_text := str(main.get("hud").call("goals_chip_text"))
+	_check("goals_chip_shown", chip_text.begins_with("할 일 "), "HUD 오른쪽 위에 '할 일 n/m' 칩 (%s)" % chip_text)
+	_check("goal_counter_till", int((gs.get("counters") as Dictionary).get("farm.till", 0)) >= 1, "괭이질이 활동 카운터에 쌓였다")
+	await _shot("18_goals_tab")
 	hub.call("close")
 	await _frames(1)
 

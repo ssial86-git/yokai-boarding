@@ -42,6 +42,7 @@ const ACTION_TAB_INVENTORY := &"ui_tab_inventory"
 const ACTION_TAB_ROSTER := &"ui_tab_roster"
 const ACTION_TAB_LEDGER := &"ui_tab_ledger"
 const ACTION_TAB_CALENDAR := &"ui_tab_calendar"
+const ACTION_TAB_GOALS := &"ui_tab_goals"
 const ACTION_SLEEP := &"ui_sleep"
 const ACTION_PANEL := &"ui_panel_toggle"
 
@@ -58,6 +59,8 @@ var gather_system: GatherSystem
 var station_system: StationSystem
 var fishing_system: FishingSystem
 var expedition_system: ExpeditionSystem
+var goal_system: GoalSystem
+var festival_system: FestivalSystem
 var station_menu: StationMenu
 var fishing_bar: FishingBar
 var region_manager: RegionManager
@@ -124,6 +127,13 @@ func _ready() -> void:
 	expedition_system.unlock_system = unlock_system
 	expedition_system.gather_system = gather_system
 	add_child(expedition_system)
+	goal_system = GoalSystem.new()
+	goal_system.name = "GoalSystem"
+	add_child(goal_system)
+	festival_system = FestivalSystem.new()
+	festival_system.name = "FestivalSystem"
+	festival_system.goal_system = goal_system
+	add_child(festival_system)
 
 	_build_world()
 	_build_ui()
@@ -207,6 +217,7 @@ func _build_ui() -> void:
 	hud = Hud.new()
 	hud.name = "Hud"
 	hud.menu_hub = menu_hub
+	hud.goal_system = goal_system
 	ui_root.add_child(hud)
 
 	message_log = MessageLog.new()
@@ -250,6 +261,8 @@ func _build_ui() -> void:
 	fishing_bar.fishing_system = fishing_system
 	ui_root.add_child(fishing_bar)
 
+	menu_hub.goal_system = goal_system
+	menu_hub.festival_system = festival_system
 	ui_root.add_child(menu_hub)  # 장부 메뉴는 작업 메뉴보다 위, 대화창보다 아래
 
 	dialogue_box = DialogueBox.new()
@@ -316,6 +329,7 @@ func _ensure_input_actions() -> void:
 		ACTION_TAB_ROSTER: [KEY_J],
 		ACTION_TAB_LEDGER: [KEY_L],
 		ACTION_TAB_CALENDAR: [KEY_K],
+		ACTION_TAB_GOALS: [KEY_H],
 		ACTION_SLEEP: [KEY_Z],
 		ACTION_PANEL: [KEY_B],
 	}
@@ -343,6 +357,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		menu_hub.toggle(MenuHub.Tab.LEDGER)
 	elif event.is_action_pressed(ACTION_TAB_CALENDAR):
 		menu_hub.toggle(MenuHub.Tab.CALENDAR)
+	elif event.is_action_pressed(ACTION_TAB_GOALS):
+		menu_hub.toggle(MenuHub.Tab.GOALS)
 	elif event.is_action_pressed(ACTION_SLEEP):
 		if Clock.can_sleep():
 			Clock.sleep()

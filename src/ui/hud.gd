@@ -13,6 +13,8 @@ const STAMINA_BAR_HEIGHT := 6.0
 const EXPEDITION_KIND := "expedition"
 
 var menu_hub: MenuHub
+## 할 일 칩 "할 일 n/m" 의 출처 (P2-S2). main.gd 가 넣는다. 없으면 칩을 숨긴다.
+var goal_system: GoalSystem
 ## () -> bool. 대화·심사·메뉴가 열려 있으면 안내 줄을 숨긴다 (겹쳐서 반쯤 잘려 보이던 문제). main.gd 가 넣는다.
 var modal_open_check: Callable
 var _hint_text: String = ""
@@ -21,6 +23,7 @@ var _top: HBoxContainer
 var _clock_line1: Label
 var _clock_line2: Label
 var _progress: ProgressBar
+var _goals_chip: Label
 var _money_chip: Label
 var _reputation_chip: Label
 var _beds_chip: Label
@@ -57,9 +60,10 @@ func _ready() -> void:
 	for refresh_signal: Signal in [
 		Events.money_changed, Events.timeband_changed, Events.day_started,
 		Events.reputation_changed, Events.weather_changed, Events.weather_rolled, Events.guests_changed, Events.yokai_arrived,
-		Events.room_changed, Events.floor_added, Events.game_loaded,
+		Events.room_changed, Events.floor_added, Events.game_loaded, Events.goal_completed,
 	]:
 		refresh_signal.connect(func(_a: Variant = null, _b: Variant = null) -> void: refresh())
+	Events.activity_done.connect(func(_verb: String, _detail: String, _amount: int) -> void: refresh())
 	_connect_messages()
 	refresh()
 
@@ -103,6 +107,8 @@ func _build_top() -> void:
 	var chips := HBoxContainer.new()
 	chips.alignment = BoxContainer.ALIGNMENT_END
 	right.add_child(chips)
+	_goals_chip = UiStyles.text_chip(chips, "")
+	_goals_chip.get_parent().visible = false
 	_money_chip = UiStyles.text_chip(chips, "")
 	_reputation_chip = UiStyles.text_chip(chips, "")
 	_beds_chip = UiStyles.text_chip(chips, "")
@@ -201,6 +207,10 @@ func refresh() -> void:
 		"weather": DataRegistry.weather_name(GameState.weather),
 		"yin": DataRegistry.text("yin_level_%d" % clampi(GameState.yin, WeatherRoll.YIN_MIN, WeatherRoll.YIN_MAX)),
 		"region": region.name_ko if region != null else GameState.player_region})
+	if goal_system != null:
+		var summary := goal_system.summary()
+		_goals_chip.text = DataRegistry.text("chip_goals", {"done": summary.x, "total": summary.y})
+		_goals_chip.get_parent().visible = summary.y > 0
 	_money_chip.text = DataRegistry.text("chip_money", {"money": GameState.money})
 	_reputation_chip.text = DataRegistry.text("chip_reputation", {"value": GameState.reputation})
 	_beds_chip.text = DataRegistry.text("chip_beds", {
@@ -233,6 +243,11 @@ func set_prompt_bottom(bottom_px: float) -> void:
 ## 왼쪽 아래 메시지 로그가 앉을 바닥 (체력 바 위).
 func log_bottom_inset(bottom_px: float) -> float:
 	return bottom_px + _margin * 2.0 + _stamina_panel.get_combined_minimum_size().y
+
+
+## 할 일 칩 문구 (검증용). 숨겨져 있으면 빈 문자열.
+func goals_chip_text() -> String:
+	return _goals_chip.text if (_goals_chip.get_parent() as Control).visible else ""
 
 
 func prompt_text() -> String:

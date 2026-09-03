@@ -6,8 +6,12 @@ var _max_lines: int = 4
 var _fade_seconds: float = 4.0
 ## 한 줄의 최대 폭. 넘치면 줄바꿈 — 집 단면(x≈193) 위로 글자가 흘러가던 문제 (검증 에이전트 08_day2_morning)
 var _line_width: float = 180.0
-## 토스트 더미의 최대 높이. 넘치면 오래된 줄부터 지운다 — 위로 자라 시계 카드·안내 줄을 덮던 문제. main.gd 가 레이아웃 때 넣는다
-var max_height: float = INF
+## 토스트 더미의 최대 높이. 넘치면 오래된 줄부터 지운다 — 위로 자라 시계 카드·안내 줄을 덮던 문제. main.gd 가 레이아웃 때 넣는다.
+## 값이 바뀌면 이미 쌓인 줄도 바로 다듬는다 (첫 아침 토스트는 레이아웃보다 먼저 온다 — 검증 에이전트 02_morning_plain)
+var max_height: float = INF:
+	set(value):
+		max_height = value
+		_trim()
 
 
 func _ready() -> void:
@@ -39,6 +43,10 @@ func post(text: String) -> void:
 		tween.tween_interval(_fade_seconds)
 		tween.tween_property(box, "modulate:a", 0.0, 0.5)
 		tween.tween_callback(box.queue_free)
+	_trim()
+
+
+func _trim() -> void:
 	while get_child_count() > _max_lines or (get_child_count() > 1 and get_combined_minimum_size().y > max_height):
 		var oldest := get_child(0)
 		remove_child(oldest)
