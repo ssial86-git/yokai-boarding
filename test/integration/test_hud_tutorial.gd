@@ -100,6 +100,49 @@ func test_accepted_guest_gets_a_card_and_an_actor() -> void:
 	assert_int(manager.actor_count()).is_equal(GameState.residents.size() + 1)
 
 
+## ESC(ui_cancel) 는 열린 메뉴(건설·명부·하숙부·디버그)를 닫는다. 디버그 오버레이의 시간 건너뛰기도 확인.
+func test_escape_closes_menus_and_debug_time_skip() -> void:
+	var runner := scene_runner("res://scenes/main.tscn")
+	await runner.simulate_frames(1)
+	var main: Node = runner.scene()
+	var story: StorySystem = main.get("story_system")
+	_drain(story)
+	var build_menu: BuildMenu = main.get("build_menu")
+	var hud: Hud = main.get("hud")
+	build_menu.open_for_cell(Vector2i(3, 0), Vector2(100, 100))
+	assert_bool(build_menu.is_open()).is_true()
+	runner.simulate_action_pressed("ui_cancel")
+	await runner.simulate_frames(1)
+	runner.simulate_action_release("ui_cancel")
+	await runner.simulate_frames(1)
+	assert_bool(build_menu.is_open()).override_failure_message("ESC 로 건설 메뉴가 닫히지 않았다").is_false()
+	hud.ledger_panel.open()
+	hud.roster_panel.open()
+	runner.simulate_action_pressed("ui_cancel")
+	await runner.simulate_frames(1)
+	runner.simulate_action_release("ui_cancel")
+	await runner.simulate_frames(1)
+	assert_bool(hud.ledger_panel.visible and hud.roster_panel.visible).is_false()
+
+	var overlay := DebugOverlay.new()
+	main.add_child(overlay)
+	await runner.simulate_frames(1)
+	assert_int(Clock.band).is_equal(Clock.Band.MORNING)
+	overlay.skip_hour()
+	assert_float(Clock.get_hour()).is_equal_approx(7.0, 0.01)
+	overlay.skip_to_band(Clock.Band.EVENING)
+	assert_int(Clock.band).is_equal(Clock.Band.EVENING)
+	_drain(story)
+	var intake: IntakeSystem = main.get("intake_system")
+	if intake.has_pending():
+		intake.decide(Intake.Decision.DECLINE)
+	_drain(story)
+	overlay.skip_to_band(Clock.Band.DAY)  # 이미 지난 시간대 → 취침 후 다음 날 낮
+	_drain(story)
+	assert_int(GameState.day).is_equal(2)
+	assert_int(Clock.band).is_equal(Clock.Band.DAY)
+
+
 func test_message_log_and_clarity_react_to_events() -> void:
 	var runner := scene_runner("res://scenes/main.tscn")
 	await runner.simulate_frames(1)

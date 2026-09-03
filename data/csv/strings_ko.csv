@@ -137,3 +137,9 @@ msg_greeting,{name}: 오늘도 잘 부탁해요.
 msg_gather_respawned,{name}의 채집물이 다시 자랐다
 msg_stamina_out,지쳤다. 움직임이 느려진다
 msg_tool_got,{tool} Lv{level} 을(를) 손에 넣었다
+ui_debug_time_title,시간 건너뛰기 (테스트)
+ui_debug_skip_hour,+1시간
+ui_debug_skip_day,낮으로 (09:00)
+ui_debug_skip_evening,저녁으로 (17:00)
+ui_debug_skip_night,밤으로 (20:00)
+ui_debug_sleep,취침 (다음 날)

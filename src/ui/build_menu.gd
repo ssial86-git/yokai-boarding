@@ -58,6 +58,13 @@ func close() -> void:
 	_coords = Vector2i(-1, -1)
 
 
+## ESC(ui_cancel) 는 모든 메뉴에서 닫기다.
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and event.is_action_pressed(&"ui_cancel"):
+		close()
+		get_viewport().set_input_as_handled()
+
+
 # --- 내용 구성 ---
 
 func _build_locked_floor(grid: RoomGrid, floor: int) -> void:

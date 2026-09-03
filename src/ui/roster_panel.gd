@@ -78,6 +78,13 @@ func close() -> void:
 	visible = false
 
 
+## ESC(ui_cancel) 는 모든 메뉴에서 닫기다.
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and event.is_action_pressed(&"ui_cancel"):
+		close()
+		get_viewport().set_input_as_handled()
+
+
 func _add_row(text: String) -> void:
 	var label := Label.new()
 	label.text = text
