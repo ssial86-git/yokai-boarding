@@ -29,6 +29,10 @@ class FieldZone:
 	## (yokai_id: String) -> void
 	var on_drop: Callable
 
+	func _init() -> void:
+		# Label 기본값은 IGNORE 라 드롭이 이 컨트롤에 닿지 않고 패널 바닥(휴식)으로 떨어진다 — 사용자가 잡은 버그
+		mouse_filter = Control.MOUSE_FILTER_STOP
+
 	func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 		if not (data is Dictionary and (data as Dictionary).has(YokaiCard.DRAG_KEY)):
 			return false
@@ -150,6 +154,15 @@ func refresh() -> void:
 		card.refresh()
 	for card: YokaiCard in _guest_cards:
 		card.refresh()
+
+
+## 드롭존 화면 사각형 (검증용 — 실제 마우스 드래그를 재현할 때 목적지로 쓴다).
+func party_zone_rect() -> Rect2:
+	return _party_zone.get_global_rect()
+
+
+func field_zone_rect() -> Rect2:
+	return _field_zone.get_global_rect()
 
 
 ## 드롭존 세 개가 전부 뷰포트 안에 있는지 (검증용 — 카드가 늘어도 조작이 막히지 않아야 한다).

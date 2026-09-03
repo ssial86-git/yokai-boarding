@@ -46,6 +46,19 @@ func _initialize() -> void:
 	_check("assign_kitchen", int(assign.call("try_assign", "y02_eoduki", Vector2i(2, 0))) == 0, "어둑이 → 주방 배치 OK")
 	await _frames(2)
 	await _shot("03_morning_assigned")
+	# 실제 마우스 입력으로 카드 → '동행' 존 드래그 (사용자가 잡은 버그: 존이 드롭을 받지 못해 휴식으로 떨어졌다)
+	var card: Control = panel.call("get_card", "y01_ttukttagi")
+	var party_rect: Rect2 = panel.call("party_zone_rect")
+	await _drag(card.get_global_rect().get_center(), party_rect.get_center())
+	var assignment: RefCounted = gs.get("assignment")
+	_check("drag_card_to_party_zone", assignment.call("get_cell", "y01_ttukttagi") == Vector2i(-3, -3),
+		"뚝딱이 카드를 마우스로 동행 존에 끌어 놓으면 '동행'이 된다 (지금: %s)" % str(assignment.call("get_cell", "y01_ttukttagi")))
+	var field_rect: Rect2 = panel.call("field_zone_rect")
+	await _drag(card.get_global_rect().get_center(), field_rect.get_center())
+	_check("drag_card_to_field_zone", assignment.call("get_cell", "y01_ttukttagi") == Vector2i(-2, -2),
+		"같은 카드를 텃밭 존에 끌어 놓으면 '텃밭'이 된다")
+	_check("drag_back_to_rest", int(assign.call("try_rest", "y01_ttukttagi")) == 0, "다시 휴식으로 (뒤 검사는 뚝딱이가 쉬는 전제)")
+	await _frames(2)
 
 	# --- 낮: 걸어가서 일하는지 --- (Clock.Band: 0 아침 / 1 낮 / 2 저녁 / 3 밤)
 	clock.call("advance_to_band", 1)
@@ -290,6 +303,46 @@ func _shot(name: String) -> void:
 func _frames(count: int) -> void:
 	for i in count:
 		await process_frame
+
+
+# --- 실제 입력 재현 (diag_drag.gd 와 같은 방식). Input.parse_input_event 의 좌표는 창 픽셀이므로 스트레치 배율을 곱한다 ---
+
+const DRAG_STEPS := 16
+var _last_mouse: Vector2 = Vector2.ZERO
+
+
+func _drag(from_viewport: Vector2, to_viewport: Vector2) -> void:
+	var window_scale: Vector2 = Vector2(root.get_window().size) / root.get_visible_rect().size
+	var start := from_viewport * window_scale
+	var end := to_viewport * window_scale
+	_motion(start)
+	await process_frame
+	_mouse(start, MOUSE_BUTTON_LEFT, true)
+	await process_frame
+	for i in DRAG_STEPS:
+		_motion(start.lerp(end, float(i + 1) / DRAG_STEPS))
+		await process_frame
+	_mouse(end, MOUSE_BUTTON_LEFT, false)
+	await _frames(3)
+
+
+func _mouse(pos: Vector2, button: MouseButton, pressed: bool) -> void:
+	var event := InputEventMouseButton.new()
+	event.position = pos
+	event.global_position = pos
+	event.button_index = button
+	event.pressed = pressed
+	Input.parse_input_event(event)
+
+
+func _motion(pos: Vector2) -> void:
+	var event := InputEventMouseMotion.new()
+	event.position = pos
+	event.global_position = pos
+	event.relative = pos - _last_mouse  # 드래그 시작 판정은 relative 누적으로 한다
+	event.button_mask = MOUSE_BUTTON_MASK_LEFT
+	_last_mouse = pos
+	Input.parse_input_event(event)
 
 
 func _write_report() -> void:
