@@ -12,6 +12,8 @@ extends Node2D
 ##  ├ UnlockSystem           unlocks.csv 케이던스 (지역·도구·텃밭 확장 해금)
 ##  ├ FarmSystem             텃밭 행동·성장·자동 물주기
 ##  ├ GatherSystem           채집 포인트 리스폰·채집
+##  ├ StationSystem          가마솥 요리·작업장 제작·도구 벼리기·배식·판매 (실시간)
+##  ├ FishingSystem          낚시 타이밍 바·추첨
 ##  ├ World (Node2D)
 ##  │   ├ RegionManager      구역 전환 (문 통과)
 ##  │   │   ├ HouseRegion    걸어다니는 집: HouseView + YokaiManager + 바닥·계단·방 앞 상호작용·대문
@@ -28,6 +30,8 @@ extends Node2D
 ##      ├ LedgerPanel        손님 명부
 ##      ├ RosterPanel        하숙부
 ##      ├ IntakePanel        심사 카드
+##      ├ StationMenu        요리·제작·판매 메뉴 (방 앞 E)
+##      ├ FishingBar         낚시 타이밍 바
 ##      ├ DialogueBox        대화창
 ##      └ DebugOverlay       F1 (디버그 빌드 전용)
 
@@ -43,6 +47,10 @@ var audio_system: AudioSystem
 var unlock_system: UnlockSystem
 var farm_system: FarmSystem
 var gather_system: GatherSystem
+var station_system: StationSystem
+var fishing_system: FishingSystem
+var station_menu: StationMenu
+var fishing_bar: FishingBar
 var region_manager: RegionManager
 var house_region: HouseRegion
 var player: PlayerController
@@ -93,14 +101,23 @@ func _ready() -> void:
 	gather_system = GatherSystem.new()
 	gather_system.name = "GatherSystem"
 	add_child(gather_system)
+	station_system = StationSystem.new()
+	station_system.name = "StationSystem"
+	station_system.unlock_system = unlock_system
+	add_child(station_system)
+	fishing_system = FishingSystem.new()
+	fishing_system.name = "FishingSystem"
+	fishing_system.unlock_system = unlock_system
+	add_child(fishing_system)
 
 	_build_world()
 	_build_ui()
 
-	house_region.open_build_menu = func(coords: Vector2i) -> void:
-		build_menu.open_for_cell(coords, _player_screen_position())
+	house_region.open_room_menu = _open_room_menu
 	yokai_manager.talk_action = story_system.try_talk
-	player.blocked_check = func() -> bool: return build_menu.is_open()
+	player.blocked_check = func() -> bool: return build_menu.is_open() or station_menu.is_open()
+	player.movement_locked_check = fishing_system.is_active
+	region_manager.fishing_system = fishing_system
 	camera.clicked.connect(_on_world_clicked)
 	camera.hovered.connect(house_view.set_hover)
 
@@ -203,6 +220,18 @@ func _build_ui() -> void:
 	intake_panel.intake = intake_system
 	ui.add_child(intake_panel)
 
+	station_menu = StationMenu.new()
+	station_menu.name = "StationMenu"
+	station_menu.station_system = station_system
+	station_menu.open_renovate = func(coords: Vector2i) -> void:
+		build_menu.open_for_cell(coords, _player_screen_position())
+	ui.add_child(station_menu)
+
+	fishing_bar = FishingBar.new()
+	fishing_bar.name = "FishingBar"
+	fishing_bar.fishing_system = fishing_system
+	ui.add_child(fishing_bar)
+
 	dialogue_box = DialogueBox.new()
 	dialogue_box.name = "DialogueBox"
 	dialogue_box.story = story_system
@@ -269,6 +298,21 @@ func _ensure_input_actions() -> void:
 
 func _player_screen_position() -> Vector2:
 	return get_viewport().get_canvas_transform() * player.global_position
+
+
+## 방 앞에서 E: 주방 → 요리·배식, 작업장 → 제작·벼리기, 대문간 → 팔기, 그 외 → 건설·개조 메뉴.
+func _open_room_menu(coords: Vector2i) -> void:
+	var grid := house_view.grid()
+	var room_id := grid.get_room_id(coords) if grid.is_floor_built(coords.y) else ""
+	match room_id:
+		"kitchen":
+			station_menu.open_cook(coords)
+		"workshop":
+			station_menu.open_craft(coords)
+		"gate":
+			station_menu.open_sell(coords)
+		_:
+			build_menu.open_for_cell(coords, _player_screen_position())
 
 
 ## 집 안에서 방을 클릭해도 건설 메뉴가 열린다 (E 와 같은 기능 — 마우스 조작 유지).

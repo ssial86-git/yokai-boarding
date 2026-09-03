@@ -11,8 +11,10 @@ const DOOR_WIDTH := 20.0
 
 var house_view: HouseView
 var yokai_manager: YokaiManager
-## (coords: Vector2i) -> void. 방 앞에서 E: 건설 메뉴. main.gd 가 넣는다.
-var open_build_menu: Callable
+## (coords: Vector2i) -> void. 방 앞에서 E: 방 종류에 따라 요리·제작·판매·건설 메뉴. main.gd 가 넣는다.
+var open_room_menu: Callable
+## 방 종류(room id) -> 안내 문구 키. 없으면 개조 문구
+const ROOM_PROMPT_KEYS: Dictionary = {"kitchen": "prompt_kitchen", "workshop": "prompt_workshop", "gate": "prompt_gate"}
 ## (region_id: String) -> void. RegionManager 가 넣는다.
 var travel: Callable
 
@@ -136,10 +138,13 @@ func _add_room_node(coords: Vector2i, anchor_cell: Vector2i = Vector2i(-1, -1)) 
 		var g := grid()
 		if not g.is_floor_built(coords.y) or g.is_empty(coords):
 			return DataRegistry.text("prompt_build")
-		return DataRegistry.text("prompt_room", {"room": DataRegistry.room_name(g.get_room_id(coords))})
+		var room_id := g.get_room_id(coords)
+		if ROOM_PROMPT_KEYS.has(room_id):
+			return DataRegistry.text(ROOM_PROMPT_KEYS[room_id])
+		return DataRegistry.text("prompt_room", {"room": DataRegistry.room_name(room_id)})
 	node.action = func(_player: Node) -> void:
-		if open_build_menu.is_valid():
-			open_build_menu.call(coords)
+		if open_room_menu.is_valid():
+			open_room_menu.call(coords)
 	add_child(node)
 	_room_nodes[coords] = node
 

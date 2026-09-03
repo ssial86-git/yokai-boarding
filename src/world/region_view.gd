@@ -22,6 +22,18 @@ var _door_locked_color: Color = Color.DIM_GRAY
 var _doors: Array[Interactable] = []
 ## (region_id: String) -> bool. RegionManager 가 넣는다 (해금 여부).
 var is_region_open: Callable
+## 낚시 자리를 만들 때 필요. RegionManager 가 setup 전에 넣는다 (null 이면 낚시 자리 없음).
+var fishing_system: FishingSystem
+
+
+## 낚시 자리 자리표시 (물 웅덩이).
+class SpotMarker:
+	extends Node2D
+	var color: Color = Color.STEEL_BLUE
+
+	func _draw() -> void:
+		draw_rect(Rect2(Vector2(-20.0, -3.0), Vector2(40.0, 6.0)), color)
+		draw_rect(Rect2(Vector2(-20.0, -3.0), Vector2(40.0, 6.0)), Color(0.1, 0.08, 0.12), false, 1.0)
 
 
 ## travel: (target_region_id: String) -> void
@@ -45,9 +57,32 @@ func setup(region_data: RegionData, travel: Callable, farm_system: FarmSystem, g
 	if region.kind == "yard":
 		_build_farm(farm_system)
 	_build_gather_points(gather_system)
+	if fishing_system != null and fishing_system.has_spot(region):
+		_build_fishing_spot()
 	Events.farm_changed.connect(func(index: int) -> void:
 		if index < 0 and region.kind == "yard":
 			_build_farm(farm_system))
+
+
+## 낚시 자리 (P1-S3): E 로 찌 던지기, 던진 뒤 E 는 판정. 그림은 물 자리표시.
+func _build_fishing_spot() -> void:
+	var node := Interactable.new()
+	node.name = "FishingSpot"
+	var x := float(region.fishing_x)
+	node.position = Vector2(x, ground_y_at(x))
+	node.set_box(Vector2(40.0, 32.0), Vector2(0, -16.0))
+	node.interact_priority = 1
+	node.prompt_provider = func() -> String: return fishing_system.prompt_for(region.id)
+	node.enabled_check = func() -> bool: return fishing_system.is_active() or fishing_system.can_start(region.id)
+	node.action = func(_player: Node) -> void:
+		if fishing_system.is_active():
+			fishing_system.strike()
+		else:
+			fishing_system.start(region.id)
+	add_child(node)
+	var marker := SpotMarker.new()
+	marker.color = Color.html(DataRegistry.tuning.get_string("region_water_color", "5f8090"))
+	node.add_child(marker)
 
 
 func bounds() -> Rect2:

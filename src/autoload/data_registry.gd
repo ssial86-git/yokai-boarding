@@ -27,6 +27,7 @@ var enemies: Dictionary = {}  # id -> EnemyData
 var unlocks: Dictionary = {}  # id -> UnlockData
 var chains: Dictionary = {}  # content_id -> ChainData
 var metrics_events: Dictionary = {}  # id -> MetricsEventData
+var recipes: Dictionary = {}  # id -> RecipeData
 var tuning: TuningData = TuningData.new()
 var strings: StringTableData = StringTableData.new()
 
@@ -56,6 +57,7 @@ func reload() -> void:
 	unlocks = _load_dir(RESOURCE_ROOT + "unlocks")
 	chains = _load_dir(RESOURCE_ROOT + "chains")
 	metrics_events = _load_dir(RESOURCE_ROOT + "metrics_events")
+	recipes = _load_dir(RESOURCE_ROOT + "recipes")
 	tuning = _load_single(TUNING_PATH, TuningData.new()) as TuningData
 	strings = _load_single(STRINGS_PATH, StringTableData.new()) as StringTableData
 
@@ -134,6 +136,30 @@ func get_chain(content_id: String) -> ChainData:
 
 func get_metrics_event(id: String) -> MetricsEventData:
 	return metrics_events.get(id) as MetricsEventData
+
+
+func get_recipe(id: String) -> RecipeData:
+	return recipes.get(id) as RecipeData
+
+
+## 레시피를 티어, id 순으로 (메뉴 표시용).
+func recipes_sorted() -> Array[RecipeData]:
+	var result: Array[RecipeData] = []
+	for recipe: RecipeData in recipes.values():
+		result.append(recipe)
+	result.sort_custom(func(a: RecipeData, b: RecipeData) -> bool:
+		if a.tier != b.tier:
+			return a.tier < b.tier
+		return a.id < b.id)
+	return result
+
+
+## 요리(output_item) → 레시피. 배식·손님 만족은 창고의 아이템에서 레시피를 거꾸로 찾는다.
+func recipe_for_dish(item_id: String) -> RecipeData:
+	for recipe: RecipeData in recipes.values():
+		if recipe.output_item == item_id:
+			return recipe
+	return null
 
 
 ## 해금 일정을 expected_day, day_min, id 순으로 (케이던스 검사·안내 순서용).

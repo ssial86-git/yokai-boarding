@@ -56,6 +56,8 @@ static func rent_lines(rent: Dictionary) -> Array[String]:
 		parts.append(DataRegistry.text("msg_rent_buff", {"amount": bonus}))
 	if not parts.is_empty():
 		lines.append(DataRegistry.text("msg_rent_summary", {"list": ", ".join(parts)}))
+	for text: Variant in rent.get("dish_texts", []):
+		lines.append(str(text))
 	for guest: Dictionary in rent.get("departed", []):
 		var species_id := str(guest.get("species_id", ""))
 		var species := DataRegistry.get_guest_species(species_id)

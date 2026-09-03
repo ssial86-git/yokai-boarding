@@ -19,6 +19,8 @@ const ACTION_INTERACT := &"interact"
 
 ## () -> bool. 메뉴가 열려 있는 등 조작을 막아야 할 때 true. main.gd 가 넣는다.
 var blocked_check: Callable
+## () -> bool. 이동만 막고 E 는 듣는 상태 (낚시 중). main.gd 가 넣는다.
+var movement_locked_check: Callable
 var controls_enabled: bool = true
 ## 테스트·자동 플레이용 가상 입력 (-1 / 0 / 1). 실제 입력과 더해진다.
 var virtual_axis: Vector2 = Vector2.ZERO
@@ -102,6 +104,9 @@ func _physics_process(delta: float) -> void:
 		) + virtual_axis
 		axis = axis.clamp(Vector2(-1, -1), Vector2(1, 1))
 		wants_run = Input.is_action_pressed(ACTION_RUN) or virtual_run
+		if movement_locked_check.is_valid() and bool(movement_locked_check.call()):
+			axis = Vector2.ZERO
+			wants_run = false
 
 	if _ladders > 0 and axis.y != 0.0:
 		climbing = true

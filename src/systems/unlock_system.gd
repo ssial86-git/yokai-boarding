@@ -25,11 +25,11 @@ func is_unlocked(unlock_id: String) -> bool:
 
 ## 해금 행이 하나도 가리키지 않는 구역은 늘 열려 있다. 가리키는 행이 있으면 그중 하나라도 열려야 한다.
 func is_region_open(region_id: String) -> bool:
-	return _is_target_open(TYPE_REGION, region_id)
+	return is_target_open(TYPE_REGION, region_id)
 
 
 func is_feature_open(feature_id: String) -> bool:
-	return _is_target_open("feature", feature_id)
+	return is_target_open("feature", feature_id)
 
 
 func build_context() -> UnlockRules.Context:
@@ -66,7 +66,7 @@ func _apply(unlock: UnlockData) -> void:
 		Events.message_posted.emit(DataRegistry.text("msg_unlocked", {"hint": unlock.hint_ko}))
 
 
-func _is_target_open(unlock_type: String, target_id: String) -> bool:
+func is_target_open(unlock_type: String, target_id: String) -> bool:
 	var gated := false
 	for unlock: UnlockData in DataRegistry.unlocks.values():
 		if unlock.unlock_type != unlock_type or unlock.unlock_id != target_id:

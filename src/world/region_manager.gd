@@ -11,6 +11,7 @@ var house_region: HouseRegion
 var farm_system: FarmSystem
 var gather_system: GatherSystem
 var unlock_system: UnlockSystem
+var fishing_system: FishingSystem
 var camera: HouseCamera
 
 var current_region_id: String = ""
@@ -60,6 +61,7 @@ func travel(region_id: String, from_region_id: String = "", at: Vector2 = Vector
 		_outdoor = RegionView.new()
 		_outdoor.name = "Region_%s" % region_id
 		_outdoor.is_region_open = is_region_open
+		_outdoor.fishing_system = fishing_system
 		_outdoor.setup(region, func(target: String) -> void: travel(target), farm_system, gather_system)
 		add_child(_outdoor)
 		move_child(_outdoor, 0)  # 플레이어보다 뒤에 그린다

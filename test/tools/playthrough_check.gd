@@ -147,8 +147,35 @@ func _initialize() -> void:
 	_check("gathered_one", gathered, "채집 포인트 하나를 캤다")
 	await _frames(2)
 	await _shot("11_back_hill")
-	_check("travel_home", bool(region_manager.call("travel", "r_house")), "뒷산 → 집")
+	# --- P1-S3: 개울 낚시·가마솥 요리 메뉴 ---
+	var fishing_system: Node = main.get("fishing_system")
+	var station_menu: Control = main.get("station_menu")
+	(gs.get("unlocked") as Dictionary)["u_fishing"] = int(gs.get("day"))  # 4일차 해금을 미리 연다
+	(gs.get("tools") as Dictionary)["rod"] = 1
+	_check("travel_stream", bool(region_manager.call("travel", "r_stream")), "뒷산 → 개울")
+	await _frames(3)
+	var spot: Node2D = region_manager.call("current_view").get_node_or_null("FishingSpot")
+	_check("fishing_spot_exists", spot != null, "개울에 낚시 자리가 있다")
+	if spot != null:
+		player.call("place", spot.position)  # 낚시 자리 앞에 서서 E
+	_check("fishing_started", bool(fishing_system.call("start", "r_stream")), "찌를 던졌다 (타이밍 바)")
+	await _frames(3)
+	_check("fishing_prompt_strike", str(main.get("hud").call("prompt_text")) == "E: 지금!", "안내 문구가 'E: 지금!' 으로 바뀐다")
+	await _shot("12_fishing_bar")
+	var cast: RefCounted = fishing_system.get("cast")
+	if cast != null:
+		cast.set("center", float(cast.call("marker")))
+	var caught := str(fishing_system.call("strike"))
+	_check("fishing_caught", not caught.is_empty(), "구간 안에서 E → 낚았다 (%s)" % caught)
+	_check("travel_home", bool(region_manager.call("travel", "r_house")), "개울 → 집")
 	await _frames(2)
+	(gs.get("unlocked") as Dictionary)["u_recipes_tier1"] = int(gs.get("day"))
+	station_menu.call("open_cook", Vector2i(2, 0))
+	await _frames(2)
+	_check("cook_menu_open", station_menu.visible and int(station_menu.call("row_count")) >= 12, "가마솥 메뉴에 레시피 12줄이 보인다")
+	await _shot("13_cook_menu")
+	station_menu.call("close")
+	await _frames(1)
 
 	_write_report()
 

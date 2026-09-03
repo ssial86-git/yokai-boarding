@@ -50,6 +50,15 @@ var tools: Dictionary = {}
 ## 열린 unlocks.csv id -> 열린 날
 var unlocked: Dictionary = {}
 
+# --- P1-S3: 요리·제작·버프 ---
+const STATION_KITCHEN := "kitchen"
+const STATION_WORKSHOP := "workshop"
+const STATION_IDS: Array[String] = [STATION_KITCHEN, STATION_WORKSHOP]
+## 작업대 id -> WorkStation (가마솥·작업장, 각각 작업 하나)
+var stations: Dictionary = {}
+## 오늘의 배식 버프: yokai_id -> {stat: amount}. 하루 시작에 비운다
+var buffs: Dictionary = {}
+
 
 func reset_new_game() -> void:
 	day = 1
@@ -71,6 +80,8 @@ func reset_new_game() -> void:
 	farm = Farm.new(DataRegistry.tuning.get_int("farm_plots_initial"))
 	tools = _parse_levels(DataRegistry.tuning.get_string("start_tools"))
 	unlocked.clear()
+	_reset_stations()
+	buffs.clear()
 	var start_items := _parse_levels(DataRegistry.tuning.get_string("start_items"))
 	for item_id: String in start_items:
 		inventory.add(item_id, int(start_items[item_id]))
@@ -152,7 +163,43 @@ func to_dict() -> Dictionary:
 		"farm": farm.to_dict(),
 		"tools": tools.duplicate(),
 		"unlocked": unlocked.duplicate(),
+		"stations": _stations_to_dict(),
+		"buffs": buffs.duplicate(true),
 	}
+
+
+func station(station_id: String) -> WorkStation:
+	if not stations.has(station_id):
+		stations[station_id] = WorkStation.new()
+	return stations[station_id]
+
+
+## 배식 버프를 더한 오늘의 능력치. stat 은 yokai.csv 의 stat_<name> 이름 (strength/skill/sight/courage).
+func stat_of(yokai_id: String, stat: String) -> int:
+	var yokai := DataRegistry.get_yokai(yokai_id)
+	var base := int(yokai.get("stat_%s" % stat)) if yokai != null else 0
+	var bonus := int((buffs.get(yokai_id, {}) as Dictionary).get(stat, 0))
+	return base + bonus
+
+
+func add_buff(yokai_id: String, stat: String, amount: int) -> void:
+	var own: Dictionary = buffs.get(yokai_id, {})
+	own[stat] = int(own.get(stat, 0)) + amount
+	buffs[yokai_id] = own
+	Events.buff_applied.emit(yokai_id, stat, int(own[stat]))
+
+
+func _reset_stations() -> void:
+	stations.clear()
+	for station_id in STATION_IDS:
+		stations[station_id] = WorkStation.new()
+
+
+func _stations_to_dict() -> Dictionary:
+	var result: Dictionary = {}
+	for station_id: String in stations:
+		result[station_id] = (stations[station_id] as WorkStation).to_dict()
+	return result
 
 
 ## 도구 갈래를 level 로 올린다 (내리지는 않는다). 올랐으면 true.
@@ -297,6 +344,20 @@ func from_dict(data: Dictionary) -> bool:
 	tools = _int_dict(data.get("tools", {})) if data.has("tools") \
 		else _parse_levels(DataRegistry.tuning.get_string("start_tools"))
 	unlocked = _int_dict(data.get("unlocked", {}))
+	_reset_stations()
+	var stations_data: Variant = data.get("stations", {})
+	if stations_data is Dictionary:
+		for station_id: Variant in (stations_data as Dictionary):
+			var raw: Variant = (stations_data as Dictionary)[station_id]
+			if raw is Dictionary and not station(str(station_id)).from_dict(raw as Dictionary):
+				return false
+	buffs.clear()
+	var buffs_data: Variant = data.get("buffs", {})
+	if buffs_data is Dictionary:
+		for yokai_id: Variant in (buffs_data as Dictionary):
+			var raw: Variant = (buffs_data as Dictionary)[yokai_id]
+			if raw is Dictionary:
+				buffs[str(yokai_id)] = _int_dict(raw as Dictionary)
 	if data.has("rng_state"):
 		rng.state = str(data["rng_state"]).to_int()
 	else:

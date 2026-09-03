@@ -58,7 +58,20 @@ func settle_rent(condition_max: int) -> Dictionary:
 	var day := GameState.day
 	var residents := Rent.settle_residents(GameState.residents, DataRegistry.yokai, DataRegistry.items, day, GameState.rng)
 	var guests := Rent.settle_guests(GameState.guests, DataRegistry.guest_species, DataRegistry.visitors, day)
-	var money := residents.money + guests.money - guests.mishap_money
+	# 손님 만족 (P1-S3 요리 3중 용도): 떠나는 손님이 좋아하는 요리가 창고에 있으면 먹고 돈을 더 낸다
+	var dish_bonus := 0
+	var dish_texts: Array[String] = []
+	var bonus_each := DataRegistry.tuning.get_int("guest_dish_bonus_money")
+	for guest in guests.departed:
+		var species := DataRegistry.get_guest_species(str(guest.get("species_id", "")))
+		var recipe := DataRegistry.get_recipe(species.liked_recipe) if species != null else null
+		if recipe == null or not GameState.inventory.remove(recipe.output_item, 1):
+			continue
+		Events.item_removed.emit(recipe.output_item, 1)
+		dish_bonus += bonus_each
+		dish_texts.append(DataRegistry.text("msg_guest_liked_dish", {
+			"guest": species.name_ko, "dish": recipe.name_ko, "money": bonus_each}))
+	var money := residents.money + guests.money + dish_bonus - guests.mishap_money
 	var items: Dictionary = residents.items.duplicate()
 	for item_id: String in guests.items:
 		items[item_id] = int(items.get(item_id, 0)) + int(guests.items[item_id])
@@ -78,7 +91,9 @@ func settle_rent(condition_max: int) -> Dictionary:
 		Events.guests_changed.emit()
 
 	var summary := {
-		"money": residents.money + guests.money,
+		"money": residents.money + guests.money + dish_bonus,
+		"dish_bonus": dish_bonus,
+		"dish_texts": dish_texts,
 		"items": items,
 		"condition_bonus": bonus,
 		"mishap_money": guests.mishap_money,

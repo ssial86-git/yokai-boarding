@@ -68,6 +68,15 @@ signal tool_changed(kind: String, level: int)
 ## unlocks.csv 의 항목이 열렸다.
 signal unlocked(unlock_id: String)
 
+# --- 요리·제작·낚시 (P1-S3) ---
+## 작업대(kitchen/workshop)의 작업이 시작·완료됐다.
+signal station_changed(station_id: String)
+signal fishing_started(region_id: String)
+## item_id 가 비어 있으면 놓친 것.
+signal fishing_ended(region_id: String, item_id: String)
+## 배식으로 오늘 능력치가 올랐다 (amount 는 누적 후 값).
+signal buff_applied(yokai_id: String, stat: String, amount: int)
+
 # --- 세이브 ---
 signal game_saved(slot: int)
 signal game_loaded(slot: int)
