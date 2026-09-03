@@ -20,6 +20,12 @@ func _drain(story: StorySystem, intake: IntakeSystem) -> void:
 			return
 
 
+func _physics_frames(count: int) -> void:
+	var tree := Engine.get_main_loop() as SceneTree
+	for i in count:
+		await tree.physics_frame
+
+
 func _next_day(story: StorySystem, intake: IntakeSystem) -> void:
 	Clock.advance_to_band(Clock.Band.EVENING)
 	_drain(story, intake)
@@ -69,6 +75,23 @@ func test_farm_cycle_then_gather_on_back_hill() -> void:
 			plots += 1
 	assert_int(plots).is_equal(DataRegistry.tuning.get_int("farm_plots_initial"))
 	assert_float(player.global_position.y).is_equal(0.0)
+
+	# 회귀: 마당에서 집의 방 앞 상호작용·벽이 남아 있으면 안 된다 (사용자가 잡은 버그 — 마당에서 건설 메뉴가 뜸)
+	var house_region: HouseRegion = main.get("house_region")
+	assert_int(house_region.process_mode).is_equal(Node.PROCESS_MODE_DISABLED)
+	# headless 에서는 process 프레임이 물리 틱보다 빠르므로 감지·이동은 물리 프레임으로 기다린다
+	player.place(Vector2(100.0, 0.0))  # 집 좌표계라면 대문간·객실 칸 앞
+	await _physics_frames(4)
+	assert_bool(player.current_target == null or player.current_target is FarmPlotNode) \
+		.override_failure_message("마당에서 집 상호작용 대상이 잡혔다: %s" % (player.current_target.name if player.current_target != null else "")).is_true()
+	player.place(Vector2(240.0, 0.0))  # 집 오른쪽 벽(x=256) 자리를 지나 걸을 수 있어야 한다
+	player.virtual_axis = Vector2.RIGHT
+	for i in 120:
+		await _physics_frames(1)
+		if player.global_position.x > 270.0:
+			break
+	player.virtual_axis = Vector2.ZERO
+	assert_float(player.global_position.x).is_greater(270.0)
 
 	# 괭이질 → 파종(무 씨앗 3→2) → 물주기
 	assert_bool(farm_system.act(0)).is_true()

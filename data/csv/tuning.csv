@@ -77,9 +77,9 @@ metrics_enabled,true,bool,내장 지표 JSONL(user://metrics/session_*.jsonl) �
 player_start_region,r_house,string,새 게임 플레이어 시작 구역(regions.csv id)
 player_start_x,32,float,시작 구역 안 플레이어 x(px). 하숙집은 대문간 칸 가운데
 player_start_y,0,float,시작 구역 안 플레이어 y(px)
-player_walk_speed_px,70,float,플레이어 걷기 속도(px/초) — 손맛 조정 대상
-player_run_speed_px,120,float,플레이어 달리기 속도(px/초). 스태미너를 소모한다
-player_climb_speed_px,55,float,사다리·계단 오르내리기 속도(px/초)
+player_walk_speed_px,140,float,플레이어 걷기 속도(px/초). 테스트용 임시 2배 — 정식값 70 (2026-09-03 사용자 요청)
+player_run_speed_px,240,float,플레이어 달리기 속도(px/초). 스태미너를 소모한다. 테스트용 임시 2배 — 정식값 120
+player_climb_speed_px,110,float,사다리·계단 오르내리기 속도(px/초). 테스트용 임시 2배 — 정식값 55
 player_gravity_px,900,float,중력 가속(px/초²)
 player_max_fall_speed_px,400,float,낙하 최고 속도(px/초)
 player_interact_radius_px,20,float,상호작용 대상을 잡는 반경(px)

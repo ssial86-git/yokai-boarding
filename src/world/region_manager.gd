@@ -50,10 +50,13 @@ func travel(region_id: String, from_region_id: String = "", at: Vector2 = Vector
 	if _outdoor != null:
 		_outdoor.queue_free()
 		_outdoor = null
+	# 숨길 때는 처리도 끈다 — 보이지 않아도 방 앞 상호작용 영역·벽 충돌체가 마당 좌표에 남아 있으면 안 된다
 	if region_id == HOUSE_REGION_ID:
 		house_region.visible = true
+		house_region.process_mode = Node.PROCESS_MODE_INHERIT
 	else:
 		house_region.visible = false
+		house_region.process_mode = Node.PROCESS_MODE_DISABLED
 		_outdoor = RegionView.new()
 		_outdoor.name = "Region_%s" % region_id
 		_outdoor.is_region_open = is_region_open
