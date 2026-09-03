@@ -18,9 +18,11 @@ class Plot:
 	var growth: float = 0.0
 	## 오늘 준 물의 양 (1.0 = 하루치)
 	var water: float = 0.0
+	## 심은 씨앗에 붙어 있던 가호 (blessings.csv id). 없으면 빈 문자열 (P2-S3)
+	var blessing_id: String = ""
 
 	func to_dict() -> Dictionary:
-		return {"state": state, "crop_id": crop_id, "growth": growth, "water": water}
+		return {"state": state, "crop_id": crop_id, "growth": growth, "water": water, "blessing": blessing_id}
 
 	static func from_dict(data: Dictionary) -> Plot:
 		var plot := Plot.new()
@@ -28,6 +30,7 @@ class Plot:
 		plot.crop_id = str(data.get("crop_id", ""))
 		plot.growth = maxf(float(data.get("growth", 0.0)), 0.0)
 		plot.water = clampf(float(data.get("water", 0.0)), 0.0, FULL_WATER)
+		plot.blessing_id = str(data.get("blessing", ""))
 		return plot
 
 
@@ -63,7 +66,8 @@ func till(index: int) -> Outcome:
 
 
 ## 씨앗(crop.seed_item)을 인벤토리에서 하나 쓴다. season_key(절기 id)를 주면 제철이 아닌 작물은 심지 못한다 (P2-S1).
-func sow(index: int, crop: CropData, inventory: Inventory, season_key: String = "") -> Outcome:
+## seed_item_id 를 주면 그 아이템(가호가 붙은 합성 id 가능)을 쓰고 가호를 칸에 남긴다 (P2-S3).
+func sow(index: int, crop: CropData, inventory: Inventory, season_key: String = "", seed_item_id: String = "") -> Outcome:
 	var plot := get_plot(index)
 	if plot == null:
 		return Outcome.OUT_OF_RANGE
@@ -73,12 +77,14 @@ func sow(index: int, crop: CropData, inventory: Inventory, season_key: String = 
 		return Outcome.NOT_TILLED
 	if not in_season(crop, season_key):
 		return Outcome.OUT_OF_SEASON
-	if not inventory.remove(crop.seed_item, 1):
+	var seed_id := seed_item_id if not seed_item_id.is_empty() else crop.seed_item
+	if BlessingRules.base_id(seed_id) != crop.seed_item or not inventory.remove(seed_id, 1):
 		return Outcome.NO_SEED
 	plot.state = PlotState.GROWING
 	plot.crop_id = crop.id
 	plot.growth = 0.0
 	plot.water = 0.0
+	plot.blessing_id = BlessingRules.blessing_of(seed_id)
 	return Outcome.OK
 
 
@@ -107,20 +113,23 @@ func water_all(amount: float) -> int:
 	return watered
 
 
-## 수확물 {"item": id, "count": n}. 실패하면 빈 Dictionary. 수확한 칸은 갈아 둔 상태로 남는다.
-func harvest(index: int, crop_catalog: Dictionary, rng: RandomNumberGenerator) -> Dictionary:
+## 수확물 {"item": id, "count": n, "blessing": 가호 id}. 실패하면 빈 Dictionary. 수확한 칸은 갈아 둔 상태로 남는다.
+## yield_bonus 는 씨앗 가호의 수확 보너스 (FarmSystem 이 계산해 넘긴다).
+func harvest(index: int, crop_catalog: Dictionary, rng: RandomNumberGenerator, yield_bonus: int = 0) -> Dictionary:
 	var plot := get_plot(index)
 	if plot == null or plot.state != PlotState.READY:
 		return {}
 	var crop := crop_catalog.get(plot.crop_id) as CropData
 	if crop == null:
 		return {}
-	var count := rng.randi_range(mini(crop.yield_min, crop.yield_max), maxi(crop.yield_min, crop.yield_max))
+	var count := rng.randi_range(mini(crop.yield_min, crop.yield_max), maxi(crop.yield_min, crop.yield_max)) + maxi(yield_bonus, 0)
+	var blessing := plot.blessing_id
 	plot.state = PlotState.TILLED
 	plot.crop_id = ""
 	plot.growth = 0.0
 	plot.water = 0.0
-	return {"item": crop.harvest_item, "count": maxi(count, 1)}
+	plot.blessing_id = ""
+	return {"item": crop.harvest_item, "count": maxi(count, 1), "blessing": blessing}
 
 
 ## 하루 끝: 물 비율만큼 자라고 물은 마른다. 다 자란 칸 index 목록을 돌려준다.

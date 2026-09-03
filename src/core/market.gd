@@ -17,11 +17,11 @@ static func unit_price(item: ItemData, ratio: float) -> int:
 	return maxi(int(floor(item.base_value * ratio + 0.5)), 1)
 
 
-## 창고에서 팔 수 있는 아이템 id 를 이름 순으로.
+## 창고에서 팔 수 있는 아이템 id 를 이름 순으로. 가호 합성 id 는 기본 아이템으로 판정한다.
 static func sellable_ids(inventory: Inventory, items_catalog: Dictionary) -> Array[String]:
 	var result: Array[String] = []
 	for item_id: String in inventory.items():
-		if is_sellable(items_catalog.get(item_id) as ItemData):
+		if is_sellable(items_catalog.get(BlessingRules.base_id(item_id)) as ItemData):
 			result.append(item_id)
 	result.sort()
 	return result
@@ -29,7 +29,7 @@ static func sellable_ids(inventory: Inventory, items_catalog: Dictionary) -> Arr
 
 ## count 개를 판다. 판 돈을 돌려주고 실패(없음·불가)면 0.
 static func sell(inventory: Inventory, items_catalog: Dictionary, item_id: String, count: int, ratio: float) -> int:
-	var item := items_catalog.get(item_id) as ItemData
+	var item := items_catalog.get(BlessingRules.base_id(item_id)) as ItemData
 	var price := unit_price(item, ratio)
 	if price <= 0 or count <= 0 or not inventory.remove(item_id, count):
 		return 0

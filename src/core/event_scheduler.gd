@@ -3,6 +3,8 @@ extends RefCounted
 ## events.csv 조건(시간대·날짜·입주·호감도·소지품·플래그·1회) 을 평가해 지금 띄울 이벤트를 고른다.
 
 const TIMEBAND_ANY := "any"
+## 말을 걸 때만 뜨는 NPC 대화 (P2-S3)
+const KIND_NPC := "npc"
 
 
 class Context:
@@ -42,6 +44,9 @@ static func is_eligible(event: EventData, ctx: Context) -> bool:
 static func eligible(events: Dictionary, ctx: Context) -> Array[EventData]:
 	var result: Array[EventData] = []
 	for event: EventData in events.values():
+		# NPC 대화(kind npc)는 시간대 트리거로 뜨지 않는다 — 말을 걸 때만 (P2-S3 회색 장꾼)
+		if event.kind == KIND_NPC:
+			continue
 		if is_eligible(event, ctx):
 			result.append(event)
 	result.sort_custom(func(a: EventData, b: EventData) -> bool:
