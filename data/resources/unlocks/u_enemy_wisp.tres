@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_enemy_wisp"
+day_min = 3
+expected_day = 3
+timeband = "day"
+condition = "unlock:u_ash_field"
+unlock_type = "enemy"
+unlock_id = "e_ash_wisp"
+hint_ko = "잿불 도깨비불이 떠돈다. 동료가 알아서 싸운다."

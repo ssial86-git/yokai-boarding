@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RegionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/region_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_ash_field"
+name_ko = "잿빛 들"
+realm = "demon"
+kind = "expedition"
+parent_id = "r_well"
+gather_point_count = 8
+gather_pool = []
+enemy_pool = ["e_ash_wisp", "e_cinder_hound"]
+boss_id = ""
+stamina_enter_cost = 15
+in_p1 = true

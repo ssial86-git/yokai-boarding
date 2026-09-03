@@ -7,3 +7,6 @@ charm,부적,misc,20
 scrap,쇠부스러기,material,10
 doodle,낙서,misc,3
 record_piece,기록 조각,key,0
+t_throw,투척 부적,talisman,15
+t_gather,채집 부적,talisman,12
+t_return,귀환 부적,talisman,20

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_ledger"
+day_min = 1
+expected_day = 1
+timeband = "night"
+condition = ""
+unlock_type = "event"
+unlock_id = "tut_night"
+hint_ko = "아버지의 하숙부를 찾았다."

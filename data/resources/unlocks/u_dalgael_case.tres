@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_dalgael_case"
+day_min = 4
+expected_day = 5
+timeband = "evening"
+condition = ""
+unlock_type = "yokai"
+unlock_id = "y03_dalgael"
+hint_ko = "빈 카드의 손님 — 달갤 사건. 심사가 무엇인지 배운다."

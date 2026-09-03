@@ -1,0 +1,4 @@
+content_type,content_id,use1,use2,use3
+talisman,t_throw,combat:ash_field,sell:market,quest:y01_act3
+talisman,t_gather,gather:back_hill,sell:market,gift:y02_eoduki
+talisman,t_return,travel:ash_field,sell:market,event:y03_act2

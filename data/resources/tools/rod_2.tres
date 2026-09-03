@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ToolData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/tool_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "rod_2"
+kind = "rod"
+level = 2
+name_ko = "실 감은 낚싯대"
+stamina_cost = 3
+power = 2
+upgrade_cost = ["wood:2", "cloth:2"]
+upgrade_from = "rod_1"

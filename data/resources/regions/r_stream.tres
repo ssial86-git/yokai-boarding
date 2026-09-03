@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="RegionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/region_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_stream"
+name_ko = "개울"
+realm = "mortal"
+kind = "wild"
+parent_id = "r_back_hill"
+gather_point_count = 2
+gather_pool = []
+enemy_pool = []
+boss_id = ""
+stamina_enter_cost = 3
+in_p1 = true

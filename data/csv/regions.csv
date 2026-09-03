@@ -1,0 +1,7 @@
+id,name_ko,realm,kind,parent_id,gather_point_count,gather_pool,enemy_pool,boss_id,stamina_enter_cost,in_p1
+r_yard,마당,mortal,yard,,0,,,,0,true
+r_back_hill,뒷산,mortal,wild,,8,,,,5,true
+r_stream,개울,mortal,wild,r_back_hill,2,,,,3,true
+r_well,우물 아래,mortal,gate,r_yard,0,,,,0,true
+r_ash_field,잿빛 들,demon,expedition,r_well,8,,e_ash_wisp;e_cinder_hound,,15,true
+r_ash_field_deep,잿빛 들 심부,demon,expedition,r_ash_field,0,,e_ash_wisp;e_cinder_hound,e_ash_warden,10,true

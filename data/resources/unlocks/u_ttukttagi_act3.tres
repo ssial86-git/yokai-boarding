@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_ttukttagi_act3"
+day_min = 9
+expected_day = 11
+timeband = "night"
+condition = "affinity:y01_ttukttagi>=2"
+unlock_type = "event"
+unlock_id = "y01_act3"
+hint_ko = "뚝딱이의 마지막 사연."

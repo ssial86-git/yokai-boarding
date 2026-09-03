@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """CSV -> Godot .tres 빌더 (data/csv -> data/resources).
 
-검증 순서: 필수 컬럼 존재 -> 타입 변환 -> 키 중복 -> 참조 무결성.
+검증 순서: 필수 컬럼 존재 -> 타입 변환 -> 키 중복 -> 참조 무결성 -> 대화 그래프 -> 해금 조건 -> 사슬(용도 3칸).
 하나라도 실패하면 어느 파일의 어느 행이 문제인지 출력하고 종료 코드 1로 중단한다.
-스키마는 docs/decisions/2026-09-02_csv_schema_v1.md 참조.
+스키마는 docs/decisions/2026-09-02_csv_schema_v1.md, P1 신설 스키마는 docs/decisions/2026-09-03_p1_s1_realtime_clock_and_schema.md 참조.
 
 사용:  python tools/data/build_resources.py [--check]   (--check 는 검증만, 파일 미생성)
 """
@@ -28,7 +28,7 @@ OUT_DIR = ROOT / "data" / "resources"
 SCRIPT_DIR = "res://src/core/resources/"
 
 ENUMS: dict[str, set[str]] = {
-    "item_kind": {"food", "material", "misc", "key"},
+    "item_kind": {"food", "material", "misc", "key", "talisman", "seed", "crop", "fish"},
     "rent_type": {"money", "items", "errand", "buff", "info", "none"},
     "rarity": {"common", "uncommon", "rare"},
     "room_kind": {"lodging", "production", "service", "gate", "storage", "empty"},
@@ -38,12 +38,46 @@ ENUMS: dict[str, set[str]] = {
     "visitor_kind": {"guest", "troublemaker", "erased"},
     "event_kind": {"tutorial", "story", "arrival"},
     "timeband": {"morning", "day", "evening", "night", "any"},
+    # --- P1 신설 ---
+    "realm": {"mortal", "demon", "both"},
+    "material_source": {"gather", "chop", "mine", "drop", "fish", "farm", "craft"},
+    "tool_kind": {"none", "hoe", "axe", "pickaxe", "rod"},
+    "season": {"any", "spring", "summer", "autumn", "winter"},
+    "yin_condition": {"any", "low", "high"},
+    "fish_kind": {"fish", "junk"},
+    "talisman_effect": {"throw", "gather", "return"},
+    "region_kind": {"yard", "wild", "gate", "expedition"},
+    "enemy_tier": {"normal", "boss"},
+    "unlock_type": {"region", "tool", "talisman", "enemy", "yokai", "event", "crop", "material", "fish", "verb", "feature"},
+    "verb": {"walk", "gather", "farm", "cook", "fish", "craft", "talk", "intake", "assign", "build", "explore", "fight", "sleep"},
+    "chain_content_type": {"material", "crop", "talisman", "fish", "recipe"},
+    "chain_use_kind": {"cook", "craft", "sell", "gift", "buff", "quest", "feed", "bait", "decor", "combat", "gather", "travel", "upgrade", "event"},
+    "metrics_category": {"session", "day", "house", "economy", "intake", "story", "save", "verb"},
 }
 
 # 대사 효과 문법: affinity:+1 / item:<id>:<±n> / flag:<name> / money:<±n>  (세미콜론으로 여러 개)
 EFFECT_PATTERN = re.compile(r"^(affinity:[+-]?\d+|item:[a-z0-9_]+:[+-]?\d+|flag:[a-z0-9_]+|money:[+-]?\d+)$")
+# 해금 조건 문법 (세미콜론 AND): flag:<name> / affinity:<yokai>>=<n> / unlock:<id> / resident:<yokai> / item:<id>>=<n>
+CONDITION_PATTERN = re.compile(
+    r"^(flag:[a-z0-9_]+|affinity:[a-z0-9_]+>=\d+|unlock:[a-z0-9_]+|resident:[a-z0-9_]+|item:[a-z0-9_]+>=\d+)$"
+)
+ID_PATTERN = re.compile(r"^[a-z0-9_]+$")
+COST_PATTERN = re.compile(r"^[a-z0-9_]+:\d+$")
 DIALOGUE_END = "end"
 SPEAKER_PLAYER = "player"
+LIST_SEPARATOR = ";"
+
+# 해금 대상 타입 -> 참조 테이블. verb 는 ENUMS["verb"], feature 는 자유 id.
+UNLOCK_REF_TABLES: dict[str, str] = {
+    "region": "regions", "tool": "tools", "talisman": "talismans", "enemy": "enemies", "yokai": "yokai",
+    "event": "events", "crop": "crops", "material": "materials", "fish": "fish",
+}
+# 사슬 대상 타입 -> 참조 테이블. recipes 테이블이 생기면 자동으로 검증 대상에 든다.
+CHAIN_REF_TABLES: dict[str, str] = {
+    "material": "materials", "crop": "crops", "talisman": "talismans", "fish": "fish", "recipe": "recipes",
+}
+# 사슬 행이 반드시 있어야 하는 콘텐츠 (docs/01 v3 5절: 재료·작물·요리·부적). fish 는 대상이 아니다.
+CHAIN_COVERED_TYPES: tuple[str, ...] = ("material", "crop", "talisman", "recipe")
 
 
 def parse_rent_item(value: str) -> str:
@@ -59,6 +93,45 @@ def parse_effects(value: str) -> str:
     for part in filter(None, (p.strip() for p in v.split(";"))):
         if not EFFECT_PATTERN.match(part):
             raise ValueError(f"effect 문법 오류: {part!r}")
+    return v
+
+
+def parse_condition(value: str) -> str:
+    v = value.strip()
+    for part in filter(None, (p.strip() for p in v.split(LIST_SEPARATOR))):
+        if not CONDITION_PATTERN.match(part):
+            raise ValueError(f"condition 문법 오류: {part!r} (flag:x / affinity:y>=n / unlock:u / resident:y / item:i>=n)")
+    return v
+
+
+def parse_id_list(value: str) -> list[str]:
+    """세미콜론으로 나눈 id 목록. 빈 값은 빈 목록."""
+    result: list[str] = []
+    for part in filter(None, (p.strip() for p in value.split(LIST_SEPARATOR))):
+        if not ID_PATTERN.match(part):
+            raise ValueError(f"id 형식 오류: {part!r}")
+        result.append(part)
+    return result
+
+
+def parse_cost_list(value: str) -> list[str]:
+    """'item_id:n' 목록."""
+    result: list[str] = []
+    for part in filter(None, (p.strip() for p in value.split(LIST_SEPARATOR))):
+        if not COST_PATTERN.match(part):
+            raise ValueError(f"비용 형식 오류: {part!r} (item_id:n)")
+        result.append(part)
+    return result
+
+
+def parse_use(value: str) -> str:
+    """사슬 용도 'kind:detail'. 비어 있으면 빈 문자열 (3칸 검사는 check_chains 가 한다)."""
+    v = value.strip()
+    if not v:
+        return v
+    kind, sep, detail = v.partition(":")
+    if not sep or kind not in ENUMS["chain_use_kind"] or not ID_PATTERN.match(detail):
+        raise ValueError(f"use 형식 오류: {v!r} (kind:detail, kind ∈ {sorted(ENUMS['chain_use_kind'])})")
     return v
 
 
@@ -93,11 +166,17 @@ def parse_str(value: str) -> str:
     return value.strip()
 
 
+def cost_ids(value: list[str]) -> list[str]:
+    return [part.split(":")[0] for part in value]
+
+
 @dataclass
 class Column:
     name: str
     parse: Callable[[str], Any]
     ref: str | None = None  # 참조 대상 테이블 이름 (빈 값은 '참조 없음'으로 허용)
+    # 참조 검사에 쓸 id 를 파싱 값에서 뽑는다. 기본은 값 하나, 목록 컬럼은 목록 그대로, 비용 목록은 item 부분.
+    ref_ids: Callable[[Any], list[str]] = lambda v: [v] if v else []
 
 
 @dataclass
@@ -310,6 +389,169 @@ TABLES: list[Table] = [
             Column("title_ko", parse_str),
         ],
     ),
+    # ------------------------------------------------------------ P1 신설 (docs/01 v3 5절)
+    Table(
+        name="materials",
+        csv_file="materials.csv",
+        script_class="MaterialData",
+        script_file="material_data.gd",
+        columns=[
+            Column("id", parse_str, ref="items"),  # 인벤토리 공용이므로 items.csv 에도 있어야 한다
+            Column("name_ko", parse_str),
+            Column("realm", parse_enum("realm")),
+            Column("source", parse_enum("material_source")),
+            Column("tool_kind", parse_enum("tool_kind")),
+            Column("min_tool_level", int),
+            Column("season", parse_enum("season")),
+            Column("yin_condition", parse_enum("yin_condition")),
+            Column("rarity", parse_enum("rarity")),
+        ],
+    ),
+    Table(
+        name="crops",
+        csv_file="crops.csv",
+        script_class="CropData",
+        script_file="crop_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("realm", parse_enum("realm")),
+            Column("seed_item", parse_str, ref="items"),
+            Column("harvest_item", parse_str, ref="items"),
+            Column("grow_days", int),
+            Column("water_per_day", int),
+            Column("yield_min", int),
+            Column("yield_max", int),
+            Column("yin_growth_bonus", float),
+            Column("season", parse_enum("season")),
+        ],
+    ),
+    Table(
+        name="fish",
+        csv_file="fish.csv",
+        script_class="FishData",
+        script_file="fish_data.gd",
+        columns=[
+            Column("id", parse_str, ref="items"),
+            Column("name_ko", parse_str),
+            Column("kind", parse_enum("fish_kind")),
+            Column("region_id", parse_str, ref="regions"),
+            Column("weight", int),
+            Column("timeband", parse_enum("timeband")),
+            Column("min_rod_level", int),
+        ],
+    ),
+    Table(
+        name="talismans",
+        csv_file="talismans.csv",
+        script_class="TalismanData",
+        script_file="talisman_data.gd",
+        columns=[
+            Column("id", parse_str, ref="items"),
+            Column("name_ko", parse_str),
+            Column("effect", parse_enum("talisman_effect")),
+            Column("cooldown_seconds", float),
+            Column("power", int),
+            Column("range_px", int),
+            Column("craft_cost", parse_cost_list, ref="items", ref_ids=cost_ids),
+            Column("craft_seconds", float),
+        ],
+    ),
+    Table(
+        name="tools",
+        csv_file="tools.csv",
+        script_class="ToolData",
+        script_file="tool_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("kind", parse_enum("tool_kind")),
+            Column("level", int),
+            Column("name_ko", parse_str),
+            Column("stamina_cost", int),
+            Column("power", int),
+            Column("upgrade_cost", parse_cost_list, ref="items", ref_ids=cost_ids),
+            Column("upgrade_from", parse_str, ref="tools"),
+        ],
+    ),
+    Table(
+        name="regions",
+        csv_file="regions.csv",
+        script_class="RegionData",
+        script_file="region_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("realm", parse_enum("realm")),
+            Column("kind", parse_enum("region_kind")),
+            Column("parent_id", parse_str, ref="regions"),
+            Column("gather_point_count", int),
+            Column("gather_pool", parse_id_list, ref="materials", ref_ids=lambda v: v),
+            Column("enemy_pool", parse_id_list, ref="enemies", ref_ids=lambda v: v),
+            Column("boss_id", parse_str, ref="enemies"),
+            Column("stamina_enter_cost", int),
+            Column("in_p1", parse_bool),
+        ],
+    ),
+    Table(
+        name="enemies",
+        csv_file="enemies.csv",
+        script_class="EnemyData",
+        script_file="enemy_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("tier", parse_enum("enemy_tier")),
+            Column("hp", int),
+            Column("attack", int),
+            Column("speed_px", float),
+            Column("aggro_radius_px", int),
+            Column("drop_material", parse_str, ref="materials"),
+            Column("drop_chance", float),
+            Column("sprite_size", parse_sprite_size),
+        ],
+    ),
+    Table(
+        name="unlocks",
+        csv_file="unlocks.csv",
+        script_class="UnlockData",
+        script_file="unlock_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("day_min", int),
+            Column("expected_day", int),
+            Column("timeband", parse_enum("timeband")),
+            Column("condition", parse_condition),
+            Column("unlock_type", parse_enum("unlock_type")),
+            Column("unlock_id", parse_str),  # 타입별 참조는 check_unlocks
+            Column("hint_ko", parse_str),
+        ],
+    ),
+    Table(
+        name="chains",
+        csv_file="chains.csv",
+        script_class="ChainData",
+        script_file="chain_data.gd",
+        key="content_id",
+        columns=[
+            Column("content_type", parse_enum("chain_content_type")),
+            Column("content_id", parse_str),  # 타입별 참조는 check_chains
+            Column("use1", parse_use),
+            Column("use2", parse_use),
+            Column("use3", parse_use),
+        ],
+    ),
+    Table(
+        name="metrics_events",
+        csv_file="metrics_events.csv",
+        script_class="MetricsEventData",
+        script_file="metrics_event_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("category", parse_enum("metrics_category")),
+            Column("fields", parse_id_list),
+            Column("description", parse_str),
+        ],
+    ),
     Table(
         name="tuning",
         csv_file="tuning.csv",
@@ -419,12 +661,75 @@ def check_references(tables: dict[str, Table]) -> None:
                 continue
             target = tables[col.ref]
             for row in table.rows:
-                value = row[col.name]
-                if value and value not in keys[col.ref]:
-                    raise BuildError(
-                        f"{table.csv_file} {row['_line']}행 컬럼 {col.name!r}: "
-                        f"{value!r} 가 {target.csv_file} 의 {target.key} 에 없음"
-                    )
+                for value in col.ref_ids(row[col.name]):
+                    if value not in keys[col.ref]:
+                        raise BuildError(
+                            f"{table.csv_file} {row['_line']}행 컬럼 {col.name!r}: "
+                            f"{value!r} 가 {target.csv_file} 의 {target.key} 에 없음"
+                        )
+
+
+def check_unlocks(tables: dict[str, Table]) -> None:
+    """unlock_id 는 타입별 테이블에 있어야 하고, 조건이 가리키는 요괴·해금·아이템도 실재해야 한다."""
+    unlocks = tables["unlocks"]
+    keys = {name: t.key_values() for name, t in tables.items()}
+    unlock_ids = unlocks.key_values()
+    for row in unlocks.rows:
+        line, kind, target = row["_line"], row["unlock_type"], row["unlock_id"]
+        if not ID_PATTERN.match(target):
+            raise BuildError(f"unlocks.csv {line}행: unlock_id {target!r} 형식 오류")
+        if kind in UNLOCK_REF_TABLES:
+            ref_table = tables[UNLOCK_REF_TABLES[kind]]
+            if target not in keys[ref_table.name]:
+                raise BuildError(f"unlocks.csv {line}행: {kind} {target!r} 가 {ref_table.csv_file} 에 없음")
+        elif kind == "verb" and target not in ENUMS["verb"]:
+            raise BuildError(f"unlocks.csv {line}행: verb {target!r} 는 허용값 {sorted(ENUMS['verb'])} 밖")
+        if row["expected_day"] < row["day_min"]:
+            raise BuildError(f"unlocks.csv {line}행: expected_day({row['expected_day']}) < day_min({row['day_min']})")
+        for part in filter(None, (p.strip() for p in row["condition"].split(LIST_SEPARATOR))):
+            name, _, rest = part.partition(":")
+            ref_id = rest.split(">=")[0]
+            if name in ("affinity", "resident") and ref_id not in keys["yokai"]:
+                raise BuildError(f"unlocks.csv {line}행: 조건의 요괴 {ref_id!r} 가 yokai.csv 에 없음")
+            if name == "unlock":
+                if ref_id == row["id"]:
+                    raise BuildError(f"unlocks.csv {line}행: 자기 자신을 조건으로 건다")
+                if ref_id not in unlock_ids:
+                    raise BuildError(f"unlocks.csv {line}행: 조건의 해금 {ref_id!r} 가 unlocks.csv 에 없음")
+            if name == "item" and ref_id not in keys["items"]:
+                raise BuildError(f"unlocks.csv {line}행: 조건의 아이템 {ref_id!r} 가 items.csv 에 없음")
+
+
+def check_chains(tables: dict[str, Table]) -> None:
+    """재미 원칙 3 의 기계 강제: 용도 3칸이 전부 차야 하고(서로 다른 갈래), 대상 콘텐츠 전부가 사슬 행을 가져야 한다."""
+    chains = tables["chains"]
+    covered: dict[str, set[str]] = {}
+    for row in chains.rows:
+        line, kind, target = row["_line"], row["content_type"], row["content_id"]
+        ref_name = CHAIN_REF_TABLES[kind]
+        if ref_name not in tables:
+            raise BuildError(f"chains.csv {line}행: content_type {kind!r} 의 테이블 {ref_name} 이 아직 없음")
+        if target not in tables[ref_name].key_values():
+            raise BuildError(f"chains.csv {line}행: {kind} {target!r} 가 {tables[ref_name].csv_file} 에 없음")
+        uses = [row["use1"], row["use2"], row["use3"]]
+        if any(not u for u in uses):
+            raise BuildError(
+                f"chains.csv {line}행: {kind} {target!r} 의 용도가 3칸 미달 ({sum(1 for u in uses if u)}/3) — "
+                f"docs/08 재미 원칙 3: 어디에도 두 번 쓰이지 않는 콘텐츠는 넣지 않는다"
+            )
+        kinds = [u.split(":")[0] for u in uses]
+        if len(set(kinds)) < 3:
+            raise BuildError(f"chains.csv {line}행: {kind} {target!r} 의 용도 갈래가 서로 달라야 함 ({kinds})")
+        covered.setdefault(kind, set()).add(target)
+    for kind in CHAIN_COVERED_TYPES:
+        ref_name = CHAIN_REF_TABLES[kind]
+        if ref_name not in tables:
+            continue  # recipes 테이블은 P1-S3 에서 생긴다
+        missing = sorted(tables[ref_name].key_values() - covered.get(kind, set()))
+        if missing:
+            raise BuildError(
+                f"chains.csv: {tables[ref_name].csv_file} 의 {missing} 에 사슬 행이 없음 — 용도 3칸을 채워야 빌드가 통과한다"
+            )
 
 
 def convert_tuning_value(row: dict[str, Any]) -> Any:
@@ -488,7 +793,9 @@ def write_outputs(tables: dict[str, Table]) -> list[Path]:
                 shutil.rmtree(out_dir)
             out_dir.mkdir(parents=True)
             for row in table.rows:
-                props = {c.name: row[c.name] for c in table.columns}
+                # DataRegistry 는 id 로 찾으므로 키 컬럼 이름이 달라도(chains.content_id) id 를 함께 쓴다
+                props = {"id": row[table.key]} if table.key != "id" else {}
+                props.update({c.name: row[c.name] for c in table.columns})
                 path = out_dir / f"{row[table.key]}.tres"
                 path.write_text(tres_text(table, props), encoding="utf-8", newline="\n")
                 written.append(path)
@@ -527,6 +834,8 @@ def main(argv: list[str]) -> int:
             check_duplicates(table)
         check_references(tables)
         check_dialogue(tables)
+        check_unlocks(tables)
+        check_chains(tables)
         for table in tables.values():
             if table.dict_value is not None:
                 for row in table.rows:

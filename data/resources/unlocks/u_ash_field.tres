@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_ash_field"
+day_min = 3
+expected_day = 3
+timeband = "day"
+condition = "unlock:u_well"
+unlock_type = "region"
+unlock_id = "r_ash_field"
+hint_ko = "잿빛 들 입구. 동료 요괴 둘과 함께 간다."

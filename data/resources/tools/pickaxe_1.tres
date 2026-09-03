@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ToolData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/tool_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "pickaxe_1"
+kind = "pickaxe"
+level = 1
+name_ko = "낡은 곡괭이"
+stamina_cost = 6
+power = 1
+upgrade_cost = []
+upgrade_from = ""

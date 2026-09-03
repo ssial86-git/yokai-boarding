@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/enemy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "e_ash_warden"
+name_ko = "잿빛 파수꾼"
+tier = "boss"
+hp = 60
+attack = 4
+speed_px = 35.0
+aggro_radius_px = 128
+drop_material = ""
+drop_chance = 0.0
+sprite_size = 32

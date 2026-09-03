@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_back_hill"
+day_min = 2
+expected_day = 2
+timeband = "morning"
+condition = ""
+unlock_type = "region"
+unlock_id = "r_back_hill"
+hint_ko = "뒷산 길이 열렸다. 나물·버섯·나뭇가지·돌을 주울 수 있다."

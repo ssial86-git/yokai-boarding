@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_automation"
+day_min = 6
+expected_day = 7
+timeband = "morning"
+condition = "affinity:y01_ttukttagi>=2"
+unlock_type = "feature"
+unlock_id = "assignment_automation"
+hint_ko = "뚝딱이가 텃밭 물주기를 맡겠다고 한다. 배치로 일을 넘길 수 있다."

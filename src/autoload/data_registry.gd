@@ -16,6 +16,17 @@ var events: Dictionary = {}  # id -> EventData
 var dialogues: Dictionary = {}  # id -> DialogueData
 var hints: Dictionary = {}  # id -> HintData
 var sfx: Dictionary = {}  # id -> SfxData
+# --- P1 신설 (docs/01 v3 5절) ---
+var materials: Dictionary = {}  # id -> MaterialData
+var crops: Dictionary = {}  # id -> CropData
+var fish: Dictionary = {}  # id -> FishData
+var talismans: Dictionary = {}  # id -> TalismanData
+var tools: Dictionary = {}  # id -> ToolData
+var regions: Dictionary = {}  # id -> RegionData
+var enemies: Dictionary = {}  # id -> EnemyData
+var unlocks: Dictionary = {}  # id -> UnlockData
+var chains: Dictionary = {}  # content_id -> ChainData
+var metrics_events: Dictionary = {}  # id -> MetricsEventData
 var tuning: TuningData = TuningData.new()
 var strings: StringTableData = StringTableData.new()
 
@@ -35,6 +46,16 @@ func reload() -> void:
 	dialogues = _load_dir(RESOURCE_ROOT + "dialogue")
 	hints = _load_dir(RESOURCE_ROOT + "hints")
 	sfx = _load_dir(RESOURCE_ROOT + "sfx")
+	materials = _load_dir(RESOURCE_ROOT + "materials")
+	crops = _load_dir(RESOURCE_ROOT + "crops")
+	fish = _load_dir(RESOURCE_ROOT + "fish")
+	talismans = _load_dir(RESOURCE_ROOT + "talismans")
+	tools = _load_dir(RESOURCE_ROOT + "tools")
+	regions = _load_dir(RESOURCE_ROOT + "regions")
+	enemies = _load_dir(RESOURCE_ROOT + "enemies")
+	unlocks = _load_dir(RESOURCE_ROOT + "unlocks")
+	chains = _load_dir(RESOURCE_ROOT + "chains")
+	metrics_events = _load_dir(RESOURCE_ROOT + "metrics_events")
 	tuning = _load_single(TUNING_PATH, TuningData.new()) as TuningData
 	strings = _load_single(STRINGS_PATH, StringTableData.new()) as StringTableData
 
@@ -73,6 +94,60 @@ func get_dialogue(id: String) -> DialogueData:
 
 func get_sfx(id: String) -> SfxData:
 	return sfx.get(id) as SfxData
+
+
+func get_material(id: String) -> MaterialData:
+	return materials.get(id) as MaterialData
+
+
+func get_crop(id: String) -> CropData:
+	return crops.get(id) as CropData
+
+
+func get_fish(id: String) -> FishData:
+	return fish.get(id) as FishData
+
+
+func get_talisman(id: String) -> TalismanData:
+	return talismans.get(id) as TalismanData
+
+
+func get_tool(id: String) -> ToolData:
+	return tools.get(id) as ToolData
+
+
+func get_region(id: String) -> RegionData:
+	return regions.get(id) as RegionData
+
+
+func get_enemy(id: String) -> EnemyData:
+	return enemies.get(id) as EnemyData
+
+
+func get_unlock(id: String) -> UnlockData:
+	return unlocks.get(id) as UnlockData
+
+
+func get_chain(content_id: String) -> ChainData:
+	return chains.get(content_id) as ChainData
+
+
+func get_metrics_event(id: String) -> MetricsEventData:
+	return metrics_events.get(id) as MetricsEventData
+
+
+## 해금 일정을 expected_day, day_min, id 순으로 (케이던스 검사·안내 순서용).
+func unlocks_sorted() -> Array[UnlockData]:
+	var result: Array[UnlockData] = []
+	for unlock: UnlockData in unlocks.values():
+		result.append(unlock)
+	result.sort_custom(func(a: UnlockData, b: UnlockData) -> bool:
+		if a.expected_day != b.expected_day:
+			return a.expected_day < b.expected_day
+		if a.day_min != b.day_min:
+			return a.day_min < b.day_min
+		return a.id < b.id)
+	return result
 
 
 ## 하숙생의 사연(story) 이벤트 id 목록, id 순.

@@ -1,0 +1,37 @@
+id,day_min,expected_day,timeband,condition,unlock_type,unlock_id,hint_ko
+u_prologue,1,1,morning,,event,tut_morning,폐가에 도착했다. 성주 영감을 깨우자.
+u_farm_plots_3,1,1,morning,,feature,farm_plots_3,마당 텃밭 3칸이 열렸다. 괭이질부터.
+u_ttukttagi,1,1,any,,yokai,y01_ttukttagi,첫 하숙생 뚝딱이가 문을 두드렸다.
+u_ledger,1,1,night,,event,tut_night,아버지의 하숙부를 찾았다.
+u_back_hill,2,2,morning,,region,r_back_hill,뒷산 길이 열렸다. 나물·버섯·나뭇가지·돌을 주울 수 있다.
+u_axe,2,2,morning,unlock:u_back_hill,tool,axe_1,낡은 도끼를 찾았다. 나무를 벨 수 있다.
+u_pickaxe,2,2,morning,unlock:u_back_hill,tool,pickaxe_1,낡은 곡괭이를 찾았다. 돌을 캘 수 있다.
+u_hoe,1,1,morning,,tool,hoe_1,낡은 괭이. 텃밭을 갈 수 있다.
+u_recipes_tier1,2,2,day,,feature,recipes_tier1,조왕 부엌 가마솥에 첫 레시피 3개가 떠올랐다.
+u_eoduki_visit,3,3,night,,yokai,y02_eoduki,밤에 어둑이가 찾아왔다.
+u_well,3,3,day,,region,r_well,우물 아래로 내려갈 수 있다.
+u_ash_field,3,3,day,unlock:u_well,region,r_ash_field,잿빛 들 입구. 동료 요괴 둘과 함께 간다.
+u_enemy_wisp,3,3,day,unlock:u_ash_field,enemy,e_ash_wisp,잿불 도깨비불이 떠돈다. 동료가 알아서 싸운다.
+u_enemy_hound,3,3,day,unlock:u_ash_field,enemy,e_cinder_hound,재구렁 개가 냄새를 맡았다.
+u_fishing,4,4,day,unlock:u_back_hill,verb,fish,개울에서 낚시를 할 수 있다.
+u_rod,4,4,day,unlock:u_fishing,tool,rod_1,대나무 낚싯대.
+u_dalgael_case,4,5,evening,,yokai,y03_dalgael,빈 카드의 손님 — 달갤 사건. 심사가 무엇인지 배운다.
+u_talisman_craft,5,5,any,unlock:u_back_hill,verb,craft,부적을 만들 수 있다. 천과 재료가 필요하다.
+u_t_throw,5,5,any,unlock:u_talisman_craft,talisman,t_throw,투척 부적 — 탐험 중 던져 적을 밀어낸다.
+u_t_gather,5,5,any,unlock:u_talisman_craft,talisman,t_gather,채집 부적 — 잠시 채집량이 는다.
+u_t_return,5,6,any,unlock:u_talisman_craft,talisman,t_return,귀환 부적 — 어디서든 집으로.
+u_ash_field_deep,6,7,day,unlock:u_ash_field,region,r_ash_field_deep,잿빛 들 심부로 가는 길이 보인다.
+u_ash_warden,6,7,day,unlock:u_ash_field_deep,enemy,e_ash_warden,잿빛 파수꾼이 길을 막는다.
+u_automation,6,7,morning,affinity:y01_ttukttagi>=2,feature,assignment_automation,뚝딱이가 텃밭 물주기를 맡겠다고 한다. 배치로 일을 넘길 수 있다.
+u_farm_plots_12,7,8,morning,unlock:u_farm_plots_3,feature,farm_plots_12,텃밭을 12칸으로 넓힐 수 있다.
+u_axe_2,8,8,any,unlock:u_axe,tool,axe_2,도끼를 벼릴 수 있다.
+u_hoe_2,8,9,any,unlock:u_hoe,tool,hoe_2,괭이를 벼릴 수 있다.
+u_pickaxe_2,9,10,any,unlock:u_pickaxe,tool,pickaxe_2,곡괭이를 벼릴 수 있다.
+u_rod_2,10,11,any,unlock:u_rod,tool,rod_2,낚싯대에 실을 감았다.
+u_demon_crops,9,9,morning,unlock:u_ash_field,feature,demon_crops,마계 작물 씨앗. 음기 짙은 날 빨리 자란다.
+u_recipes_tier2,10,10,day,unlock:u_recipes_tier1,feature,recipes_tier2,레시피 티어 2.
+u_ttukttagi_act3,9,11,night,affinity:y01_ttukttagi>=2,event,y01_act3,뚝딱이의 마지막 사연.
+u_eoduki_act3,10,12,night,affinity:y02_eoduki>=2,event,y02_act3,어둑이의 마지막 사연.
+u_warden_rematch,11,12,day,unlock:u_ash_warden,feature,boss_rematch,잿빛 파수꾼이 다시 나타났다. 더 강하다.
+u_dalgael_act3,12,13,night,affinity:y03_dalgael>=2;item:record_piece>=1,event,y03_act3,달갤의 마지막 사연.
+u_rare_visitor,12,14,evening,,feature,rare_visitor_species,희귀한 뜨내기가 소문을 듣고 온다.

@@ -1,0 +1,34 @@
+id,category,fields,description
+session_start,session,version;seed,세션 시작 (게임 이름·RNG 시드)
+session_end,session,money;residents,세션 종료
+day_started,day,day;beds_total,하루 시작
+day_ended,day,day;activities,취침 정산 직전. activities = 그날 쓴 동사 종류 수 (P1 게이트: 4 이상)
+timeband,day,timeband,시간대 진입
+sleep,day,day;hour;forced,취침 (forced = 시계가 다 흘러 자동)
+unlock,day,unlock_id,해금 발생 (unlocks.csv id)
+assignment,house,yokai;cell;rest,배치 변경
+assign_failed,house,yokai;outcome,배치 실패
+room,house,cell;room;money,방 설치·개조
+floor,house,floor;money,층 증축
+build_failed,house,outcome,건설 실패
+settled,economy,totals;rent_money;money,저녁 정산
+visitor,intake,kind;species;free_beds,방문자 노크
+intake,intake,kind;species;outcome,심사 결정
+dialogue,story,event,대화 이벤트 시작
+affinity,story,yokai;value,호감도 변화
+resident,story,yokai,하숙생 입주
+save,save,slot,저장
+load,save,slot,불러오기
+verb_started,verb,verb;region,동사 시작 (걷기 제외)
+verb_ended,verb,verb;region;seconds,동사 종료 — 동사별 사용 시간 (P1 게이트 지표)
+gather,verb,material;region;tool,채집·벌목·채광 1회
+farm,verb,action;plot;crop,텃밭 행동 (till / sow / water / harvest)
+cook,verb,recipe;seconds,요리 완료
+fish,verb,result;region,낚시 결과 (어종·고물 id 또는 miss)
+craft,verb,item;count,제작 완료
+explore_enter,verb,region,탐험지 진입
+explore_exit,verb,region;reason,탐험지 이탈 (exit / return_talisman / retreat / defeat)
+combat_hit,verb,enemy;source;damage,적 피격 (source = companion / talisman)
+enemy_defeated,verb,enemy;region,적 처치
+talisman_used,verb,talisman,부적 사용
+stamina,verb,value,스태미너가 문턱(tuning)을 넘음

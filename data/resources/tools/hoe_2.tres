@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ToolData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/tool_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "hoe_2"
+kind = "hoe"
+level = 2
+name_ko = "벼린 괭이"
+stamina_cost = 3
+power = 2
+upgrade_cost = ["wood:3", "scrap:2"]
+upgrade_from = "hoe_1"

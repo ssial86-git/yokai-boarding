@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MetricsEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/metrics_event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "day_ended"
+category = "day"
+fields = ["day", "activities"]
+description = "취침 정산 직전. activities = 그날 쓴 동사 종류 수 (P1 게이트: 4 이상)"

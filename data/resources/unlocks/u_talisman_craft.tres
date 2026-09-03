@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_talisman_craft"
+day_min = 5
+expected_day = 5
+timeband = "any"
+condition = "unlock:u_back_hill"
+unlock_type = "verb"
+unlock_id = "craft"
+hint_ko = "부적을 만들 수 있다. 천과 재료가 필요하다."

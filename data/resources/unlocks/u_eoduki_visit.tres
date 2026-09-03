@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_eoduki_visit"
+day_min = 3
+expected_day = 3
+timeband = "night"
+condition = ""
+unlock_type = "yokai"
+unlock_id = "y02_eoduki"
+hint_ko = "밤에 어둑이가 찾아왔다."

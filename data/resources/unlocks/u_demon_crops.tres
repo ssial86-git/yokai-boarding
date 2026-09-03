@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_demon_crops"
+day_min = 9
+expected_day = 9
+timeband = "morning"
+condition = "unlock:u_ash_field"
+unlock_type = "feature"
+unlock_id = "demon_crops"
+hint_ko = "마계 작물 씨앗. 음기 짙은 날 빨리 자란다."

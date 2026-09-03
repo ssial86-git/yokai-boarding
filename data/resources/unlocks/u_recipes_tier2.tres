@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_recipes_tier2"
+day_min = 10
+expected_day = 10
+timeband = "day"
+condition = "unlock:u_recipes_tier1"
+unlock_type = "feature"
+unlock_id = "recipes_tier2"
+hint_ko = "레시피 티어 2."

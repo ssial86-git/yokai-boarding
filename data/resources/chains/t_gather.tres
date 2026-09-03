@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ChainData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/chain_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "t_gather"
+content_type = "talisman"
+content_id = "t_gather"
+use1 = "gather:back_hill"
+use2 = "sell:market"
+use3 = "gift:y02_eoduki"

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_ttukttagi"
+day_min = 1
+expected_day = 1
+timeband = "any"
+condition = ""
+unlock_type = "yokai"
+unlock_id = "y01_ttukttagi"
+hint_ko = "첫 하숙생 뚝딱이가 문을 두드렸다."

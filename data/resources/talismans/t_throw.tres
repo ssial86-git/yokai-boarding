@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="TalismanData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/talisman_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "t_throw"
+name_ko = "투척 부적"
+effect = "throw"
+cooldown_seconds = 3.0
+power = 2
+range_px = 96
+craft_cost = ["cloth:1", "scrap:1"]
+craft_seconds = 30.0

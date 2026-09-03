@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_warden_rematch"
+day_min = 11
+expected_day = 12
+timeband = "day"
+condition = "unlock:u_ash_warden"
+unlock_type = "feature"
+unlock_id = "boss_rematch"
+hint_ko = "잿빛 파수꾼이 다시 나타났다. 더 강하다."

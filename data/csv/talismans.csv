@@ -1,0 +1,4 @@
+id,name_ko,effect,cooldown_seconds,power,range_px,craft_cost,craft_seconds
+t_throw,투척 부적,throw,3.0,2,96,cloth:1;scrap:1,30
+t_gather,채집 부적,gather,60.0,150,0,cloth:1;wood:1,30
+t_return,귀환 부적,return,0.0,0,0,cloth:2;trinket:1,60

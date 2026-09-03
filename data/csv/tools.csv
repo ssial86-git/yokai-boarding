@@ -1,0 +1,9 @@
+id,kind,level,name_ko,stamina_cost,power,upgrade_cost,upgrade_from
+hoe_1,hoe,1,낡은 괭이,4,1,,
+hoe_2,hoe,2,벼린 괭이,3,2,wood:3;scrap:2,hoe_1
+axe_1,axe,1,낡은 도끼,5,1,,
+axe_2,axe,2,벼린 도끼,4,2,wood:3;scrap:3,axe_1
+pickaxe_1,pickaxe,1,낡은 곡괭이,6,1,,
+pickaxe_2,pickaxe,2,벼린 곡괭이,5,2,wood:2;scrap:4,pickaxe_1
+rod_1,rod,1,대나무 낚싯대,3,1,,
+rod_2,rod,2,실 감은 낚싯대,3,2,wood:2;cloth:2,rod_1

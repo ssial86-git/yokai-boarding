@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_pickaxe"
+day_min = 2
+expected_day = 2
+timeband = "morning"
+condition = "unlock:u_back_hill"
+unlock_type = "tool"
+unlock_id = "pickaxe_1"
+hint_ko = "낡은 곡괭이를 찾았다. 돌을 캘 수 있다."
