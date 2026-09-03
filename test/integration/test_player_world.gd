@@ -147,6 +147,56 @@ func test_farm_cycle_then_gather_on_back_hill() -> void:
 	assert_str(str((state["player"] as Dictionary)["region"])).is_equal("r_back_hill")
 
 
+## 사용자가 잡은 버그: 2층에 올라가면 내려올 수 없었다 (계단 영역이 위층 바닥에서 끝나 서 있는 몸에 닿지 않음).
+## 계단 열에서 W 로 올라가 2층 바닥에 서고, S 로 다시 1층 바닥에 내려오되 바닥 아래로 빠지지 않아야 한다.
+func test_stairs_up_and_down_between_floors() -> void:
+	var runner := scene_runner(MAIN_SCENE)
+	await runner.simulate_frames(2)
+	var main: Node = runner.scene()
+	var player: PlayerController = main.get("player")
+	var house: HouseController = main.get("house_controller")
+	var house_view: HouseView = main.get("house_view")
+	var hud: Hud = main.get("hud")
+	_drain(main.get("story_system"), main.get("intake_system"))
+	GameState.money = 10_000
+	assert_int(house.try_add_floor()).is_equal(RoomGrid.Outcome.OK)
+	await _physics_frames(2)
+	var stair_x := house_view.cell_rect(Vector2i(DataRegistry.tuning.get_int("stair_column"), 0)).get_center().x
+	var floor_height := float(house_view.cell_size.y)
+	player.place(Vector2(stair_x, 0.0))
+	await _physics_frames(3)
+	assert_bool(player.on_ladder()).is_true()
+	# 대문 칸이 계단 열이므로 문 안내가 우선한다. 문이 없는 자리(위층)에서는 계단 안내가 뜬다
+	assert_bool(hud.prompt_text() in [DataRegistry.text("prompt_stairs"), DataRegistry.text("prompt_door", {"name": "마당"})]).is_true()
+
+	# 올라가기: 2층 바닥(-48) 위에 선다
+	player.virtual_axis = Vector2.UP
+	for i in 240:
+		await _physics_frames(1)
+		if player.global_position.y <= -floor_height - 4.0:
+			break
+	player.virtual_axis = Vector2.ZERO
+	for i in 60:
+		await _physics_frames(1)
+		if player.is_on_floor():
+			break
+	assert_float(player.global_position.y).is_equal_approx(-floor_height, 2.0)
+	assert_bool(player.is_on_floor()).is_true()
+	assert_bool(player.on_ladder()).override_failure_message("2층에 서 있어도 계단이 잡혀야 내려올 수 있다").is_true()
+
+	# 내려가기: 1층 바닥(0)에 서고 그 아래로 빠지지 않는다
+	player.virtual_axis = Vector2.DOWN
+	for i in 240:
+		await _physics_frames(1)
+		if player.global_position.y >= -1.0 and player.is_on_floor():
+			break
+	player.virtual_axis = Vector2.ZERO
+	await _physics_frames(5)
+	assert_float(player.global_position.y).is_equal_approx(0.0, 2.0)
+	assert_bool(player.is_on_floor()).is_true()
+	assert_bool(player.climbing).is_false()
+
+
 func test_field_assignment_auto_waters_with_efficiency() -> void:
 	var runner := scene_runner(MAIN_SCENE)
 	await runner.simulate_frames(2)

@@ -188,3 +188,4 @@ msg_fish_caught,{name} 낚음!
 msg_fish_junk,{name}이(가) 걸렸다
 msg_fish_missed,놓쳤다
 msg_fishing_started,찌를 던졌다. 마커가 초록 구간에 올 때 E
+prompt_stairs,W/S: 계단 오르내리기

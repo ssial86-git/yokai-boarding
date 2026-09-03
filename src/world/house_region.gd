@@ -8,6 +8,8 @@ const YARD_REGION_ID := "r_yard"
 const FLOOR_THICKNESS := 4.0
 const WALL_HEIGHT_EXTRA := 64.0
 const DOOR_WIDTH := 20.0
+## 계단 영역이 맨 위층 바닥에서 위로 더 뻗는 여유(px) — 몸 높이에 더한다
+const STAIR_TOP_MARGIN := 8.0
 
 var house_view: HouseView
 var yokai_manager: YokaiManager
@@ -110,11 +112,14 @@ func rebuild_geometry() -> void:
 		_ladder.collision_mask = 0
 		var stair_x := house_view.cell_rect(Vector2i(_stair_column, 0)).get_center().x
 		var top := -float(g.built_floors - 1) * cell_h
+		# 맨 위층에 '서 있는' 플레이어도 잡히도록 몸 높이만큼 더 올린다 — 안 그러면 올라간 뒤 내려올 수 없다
+		var reach := float(DataRegistry.tuning.get_int("player_body_height_px")) + STAIR_TOP_MARGIN
+		var height := absf(top) + reach
 		var shape := RectangleShape2D.new()
-		shape.size = Vector2(16.0, absf(top) + 4.0)
+		shape.size = Vector2(16.0, height)
 		var collider := CollisionShape2D.new()
 		collider.shape = shape
-		collider.position = Vector2(stair_x, top * 0.5 - 2.0)
+		collider.position = Vector2(stair_x, -height * 0.5)  # y 는 -height .. 0 (1층 바닥이 하한)
 		_ladder.add_child(collider)
 		add_child(_ladder)
 

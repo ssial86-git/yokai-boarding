@@ -70,12 +70,8 @@ func _ready() -> void:
 	add_child(_sprite)
 
 	_sensor = _make_sensor(Interactable.LAYER_BIT, tuning.get_float("player_interact_radius_px"), body.size.y * 0.5)
+	# 계단 겹침은 신호 카운트가 아니라 매 물리 프레임 겹친 영역 수로 본다 — place() 로 순간이동해도 어긋나지 않게
 	_ladder_sensor = _make_sensor(LADDER_LAYER_BIT, body.size.x * 0.5, body.size.y * 0.5)
-	_ladder_sensor.area_entered.connect(func(_area: Area2D) -> void: _ladders += 1)
-	_ladder_sensor.area_exited.connect(func(_area: Area2D) -> void:
-		_ladders = maxi(_ladders - 1, 0)
-		if _ladders == 0:
-			climbing = false)
 
 
 func stamina() -> Stamina:
@@ -108,10 +104,14 @@ func _physics_process(delta: float) -> void:
 			axis = Vector2.ZERO
 			wants_run = false
 
-	if _ladders > 0 and axis.y != 0.0:
-		climbing = true
-	if climbing and _ladders == 0:
+	var ladder_areas := _ladder_sensor.get_overlapping_areas()
+	_ladders = ladder_areas.size()
+	# W/S 를 누르는 동안만 오른다. 손을 떼면 중력이 돌아와 바로 아래 층 바닥에 선다 (계단 중간에 매달리지 않는다)
+	climbing = _ladders > 0 and axis.y != 0.0
+	# 계단 밑(1층 바닥)보다 아래로는 타고 내려가지 않는다 — 바닥을 뚫고 떨어지지 않게 하한에서 내린다
+	if climbing and axis.y > 0.0 and global_position.y >= _ladder_bottom(ladder_areas) - 0.5:
 		climbing = false
+		axis.y = 0.0
 
 	var stamina_state := stamina()
 	running = wants_run and axis.x != 0.0 and not stamina_state.is_exhausted() and not climbing
@@ -184,9 +184,23 @@ func _refresh_target() -> void:
 			best = target
 	current_target = best
 	var prompt := best.prompt() if best != null else ""
+	if prompt.is_empty() and _ladders > 0:
+		prompt = DataRegistry.text("prompt_stairs")  # 계단 위: 오르내리는 법을 알려준다
 	if prompt != _last_prompt:
 		_last_prompt = prompt
 		Events.prompt_changed.emit(prompt)
+
+
+## 겹친 계단 영역들의 가장 낮은 끝(월드 y). 영역이 없으면 무한대(제한 없음).
+func _ladder_bottom(areas: Array[Area2D]) -> float:
+	var bottom := -INF
+	for area in areas:
+		for child in area.get_children():
+			var collider := child as CollisionShape2D
+			var rect := collider.shape as RectangleShape2D if collider != null else null
+			if rect != null:
+				bottom = maxf(bottom, collider.global_position.y + rect.size.y * 0.5)
+	return bottom if bottom > -INF else INF
 
 
 func _make_sensor(mask: int, radius: float, center_y: float) -> Area2D:
