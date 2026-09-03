@@ -42,7 +42,16 @@ def summarize(rows: list[dict]) -> dict:
     eoduki = max((r["data"].get("value", 0) for r in rows if r["kind"] == "affinity" and r["data"].get("yokai") == EODUKI), default=0)
     assignments_per_day = Counter(r["day"] for r in rows if r["kind"] == "assignment" and not r["data"].get("rest"))
     money_end = next((r["data"].get("money") for r in reversed(rows) if r["kind"] in ("session_end", "settled")), None)
+    # P1 게이트 (docs/01 v3 1절): 하루에 서로 다른 활동 4개 이상. day_ended.activities 는 Metrics 가 센 그날의 동사 종류 수.
+    activities_by_day = {int(r["data"].get("day", r["day"])): int(r["data"].get("activities", 0)) for r in rows if r["kind"] == "day_ended"}
+    verbs_used = sorted({r["data"].get("verb", r["kind"]) for r in rows
+                         if r["kind"] in ("verb_started", "verb_ended", "gather", "farm", "cook", "fish", "craft",
+                                          "explore_enter", "talisman_used", "serve", "upgrade")})
     return {
+        "days_ended": len(activities_by_day),
+        "days_4plus_activities": sum(1 for n in activities_by_day.values() if n >= 4),
+        "max_activities": max(activities_by_day.values(), default=0),
+        "verbs_used": "+".join(verbs_used) if verbs_used else "-",
         "minutes": round(minutes, 1),
         "max_day": max_day,
         "assignments": sum(assignments_per_day.values()),
@@ -70,7 +79,8 @@ def main(argv: list[str]) -> int:
     if not files:
         print(f"[summarize] 로그 없음: {log_dir}")
         return 1
-    columns = ["minutes", "max_day", "assignments", "days_with_assignment", "rooms_built", "guest_rooms_built",
+    columns = ["minutes", "max_day", "days_ended", "days_4plus_activities", "max_activities", "verbs_used",
+               "assignments", "days_with_assignment", "rooms_built", "guest_rooms_built",
                "floors_added", "intake_accepted", "intake_declined", "intake_no_bed", "visitors_when_full",
                "dialogues", "eoduki_affinity_max", "saves", "money_end", "gonogo2_pressure_seen", "gonogo2_expanded"]
     print("session\t" + "\t".join(columns))
@@ -82,9 +92,11 @@ def main(argv: list[str]) -> int:
     reached_day3 = sum(1 for s in totals if s["max_day"] >= 3)
     pressure = sum(1 for s in totals if s["gonogo2_pressure_seen"])
     expanded = sum(1 for s in totals if s["gonogo2_expanded"])
+    gate_sessions = sum(1 for s in totals if s["days_4plus_activities"] > 0)
     print()
     print(f"세션 {len(totals)}개 · 3일차 도달 {reached_day3} · 침대 압박 경험 {pressure} · 증축 실행 {expanded}")
-    print("Go/No-Go 1·5·6 은 설문/관찰 시트로 판정 (docs/playtest/questionnaire.md, observer_sheet.md)")
+    print(f"P1 게이트 2번(하루 4개 이상 활동): 해당 날이 있는 세션 {gate_sessions}/{len(totals)} — days_4plus_activities 열 참조")
+    print("P1 게이트 1번(\"오늘 할 일이 밀려서 즐거웠다\")은 설문/관찰 시트로 판정 (docs/playtest/questionnaire.md, observer_sheet.md)")
     return 0
 
 

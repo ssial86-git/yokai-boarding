@@ -54,6 +54,10 @@ jobs:
       - name: Validate art assets
         run: python tools/art/validate_assets.py
 
+      # 재미 원칙 6 (케이던스: 어느 30분에도 처음 보는 것) 과 위임 손익 교차점(6~8일차)을 데이터로 검사한다
+      - name: Cadence and delegation simulator
+        run: python tools/sim/autoplay.py --check
+
       - name: Check generated files are committed
         run: git diff --exit-code -- data/resources
 
