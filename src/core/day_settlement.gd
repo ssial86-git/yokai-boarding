@@ -121,11 +121,13 @@ static func settle(
 			continue
 		var condition := int(conditions.get(yokai_id, params.condition_max))
 		var cell := assignment.get_cell(yokai_id)
-		var working := cell != Assignment.REST and grid.is_in_bounds(cell) and grid.is_floor_built(cell.y)
-		if working:
-			var output := output_for(yokai, cell, grid.get_room(cell), condition, params)
-			if output != null:
-				result.outputs.append(output)
+		var in_house := cell != Assignment.REST and grid.is_in_bounds(cell) and grid.is_floor_built(cell.y)
+		# 텃밭(FIELD) 배치도 일한 것이다 — 산출은 물주기(FarmSystem)로 이미 반영됐으므로 컨디션만 깎는다
+		if in_house or cell == Assignment.FIELD:
+			if in_house:
+				var output := output_for(yokai, cell, grid.get_room(cell), condition, params)
+				if output != null:
+					result.outputs.append(output)
 			condition -= params.work_condition_cost
 		else:
 			condition += params.rest_condition_gain
