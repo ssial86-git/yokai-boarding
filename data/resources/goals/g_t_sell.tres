@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_sell"
+tier = "today"
+name_ko = "대문간에서 다섯 개 팔기"
+condition = "count:sell>=5"
+day_min = 7
+day_max = 12
+festival_id = ""
+reward_money = 50
+reward_reputation = 0
+hint_ko = "대문간 앞에서 E — 판매."

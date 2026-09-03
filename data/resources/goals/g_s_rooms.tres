@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_s_rooms"
+tier = "season"
+name_ko = "객실 둘"
+condition = "rooms:guest_room>=2"
+day_min = 1
+day_max = 28
+festival_id = "f_dongji"
+reward_money = 0
+reward_reputation = 2
+hint_ko = "빈터에서 E — 객실."

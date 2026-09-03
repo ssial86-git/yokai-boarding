@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_harvest_demon"
+tier = "today"
+name_ko = "마계 작물 수확"
+condition = "count:farm.harvest.c_moon_melon>=1"
+day_min = 10
+day_max = 18
+festival_id = ""
+reward_money = 80
+reward_reputation = 1
+hint_ko = "달무리 참외 씨앗은 잿빛 들 손님이 준다. 음기 짙은 날 빨리 자란다."

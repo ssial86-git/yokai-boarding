@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_house_decor"
+day_min = 17
+expected_day = 17
+timeband = "morning"
+condition = ""
+unlock_type = "feature"
+unlock_id = "house_decor"
+hint_ko = "팥죽 세 그릇이 갖춰지면 동짓날 집에 등이 걸린다."

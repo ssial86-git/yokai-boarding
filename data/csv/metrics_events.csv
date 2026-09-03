@@ -39,3 +39,7 @@ upgrade,verb,tool;level,도구 벼리기
 calendar_opened,day,season;day_of_season,달력 탭 열람 (P2 게이트: 달력 확인 행동)
 weather,day,weather;yin;season,아침 날씨·음기 추첨 결과
 season_event,day,event;season,소절기 이벤트 시작
+goal_completed,day,goal;tier,goals.csv 목표 완료
+goals_opened,day,done;total,할 일 탭 열람 (P2 게이트: 계획 행동)
+festival_started,day,festival;met;total,명절 당일 아침 (준비 목표 충족 수)
+festival_scored,day,festival;score;max,명절 채점 결과

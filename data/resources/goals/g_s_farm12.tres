@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_s_farm12"
+tier = "season"
+name_ko = "텃밭 12칸"
+condition = "unlock:u_farm_plots_12"
+day_min = 7
+day_max = 28
+festival_id = ""
+reward_money = 50
+reward_reputation = 1
+hint_ko = "7일차 무렵 열린다."

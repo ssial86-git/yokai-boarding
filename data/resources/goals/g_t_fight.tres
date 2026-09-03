@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_fight"
+tier = "today"
+name_ko = "잿빛 들에서 적 셋 물리치기"
+condition = "count:fight>=3"
+day_min = 6
+day_max = 10
+festival_id = ""
+reward_money = 60
+reward_reputation = 1
+hint_ko = "아침 배치의 동행에 둘을 놓고 우물 아래로."

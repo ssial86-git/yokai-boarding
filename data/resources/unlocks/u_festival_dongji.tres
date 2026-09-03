@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_festival_dongji"
+day_min = 28
+expected_day = 28
+timeband = "morning"
+condition = ""
+unlock_type = "festival"
+unlock_id = "f_dongji"
+hint_ko = "동짓날. 저녁에 팥죽을 나누고 채점한다."

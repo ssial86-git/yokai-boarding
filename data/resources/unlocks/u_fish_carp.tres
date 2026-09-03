@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_fish_carp"
+day_min = 22
+expected_day = 22
+timeband = "day"
+condition = "unlock:u_rod_2"
+unlock_type = "fish"
+unlock_id = "f_carp"
+hint_ko = "저녁 개울에 잉어가 올라온다 (낚싯대 Lv2)."

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_fish"
+tier = "today"
+name_ko = "물고기 두 마리"
+condition = "count:fish>=2"
+day_min = 4
+day_max = 8
+festival_id = ""
+reward_money = 40
+reward_reputation = 0
+hint_ko = "개울 낚시 자리에서 E. 초록 구간에 맞춰 다시 E."

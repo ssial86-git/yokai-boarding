@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="FestivalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/festival_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "f_dongji"
+name_ko = "동지"
+season = "spring"
+day_of_season = 28
+dish_recipe = "r_patjuk"
+dish_target = 3
+guest_target = 2
+goal_ids = ["g_s_patjuk", "g_s_guests", "g_s_rooms"]
+score_per_goal = 2
+score_per_guest = 1
+score_per_dish = 1
+reward_money = 300
+reward_reputation = 5
+perfect_reward_reputation = 5
+rare_guest_species = "g_geumjuri"
+decor_goal = "g_s_patjuk"
+hint_ko = "동짓날. 팥죽을 나누면 액이 물러간다 — 팥죽 3그릇·손님 둘·객실 둘이면 만점."

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_serve"
+tier = "today"
+name_ko = "배식 두 번"
+condition = "count:serve>=2"
+day_min = 9
+day_max = 14
+festival_id = ""
+reward_money = 40
+reward_reputation = 1
+hint_ko = "가마솥 메뉴의 배식. 오늘 능력치가 오른다."

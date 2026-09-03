@@ -41,3 +41,6 @@ fish,f_catfish,cook:catfish_stew,sell:market,quest:y02_act2
 fish,f_sweetfish,cook:grilled_sweetfish,feed:g_geumjuri,sell:market
 fish,j_straw_shoe,craft:scarecrow,decor:room,sell:market
 fish,j_clay_bottle,craft:clay_jar,decor:room,sell:market
+material,m_red_bean,cook:patjuk,sell:market,gift:y03_dalgael
+recipe,r_patjuk,event:f_dongji,feed:guests,sell:market
+recipe,r_red_bean_rice,feed:g_geumjuri,buff:courage,sell:market

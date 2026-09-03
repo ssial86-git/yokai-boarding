@@ -55,3 +55,7 @@ f_catfish,메기,fish,18
 f_sweetfish,은어,fish,24
 j_straw_shoe,낡은 짚신,misc,1
 j_clay_bottle,흙병,misc,3
+m_red_bean,팥,material,6
+dish_patjuk,동지 팥죽,food,40
+dish_red_bean_rice,팥밥,food,26
+f_carp,잉어,fish,30

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_l_species"
+tier = "long"
+name_ko = "명부에 네 종족"
+condition = "species>=4"
+day_min = 1
+day_max = 0
+festival_id = ""
+reward_money = 100
+reward_reputation = 2
+hint_ko = "날씨·음기에 따라 오는 손님이 다르다."

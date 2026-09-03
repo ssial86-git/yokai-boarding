@@ -1,0 +1,23 @@
+id,tier,name_ko,condition,day_min,day_max,festival_id,reward_money,reward_reputation,hint_ko
+g_t_till,today,텃밭 세 칸 갈기,count:farm.till>=3,1,3,,20,0,마당 텃밭에서 괭이질. 씨앗은 무·깻잎부터.
+g_t_gather,today,뒷산에서 다섯 번 캐기,count:gather>=5,2,4,,30,0,뒷산 길이 열렸다. 나물·버섯·돌.
+g_t_cook_first,today,첫 요리 한 그릇,count:cook>=1,2,5,,30,1,가마솥 앞에서 E. 나물무침이 제일 쉽다.
+g_t_harvest,today,수확 두 번,count:farm.harvest>=2,4,7,,40,0,물을 매일 주면 무는 사흘.
+g_t_fish,today,물고기 두 마리,count:fish>=2,4,8,,40,0,개울 낚시 자리에서 E. 초록 구간에 맞춰 다시 E.
+g_t_talisman,today,부적 한 장 만들기,count:craft>=1,5,9,,40,1,작업장을 지어 그 앞에서 E.
+g_t_fight,today,잿빛 들에서 적 셋 물리치기,count:fight>=3,6,10,,60,1,아침 배치의 동행에 둘을 놓고 우물 아래로.
+g_t_sell,today,대문간에서 다섯 개 팔기,count:sell>=5,7,12,,50,0,대문간 앞에서 E — 판매.
+g_t_serve,today,배식 두 번,count:serve>=2,9,14,,40,1,가마솥 메뉴의 배식. 오늘 능력치가 오른다.
+g_t_kimchi,today,김치 담그기,count:cook.r_kimchi>=1,11,16,,60,1,배추 둘·마늘 하나. 티어 2.
+g_t_harvest_demon,today,마계 작물 수확,count:farm.harvest.c_moon_melon>=1,10,18,,80,1,달무리 참외 씨앗은 잿빛 들 손님이 준다. 음기 짙은 날 빨리 자란다.
+g_t_patjuk_taste,today,팥죽 첫 그릇,count:cook.r_patjuk>=1,15,20,,60,1,뒷산에 팥이 열렸다. 팥 둘·밥 하나.
+g_t_gather_moon,today,만월 채집 — 누계 서른,count:gather>=30,20,22,,80,1,만월 이틀은 채집량이 는다.
+g_t_carp,today,잉어 낚기,count:fish.f_carp>=1,22,28,,80,1,저녁 개울. 낚싯대 Lv2.
+g_s_patjuk,season,동지 팥죽 세 그릇 마련,item:dish_patjuk>=3,15,28,f_dongji,0,2,동짓날 저녁에 나눈다. 창고에 세 그릇.
+g_s_guests,season,손님 다섯 번 맞이,ledger>=5,1,28,f_dongji,0,2,저녁 심사에서 받은 손님 누계.
+g_s_rooms,season,객실 둘,rooms:guest_room>=2,1,28,f_dongji,0,2,빈터에서 E — 객실.
+g_s_farm12,season,텃밭 12칸,unlock:u_farm_plots_12,7,28,,50,1,7일차 무렵 열린다.
+g_s_second_floor,season,2층 올리기,floors>=2,5,28,,100,2,점선 칸에서 E — 증축.
+g_l_settle,long,하숙생과 호감도 3,affinity:y01_ttukttagi>=3,1,0,,0,3,밤 사연을 들어주면 오른다.
+g_l_species,long,명부에 네 종족,species>=4,1,0,,100,2,날씨·음기에 따라 오는 손님이 다르다.
+g_l_festival,long,동지 만점,festival:f_dongji>=11,1,0,,200,5,팥죽 셋·손님 둘·객실 둘.

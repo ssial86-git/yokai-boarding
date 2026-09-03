@@ -36,3 +36,14 @@ u_warden_rematch,11,12,day,unlock:u_ash_warden,feature,boss_rematch,잿빛 파�
 u_dalgael_act3,12,13,night,affinity:y03_dalgael>=2;item:record_piece>=1,event,y03_act3,달갤의 마지막 사연.
 u_rare_visitor,12,14,evening,,feature,rare_visitor_species,희귀한 뜨내기가 소문을 듣고 온다.
 u_party,3,3,day,unlock:u_ash_field,feature,party,아침 배치의 '동행'에 하숙생을 놓으면 잿빛 들에 함께 간다. 동료가 알아서 싸운다.
+u_goals,1,1,morning,,feature,goals,할 일 탭 [H]에 오늘·절기·장기 목표가 적힌다. 달력 [K]과 함께 보자.
+u_se_rain_start,10,10,morning,,season_event,se_rain_start,장마가 시작됐다. 이틀 동안 비 — 텃밭은 절로 젖는다.
+u_festival_notice,14,14,morning,,feature,festival_notice,동지가 두 주 뒤다. 달력 [K]에 ★ 로 적혔다 — 팥죽·손님·객실을 준비하자.
+u_recipes_tier3,15,15,day,unlock:u_recipes_tier2,feature,recipes_tier3,동지 팥죽 레시피가 떠올랐다. 뒷산에서 팥을 딴다.
+u_house_decor,17,17,morning,,feature,house_decor,팥죽 세 그릇이 갖춰지면 동짓날 집에 등이 걸린다.
+u_goal_long,18,18,morning,,feature,long_goals,장기 목표가 적혔다 — 정착·명부·명절 만점.
+u_se_full_moon,20,20,morning,,season_event,se_full_moon,달무리가 떴다. 이틀 동안 음기가 짙다.
+u_fish_carp,22,22,day,unlock:u_rod_2,fish,f_carp,저녁 개울에 잉어가 올라온다 (낚싯대 Lv2).
+u_recipe_red_bean_rice,24,24,day,unlock:u_recipes_tier3,recipe,r_red_bean_rice,팥밥 — 남은 팥으로 두 그릇.
+u_festival_eve,26,26,morning,,feature,festival_eve,이틀 뒤 동지. 준비 목표를 확인하자 — 할 일 [H].
+u_festival_dongji,28,28,morning,,festival,f_dongji,동짓날. 저녁에 팥죽을 나누고 채점한다.

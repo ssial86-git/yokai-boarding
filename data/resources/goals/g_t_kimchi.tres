@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_kimchi"
+tier = "today"
+name_ko = "김치 담그기"
+condition = "count:cook.r_kimchi>=1"
+day_min = 11
+day_max = 16
+festival_id = ""
+reward_money = 60
+reward_reputation = 1
+hint_ko = "배추 둘·마늘 하나. 티어 2."

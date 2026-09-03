@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_se_rain_start"
+day_min = 10
+expected_day = 10
+timeband = "morning"
+condition = ""
+unlock_type = "season_event"
+unlock_id = "se_rain_start"
+hint_ko = "장마가 시작됐다. 이틀 동안 비 — 텃밭은 절로 젖는다."

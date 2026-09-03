@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_recipes_tier3"
+day_min = 15
+expected_day = 15
+timeband = "day"
+condition = "unlock:u_recipes_tier2"
+unlock_type = "feature"
+unlock_id = "recipes_tier3"
+hint_ko = "동지 팥죽 레시피가 떠올랐다. 뒷산에서 팥을 딴다."

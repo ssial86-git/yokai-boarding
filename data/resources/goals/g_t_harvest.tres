@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_harvest"
+tier = "today"
+name_ko = "수확 두 번"
+condition = "count:farm.harvest>=2"
+day_min = 4
+day_max = 7
+festival_id = ""
+reward_money = 40
+reward_reputation = 0
+hint_ko = "물을 매일 주면 무는 사흘."

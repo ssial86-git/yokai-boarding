@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/recipe_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_red_bean_rice"
+name_ko = "팥밥"
+tier = 3
+output_item = "dish_red_bean_rice"
+output_count = 2
+ingredients = ["m_red_bean:1", "meal:1"]
+cook_seconds = 30.0
+buff_stat = "none"
+buff_amount = 0

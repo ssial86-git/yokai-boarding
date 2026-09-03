@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MetricsEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/metrics_event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "festival_started"
+category = "day"
+fields = ["festival", "met", "total"]
+description = "명절 당일 아침 (준비 목표 충족 수)"

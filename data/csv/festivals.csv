@@ -1,0 +1,2 @@
+id,name_ko,season,day_of_season,dish_recipe,dish_target,guest_target,goal_ids,score_per_goal,score_per_guest,score_per_dish,reward_money,reward_reputation,perfect_reward_reputation,rare_guest_species,decor_goal,hint_ko
+f_dongji,동지,spring,28,r_patjuk,3,2,g_s_patjuk;g_s_guests;g_s_rooms,2,1,1,300,5,5,g_geumjuri,g_s_patjuk,동짓날. 팥죽을 나누면 액이 물러간다 — 팥죽 3그릇·손님 둘·객실 둘이면 만점.

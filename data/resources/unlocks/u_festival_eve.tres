@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_festival_eve"
+day_min = 26
+expected_day = 26
+timeband = "morning"
+condition = ""
+unlock_type = "feature"
+unlock_id = "festival_eve"
+hint_ko = "이틀 뒤 동지. 준비 목표를 확인하자 — 할 일 [H]."

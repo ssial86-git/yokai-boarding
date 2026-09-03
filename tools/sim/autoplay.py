@@ -66,7 +66,7 @@ def cadence_gaps(unlocks: list[dict[str, str]], day_minutes: float, days: int) -
     worst_text = ""
     previous = 0.0
     previous_id = "시작"
-    for minutes, unlock_id in moments + [(end, "14일차 끝")]:
+    for minutes, unlock_id in moments + [(end, f"{days}일차 끝")]:
         gap = minutes - previous
         if gap > worst:
             worst = gap
@@ -161,9 +161,9 @@ def economy_curve(tune: dict, unlocks, crops, items, materials, regions, species
 
 
 def main(argv: list[str]) -> int:
-    parser = argparse.ArgumentParser(description="14일 자동 플레이 시뮬레이터")
+    parser = argparse.ArgumentParser(description="자동 플레이 시뮬레이터 (기본 28일 = 봄 한 절기, P2-S2)")
     parser.add_argument("--check", action="store_true", help="케이던스·위임 교차점이 목표 밖이면 종료 코드 1")
-    parser.add_argument("--days", type=int, default=14)
+    parser.add_argument("--days", type=int, default=28)
     args = parser.parse_args(argv)
 
     tune = tuning()

@@ -11,3 +11,5 @@ r_roasted_sweet_potato,군고구마,2,dish_roasted_sweet_potato,2,sweet_potato:2
 r_moon_melon_slice,달무리 화채,2,dish_moon_melon_slice,1,moon_melon:1;m_spring_water:1,20,sight,2
 r_ash_pepper_stew,잿빛 고추찜,2,dish_ash_pepper_stew,1,ash_pepper:1;meal:1;m_ash_grass:1,50,strength,2
 r_shadow_stew,그늘탕,2,dish_shadow_stew,1,m_shadow_moss:1;m_mushroom:1,60,skill,2
+r_patjuk,동지 팥죽,3,dish_patjuk,1,m_red_bean:2;meal:1,60,courage,2
+r_red_bean_rice,팥밥,3,dish_red_bean_rice,2,m_red_bean:1;meal:1,30,none,0

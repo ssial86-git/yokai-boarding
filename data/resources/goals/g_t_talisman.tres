@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_talisman"
+tier = "today"
+name_ko = "부적 한 장 만들기"
+condition = "count:craft>=1"
+day_min = 5
+day_max = 9
+festival_id = ""
+reward_money = 40
+reward_reputation = 1
+hint_ko = "작업장을 지어 그 앞에서 E."

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_till"
+tier = "today"
+name_ko = "텃밭 세 칸 갈기"
+condition = "count:farm.till>=3"
+day_min = 1
+day_max = 3
+festival_id = ""
+reward_money = 20
+reward_reputation = 0
+hint_ko = "마당 텃밭에서 괭이질. 씨앗은 무·깻잎부터."

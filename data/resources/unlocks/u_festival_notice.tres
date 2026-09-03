@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_festival_notice"
+day_min = 14
+expected_day = 14
+timeband = "morning"
+condition = ""
+unlock_type = "feature"
+unlock_id = "festival_notice"
+hint_ko = "동지가 두 주 뒤다. 달력 [K]에 ★ 로 적혔다 — 팥죽·손님·객실을 준비하자."

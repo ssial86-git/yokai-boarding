@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_gather_moon"
+tier = "today"
+name_ko = "만월 채집 — 누계 서른"
+condition = "count:gather>=30"
+day_min = 20
+day_max = 22
+festival_id = ""
+reward_money = 80
+reward_reputation = 1
+hint_ko = "만월 이틀은 채집량이 는다."

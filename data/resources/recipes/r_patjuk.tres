@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/recipe_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_patjuk"
+name_ko = "동지 팥죽"
+tier = 3
+output_item = "dish_patjuk"
+output_count = 1
+ingredients = ["m_red_bean:2", "meal:1"]
+cook_seconds = 60.0
+buff_stat = "courage"
+buff_amount = 2

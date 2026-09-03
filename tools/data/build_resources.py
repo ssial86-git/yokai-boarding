@@ -48,7 +48,9 @@ ENUMS: dict[str, set[str]] = {
     "talisman_effect": {"throw", "gather", "return"},
     "region_kind": {"house", "yard", "wild", "gate", "expedition"},
     "enemy_tier": {"normal", "boss"},
-    "unlock_type": {"region", "tool", "talisman", "enemy", "yokai", "event", "crop", "material", "fish", "verb", "feature"},
+    "unlock_type": {"region", "tool", "talisman", "enemy", "yokai", "event", "crop", "material", "fish", "verb", "feature",
+                    "season_event", "festival", "recipe"},
+    "goal_tier": {"today", "season", "long"},
     "verb": {"walk", "gather", "farm", "cook", "fish", "craft", "talk", "intake", "assign", "build", "explore", "fight", "sleep"},
     "chain_content_type": {"material", "crop", "talisman", "fish", "recipe"},
     "chain_use_kind": {"cook", "craft", "sell", "gift", "buff", "quest", "feed", "bait", "decor", "combat", "gather", "travel", "upgrade", "event"},
@@ -75,7 +77,21 @@ LIST_SEPARATOR = ";"
 UNLOCK_REF_TABLES: dict[str, str] = {
     "region": "regions", "tool": "tools", "talisman": "talismans", "enemy": "enemies", "yokai": "yokai",
     "event": "events", "crop": "crops", "material": "materials", "fish": "fish",
+    "season_event": "season_events", "festival": "festivals", "recipe": "recipes",
 }
+# 목표 조건 문법 (세미콜론 AND): 정량 절 <name>[:<target>]>=<n>, 불리언 절 resident:/unlock:/flag:
+GOAL_CONDITION_PATTERN = re.compile(
+    r"^((item|count|rooms|affinity|festival):[a-z0-9_.]+>=\d+|(ledger|species|floors|beds|money|reputation)>=\d+"
+    r"|(resident|unlock|flag):[a-z0-9_]+)$"
+)
+
+
+def parse_goal_condition(value: str) -> str:
+    v = value.strip()
+    for part in filter(None, (p.strip() for p in v.split(LIST_SEPARATOR))):
+        if not GOAL_CONDITION_PATTERN.match(part):
+            raise ValueError(f"goal condition 문법 오류: {part!r}")
+    return v
 # 사슬 대상 타입 -> 참조 테이블. recipes 테이블이 생기면 자동으로 검증 대상에 든다.
 CHAIN_REF_TABLES: dict[str, str] = {
     "material": "materials", "crop": "crops", "talisman": "talismans", "fish": "fish", "recipe": "recipes",
@@ -676,6 +692,49 @@ TABLES: list[Table] = [
         ],
     ),
     Table(
+        name="goals",
+        csv_file="goals.csv",
+        script_class="GoalData",
+        script_file="goal_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("tier", parse_enum("goal_tier")),
+            Column("name_ko", parse_str),
+            Column("condition", parse_goal_condition),  # 참조 대상은 check_goals
+            Column("day_min", int),
+            Column("day_max", int),
+            Column("festival_id", parse_str, ref="festivals"),
+            Column("reward_money", int),
+            Column("reward_reputation", int),
+            Column("hint_ko", parse_str),
+        ],
+    ),
+    Table(
+        name="festivals",
+        csv_file="festivals.csv",
+        script_class="FestivalData",
+        script_file="festival_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("name_ko", parse_str),
+            Column("season", parse_str, ref="seasons"),
+            Column("day_of_season", int),
+            Column("dish_recipe", parse_str, ref="recipes"),
+            Column("dish_target", int),
+            Column("guest_target", int),
+            Column("goal_ids", parse_id_list, ref="goals", ref_ids=lambda v: v),
+            Column("score_per_goal", int),
+            Column("score_per_guest", int),
+            Column("score_per_dish", int),
+            Column("reward_money", int),
+            Column("reward_reputation", int),
+            Column("perfect_reward_reputation", int),
+            Column("rare_guest_species", parse_str, ref="guest_species"),
+            Column("decor_goal", parse_str, ref="goals"),
+            Column("hint_ko", parse_str),
+        ],
+    ),
+    Table(
         name="tuning",
         csv_file="tuning.csv",
         script_class="TuningData",
@@ -845,6 +904,30 @@ def check_seasons(tables: dict[str, Table]) -> None:
             raise BuildError(f"season_events.csv {row['_line']}행: 이벤트가 절기 끝을 넘어감")
 
 
+def check_goals(tables: dict[str, Table]) -> None:
+    """목표 조건이 가리키는 아이템·방·요괴·해금·명절이 실재하고, 날 창이 뒤집히지 않았으며, 명절이 절기 길이 안인지."""
+    keys = {name: t.key_values() for name, t in tables.items()}
+    ref_by_name = {"item": "items", "rooms": "rooms", "affinity": "yokai", "resident": "yokai", "unlock": "unlocks",
+                   "festival": "festivals"}
+    for row in tables["goals"].rows:
+        line = row["_line"]
+        if row["day_max"] and row["day_max"] < row["day_min"]:
+            raise BuildError(f"goals.csv {line}행: day_max({row['day_max']}) < day_min({row['day_min']})")
+        for part in filter(None, (p.strip() for p in row["condition"].split(LIST_SEPARATOR))):
+            name, _, rest = part.partition(":")
+            if name in ref_by_name and rest:
+                target = rest.split(">=")[0]
+                if target not in keys[ref_by_name[name]]:
+                    raise BuildError(f"goals.csv {line}행: 조건의 {name} {target!r} 가 {ref_by_name[name]}.csv 에 없음")
+    seasons = {r["id"]: r for r in tables["seasons"].rows}
+    for row in tables["festivals"].rows:
+        length = seasons[row["season"]]["length_days"]
+        if not 1 <= row["day_of_season"] <= length:
+            raise BuildError(f"festivals.csv {row['_line']}행: day_of_season={row['day_of_season']} 이 절기 길이 {length} 밖")
+        if row["decor_goal"] and row["decor_goal"] not in row["goal_ids"]:
+            raise BuildError(f"festivals.csv {row['_line']}행: decor_goal 은 goal_ids 안에 있어야 함")
+
+
 def check_chains(tables: dict[str, Table]) -> None:
     """재미 원칙 3 의 기계 강제: 용도 3칸이 전부 차야 하고(서로 다른 갈래), 대상 콘텐츠 전부가 사슬 행을 가져야 한다."""
     chains = tables["chains"]
@@ -981,6 +1064,7 @@ def main(argv: list[str]) -> int:
         check_dialogue(tables)
         check_unlocks(tables)
         check_seasons(tables)
+        check_goals(tables)
         check_chains(tables)
         for table in tables.values():
             if table.dict_value is not None:

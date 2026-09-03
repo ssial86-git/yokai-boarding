@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_goal_long"
+day_min = 18
+expected_day = 18
+timeband = "morning"
+condition = ""
+unlock_type = "feature"
+unlock_id = "long_goals"
+hint_ko = "장기 목표가 적혔다 — 정착·명부·명절 만점."

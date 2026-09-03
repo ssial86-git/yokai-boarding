@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_gather"
+tier = "today"
+name_ko = "뒷산에서 다섯 번 캐기"
+condition = "count:gather>=5"
+day_min = 2
+day_max = 4
+festival_id = ""
+reward_money = 30
+reward_reputation = 0
+hint_ko = "뒷산 길이 열렸다. 나물·버섯·돌."

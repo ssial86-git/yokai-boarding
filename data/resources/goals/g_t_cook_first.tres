@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_cook_first"
+tier = "today"
+name_ko = "첫 요리 한 그릇"
+condition = "count:cook>=1"
+day_min = 2
+day_max = 5
+festival_id = ""
+reward_money = 30
+reward_reputation = 1
+hint_ko = "가마솥 앞에서 E. 나물무침이 제일 쉽다."
