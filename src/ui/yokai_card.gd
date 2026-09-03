@@ -48,6 +48,7 @@ func refresh() -> void:
 	var cell := GameState.assignment.get_cell(yokai_id)
 	var place := DataRegistry.text("card_rest") if cell == Assignment.REST \
 		else DataRegistry.text("card_field") if cell == Assignment.FIELD \
+		else DataRegistry.text("card_party") if cell == Assignment.PARTY \
 		else DataRegistry.room_name(GameState.room_grid.get_room_id(cell))
 	_status_label.text = DataRegistry.text("card_status", {
 		"place": place, "condition": GameState.get_condition(yokai_id)})

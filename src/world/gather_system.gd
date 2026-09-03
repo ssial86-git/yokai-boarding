@@ -9,6 +9,9 @@ const PLACEHOLDER_COLORS: Array[String] = ["6b8e5a", "9bb572", "c7d48f", "7a5c8f
 
 var _cache: Dictionary = {}  # region_id -> GatherPoints
 var _stamina_cost: float = 5.0
+## 채집 부적 효과: 남은 초와 추가 개수 (P1-S4)
+var _bonus_remaining: float = 0.0
+var _bonus_amount: int = 0
 
 
 func _ready() -> void:
@@ -17,6 +20,21 @@ func _ready() -> void:
 		if day > 1 or _cache.is_empty():
 			respawn_all())
 	Events.game_loaded.connect(func(_slot: int) -> void: _cache.clear())
+
+
+func _process(delta: float) -> void:
+	if _bonus_remaining > 0.0 and not Clock.is_held():
+		_bonus_remaining = maxf(_bonus_remaining - delta, 0.0)
+
+
+func bonus_active() -> bool:
+	return _bonus_remaining > 0.0 and _bonus_amount > 0
+
+
+## 채집 부적: seconds 동안 채집마다 amount 개를 더 준다.
+func apply_bonus(amount: int, seconds: float) -> void:
+	_bonus_amount = maxi(amount, 0)
+	_bonus_remaining = maxf(seconds, 0.0)
 
 
 func points_for(region_id: String) -> GatherPoints:
@@ -81,12 +99,13 @@ func gather(region_id: String, index: int) -> bool:
 	if material_id.is_empty():
 		return false
 	GameState.region_state(region_id)["gather_taken"] = points.taken_indices()
-	GameState.inventory.add(material_id, 1)
+	var count := 1 + (_bonus_amount if bonus_active() else 0)  # 채집 부적
+	GameState.inventory.add(material_id, count)
 	GameState.stamina.spend(_stamina_cost)
 	var material := DataRegistry.get_material(material_id)
 	var tool_kind := material.tool_kind if material != null else TOOL_NONE
-	Events.item_added.emit(material_id, 1)
-	Events.message_posted.emit(DataRegistry.text("msg_gathered", {"name": DataRegistry.item_name(material_id), "count": 1}))
+	Events.item_added.emit(material_id, count)
+	Events.message_posted.emit(DataRegistry.text("msg_gathered", {"name": DataRegistry.item_name(material_id), "count": count}))
 	Metrics.record("gather", {"material": material_id, "region": region_id, "tool": tool_kind})
 	Events.gather_point_changed.emit(region_id, index)
 	return true

@@ -49,7 +49,7 @@ func test_p1_tables_loaded_and_typed() -> void:
 	var throw := DataRegistry.get_talisman("t_throw")
 	assert_object(throw).is_not_null()
 	assert_str(throw.effect).is_equal("throw")
-	assert_array(throw.craft_cost).contains_exactly(["cloth:1", "scrap:1"])
+	assert_array(throw.craft_cost).contains_exactly(["cloth:1", "m_ember_stone:1"])  # 전리품 → 제작 사슬 (S4)
 	assert_object(DataRegistry.get_item("t_throw")).is_not_null()  # 부적은 인벤토리 아이템이기도 하다
 
 	var deep := DataRegistry.get_region("r_ash_field_deep")

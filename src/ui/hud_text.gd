@@ -17,6 +17,8 @@ static func assignment(yokai_id: String, cell: Vector2i) -> String:
 		return DataRegistry.text("msg_rested", {"name": yokai_name})
 	if cell == Assignment.FIELD:
 		return DataRegistry.text("msg_assigned_field", {"name": yokai_name})
+	if cell == Assignment.PARTY:
+		return DataRegistry.text("msg_assigned_party", {"name": yokai_name})
 	var room_name := DataRegistry.room_name(GameState.room_grid.get_room_id(cell))
 	return DataRegistry.text("msg_assigned", {"name": yokai_name, "room": room_name})
 

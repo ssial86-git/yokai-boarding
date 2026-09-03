@@ -8,6 +8,8 @@ const SKY_HEIGHT := 200.0
 const DOOR_SIZE := Vector2(16.0, 32.0)
 ## 배경·바닥 그림을 벽 밖으로 늘리는 폭 (뷰포트 너비)
 const EDGE_FILL_PX := 640.0
+## 바닥 아래 카메라 여유 — 바닥선이 화면 아래에서 이만큼 위로 올라온다
+const GROUND_BELOW_PX := 120.0
 
 var region: RegionData
 var layout: RegionLayout
@@ -85,11 +87,12 @@ func _build_fishing_spot() -> void:
 	node.add_child(marker)
 
 
+## 카메라 경계. 바닥 아래에 여유(GROUND_BELOW_PX)를 두어 바닥이 화면 맨 아래에 붙지 않게 한다 — 왼쪽 아래 로그가 배우를 가리지 않도록.
 func bounds() -> Rect2:
 	var top := 0.0
 	for segment in layout.segments:
 		top = minf(top, segment.y)
-	return Rect2(0.0, top - SKY_HEIGHT, layout.width_px, SKY_HEIGHT + _ground_thickness - top)
+	return Rect2(0.0, top - SKY_HEIGHT, layout.width_px, SKY_HEIGHT + maxf(_ground_thickness, GROUND_BELOW_PX) - top)
 
 
 func ground_y_at(x: float) -> float:

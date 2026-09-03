@@ -84,6 +84,8 @@ func _initialize() -> void:
 		_check("guest_card_shown", int(panel.call("guest_card_count")) == guests.size(), "손님 카드가 패널에 보인다")
 		_check("guest_actor_spawned", int(manager.call("actor_count")) == (gs.get("residents") as Array).size() + guests.size(),
 			"손님 액터가 집에 보인다")
+		# 검증 에이전트가 잡은 결함: 카드 3장이 되면 휴식·텃밭·동행 드롭존이 화면 밖으로 밀렸다
+		_check("drop_zones_on_screen_with_guest", bool(panel.call("zones_on_screen")), "카드 3장에도 휴식·텃밭·동행 존이 화면 안에 있다")
 		await _shot("06_evening_after_accept")
 	_drain(story, intake)
 
@@ -191,6 +193,43 @@ func _initialize() -> void:
 	_check("sleep_button_on_screen", sleep_rect.size.x > 0.0 and sleep_rect.end.x <= view_width + 0.5,
 		"창고 16종·돈 4자리에도 취침 버튼이 화면 안에 있다 (right=%.0f / %.0f)" % [sleep_rect.end.x, view_width])
 	await _shot("14_long_inventory_bar")
+
+	# --- P1-S4: 잿빛 들 — 동행 편성 → 적·동료 스폰 → 부적 투척 → 귀환 ---
+	var expedition: Node = main.get("expedition_system")
+	for unlock_id in ["u_well", "u_ash_field", "u_party"]:
+		(gs.get("unlocked") as Dictionary)[unlock_id] = int(gs.get("day"))
+	_check("party_assign_1", int(assign.call("try_assign", "y01_ttukttagi", Vector2i(-3, -3))) == 0, "뚝딱이 → 동행 (아침 배치)")
+	_check("party_assign_2", int(assign.call("try_assign", "y02_eoduki", Vector2i(-3, -3))) == 0, "어둑이 → 동행")
+	_check("travel_well", bool(region_manager.call("travel", "r_well")), "마당 → 우물 아래")
+	_check("travel_ash_field", bool(region_manager.call("travel", "r_ash_field")), "우물 → 잿빛 들")
+	await _frames(3)
+	var enemies: Array = expedition.get("enemies")
+	var companions: Array = expedition.get("companions")
+	_check("enemies_spawned", enemies.size() == 4, "잿빛 들에 적 4마리 (regions.enemy_count)")
+	_check("companions_spawned", companions.size() == 2, "동행 2명이 따라왔다")
+	if not enemies.is_empty():
+		player.call("place", (enemies[0] as Node2D).global_position + Vector2(-60.0, 0.0))
+		# 동료는 걸어오는 데 시간이 걸리므로 캡처를 위해 플레이어 뒤에 세운다
+		for i in companions.size():
+			(companions[i] as Node2D).global_position = player.global_position + Vector2(-24.0 * float(i + 1), 0.0)
+	await _frames(3)
+	await _shot("15_ash_field")
+	inventory.call("add", "t_throw", 1)
+	var target_hp := int((enemies[0] as Node).get("hp")) if not enemies.is_empty() else 0
+	_check("talisman_thrown", bool(expedition.call("throw_talisman")), "Q: 투척 부적을 던졌다")
+	await _frames(4)  # 부적이 플레이어 앞으로 나온 뒤 찍는다
+	var in_flight := (expedition.get("projectiles") as Array).size() == 1
+	var hit := not enemies.is_empty() and is_instance_valid(enemies[0]) and int((enemies[0] as Node).get("hp")) < target_hp
+	_check("projectile_in_flight_or_hit", in_flight or hit, "부적이 날고 있거나 적을 맞혔다 (flight=%s hit=%s)" % [in_flight, hit])
+	await _shot("16_talisman_flight")
+	for i in 60:
+		await process_frame
+		if (expedition.get("enemies") as Array).size() < enemies.size():
+			break
+	inventory.call("add", "t_return", 1)
+	_check("talisman_return", bool(expedition.call("use_return_talisman")), "R: 귀환 부적으로 집에 돌아왔다")
+	_check("back_home", str(gs.get("player_region")) == "r_house", "집에 있다")
+	await _frames(2)
 
 	_write_report()
 

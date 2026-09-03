@@ -113,8 +113,8 @@ func dispatch_all(band: int) -> void:
 		if actor == null:
 			continue
 		var work_cell := GameState.assignment.get_cell(yokai_id)
-		# 텃밭(FIELD) 배치는 마당에서 일하지만 집 단면에는 대문간 앞에서 일하는 모습으로 보여준다
-		if work_cell == Assignment.FIELD:
+		# 텃밭(FIELD)·동행(PARTY) 배치는 집 밖에서 일하지만 집 단면에는 대문간 앞에서 일하는 모습으로 보여준다
+		if Assignment.is_virtual(work_cell):
 			work_cell = _gate_cell(grid)
 		var goes_to_work := band == Clock.Band.DAY and work_cell != Assignment.REST \
 			and grid.is_in_bounds(work_cell) and grid.is_floor_built(work_cell.y)

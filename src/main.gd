@@ -14,6 +14,7 @@ extends Node2D
 ##  ├ GatherSystem           채집 포인트 리스폰·채집
 ##  ├ StationSystem          가마솥 요리·작업장 제작·도구 벼리기·배식·판매 (실시간)
 ##  ├ FishingSystem          낚시 타이밍 바·추첨
+##  ├ ExpeditionSystem       잿빛 들: 적·미니보스 스폰, 동행 자동 전투, 부적 Q/R/G, 스태미너 0 후퇴
 ##  ├ World (Node2D)
 ##  │   ├ RegionManager      구역 전환 (문 통과)
 ##  │   │   ├ HouseRegion    걸어다니는 집: HouseView + YokaiManager + 바닥·계단·방 앞 상호작용·대문
@@ -49,6 +50,7 @@ var farm_system: FarmSystem
 var gather_system: GatherSystem
 var station_system: StationSystem
 var fishing_system: FishingSystem
+var expedition_system: ExpeditionSystem
 var station_menu: StationMenu
 var fishing_bar: FishingBar
 var region_manager: RegionManager
@@ -109,6 +111,11 @@ func _ready() -> void:
 	fishing_system.name = "FishingSystem"
 	fishing_system.unlock_system = unlock_system
 	add_child(fishing_system)
+	expedition_system = ExpeditionSystem.new()
+	expedition_system.name = "ExpeditionSystem"
+	expedition_system.unlock_system = unlock_system
+	expedition_system.gather_system = gather_system
+	add_child(expedition_system)
 
 	_build_world()
 	_build_ui()
@@ -118,6 +125,8 @@ func _ready() -> void:
 	player.blocked_check = func() -> bool: return build_menu.is_open() or station_menu.is_open()
 	player.movement_locked_check = fishing_system.is_active
 	region_manager.fishing_system = fishing_system
+	expedition_system.region_manager = region_manager
+	player.talisman_requested.connect(_on_talisman_requested)
 	camera.clicked.connect(_on_world_clicked)
 	camera.hovered.connect(house_view.set_hover)
 
@@ -285,6 +294,9 @@ func _ensure_input_actions() -> void:
 		PlayerController.ACTION_DOWN: [KEY_S, KEY_DOWN],
 		PlayerController.ACTION_RUN: [KEY_SHIFT],
 		PlayerController.ACTION_INTERACT: [KEY_E, KEY_SPACE],
+		PlayerController.ACTION_THROW: [KEY_Q],
+		PlayerController.ACTION_RETURN: [KEY_R],
+		PlayerController.ACTION_GATHER: [KEY_G],
 	}
 	for action: StringName in bindings:
 		if InputMap.has_action(action):
@@ -298,6 +310,17 @@ func _ensure_input_actions() -> void:
 
 func _player_screen_position() -> Vector2:
 	return get_viewport().get_canvas_transform() * player.global_position
+
+
+## Q / R / G — 부적 사용은 ExpeditionSystem 이 판단한다 (탐험지 밖에서도 귀환·채집 부적은 쓸 수 있다).
+func _on_talisman_requested(kind: String) -> void:
+	match kind:
+		"throw":
+			expedition_system.throw_talisman()
+		"return":
+			expedition_system.use_return_talisman()
+		"gather":
+			expedition_system.use_gather_talisman()
 
 
 ## 방 앞에서 E: 주방 → 요리·배식, 작업장 → 제작·벼리기, 대문간 → 팔기, 그 외 → 건설·개조 메뉴.

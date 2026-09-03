@@ -73,6 +73,8 @@ func travel(region_id: String, from_region_id: String = "", at: Vector2 = Vector
 	if camera != null:
 		camera.bounds = bounds().grow(float(DataRegistry.tuning.get_int("camera_bounds_margin_px")))
 		camera.snap_to_follow()
+	if region.kind == EXPEDITION_KIND and region.stamina_enter_cost > 0 and origin != region_id:
+		GameState.stamina.spend(float(region.stamina_enter_cost))  # 탐험지 진입 비용 (docs/01 v3: 스태미너 예산)
 	Events.region_entered.emit(region_id)
 	Metrics.record("region_entered", {"region": region_id})
 	if region.kind == EXPEDITION_KIND:

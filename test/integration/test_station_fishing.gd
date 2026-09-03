@@ -80,7 +80,7 @@ func test_craft_talisman_and_upgrade_tool() -> void:
 	assert_int(station_system.available_talismans().size()).is_equal(1)
 	assert_int(station_system.start_craft("t_gather")).is_equal(WorkStation.Outcome.INVALID)
 	GameState.inventory.add("cloth", 1)
-	GameState.inventory.add("scrap", 1)
+	GameState.inventory.add("m_ember_stone", 1)  # 잿빛 들 전리품 → 투척 부적 (사슬)
 	assert_int(station_system.start_craft("t_throw")).is_equal(WorkStation.Outcome.OK)
 	station_system.tick_all(30.0)
 	assert_int(GameState.inventory.get_count("t_throw")).is_equal(1)

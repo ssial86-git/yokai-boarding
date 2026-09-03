@@ -10,11 +10,15 @@ var controller: AssignmentController
 
 var _title: Label
 var _cards_box: HBoxContainer
+var _cards_scroll: ScrollContainer
 var _cards: Dictionary = {}  # yokai_id -> YokaiCard (하숙생)
 var _guest_cards: Array[YokaiCard] = []
 var _rest_zone: Label
 var _field_zone: FieldZone
+var _party_zone: FieldZone
 var _card_size: int = 40
+## 카드 줄 높이 = 카드 아이콘 + 이름·상태 두 줄 여유
+const CARD_ROW_EXTRA_PX := 40
 
 
 ## 텃밭 놓기 영역: 카드 드롭을 받아 FIELD 배치로 넘긴다.
@@ -46,10 +50,17 @@ func _ready() -> void:
 	add_child(box)
 	_title = Label.new()
 	box.add_child(_title)
+	# 카드 줄은 가로 스크롤 — 하숙생·손님이 늘어도 아래 드롭존이 화면 밖으로 밀리지 않는다
+	_cards_scroll = ScrollContainer.new()
+	_cards_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_cards_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	_cards_scroll.custom_minimum_size = Vector2(0, _card_size + CARD_ROW_EXTRA_PX)
+	box.add_child(_cards_scroll)
+	_cards_box = HBoxContainer.new()
+	_cards_scroll.add_child(_cards_box)
+	# 드롭존 줄: 휴식 · 텃밭 · 동행 — 셋이 폭을 나눠 쓴다
 	var row := HBoxContainer.new()
 	box.add_child(row)
-	_cards_box = HBoxContainer.new()
-	row.add_child(_cards_box)
 	_rest_zone = Label.new()
 	_rest_zone.text = DataRegistry.text("ui_rest_zone")
 	_rest_zone.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -65,11 +76,24 @@ func _ready() -> void:
 	_field_zone.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_field_zone.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_field_zone.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_field_zone.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_field_zone.custom_minimum_size = Vector2(DataRegistry.tuning.get_int("rest_zone_min_width_px"), 0)
 	_field_zone.on_drop = func(yokai_id: String) -> void: controller.try_assign(yokai_id, Assignment.FIELD)
 	_field_zone.can_accept = func(yokai_id: String) -> bool:
 		return controller.can_assign(yokai_id, Assignment.FIELD) == AssignmentController.Outcome.OK
 	row.add_child(_field_zone)
+	# 탐험 동행 슬롯 (P1-S4): 여기 놓인 하숙생이 잿빛 들에 따라와 자동으로 싸운다
+	_party_zone = FieldZone.new()
+	_party_zone.text = DataRegistry.text("ui_party_zone")
+	_party_zone.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_party_zone.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_party_zone.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_party_zone.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_party_zone.custom_minimum_size = Vector2(DataRegistry.tuning.get_int("rest_zone_min_width_px"), 0)
+	_party_zone.on_drop = func(yokai_id: String) -> void: controller.try_assign(yokai_id, Assignment.PARTY)
+	_party_zone.can_accept = func(yokai_id: String) -> bool:
+		return controller.can_assign(yokai_id, Assignment.PARTY) == AssignmentController.Outcome.OK
+	row.add_child(_party_zone)
 	# 배치 패널은 집 안에서만 (마당·뒷산에서는 화면을 비운다)
 	Events.region_entered.connect(func(region_id: String) -> void: visible = region_id == HouseRegion.REGION_ID)
 
@@ -106,6 +130,16 @@ func rebuild() -> void:
 		_guest_cards.append(card)
 		index += 1
 	refresh()
+	_fit_cards_row.call_deferred()
+
+
+## 카드 줄 높이를 카드의 실제 최소 높이에 맞춘다 (세로 스크롤을 끈 채 잘리지 않게).
+func _fit_cards_row() -> void:
+	if _cards_scroll == null or _cards_box == null:
+		return
+	var needed := _cards_box.get_combined_minimum_size().y
+	if needed > 0.0:
+		_cards_scroll.custom_minimum_size = Vector2(0, needed)
 
 
 func refresh() -> void:
@@ -116,6 +150,16 @@ func refresh() -> void:
 		card.refresh()
 	for card: YokaiCard in _guest_cards:
 		card.refresh()
+
+
+## 드롭존 세 개가 전부 뷰포트 안에 있는지 (검증용 — 카드가 늘어도 조작이 막히지 않아야 한다).
+func zones_on_screen() -> bool:
+	var width := get_viewport_rect().size.x
+	for zone: Control in [_rest_zone, _field_zone, _party_zone]:
+		var rect := zone.get_global_rect()
+		if rect.size.x <= 0.0 or rect.end.x > width + 0.5 or rect.position.x < -0.5:
+			return false
+	return true
 
 
 func get_card(yokai_id: String) -> YokaiCard:

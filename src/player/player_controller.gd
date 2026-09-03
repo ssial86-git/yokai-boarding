@@ -5,8 +5,13 @@ extends CharacterBody2D
 ## 대화·심사(Clock hold)나 메뉴가 열려 있으면 움직이지 않는다.
 
 signal interacted(target: Interactable)
+## 부적 사용 요청: "throw" / "return" / "gather" (Q / R / G). ExpeditionSystem 이 받는다.
+signal talisman_requested(kind: String)
 
 const SPRITE_PATH := "res://assets/art_generated/player.png"
+const ACTION_THROW := &"talisman_throw"
+const ACTION_RETURN := &"talisman_return"
+const ACTION_GATHER := &"talisman_gather"
 const LADDER_GROUP := &"ladder"
 const LADDER_LAYER_BIT := 4
 const WORLD_LAYER_BIT := 1
@@ -150,6 +155,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(ACTION_INTERACT):
 		if try_interact():
 			get_viewport().set_input_as_handled()
+		return
+	if not is_controllable():
+		return
+	for pair: Array in [[ACTION_THROW, "throw"], [ACTION_RETURN, "return"], [ACTION_GATHER, "gather"]]:
+		if event.is_action_pressed(pair[0]):
+			talisman_requested.emit(pair[1])
+			get_viewport().set_input_as_handled()
+			return
 
 
 ## 지금 잡힌 대상과 상호작용. 테스트·자동 플레이도 이 함수를 부른다.

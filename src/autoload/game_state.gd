@@ -68,6 +68,7 @@ func reset_new_game() -> void:
 	inventory = Inventory.new()
 	assignment = Assignment.new()
 	assignment.field_capacity = DataRegistry.tuning.get_int("field_workers_max")
+	assignment.party_capacity = DataRegistry.tuning.get_int("party_max")
 	guests.clear()
 	ledger.clear()
 	flags.clear()
@@ -284,6 +285,7 @@ func from_dict(data: Dictionary) -> bool:
 		return false
 	var new_assignment := Assignment.new()
 	new_assignment.field_capacity = DataRegistry.tuning.get_int("field_workers_max")
+	new_assignment.party_capacity = DataRegistry.tuning.get_int("party_max")
 	if not new_assignment.from_dict(data.get("assignment", {})):
 		return false
 
