@@ -1,0 +1,75 @@
+class_name RegionManager
+extends Node2D
+## 구역 전환: 하숙집(HouseRegion, 상주)과 야외 구역(RegionView, regions.csv 로 그때그때 조립) 중 하나만 보이고,
+## 플레이어는 이 노드의 자식으로 남아 구역 사이를 옮겨 다닌다. 문 통과 = travel().
+
+const HOUSE_REGION_ID := HouseRegion.REGION_ID
+const EXPEDITION_KIND := "expedition"
+
+var player: PlayerController
+var house_region: HouseRegion
+var farm_system: FarmSystem
+var gather_system: GatherSystem
+var unlock_system: UnlockSystem
+var camera: HouseCamera
+
+var current_region_id: String = ""
+var _outdoor: RegionView
+
+
+func _ready() -> void:
+	house_region.travel = travel
+	Events.game_loaded.connect(func(_slot: int) -> void:
+		travel(GameState.player_region, "", GameState.player_position))
+
+
+func current_view() -> Node2D:
+	return house_region if current_region_id == HOUSE_REGION_ID else _outdoor
+
+
+func bounds() -> Rect2:
+	if current_region_id == HOUSE_REGION_ID:
+		return house_region.bounds()
+	return _outdoor.bounds() if _outdoor != null else Rect2()
+
+
+func is_region_open(region_id: String) -> bool:
+	return unlock_system == null or unlock_system.is_region_open(region_id)
+
+
+## region_id 로 이동. 잠겨 있으면 false. at 이 주어지면 그 발 위치에, 아니면 from 쪽 문 앞에 선다.
+func travel(region_id: String, from_region_id: String = "", at: Vector2 = Vector2(NAN, NAN)) -> bool:
+	var region := DataRegistry.get_region(region_id)
+	if region == null:
+		push_error("RegionManager: 구역 없음 %s" % region_id)
+		return false
+	if not is_region_open(region_id):
+		Events.message_posted.emit(DataRegistry.text("msg_region_locked"))
+		return false
+	var origin := from_region_id if not from_region_id.is_empty() else current_region_id
+	if _outdoor != null:
+		_outdoor.queue_free()
+		_outdoor = null
+	if region_id == HOUSE_REGION_ID:
+		house_region.visible = true
+	else:
+		house_region.visible = false
+		_outdoor = RegionView.new()
+		_outdoor.name = "Region_%s" % region_id
+		_outdoor.is_region_open = is_region_open
+		_outdoor.setup(region, func(target: String) -> void: travel(target), farm_system, gather_system)
+		add_child(_outdoor)
+		move_child(_outdoor, 0)  # 플레이어보다 뒤에 그린다
+	current_region_id = region_id
+	var spawn := at if not is_nan(at.x) else (
+		house_region.spawn_position(origin) if region_id == HOUSE_REGION_ID else _outdoor.spawn_position(origin))
+	player.place(spawn)
+	GameState.set_player_location(region_id, spawn)
+	if camera != null:
+		camera.bounds = bounds().grow(float(DataRegistry.tuning.get_int("camera_bounds_margin_px")))
+		camera.snap_to_follow()
+	Events.region_entered.emit(region_id)
+	Metrics.record("region_entered", {"region": region_id})
+	if region.kind == EXPEDITION_KIND:
+		Metrics.record("explore_enter", {"region": region_id})
+	return true

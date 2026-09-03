@@ -8,6 +8,7 @@ const FLAG_FIRST_DAY := "first_day_started"
 const FLAG_FIRST_BUILD := "first_build_done"
 const FLAG_FIRST_INTAKE := "first_intake_done"
 const FLAG_EXTRA_BED := "first_extra_bed"
+const FLAG_FIRST_REGION_CHANGE := "first_region_change"
 
 var current_hint: HintData
 
@@ -31,6 +32,9 @@ func _ready() -> void:
 		if outcome != Intake.Outcome.NO_BED:
 			_set_flag(FLAG_FIRST_INTAKE))
 	Events.day_started.connect(func(_day: int) -> void: refresh())
+	Events.region_entered.connect(func(region_id: String) -> void:
+		if region_id != HouseRegion.REGION_ID:
+			_set_flag(FLAG_FIRST_REGION_CHANGE))
 	Events.game_loaded.connect(func(_slot: int) -> void: refresh())
 	refresh()
 

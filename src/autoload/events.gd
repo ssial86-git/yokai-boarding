@@ -54,6 +54,20 @@ signal hint_changed(text: String)
 signal message_posted(text: String)
 signal quest_completed(quest_id: String)
 
+# --- 플레이어·세계 (P1-S2) ---
+## 플레이어가 다른 구역(regions.csv)에 들어섰다.
+signal region_entered(region_id: String)
+## 상호작용 안내 문구 ("E: 캐기"). 빈 문자열이면 숨김.
+signal prompt_changed(text: String)
+signal stamina_changed(value: float, max_value: float)
+## 텃밭 칸 상태 변화. index 가 -1 이면 전체 (확장·하루 성장).
+signal farm_changed(index: int)
+signal gather_point_changed(region_id: String, index: int)
+## 도구 갈래의 레벨이 올랐다.
+signal tool_changed(kind: String, level: int)
+## unlocks.csv 의 항목이 열렸다.
+signal unlocked(unlock_id: String)
+
 # --- 세이브 ---
 signal game_saved(slot: int)
 signal game_loaded(slot: int)

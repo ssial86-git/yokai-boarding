@@ -13,7 +13,26 @@ var _cards_box: HBoxContainer
 var _cards: Dictionary = {}  # yokai_id -> YokaiCard (하숙생)
 var _guest_cards: Array[YokaiCard] = []
 var _rest_zone: Label
+var _field_zone: FieldZone
 var _card_size: int = 40
+
+
+## 텃밭 놓기 영역: 카드 드롭을 받아 FIELD 배치로 넘긴다.
+class FieldZone:
+	extends Label
+	## (yokai_id: String) -> bool
+	var can_accept: Callable
+	## (yokai_id: String) -> void
+	var on_drop: Callable
+
+	func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
+		if not (data is Dictionary and (data as Dictionary).has(YokaiCard.DRAG_KEY)):
+			return false
+		return not can_accept.is_valid() or bool(can_accept.call(str((data as Dictionary)[YokaiCard.DRAG_KEY])))
+
+	func _drop_data(_at_position: Vector2, data: Variant) -> void:
+		if on_drop.is_valid():
+			on_drop.call(str((data as Dictionary)[YokaiCard.DRAG_KEY]))
 
 
 func _ready() -> void:
@@ -40,6 +59,19 @@ func _ready() -> void:
 	_rest_zone.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_rest_zone.custom_minimum_size = Vector2(DataRegistry.tuning.get_int("rest_zone_min_width_px"), 0)
 	row.add_child(_rest_zone)
+	# 텃밭 자동화 슬롯 (docs/01 v3 2.2): 카드를 여기 놓으면 요괴가 낮에 물을 준다
+	_field_zone = FieldZone.new()
+	_field_zone.text = DataRegistry.text("ui_field_zone")
+	_field_zone.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_field_zone.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_field_zone.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_field_zone.custom_minimum_size = Vector2(DataRegistry.tuning.get_int("rest_zone_min_width_px"), 0)
+	_field_zone.on_drop = func(yokai_id: String) -> void: controller.try_assign(yokai_id, Assignment.FIELD)
+	_field_zone.can_accept = func(yokai_id: String) -> bool:
+		return controller.can_assign(yokai_id, Assignment.FIELD) == AssignmentController.Outcome.OK
+	row.add_child(_field_zone)
+	# 배치 패널은 집 안에서만 (마당·뒷산에서는 화면을 비운다)
+	Events.region_entered.connect(func(region_id: String) -> void: visible = region_id == HouseRegion.REGION_ID)
 
 	Events.assignment_changed.connect(func(_id: String, _cell: Vector2i) -> void: refresh())
 	Events.condition_changed.connect(func(_id: String, _value: int) -> void: refresh())

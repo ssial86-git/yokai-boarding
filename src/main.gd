@@ -5,20 +5,25 @@ extends Node2D
 ##  ├ HouseController        방 규칙 적용 + 돈 + Events
 ##  ├ AssignmentController   배치 규칙 적용 + Events
 ##  ├ DayCycle               날씨, 저녁 정산(산출·하숙비·체크아웃), 배치 무효화 정리
-##  ├ StorySystem            사연·튜토리얼 이벤트 진행
+##  ├ StorySystem            사연·튜토리얼 이벤트 진행, 말 걸기
 ##  ├ IntakeSystem           저녁 방문자 추첨·심사 결정
 ##  ├ TutorialSystem         첫 행동 플래그 + 성주 영감 안내 문구
 ##  ├ AudioSystem            효과음·빗소리
+##  ├ UnlockSystem           unlocks.csv 케이던스 (지역·도구·텃밭 확장 해금)
+##  ├ FarmSystem             텃밭 행동·성장·자동 물주기
+##  ├ GatherSystem           채집 포인트 리스폰·채집
 ##  ├ World (Node2D)
-##  │   ├ HouseView          단면 렌더링 (RoomGrid 구독)
-##  │   ├ YokaiManager       요괴·손님 액터 스폰·이동·또렷함·등불
+##  │   ├ RegionManager      구역 전환 (문 통과)
+##  │   │   ├ HouseRegion    걸어다니는 집: HouseView + YokaiManager + 바닥·계단·방 앞 상호작용·대문
+##  │   │   ├ Region_*       야외 구역 (regions.csv 로 조립, 하나만 존재)
+##  │   │   └ Player         CharacterBody2D 직접 조작
 ##  │   ├ Lighting           CanvasModulate 시간대 색조
-##  │   └ Camera             줌·드래그·클릭 판정
+##  │   └ Camera             플레이어 추적·줌·클릭 판정
 ##  └ UI (CanvasLayer)
 ##      ├ DropLayer          방 위에 카드 놓기 (투명)
-##      ├ Hud                상단 바·안내·창고
+##      ├ Hud                상단 바·안내·체력·상호작용 문구·창고
 ##      ├ MessageLog         왼쪽 아래 메시지
-##      ├ AssignmentPanel    아침 배치 카드
+##      ├ AssignmentPanel    아침 배치 카드 (집 안에서만)
 ##      ├ BuildMenu
 ##      ├ LedgerPanel        손님 명부
 ##      ├ RosterPanel        하숙부
@@ -35,6 +40,12 @@ var story_system: StorySystem
 var intake_system: IntakeSystem
 var tutorial_system: TutorialSystem
 var audio_system: AudioSystem
+var unlock_system: UnlockSystem
+var farm_system: FarmSystem
+var gather_system: GatherSystem
+var region_manager: RegionManager
+var house_region: HouseRegion
+var player: PlayerController
 var house_view: HouseView
 var yokai_manager: YokaiManager
 var camera: HouseCamera
@@ -48,6 +59,7 @@ var intake_panel: IntakePanel
 
 func _ready() -> void:
 	_apply_window_scale()
+	_ensure_input_actions()
 	GameState.reset_new_game()
 
 	house_controller = HouseController.new()
@@ -72,14 +84,28 @@ func _ready() -> void:
 	audio_system = AudioSystem.new()
 	audio_system.name = "AudioSystem"
 	add_child(audio_system)
+	unlock_system = UnlockSystem.new()
+	unlock_system.name = "UnlockSystem"
+	add_child(unlock_system)
+	farm_system = FarmSystem.new()
+	farm_system.name = "FarmSystem"
+	add_child(farm_system)
+	gather_system = GatherSystem.new()
+	gather_system.name = "GatherSystem"
+	add_child(gather_system)
 
 	_build_world()
 	_build_ui()
 
+	house_region.open_build_menu = func(coords: Vector2i) -> void:
+		build_menu.open_for_cell(coords, _player_screen_position())
+	yokai_manager.talk_action = story_system.try_talk
+	player.blocked_check = func() -> bool: return build_menu.is_open()
 	camera.clicked.connect(_on_world_clicked)
 	camera.hovered.connect(house_view.set_hover)
 
 	Clock.start_day()
+	region_manager.travel(GameState.player_region, "", GameState.player_position)
 	Events.game_started.emit()
 	tutorial_system.refresh(true)
 
@@ -89,16 +115,24 @@ func _build_world() -> void:
 	world.name = "World"
 	add_child(world)
 
-	house_view = HouseView.new()
-	house_view.name = "HouseView"
+	region_manager = RegionManager.new()
+	region_manager.name = "RegionManager"
+	house_region = HouseRegion.new()
+	house_region.name = "HouseRegion"
+	region_manager.house_region = house_region
+	region_manager.add_child(house_region)
+	player = PlayerController.new()
+	player.name = "Player"
+	region_manager.player = player
+	region_manager.add_child(player)
+	region_manager.farm_system = farm_system
+	region_manager.gather_system = gather_system
+	region_manager.unlock_system = unlock_system
+	world.add_child(region_manager)
+	house_view = house_region.house_view
+	yokai_manager = house_region.yokai_manager
 	house_view.drop_check = func(yokai_id: String, cell: Vector2i) -> bool:
 		return assignment_controller.can_assign(yokai_id, cell) == AssignmentController.Outcome.OK
-	world.add_child(house_view)
-
-	yokai_manager = YokaiManager.new()
-	yokai_manager.name = "YokaiManager"
-	yokai_manager.house_view = house_view
-	world.add_child(yokai_manager)
 
 	var lighting := DayNightLighting.new()
 	lighting.name = "Lighting"
@@ -106,9 +140,11 @@ func _build_world() -> void:
 
 	camera = HouseCamera.new()
 	camera.name = "Camera"
+	camera.follow = player
 	var margin := float(DataRegistry.tuning.get_int("camera_bounds_margin_px"))
 	camera.bounds = house_view.house_bounds().grow(margin)
 	camera.position = house_view.house_bounds().get_center()
+	region_manager.camera = camera
 	world.add_child(camera)
 	camera.clamp_to_bounds()
 
@@ -137,6 +173,10 @@ func _build_ui() -> void:
 
 	message_log = MessageLog.new()
 	message_log.name = "MessageLog"
+	# 아래쪽에 앵커를 두고 위로 자라게 한다 — 패널이 숨어도(야외) 화면 밖으로 밀리지 않도록
+	message_log.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	message_log.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	message_log.alignment = BoxContainer.ALIGNMENT_END  # 줄이 적어도 아래에 붙는다
 	ui.add_child(message_log)
 
 	assignment_panel = AssignmentPanel.new()
@@ -146,6 +186,7 @@ func _build_ui() -> void:
 	# 위 바와 아래 패널 사이에 집이 오도록 카메라를 밀고, 메시지 로그는 패널 바로 위에 붙인다.
 	# 크기는 레이아웃이 끝난 뒤에야 맞으므로 실제 바/패널의 resized 에 걸고, 첫 프레임 뒤 한 번 더 잡는다.
 	assignment_panel.resized.connect(_layout_around_panels)
+	assignment_panel.visibility_changed.connect(_layout_around_panels)
 	hud.bar_resized.connect(_layout_around_panels)
 	_layout_around_panels.call_deferred()
 
@@ -177,10 +218,12 @@ func _layout_around_panels() -> void:
 	var view_size := get_viewport().get_visible_rect().size
 	# 레이아웃 전의 엉뚱한 크기(0 이나 화면보다 큰 값)로 카메라를 밀지 않는다
 	var top := clampf(hud.bar_height(), 0.0, view_size.y * 0.5)
-	var bottom := clampf(assignment_panel.size.y, 0.0, view_size.y * 0.5)
+	var bottom := clampf(assignment_panel.size.y if assignment_panel.visible else 0.0, 0.0, view_size.y * 0.5)
 	camera.offset = Vector2(0, (bottom - top) * 0.5)
-	message_log.position = Vector2(MESSAGE_LOG_MARGIN_PX, view_size.y - bottom - MESSAGE_LOG_MARGIN_PX)
-	message_log.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	message_log.offset_left = MESSAGE_LOG_MARGIN_PX
+	message_log.offset_bottom = -(bottom + MESSAGE_LOG_MARGIN_PX)
+	message_log.offset_top = message_log.offset_bottom - maxf(message_log.size.y, message_log.get_minimum_size().y)
+	hud.set_prompt_bottom(bottom + MESSAGE_LOG_MARGIN_PX)
 
 
 ## 창 크기를 뷰포트(640x360)의 정수 배로 맞춘다. tuning window_integer_scale 이 0 이면 화면에 맞는 최대 배율.
@@ -203,7 +246,35 @@ func _apply_window_scale() -> void:
 	DisplayServer.window_set_position(screen_rect.position + (screen_rect.size - window_size) / 2)
 
 
+## 입력 액션을 코드로 등록한다 (project.godot 의 입력 맵 직렬화 형식에 손대지 않기 위해).
+## 이미 프로젝트 설정에 있으면 그대로 둔다.
+func _ensure_input_actions() -> void:
+	var bindings: Dictionary = {
+		PlayerController.ACTION_LEFT: [KEY_A, KEY_LEFT],
+		PlayerController.ACTION_RIGHT: [KEY_D, KEY_RIGHT],
+		PlayerController.ACTION_UP: [KEY_W, KEY_UP],
+		PlayerController.ACTION_DOWN: [KEY_S, KEY_DOWN],
+		PlayerController.ACTION_RUN: [KEY_SHIFT],
+		PlayerController.ACTION_INTERACT: [KEY_E, KEY_SPACE],
+	}
+	for action: StringName in bindings:
+		if InputMap.has_action(action):
+			continue
+		InputMap.add_action(action)
+		for keycode: Key in bindings[action]:
+			var event := InputEventKey.new()
+			event.physical_keycode = keycode
+			InputMap.action_add_event(action, event)
+
+
+func _player_screen_position() -> Vector2:
+	return get_viewport().get_canvas_transform() * player.global_position
+
+
+## 집 안에서 방을 클릭해도 건설 메뉴가 열린다 (E 와 같은 기능 — 마우스 조작 유지).
 func _on_world_clicked(world_pos: Vector2) -> void:
+	if region_manager.current_region_id != HouseRegion.REGION_ID:
+		return
 	var coords := house_view.world_to_cell(world_pos)
 	if house_view.grid().is_in_bounds(coords):
 		build_menu.open_for_cell(coords, get_viewport().get_mouse_position())

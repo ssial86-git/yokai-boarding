@@ -6,8 +6,10 @@ extends Node2D
 const SPRITE_PATH := "res://assets/art_generated/yokai_%s.png"
 const GUEST_SPRITE_PATH := "res://assets/art_generated/guest_%s.png"
 
-## 칸 좌표 → 월드 사각형을 아는 뷰. main.gd 가 넣는다.
+## 칸 좌표 → 월드 사각형을 아는 뷰. HouseRegion 이 넣는다.
 var house_view: HouseView
+## (yokai_id: String) -> void. 플레이어가 하숙생 앞에서 E: 말 걸기. main.gd 가 StorySystem.try_talk 를 넣는다.
+var talk_action: Callable
 
 var _actors: Dictionary = {}  # yokai_id -> YokaiActor
 var _stair_column: int = 0
@@ -78,6 +80,7 @@ func respawn() -> void:
 		actor.anchor_for = _anchor_for
 		add_child(actor)
 		actor.place_at(home, slot, YokaiActor.State.RESTING)
+		_attach_talk(actor, yokai_id)
 		_actors[yokai_id] = actor
 		slot += 1
 	# 체류 중인 뜨내기 손님은 휴식처에 머무는 액터로만 보여준다 (배치·이동 없음)
@@ -110,6 +113,9 @@ func dispatch_all(band: int) -> void:
 		if actor == null:
 			continue
 		var work_cell := GameState.assignment.get_cell(yokai_id)
+		# 텃밭(FIELD) 배치는 마당에서 일하지만 집 단면에는 대문간 앞에서 일하는 모습으로 보여준다
+		if work_cell == Assignment.FIELD:
+			work_cell = _gate_cell(grid)
 		var goes_to_work := band == Clock.Band.DAY and work_cell != Assignment.REST \
 			and grid.is_in_bounds(work_cell) and grid.is_floor_built(work_cell.y)
 		var target := work_cell if goes_to_work else home
@@ -130,3 +136,24 @@ func _anchor_for(cell: Vector2i, slot: int) -> Vector2:
 	var rect := house_view.cell_rect(cell)
 	var x := rect.position.x + rect.size.x * 0.5 + float(slot - 1) * _slot_spacing
 	return Vector2(x, rect.end.y)
+
+
+## 하숙생 앞에서 E: 말 걸기 (docs/01 v3 2.2 "방 앞에서 대화 호출").
+func _attach_talk(actor: YokaiActor, yokai_id: String) -> void:
+	var talk := Interactable.new()
+	talk.name = "Talk"
+	talk.set_box(Vector2(_slot_spacing * 2.0, 32.0), Vector2(0, -16.0))
+	talk.prompt_provider = func() -> String:
+		return DataRegistry.text("prompt_talk", {"name": DataRegistry.yokai_name(yokai_id)})
+	talk.action = func(_player: Node) -> void:
+		if talk_action.is_valid():
+			talk_action.call(yokai_id)
+	actor.add_child(talk)
+
+
+func _gate_cell(grid: RoomGrid) -> Vector2i:
+	for cell in grid.get_built_cells():
+		var room := grid.get_room(cell)
+		if room != null and room.kind == "gate":
+			return cell
+	return DaySettlement.rest_cell(grid)

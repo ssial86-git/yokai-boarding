@@ -38,7 +38,17 @@ var player_position: Vector2 = Vector2.ZERO
 ## JSON 왕복이 값을 바꾸지 않도록 bool·문자열·문자열 목록만 넣는다 (정수는 float 으로 돌아온다).
 var region_states: Dictionary = {}
 
-const REGION_STATE_KEYS: Array[String] = ["visited", "gather_taken", "enemies_defeated", "boss_defeated"]
+const REGION_STATE_KEYS: Array[String] = ["visited", "gather_taken", "gather_materials", "enemies_defeated", "boss_defeated"]
+const LIST_SEPARATOR := ";"
+const COST_SEPARATOR := ":"
+
+# --- P1-S2: 직접 조작 ---
+var stamina: Stamina = Stamina.new()
+var farm: Farm = Farm.new()
+## 도구 갈래(hoe/axe/pickaxe/rod) -> 레벨. 없으면 그 갈래의 도구가 없다.
+var tools: Dictionary = {}
+## 열린 unlocks.csv id -> 열린 날
+var unlocked: Dictionary = {}
 
 
 func reset_new_game() -> void:
@@ -48,6 +58,7 @@ func reset_new_game() -> void:
 	affinity.clear()
 	inventory = Inventory.new()
 	assignment = Assignment.new()
+	assignment.field_capacity = DataRegistry.tuning.get_int("field_workers_max")
 	guests.clear()
 	ledger.clear()
 	flags.clear()
@@ -56,6 +67,13 @@ func reset_new_game() -> void:
 	weather = WEATHER_CLEAR
 	_reset_player()
 	region_states.clear()
+	stamina = Stamina.new(Stamina.Params.from_tuning(DataRegistry.tuning))
+	farm = Farm.new(DataRegistry.tuning.get_int("farm_plots_initial"))
+	tools = _parse_levels(DataRegistry.tuning.get_string("start_tools"))
+	unlocked.clear()
+	var start_items := _parse_levels(DataRegistry.tuning.get_string("start_items"))
+	for item_id: String in start_items:
+		inventory.add(item_id, int(start_items[item_id]))
 	_reseed_rng()
 	room_grid = new_room_grid()
 	_apply_start_layout(room_grid)
@@ -130,13 +148,42 @@ func to_dict() -> Dictionary:
 		"room_grid": room_grid.to_dict() if room_grid != null else {},
 		"player": {"region": player_region, "x": player_position.x, "y": player_position.y},
 		"regions": region_states.duplicate(true),
+		"stamina": stamina.to_dict(),
+		"farm": farm.to_dict(),
+		"tools": tools.duplicate(),
+		"unlocked": unlocked.duplicate(),
 	}
+
+
+## 도구 갈래를 level 로 올린다 (내리지는 않는다). 올랐으면 true.
+func set_tool_level(kind: String, level: int) -> bool:
+	if int(tools.get(kind, 0)) >= level:
+		return false
+	tools[kind] = level
+	Events.tool_changed.emit(kind, level)
+	return true
+
+
+func has_tool(kind: String, level: int = 1) -> bool:
+	return int(tools.get(kind, 0)) >= level
+
+
+## "a:1;b:3" -> {"a": 1, "b": 3}. tuning 의 start_tools / start_items 형식.
+func _parse_levels(text: String) -> Dictionary:
+	var result: Dictionary = {}
+	for part in text.split(LIST_SEPARATOR, false):
+		var pieces := part.strip_edges().split(COST_SEPARATOR)
+		if pieces.size() == 2 and not pieces[0].is_empty():
+			result[pieces[0]] = int(pieces[1])
+	return result
 
 
 ## 구역 상태. 없으면 기본값으로 만들어 돌려준다 (반환값은 region_states 안의 그 Dictionary 자체).
 func region_state(region_id: String) -> Dictionary:
 	if not region_states.has(region_id):
-		region_states[region_id] = {"visited": false, "gather_taken": [], "enemies_defeated": [], "boss_defeated": false}
+		region_states[region_id] = {
+			"visited": false, "gather_taken": [], "gather_materials": [], "enemies_defeated": [], "boss_defeated": false,
+		}
 	return region_states[region_id]
 
 
@@ -160,12 +207,16 @@ func _region_state_from(source: Variant) -> Dictionary:
 	var gather: Array = []
 	for entry: Variant in (raw.get("gather_taken", []) as Array):
 		gather.append(str(entry))
+	var materials: Array = []
+	for entry: Variant in (raw.get("gather_materials", []) as Array):
+		materials.append(str(entry))
 	var defeated: Array = []
 	for entry: Variant in (raw.get("enemies_defeated", []) as Array):
 		defeated.append(str(entry))
 	return {
 		"visited": bool(raw.get("visited", false)),
 		"gather_taken": gather,
+		"gather_materials": materials,
 		"enemies_defeated": defeated,
 		"boss_defeated": bool(raw.get("boss_defeated", false)),
 	}
@@ -185,6 +236,7 @@ func from_dict(data: Dictionary) -> bool:
 	if not new_inventory.from_dict(data.get("inventory", {})):
 		return false
 	var new_assignment := Assignment.new()
+	new_assignment.field_capacity = DataRegistry.tuning.get_int("field_workers_max")
 	if not new_assignment.from_dict(data.get("assignment", {})):
 		return false
 
@@ -231,6 +283,20 @@ func from_dict(data: Dictionary) -> bool:
 			var state := _region_state_from((regions as Dictionary)[region_id])
 			if not state.is_empty():
 				region_states[str(region_id)] = state
+	stamina = Stamina.new(Stamina.Params.from_tuning(DataRegistry.tuning))
+	var stamina_data: Variant = data.get("stamina", {})
+	if stamina_data is Dictionary and not (stamina_data as Dictionary).is_empty():
+		if not stamina.from_dict(stamina_data as Dictionary):
+			return false
+	farm = Farm.new(DataRegistry.tuning.get_int("farm_plots_initial"))
+	var farm_data: Variant = data.get("farm", {})
+	if farm_data is Dictionary and not (farm_data as Dictionary).is_empty():
+		if not farm.from_dict(farm_data as Dictionary):
+			return false
+		farm.expand(DataRegistry.tuning.get_int("farm_plots_initial"))
+	tools = _int_dict(data.get("tools", {})) if data.has("tools") \
+		else _parse_levels(DataRegistry.tuning.get_string("start_tools"))
+	unlocked = _int_dict(data.get("unlocked", {}))
 	if data.has("rng_state"):
 		rng.state = str(data["rng_state"]).to_int()
 	else:

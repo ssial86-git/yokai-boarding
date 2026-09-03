@@ -114,6 +114,42 @@ func _initialize() -> void:
 		"2일차 카드 수 == 하숙생 + 손님")
 	await _shot("08_day2_morning")
 
+	# --- P1-S2: 플레이어·마당 텃밭·뒷산 채집 ---
+	var region_manager: Node = main.get("region_manager")
+	var farm_system: Node = main.get("farm_system")
+	var gather_system: Node = main.get("gather_system")
+	var player: Node2D = main.get("player")
+	_check("player_in_house", player != null and str(gs.get("player_region")) == "r_house", "플레이어가 하숙집 안에 있다")
+	_check("player_on_floor", player != null and bool(player.call("is_on_floor")), "플레이어가 바닥 위에 서 있다")
+	_check("hoe_unlocked", (gs.get("tools") as Dictionary).has("hoe"), "1일차 괭이 해금")
+	_check("back_hill_unlocked_day2", bool(region_manager.call("is_region_open", "r_back_hill")), "2일차 아침 뒷산이 열렸다")
+	_check("travel_yard", bool(region_manager.call("travel", "r_yard")), "대문 → 마당")
+	await _frames(3)
+	_check("panel_hidden_outdoors", not (panel as Control).visible, "마당에서는 배치 패널이 숨는다")
+	await _shot("09_yard_plain")
+	_check("farm_till", bool(farm_system.call("act", 0)), "텃밭 0번 괭이질")
+	_check("farm_sow", bool(farm_system.call("act", 0)), "텃밭 0번 파종 (무 씨앗)")
+	_check("farm_water", bool(farm_system.call("act", 0)), "텃밭 0번 물주기")
+	var farm: RefCounted = gs.get("farm")
+	var plot: RefCounted = farm.call("get_plot", 0)
+	_check("plot_growing", int(plot.get("state")) == 2 and str(plot.get("crop_id")) == "c_radish", "0번 칸이 무 자라는 중")
+	await _frames(2)
+	await _shot("10_yard_farmed")
+	_check("travel_back_hill", bool(region_manager.call("travel", "r_back_hill")), "마당 → 뒷산")
+	await _frames(3)
+	var points: RefCounted = gather_system.call("points_for", "r_back_hill")
+	_check("gather_points_8", int(points.call("size")) == 8, "뒷산 채집 포인트 8개")
+	var gathered := false
+	for i in int(points.call("size")):
+		if bool(gather_system.call("can_gather", "r_back_hill", i)):
+			gathered = bool(gather_system.call("gather", "r_back_hill", i))
+			break
+	_check("gathered_one", gathered, "채집 포인트 하나를 캤다")
+	await _frames(2)
+	await _shot("11_back_hill")
+	_check("travel_home", bool(region_manager.call("travel", "r_house")), "뒷산 → 집")
+	await _frames(2)
+
 	_write_report()
 
 

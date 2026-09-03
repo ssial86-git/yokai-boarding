@@ -24,7 +24,13 @@ func test_hints_follow_first_actions() -> void:
 	var story: StorySystem = main.get("story_system")
 	_drain(story)
 
+	# P1-S2: 첫 안내는 조작법. 마당에 한 번 나갔다 오면(first_region_change) 배치 안내로 넘어간다
 	assert_object(tutorial.current_hint).is_not_null()
+	assert_str(tutorial.current_hint.id).is_equal("hint_move")
+	var region_manager: RegionManager = main.get("region_manager")
+	assert_bool(region_manager.travel("r_yard")).is_true()
+	assert_bool(region_manager.travel(HouseRegion.REGION_ID)).is_true()
+	assert_bool(GameState.flags.has(TutorialSystem.FLAG_FIRST_REGION_CHANGE)).is_true()
 	assert_str(tutorial.current_hint.id).is_equal("hint_assign")
 	assert_int(assign.try_assign("y02_eoduki", Vector2i(2, 0))).is_equal(AssignmentController.Outcome.OK)
 	assert_bool(GameState.flags.has(TutorialSystem.FLAG_FIRST_ASSIGNMENT)).is_true()

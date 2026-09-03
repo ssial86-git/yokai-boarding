@@ -47,6 +47,7 @@ func refresh() -> void:
 		tuning.get_float("clarity_alpha_min"), tuning.get_int("clarity_affinity_max"))
 	var cell := GameState.assignment.get_cell(yokai_id)
 	var place := DataRegistry.text("card_rest") if cell == Assignment.REST \
+		else DataRegistry.text("card_field") if cell == Assignment.FIELD \
 		else DataRegistry.room_name(GameState.room_grid.get_room_id(cell))
 	_status_label.text = DataRegistry.text("card_status", {
 		"place": place, "condition": GameState.get_condition(yokai_id)})

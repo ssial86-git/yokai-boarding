@@ -40,6 +40,11 @@ func test_round_trip_through_file_is_identical() -> void:
 	ash["visited"] = true
 	ash["gather_taken"] = ["gp_1", "gp_5"]
 	ash["enemies_defeated"] = ["e_ash_wisp"]
+	GameState.stamina.value = 42.5
+	GameState.tools["axe"] = 2
+	GameState.unlocked["u_hoe"] = 1
+	assert_int(GameState.farm.till(1)).is_equal(Farm.Outcome.OK)
+	assert_int(GameState.assignment.assign(grid, Assignment.FIELD, "y02_eoduki")).is_equal(Assignment.Outcome.OK)
 	var expected := SaveManager.build_save_data()
 
 	assert_int(SaveManager.save_slot(TEST_SLOT)).is_equal(OK)
@@ -57,6 +62,11 @@ func test_round_trip_through_file_is_identical() -> void:
 	assert_array(GameState.region_state("r_ash_field")["gather_taken"]).contains_exactly(["gp_1", "gp_5"])
 	assert_array(GameState.region_state("r_ash_field")["enemies_defeated"]).contains_exactly(["e_ash_wisp"])
 	assert_bool(GameState.region_state("r_ash_field")["boss_defeated"]).is_false()
+	assert_float(GameState.stamina.value).is_equal(42.5)
+	assert_int(int(GameState.tools["axe"])).is_equal(2)
+	assert_bool(GameState.unlocked.has("u_hoe")).is_true()
+	assert_int(GameState.farm.get_plot(1).state).is_equal(Farm.PlotState.TILLED)
+	assert_that(GameState.assignment.get_cell("y02_eoduki")).is_equal(Assignment.FIELD)
 	assert_int(GameState.room_grid.built_floors).is_equal(3)
 	assert_str(GameState.room_grid.get_room_id(Vector2i(0, 2))).is_equal("workshop")
 	assert_bool(GameState.room_grid.is_empty(Vector2i(2, 0))).is_true()
@@ -132,7 +142,8 @@ func test_v4_phase_clock_migrates_to_timeband_start() -> void:
 	assert_float(Clock.elapsed_seconds()).is_equal(Clock.timeline.seconds_for_band(Clock.Band.EVENING))
 	# v4 에는 플레이어·탐험지 상태가 없으므로 시작 위치와 빈 상태로 채워진다
 	assert_str(GameState.player_region).is_equal(DataRegistry.tuning.get_string("player_start_region"))
-	assert_that(GameState.player_position).is_equal(Vector2.ZERO)
+	assert_that(GameState.player_position).is_equal(Vector2(
+		DataRegistry.tuning.get_float("player_start_x"), DataRegistry.tuning.get_float("player_start_y")))
 	assert_bool(GameState.region_states.is_empty()).is_true()
 	var saved := SaveManager.build_save_data()
 	assert_int(saved["version"]).is_equal(5)

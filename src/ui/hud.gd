@@ -6,6 +6,8 @@ extends Control
 ## 상단 바의 실제 높이가 바뀔 때 (레이아웃 확정·안내 줄 표시/숨김). main.gd 가 카메라 오프셋을 다시 잡는다.
 signal bar_resized
 
+const PROMPT_MARGIN_PX := 4.0
+
 var ledger_panel: LedgerPanel
 var roster_panel: RosterPanel
 
@@ -14,7 +16,10 @@ var _inventory_label: Label
 var _hint_label: Label
 var _sleep_button: Button
 var _progress: ProgressBar
+var _stamina: ProgressBar
+var _prompt_label: Label
 var _bar: PanelContainer
+var _stamina_low: float = 20.0
 ## 시계는 매 프레임 흐르므로 표시 분이 바뀔 때만 상태 줄을 다시 그린다.
 var _last_hour_text: String = ""
 
@@ -53,6 +58,30 @@ func _ready() -> void:
 	_progress.show_percentage = false
 	_progress.custom_minimum_size = Vector2(0, 4)
 	column.add_child(_progress)
+	_stamina = ProgressBar.new()
+	_stamina.max_value = GameState.stamina.params.max_value
+	_stamina.value = GameState.stamina.value
+	_stamina.show_percentage = false
+	_stamina.custom_minimum_size = Vector2(0, 4)
+	_stamina.modulate = Color.html(DataRegistry.tuning.get_string("drop_ok_color"))
+	_stamina_low = DataRegistry.tuning.get_float("stamina_low_threshold", _stamina_low)
+	column.add_child(_stamina)
+
+	# 상호작용 안내 ("E: 캐기"): 화면 오른쪽 아래, 배치 패널 위 (왼쪽 아래 메시지 로그와 겹치지 않게)
+	_prompt_label = Label.new()
+	_prompt_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	_prompt_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_prompt_label.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_prompt_label.visible = false
+	add_child(_prompt_label)
+	Events.prompt_changed.connect(set_prompt)
+	Events.stamina_changed.connect(func(value: float, max_value: float) -> void:
+		_stamina.max_value = max_value
+		_stamina.value = value
+		_stamina.modulate = Color.html(DataRegistry.tuning.get_string(
+			"drop_bad_color" if value <= _stamina_low else "drop_ok_color")))
+	Events.region_entered.connect(func(_region_id: String) -> void: refresh())
 
 	for refresh_signal: Signal in [
 		Events.money_changed, Events.timeband_changed, Events.day_started, Events.item_added, Events.item_removed,
@@ -77,10 +106,12 @@ func bar_height() -> float:
 
 func refresh() -> void:
 	_last_hour_text = Clock.format_hour()
+	var region := DataRegistry.get_region(GameState.player_region)
 	_status_label.text = " · ".join([
 		DataRegistry.text("hud_day", {"day": GameState.day}),
 		DataRegistry.text("hud_time", {"time": _last_hour_text}),
 		DataRegistry.text("timeband_%s" % Clock.band_name()),
+		DataRegistry.text("hud_region", {"name": region.name_ko if region != null else GameState.player_region}),
 		DataRegistry.text("weather_%s" % GameState.weather),
 		DataRegistry.text("hud_money", {"money": GameState.money}),
 		DataRegistry.text("hud_reputation", {"value": GameState.reputation}),
@@ -92,6 +123,22 @@ func refresh() -> void:
 	var items := GameState.inventory.items()
 	_inventory_label.text = DataRegistry.text("hud_inventory_empty") if items.is_empty() \
 		else DataRegistry.text("hud_inventory", {"list": HudText.item_list(items)})
+
+
+func set_prompt(text: String) -> void:
+	_prompt_label.text = text
+	_prompt_label.visible = not text.is_empty()
+
+
+## 안내 문구를 아래 패널 위로 올린다 (main.gd 가 패널 높이를 잰 뒤 부른다).
+func set_prompt_bottom(bottom_px: float) -> void:
+	_prompt_label.offset_bottom = -bottom_px
+	_prompt_label.offset_top = -bottom_px - _prompt_label.get_minimum_size().y
+	_prompt_label.offset_right = -PROMPT_MARGIN_PX
+
+
+func prompt_text() -> String:
+	return _prompt_label.text if _prompt_label.visible else ""
 
 
 func _on_hint_changed(text: String) -> void:

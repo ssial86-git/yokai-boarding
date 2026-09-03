@@ -35,6 +35,20 @@ func try_show(band: int) -> bool:
 	return true
 
 
+## 플레이어가 하숙생에게 말을 걸었다: 그 하숙생의 조건 맞는 사연이 있으면 시작, 없으면 인사말 한 줄.
+func try_talk(yokai_id: String) -> bool:
+	if is_busy():
+		return false
+	var ctx := build_context(Clock.band)
+	for event in EventScheduler.eligible(DataRegistry.events, ctx):
+		if event.yokai_id == yokai_id:
+			start_event(event)
+			return true
+	Events.message_posted.emit(DataRegistry.text("msg_greeting", {"name": DataRegistry.yokai_name(yokai_id)}))
+	Metrics.record("verb_ended", {"verb": "talk", "region": GameState.player_region, "seconds": 0.0})
+	return false
+
+
 func build_context(band: int) -> EventScheduler.Context:
 	var ctx := EventScheduler.Context.new()
 	ctx.day = GameState.day
