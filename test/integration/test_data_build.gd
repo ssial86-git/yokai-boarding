@@ -35,6 +35,29 @@ func test_tuning_values() -> void:
 	assert_int(DataRegistry.tuning.get_int("grid_columns")).is_equal(4)
 
 
+## P2-S1 절기·날씨 스키마: 4절기 순환, 날씨 4종의 음기 범위, 소절기 이벤트 2개, 손님 갈래.
+func test_p2_season_tables_loaded_and_typed() -> void:
+	assert_int(DataRegistry.seasons.size()).is_equal(4)
+	var spring := DataRegistry.get_season("spring")
+	assert_str(spring.name_ko).is_equal("봄")
+	assert_int(spring.length_days).is_equal(28)
+	assert_str(spring.next_id).is_equal("summer")
+	assert_str(DataRegistry.get_season("winter").next_id).is_equal("spring")
+	assert_int(DataRegistry.weather.size()).is_equal(4)
+	var haze := DataRegistry.get_weather("moon_haze")
+	assert_int(haze.yin_min).is_equal(3)
+	assert_float(haze.demon_guest_multiplier).is_equal(2.0)
+	assert_float(DataRegistry.get_weather("rain").crop_water_bonus).is_equal(1.0)
+	assert_int(DataRegistry.season_events.size()).is_equal(2)
+	var monsoon := DataRegistry.get_season_event("se_rain_start")
+	assert_str(monsoon.weather_override).is_equal("rain")
+	assert_int(monsoon.day_of_season).is_equal(10)
+	assert_int(monsoon.duration_days).is_equal(2)
+	assert_str(DataRegistry.get_guest_species("g_geumjuri").realm).is_equal("demon")
+	assert_str(DataRegistry.get_guest_species("g_mongdanggwi").realm).is_equal("mortal")
+	assert_str(DataRegistry.tuning.get_string("season_start_id")).is_equal("spring")
+
+
 ## P1 신설 스키마 10종이 로드되고 타입이 맞는지 (행 수는 콘텐츠 수를 고정하지 않도록 최소치만 본다).
 func test_p1_tables_loaded_and_typed() -> void:
 	assert_int(DataRegistry.talismans.size()).is_equal(3)

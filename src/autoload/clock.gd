@@ -65,7 +65,7 @@ func sleep(forced: bool = false) -> void:
 	running = false
 	Events.slept.emit(GameState.day, forced)
 	Events.day_ended.emit(GameState.day)
-	GameState.day += 1
+	GameState.advance_day()
 	start_day()
 
 

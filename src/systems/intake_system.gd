@@ -27,9 +27,13 @@ func has_pending() -> bool:
 func roll_visitor() -> void:
 	var visitor := VisitorRoll.scripted(DataRegistry.yokai, GameState.residents, GameState.day, ERASED_VISITOR_ID)
 	if visitor == null:
+		# 음기 배율 (P2-S1): 날씨의 이승/마계 손님 배율 × 소절기 이벤트의 마계 배율
+		var multipliers := WeatherRoll.guest_multipliers(
+			DataRegistry.get_weather(GameState.weather),
+			GameState.calendar.demon_guest_multiplier(DataRegistry.season_events))
 		visitor = VisitorRoll.roll(
 			DataRegistry.visitors, DataRegistry.guest_species, GameState.rng,
-			DataRegistry.tuning.get_float("visitor_chance"), GameState.weather,
+			DataRegistry.tuning.get_float("visitor_chance"), GameState.weather, multipliers,
 		)
 	if visitor == null:
 		GameState.pending_visitor = {}

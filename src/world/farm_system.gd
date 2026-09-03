@@ -24,17 +24,20 @@ func _ready() -> void:
 			GameState.farm.expand(DataRegistry.tuning.get_int("farm_plots_max"))
 			Events.farm_changed.emit(-1))
 	Events.game_loaded.connect(func(_slot: int) -> void: Events.farm_changed.emit(-1))
+	Events.weather_rolled.connect(func(weather_id: String, _yin: int) -> void: rain_water(weather_id))
 
 
 func farm() -> Farm:
 	return GameState.farm
 
 
-## 씨앗이 있는 작물 중 가장 많이 가진 것. 없으면 null.
+## 씨앗이 있는 제철 작물 중 가장 많이 가진 것. 없으면 null.
 func seed_choice() -> CropData:
 	var best: CropData = null
 	var best_count := 0
 	for crop: CropData in DataRegistry.crops.values():
+		if not Farm.in_season(crop, GameState.calendar.season_id):
+			continue
 		var count := GameState.inventory.get_count(crop.seed_item)
 		if count > best_count or (count == best_count and count > 0 and crop.id < best.id):
 			best = crop
@@ -99,7 +102,7 @@ func act(index: int) -> bool:
 			Events.message_posted.emit(DataRegistry.text("msg_tilled"))
 		Farm.PlotState.TILLED:
 			var crop := seed_choice()
-			if farm().sow(index, crop, GameState.inventory) != Farm.Outcome.OK:
+			if farm().sow(index, crop, GameState.inventory, GameState.calendar.season_id) != Farm.Outcome.OK:
 				return false
 			action = "sow"
 			crop_id = crop.id
@@ -126,12 +129,24 @@ func act(index: int) -> bool:
 	return true
 
 
-## 하루 끝 성장. 다 자란 칸이 있으면 알린다.
+## 하루 끝 성장. 음기 짙은 날(GameState.is_yin_high)은 마계 작물이 yin_growth_bonus 만큼 더 자란다. 다 자란 칸이 있으면 알린다.
 func advance_day() -> void:
-	var ripened := farm().advance_day(DataRegistry.crops, GameState.weather == DayCycle.RAIN)
+	var ripened := farm().advance_day(DataRegistry.crops, GameState.is_yin_high())
 	if not ripened.is_empty():
 		Events.message_posted.emit(DataRegistry.text("msg_crop_ready", {"count": ripened.size()}))
 	Events.farm_changed.emit(-1)
+
+
+## 비 오는 아침: weather.csv 의 crop_water_bonus 만큼 자라는 칸이 절로 젖는다. 물 준 칸 수를 돌려준다.
+func rain_water(weather_id: String) -> int:
+	var weather := DataRegistry.get_weather(weather_id)
+	if weather == null or weather.crop_water_bonus <= 0.0:
+		return 0
+	var watered := farm().water_all(weather.crop_water_bonus)
+	if watered > 0:
+		Events.message_posted.emit(DataRegistry.text("msg_rain_watered", {"count": watered}))
+		Events.farm_changed.emit(-1)
+	return watered
 
 
 ## 텃밭(FIELD)에 배치된 요괴가 낮에 효율 계수만큼 물을 준다. 물 준 칸 수를 돌려준다.

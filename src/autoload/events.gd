@@ -77,6 +77,14 @@ signal fishing_ended(region_id: String, item_id: String)
 ## 배식으로 오늘 능력치가 올랐다 (amount 는 누적 후 값).
 signal buff_applied(yokai_id: String, stat: String, amount: int)
 
+# --- 절기·날씨 (P2-S1) ---
+## 절기가 바뀌었다 (취침으로 마지막 날을 넘긴 순간).
+signal season_changed(season_id: String)
+## 아침 날씨·음기 추첨 결과. weather_changed 뒤에 온다.
+signal weather_rolled(weather: String, yin: int)
+## 소절기 이벤트(season_events.csv)가 오늘 시작했다.
+signal season_event_started(event_id: String)
+
 # --- 세이브 ---
 signal game_saved(slot: int)
 signal game_loaded(slot: int)

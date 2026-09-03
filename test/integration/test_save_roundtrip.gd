@@ -26,6 +26,8 @@ func test_round_trip_through_file_is_identical() -> void:
 	GameState.seen_events.append("y01_act1")
 	GameState.pending_visitor = {"visitor_id": "v_guest", "kind": "guest", "species_id": "g_mongdanggwi", "yokai_id": "", "omen": 0}
 	GameState.weather = "rain"
+	GameState.yin = 2
+	assert_bool(GameState.calendar.from_dict({"season": "spring", "day_of_season": 12}, DataRegistry.seasons)).is_true()
 	GameState.rng.seed = 777
 	var grid := GameState.room_grid
 	assert_int(grid.add_floor(GameState.money)).is_equal(RoomGrid.Outcome.OK)
@@ -78,7 +80,26 @@ func test_round_trip_through_file_is_identical() -> void:
 	assert_int(GameState.ledger["g_ibulnang"]).is_equal(2)
 	assert_bool(GameState.flags.has("clue_y01")).is_true()
 	assert_str(GameState.weather).is_equal("rain")
+	assert_int(GameState.yin).is_equal(2)
+	assert_str(GameState.calendar.season_id).is_equal("spring")
+	assert_int(GameState.calendar.day_of_season).is_equal(12)
 	assert_str(str(GameState.pending_visitor.get("species_id"))).is_equal("g_mongdanggwi")
+
+
+## v5 에는 절기 달력·음기가 없다. 통산 30일차 → 여름 2일, 음기 0 으로 채워진다 (P2-S1).
+func test_v5_save_gets_calendar_from_absolute_day() -> void:
+	GameState.reset_new_game()
+	var v5 := {"version": 5, "game_state": GameState.to_dict(), "clock": {"elapsed_seconds": 10.0}}
+	var state := v5["game_state"] as Dictionary
+	state["day"] = 30
+	state.erase("calendar")
+	state.erase("yin")
+	assert_bool(SaveManager.apply_save_data(v5)).is_true()
+	assert_int(GameState.day).is_equal(30)
+	assert_str(GameState.calendar.season_id).is_equal("summer")
+	assert_int(GameState.calendar.day_of_season).is_equal(2)
+	assert_int(GameState.yin).is_equal(0)
+	assert_int(SaveManager.build_save_data()["version"]).is_equal(6)
 
 
 func test_v1_save_migrates_to_default_house() -> void:
@@ -146,6 +167,6 @@ func test_v4_phase_clock_migrates_to_timeband_start() -> void:
 		DataRegistry.tuning.get_float("player_start_x"), DataRegistry.tuning.get_float("player_start_y")))
 	assert_bool(GameState.region_states.is_empty()).is_true()
 	var saved := SaveManager.build_save_data()
-	assert_int(saved["version"]).is_equal(5)
+	assert_int(saved["version"]).is_equal(SaveManager.SAVE_VERSION)
 	assert_bool((saved["clock"] as Dictionary).has("elapsed_seconds")).is_true()
 	assert_bool((saved["clock"] as Dictionary).has("phase")).is_false()

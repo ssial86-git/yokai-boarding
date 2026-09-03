@@ -11,10 +11,19 @@ func _ready() -> void:
 	Events.day_started.connect(_on_day_started)
 	Events.room_changed.connect(func(_coords: Vector2i, _room_id: String) -> void: prune_assignment())
 	Events.floor_added.connect(func(_floor: int) -> void: prune_assignment())
+	Events.season_changed.connect(func(season_id: String) -> void:
+		var season := DataRegistry.get_season(season_id)
+		Events.message_posted.emit(DataRegistry.text("msg_season_changed", {
+			"season": season.name_ko if season != null else season_id})))
 
 
 func _on_day_started(_day: int) -> void:
 	roll_weather()
+	# 소절기 이벤트 (P2-S1): 시작 날 아침에 한 번 알린다
+	for event in GameState.calendar.events_starting_today(DataRegistry.season_events):
+		Events.season_event_started.emit(event.id)
+		Events.message_posted.emit(DataRegistry.text("msg_season_event_started", {"name": event.name_ko, "hint": event.hint_ko}))
+		Metrics.record("season_event", {"event": event.id, "season": GameState.calendar.season_id})
 
 
 func _on_timeband_changed(band: int, _day: int) -> void:
@@ -22,10 +31,19 @@ func _on_timeband_changed(band: int, _day: int) -> void:
 		settle()
 
 
+## 아침 날씨·음기 (P2-S1): weather.csv 절기별 추첨표. 소절기 이벤트가 날씨를 고정할 수 있다.
+## 방문자 RNG 를 소모하지 않도록 시드+날짜에서 파생한 RNG 를 쓴다 (채집 리스폰과 같은 규칙).
 func roll_weather() -> void:
-	var rain_chance := DataRegistry.tuning.get_float("rain_chance")
-	GameState.weather = RAIN if GameState.rng.randf() < rain_chance else GameState.WEATHER_CLEAR
+	var calendar := GameState.calendar
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash("%d:%d:weather" % [GameState.rng.seed, GameState.day])
+	var result := WeatherRoll.roll(
+		DataRegistry.weather, calendar.season_id, rng, calendar.weather_override(DataRegistry.season_events))
+	GameState.weather = result.weather_id if not result.weather_id.is_empty() else GameState.WEATHER_CLEAR
+	GameState.yin = result.yin
 	Events.weather_changed.emit(GameState.weather)
+	Events.weather_rolled.emit(GameState.weather, GameState.yin)
+	Metrics.record("weather", {"weather": GameState.weather, "yin": GameState.yin, "season": calendar.season_id})
 
 
 func settle() -> DaySettlement.Result:

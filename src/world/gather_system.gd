@@ -100,6 +100,7 @@ func gather(region_id: String, index: int) -> bool:
 		return false
 	GameState.region_state(region_id)["gather_taken"] = points.taken_indices()
 	var count := 1 + (_bonus_amount if bonus_active() else 0)  # 채집 부적
+	count += _event_extra(GameState.calendar.gather_multiplier(DataRegistry.season_events))
 	GameState.inventory.add(material_id, count)
 	GameState.stamina.spend(_stamina_cost)
 	var material := DataRegistry.get_material(material_id)
@@ -120,11 +121,21 @@ func material_color(material_id: String) -> Color:
 func _roll(region: RegionData) -> GatherPoints:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash("%d:%d:%s" % [GameState.rng.seed, GameState.day, region.id])
-	var points := GatherPoints.roll(region, DataRegistry.materials, rng)
+	var points := GatherPoints.roll(region, DataRegistry.materials, rng, GameState.is_yin_high())
 	var state := GameState.region_state(region.id)
 	state["gather_materials"] = Array(points.material_ids)
 	state["gather_taken"] = []
 	return points
+
+
+## 소절기 이벤트 채집 배율 (P2-S1): 정수 부분은 확정, 소수 부분은 그 확률로 +1 (만월 1.2 → 20% 로 하나 더).
+func _event_extra(multiplier: float) -> int:
+	if multiplier <= 1.0:
+		return 0
+	var extra := int(floorf(multiplier)) - 1
+	if GameState.rng.randf() < multiplier - floorf(multiplier):
+		extra += 1
+	return extra
 
 
 func _tool_name(kind: String) -> String:

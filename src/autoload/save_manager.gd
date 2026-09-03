@@ -6,8 +6,9 @@ extends Node
 ## v4: game_state.guests / ledger / flags / seen_events / pending_visitor / weather / rng_state 추가 (M3)
 ## v5: clock 이 페이즈(phase/elapsed_in_phase)에서 실시간 경과 초(elapsed_seconds)로 바뀜,
 ##     game_state.player(구역·위치) / regions(탐험지 상태) 추가 (P1-S1)
+## v6: game_state.calendar(절기·절기 안 날짜) / yin(음기 지수) 추가 (P2-S1)
 
-const SAVE_VERSION := 5
+const SAVE_VERSION := 6
 const SAVE_DIR := "user://saves"
 const SLOT_FILE_FORMAT := "slot_%d.json"
 
@@ -80,8 +81,20 @@ func _migrate(data: Dictionary) -> Dictionary:
 		_migrate_3_to_4(result)
 	if version < 5:
 		_migrate_4_to_5(result)
+	if version < 6:
+		_migrate_5_to_6(result)
 	result["version"] = SAVE_VERSION
 	return result
+
+
+## v5 에는 절기 달력·음기가 없다. 달력을 비워 두면 GameState.from_dict 가 통산 일차에서 계산한다.
+func _migrate_5_to_6(data: Dictionary) -> void:
+	var game_state: Dictionary = data.get("game_state", {})
+	if not game_state.has("calendar"):
+		game_state["calendar"] = {}
+	if not game_state.has("yin"):
+		game_state["yin"] = 0
+	data["game_state"] = game_state
 
 
 ## v4 의 페이즈를 그 시간대의 시작 시각으로 옮긴다. 페이즈 안 경과(elapsed_in_phase)는 길이 체계가 달라 버린다.

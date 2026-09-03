@@ -27,6 +27,10 @@ var seen_events: Array[String] = []
 ## 심사 대기 중인 방문자 (VisitorRoll.Visitor.to_dict 형식). 없으면 빈 Dictionary.
 var pending_visitor: Dictionary = {}
 var weather: String = WEATHER_CLEAR
+## 절기 달력 (P2-S1). reset_new_game() 또는 from_dict() 전에는 빈 달력.
+var calendar: Calendar = Calendar.new()
+## 오늘의 음기 지수 0~3 (weather.csv 추첨). tuning yin_high_threshold 이상이면 '짙은 날'.
+var yin: int = 0
 ## 방문자·하숙비 추첨용 RNG. 상태를 세이브해 로드 후에도 같은 순서가 이어진다.
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 ## 하숙집 방 그리드. reset_new_game() 또는 from_dict() 전에는 null.
@@ -75,6 +79,8 @@ func reset_new_game() -> void:
 	seen_events.clear()
 	pending_visitor.clear()
 	weather = WEATHER_CLEAR
+	yin = 0
+	calendar = Calendar.start(DataRegistry.seasons, DataRegistry.tuning.get_string("season_start_id"))
 	_reset_player()
 	region_states.clear()
 	stamina = Stamina.new(Stamina.Params.from_tuning(DataRegistry.tuning))
@@ -93,6 +99,18 @@ func reset_new_game() -> void:
 	conditions.clear()
 	for yokai_id in residents:
 		conditions[yokai_id] = DataRegistry.tuning.get_int("condition_max")
+
+
+## 하루를 넘긴다 (취침 — Clock.sleep 만 부른다). 절기의 마지막 날을 넘기면 season_changed.
+func advance_day() -> void:
+	day += 1
+	if calendar.advance_day():
+		Events.season_changed.emit(calendar.season_id)
+
+
+## 오늘이 음기 짙은 날인가 (마계 작물 가속·마계 손님↑·음기 조건 재료).
+func is_yin_high() -> bool:
+	return WeatherRoll.is_yin_high(yin, DataRegistry.tuning.get_int("yin_high_threshold"))
 
 
 func add_money(amount: int) -> void:
@@ -155,6 +173,8 @@ func to_dict() -> Dictionary:
 		"seen_events": seen_events.duplicate(),
 		"pending_visitor": pending_visitor.duplicate(),
 		"weather": weather,
+		"yin": yin,
+		"calendar": calendar.to_dict(),
 		# JSON 은 64비트 정수를 double 로 바꿔 정밀도를 잃으므로 문자열로 보관
 		"rng_state": str(rng.state),
 		"room_grid": room_grid.to_dict() if room_grid != null else {},
@@ -318,6 +338,16 @@ func from_dict(data: Dictionary) -> bool:
 	# JSON 을 거친 float 값(omen) 을 int 로 되돌리기 위해 Visitor 로 한 번 감쌌다 푼다
 	pending_visitor = VisitorRoll.Visitor.from_dict(raw_visitor).to_dict() if not raw_visitor.is_empty() else {}
 	weather = str(data.get("weather", WEATHER_CLEAR))
+	yin = clampi(int(data.get("yin", 0)), WeatherRoll.YIN_MIN, WeatherRoll.YIN_MAX)
+	var new_calendar := Calendar.new()
+	var calendar_data: Variant = data.get("calendar", {})
+	if calendar_data is Dictionary and not (calendar_data as Dictionary).is_empty():
+		if not new_calendar.from_dict(calendar_data as Dictionary, DataRegistry.seasons):
+			return false
+	else:
+		# v5 이전 세이브: 통산 일차에서 절기·날짜를 계산한다 (1일차 = 시작 절기 1일)
+		new_calendar = Calendar.from_absolute_day(DataRegistry.seasons, DataRegistry.tuning.get_string("season_start_id"), day)
+	calendar = new_calendar
 	var player: Variant = data.get("player", {})
 	if player is Dictionary and not (player as Dictionary).is_empty():
 		var player_data := player as Dictionary

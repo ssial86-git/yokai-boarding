@@ -28,6 +28,10 @@ var unlocks: Dictionary = {}  # id -> UnlockData
 var chains: Dictionary = {}  # content_id -> ChainData
 var metrics_events: Dictionary = {}  # id -> MetricsEventData
 var recipes: Dictionary = {}  # id -> RecipeData
+# --- P2-S1: 절기·날씨 ---
+var seasons: Dictionary = {}  # id -> SeasonData
+var weather: Dictionary = {}  # id -> WeatherData
+var season_events: Dictionary = {}  # id -> SeasonEventData
 var tuning: TuningData = TuningData.new()
 var strings: StringTableData = StringTableData.new()
 
@@ -58,6 +62,9 @@ func reload() -> void:
 	chains = _load_dir(RESOURCE_ROOT + "chains")
 	metrics_events = _load_dir(RESOURCE_ROOT + "metrics_events")
 	recipes = _load_dir(RESOURCE_ROOT + "recipes")
+	seasons = _load_dir(RESOURCE_ROOT + "seasons")
+	weather = _load_dir(RESOURCE_ROOT + "weather")
+	season_events = _load_dir(RESOURCE_ROOT + "season_events")
 	tuning = _load_single(TUNING_PATH, TuningData.new()) as TuningData
 	strings = _load_single(STRINGS_PATH, StringTableData.new()) as StringTableData
 
@@ -140,6 +147,24 @@ func get_metrics_event(id: String) -> MetricsEventData:
 
 func get_recipe(id: String) -> RecipeData:
 	return recipes.get(id) as RecipeData
+
+
+func get_season(id: String) -> SeasonData:
+	return seasons.get(id) as SeasonData
+
+
+func get_weather(id: String) -> WeatherData:
+	return weather.get(id) as WeatherData
+
+
+func get_season_event(id: String) -> SeasonEventData:
+	return season_events.get(id) as SeasonEventData
+
+
+## 날씨 표시 이름. weather.csv 에 없으면 strings 의 weather_<id> 로.
+func weather_name(id: String) -> String:
+	var data := get_weather(id)
+	return data.name_ko if data != null else text("weather_%s" % id)
 
 
 ## 레시피를 티어, id 순으로 (메뉴 표시용).
