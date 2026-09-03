@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CropData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/crop_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "c_perilla"
+name_ko = "깻잎"
+realm = "mortal"
+seed_item = "seed_perilla"
+harvest_item = "perilla"
+grow_days = 3
+water_per_day = 1
+yield_min = 2
+yield_max = 3
+yin_growth_bonus = 0.0
+season = "any"

@@ -46,7 +46,7 @@ ENUMS: dict[str, set[str]] = {
     "yin_condition": {"any", "low", "high"},
     "fish_kind": {"fish", "junk"},
     "talisman_effect": {"throw", "gather", "return"},
-    "region_kind": {"yard", "wild", "gate", "expedition"},
+    "region_kind": {"house", "yard", "wild", "gate", "expedition"},
     "enemy_tier": {"normal", "boss"},
     "unlock_type": {"region", "tool", "talisman", "enemy", "yokai", "event", "crop", "material", "fish", "verb", "feature"},
     "verb": {"walk", "gather", "farm", "cook", "fish", "craft", "talk", "intake", "assign", "build", "explore", "fight", "sleep"},
@@ -133,6 +133,45 @@ def parse_use(value: str) -> str:
     if not sep or kind not in ENUMS["chain_use_kind"] or not ID_PATTERN.match(detail):
         raise ValueError(f"use 형식 오류: {v!r} (kind:detail, kind ∈ {sorted(ENUMS['chain_use_kind'])})")
     return v
+
+
+SEGMENT_PATTERN = re.compile(r"^\d+:\d+:-?\d+$")
+DOOR_PATTERN = re.compile(r"^[a-z0-9_]+:\d+$")
+SPAN_PATTERN = re.compile(r"^\d+:\d+$")
+
+
+def parse_segment_list(value: str) -> list[str]:
+    """바닥 구간 'x0:x1:y' 목록 (regions.ground). y 는 기준 바닥 0 에서의 오프셋(위가 음수)."""
+    result: list[str] = []
+    for part in filter(None, (p.strip() for p in value.split(LIST_SEPARATOR))):
+        if not SEGMENT_PATTERN.match(part):
+            raise ValueError(f"ground 형식 오류: {part!r} (x0:x1:y)")
+        x0, x1, _ = (int(v) for v in part.split(":"))
+        if x1 <= x0:
+            raise ValueError(f"ground 구간 오류: {part!r} (x1 은 x0 보다 커야 함)")
+        result.append(part)
+    return result
+
+
+def parse_door_list(value: str) -> list[str]:
+    """문 'region_id:x' 목록 (regions.doors)."""
+    result: list[str] = []
+    for part in filter(None, (p.strip() for p in value.split(LIST_SEPARATOR))):
+        if not DOOR_PATTERN.match(part):
+            raise ValueError(f"doors 형식 오류: {part!r} (region_id:x)")
+        result.append(part)
+    return result
+
+
+def parse_span(value: str) -> str:
+    v = value.strip()
+    if v and not SPAN_PATTERN.match(v):
+        raise ValueError(f"span 형식 오류: {v!r} (x0:x1)")
+    return v
+
+
+def door_ids(value: list[str]) -> list[str]:
+    return [part.split(":")[0] for part in value]
 
 
 class BuildError(Exception):
@@ -490,6 +529,13 @@ TABLES: list[Table] = [
             Column("boss_id", parse_str, ref="enemies"),
             Column("stamina_enter_cost", int),
             Column("in_p1", parse_bool),
+            # --- 레이아웃 (P1-S2): 씬은 이 값으로 조립된다. house 는 방 그리드에서 계산하므로 비워 둔다
+            Column("width_px", int),
+            Column("ground", parse_segment_list),
+            Column("doors", parse_door_list, ref="regions", ref_ids=door_ids),
+            Column("gather_span", parse_span),
+            Column("farm_x", int),
+            Column("sky_color", parse_str),
         ],
     ),
     Table(

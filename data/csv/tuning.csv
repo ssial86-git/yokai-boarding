@@ -74,6 +74,44 @@ message_fade_seconds,4.0,float,메시지가 사라지기까지의 시간
 sfx_master_db,0.0,float,효과음 전체 볼륨(dB)
 rest_zone_min_width_px,96,int,배치 패널 휴식 놓기 영역의 최소 너비(px)
 metrics_enabled,true,bool,내장 지표 JSONL(user://metrics/session_*.jsonl) 기록 여부. headless 에서는 파일을 열지 않는다
-player_start_region,r_yard,string,새 게임 플레이어 시작 구역(regions.csv id)
-player_start_x,0,float,시작 구역 안 플레이어 x(px) — S2 플레이어 컨트롤러가 사용
+player_start_region,r_house,string,새 게임 플레이어 시작 구역(regions.csv id)
+player_start_x,32,float,시작 구역 안 플레이어 x(px). 하숙집은 대문간 칸 가운데
 player_start_y,0,float,시작 구역 안 플레이어 y(px)
+player_walk_speed_px,70,float,플레이어 걷기 속도(px/초) — 손맛 조정 대상
+player_run_speed_px,120,float,플레이어 달리기 속도(px/초). 스태미너를 소모한다
+player_climb_speed_px,55,float,사다리·계단 오르내리기 속도(px/초)
+player_gravity_px,900,float,중력 가속(px/초²)
+player_max_fall_speed_px,400,float,낙하 최고 속도(px/초)
+player_interact_radius_px,20,float,상호작용 대상을 잡는 반경(px)
+player_body_width_px,12,int,플레이어 충돌 상자 너비(px)
+player_body_height_px,28,int,플레이어 충돌 상자 높이(px)
+player_floor_max_angle_deg,50,float,걸어 오를 수 있는 최대 경사(도) — 단차는 경사로로만
+ramp_width_px,32,float,바닥 높이가 바뀌는 곳의 경사로 폭(px)
+ground_thickness_px,32,int,바닥 충돌체 두께(px)
+stamina_max,100,float,스태미너 상한 (docs/01 v3: 100 예산)
+stamina_run_drain_per_second,8,float,달리기 중 초당 스태미너 소모
+stamina_regen_per_second,4,float,멈춰 있을 때 초당 회복
+stamina_exhausted_multiplier,0.5,float,스태미너 0 일 때 속도 배율 (강제 기절 없음)
+stamina_low_threshold,20,float,이 아래면 HUD 가 경고색
+stamina_gather_cost,5,float,채집·벌목·채광 1회 비용
+stamina_farm_cost,4,float,괭이질·파종·물주기·수확 1회 비용
+automation_efficiency,0.6,float,배치된 요괴가 플레이어 대신 일할 때 효율 (물주기 1회 = 이 값만큼)
+field_workers_max,1,int,텃밭 자동화 슬롯 정원
+farm_plots_initial,6,int,텃밭 시작 칸 수 (docs/01 v3 2.1: 6 → 12)
+farm_plots_max,12,int,텃밭 최대 칸 수 (unlocks feature farm_plots_12)
+farm_plot_width_px,16,int,텃밭 한 칸 폭(px)
+start_tools,hoe:1,string,새 게임 시작 도구 (갈래:레벨 목록)
+start_items,seed_radish:3;seed_perilla:2,string,새 게임 시작 소지품 (item:n 목록)
+camera_follow_smoothing,8.0,float,카메라가 플레이어를 따라가는 감쇠 (클수록 빨리 붙음)
+region_ground_color,6b8e5a,string,이승 바닥 윗면 색(hex — 팔레트)
+region_dirt_color,5c4033,string,이승 바닥 속 색(hex)
+region_demon_ground_color,7a5c8f,string,마계 바닥 윗면 색(hex)
+region_demon_dirt_color,2e2733,string,마계 바닥 속 색(hex)
+farm_plot_color_empty,8c6247,string,갈지 않은 텃밭 칸 색(hex)
+farm_plot_color_tilled,5c4033,string,갈아 둔 텃밭 칸 색(hex)
+crop_sprout_color,9bb572,string,자라는 작물 색(hex)
+crop_ready_color,f2a65a,string,다 자란 작물 색(hex)
+door_color,d9b384,string,문 자리표시 색(hex)
+door_locked_color,4a4352,string,잠긴 문 색(hex)
+gather_point_size_px,12,int,채집 포인트 자리표시 크기(px)
+prompt_offset_px,20,int,안내 문구가 플레이어 머리 위에서 떨어진 거리(px)

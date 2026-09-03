@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CropData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/crop_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "c_ash_pepper"
+name_ko = "잿빛 고추"
+realm = "demon"
+seed_item = "seed_ash_pepper"
+harvest_item = "ash_pepper"
+grow_days = 5
+water_per_day = 1
+yield_min = 1
+yield_max = 2
+yin_growth_bonus = 1.0
+season = "any"

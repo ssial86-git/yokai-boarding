@@ -182,6 +182,11 @@ def main() -> int:
         img.save(path)
         written.append(path)
 
+    # 주인공 (P1-S2 직접 조작). 32px, 요괴와 같은 규격 — 라벨 PL
+    player_path = OUT_DIR / "player.png"
+    make_character(32, PALETTE[12], "PL").save(player_path)
+    written.append(player_path)
+
     for path in written:
         print(f"  {path.relative_to(ROOT)}")
     print(f"[gen_placeholder] {len(written)}개 생성")

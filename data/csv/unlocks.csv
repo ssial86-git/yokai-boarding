@@ -1,6 +1,6 @@
 id,day_min,expected_day,timeband,condition,unlock_type,unlock_id,hint_ko
 u_prologue,1,1,morning,,event,tut_morning,폐가에 도착했다. 성주 영감을 깨우자.
-u_farm_plots_3,1,1,morning,,feature,farm_plots_3,마당 텃밭 3칸이 열렸다. 괭이질부터.
+u_farm_plots_6,1,1,morning,,feature,farm_plots_6,마당 텃밭 6칸. 괭이질부터.
 u_ttukttagi,1,1,any,,yokai,y01_ttukttagi,첫 하숙생 뚝딱이가 문을 두드렸다.
 u_ledger,1,1,night,,event,tut_night,아버지의 하숙부를 찾았다.
 u_back_hill,2,2,morning,,region,r_back_hill,뒷산 길이 열렸다. 나물·버섯·나뭇가지·돌을 주울 수 있다.
@@ -23,7 +23,7 @@ u_t_return,5,6,any,unlock:u_talisman_craft,talisman,t_return,귀환 부적 — �
 u_ash_field_deep,6,7,day,unlock:u_ash_field,region,r_ash_field_deep,잿빛 들 심부로 가는 길이 보인다.
 u_ash_warden,6,7,day,unlock:u_ash_field_deep,enemy,e_ash_warden,잿빛 파수꾼이 길을 막는다.
 u_automation,6,7,morning,affinity:y01_ttukttagi>=2,feature,assignment_automation,뚝딱이가 텃밭 물주기를 맡겠다고 한다. 배치로 일을 넘길 수 있다.
-u_farm_plots_12,7,8,morning,unlock:u_farm_plots_3,feature,farm_plots_12,텃밭을 12칸으로 넓힐 수 있다.
+u_farm_plots_12,7,8,morning,unlock:u_farm_plots_6,feature,farm_plots_12,텃밭을 12칸으로 넓힐 수 있다.
 u_axe_2,8,8,any,unlock:u_axe,tool,axe_2,도끼를 벼릴 수 있다.
 u_hoe_2,8,9,any,unlock:u_hoe,tool,hoe_2,괭이를 벼릴 수 있다.
 u_pickaxe_2,9,10,any,unlock:u_pickaxe,tool,pickaxe_2,곡괭이를 벼릴 수 있다.

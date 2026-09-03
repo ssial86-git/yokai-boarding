@@ -97,3 +97,43 @@ hud_hint_prefix,성주 영감: {text}
 card_guest_name,손님 · {name}
 card_guest_status,{nights}일 뒤 떠남 · 배치 불가
 card_guest_tooltip,{name}\n{flavor}\n하숙비: {rent}
+prompt_door,E: {name}(으)로
+prompt_door_locked,{name} — 아직 갈 수 없다
+prompt_gather,E: 캐기 ({name})
+prompt_chop,E: 베기 ({name})
+prompt_mine,E: 캐기 ({name}) — 곡괭이
+prompt_need_tool,{name} — {tool} 필요
+prompt_tool_weak,{name} — {tool} Lv{level} 필요
+prompt_taken,이미 캤다
+prompt_till,E: 괭이질
+prompt_need_hoe,괭이가 필요하다
+prompt_sow,E: 파종 ({seed} {count}개)
+prompt_sow_none,씨앗이 없다
+prompt_water,E: 물주기
+prompt_watered,자라는 중 ({name} {days}/{total}일)
+prompt_harvest,E: 수확 ({name})
+prompt_build,E: 짓기
+prompt_room,E: {room} 개조
+prompt_talk,E: 말 걸기 ({name})
+tool_hoe,괭이
+tool_axe,도끼
+tool_pickaxe,곡괭이
+tool_rod,낚싯대
+hud_stamina,체력 {value}/{max}
+hud_region,{name}
+ui_field_zone,텃밭 (여기에 놓기)
+card_field,텃밭
+msg_assigned_field,{name} → 텃밭 물주기
+msg_gathered,{name} +{count}
+msg_harvested,{name} +{count}
+msg_sown,{name} 씨앗을 심었다
+msg_watered,물을 줬다
+msg_tilled,밭을 갈았다
+msg_crop_ready,텃밭 {count}칸이 다 자랐다
+msg_auto_watered,{name}이(가) 텃밭 {count}칸에 물을 줬다 (효율 {percent}%)
+msg_unlocked,{hint}
+msg_region_locked,아직 갈 수 없다
+msg_greeting,{name}: 오늘도 잘 부탁해요.
+msg_gather_respawned,{name}의 채집물이 다시 자랐다
+msg_stamina_out,지쳤다. 움직임이 느려진다
+msg_tool_got,{tool} Lv{level} 을(를) 손에 넣었다

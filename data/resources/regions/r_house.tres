@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RegionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/region_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_house"
+name_ko = "하숙집"
+realm = "mortal"
+kind = "house"
+parent_id = ""
+gather_point_count = 0
+gather_pool = []
+enemy_pool = []
+boss_id = ""
+stamina_enter_cost = 0
+in_p1 = true
+width_px = 0
+ground = []
+doors = []
+gather_span = ""
+farm_x = 0
+sky_color = "2b3f55"

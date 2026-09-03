@@ -6,3 +6,4 @@ hint_day,day,1,1,,,20,낮에는 배치된 요괴가 일합니다. 저녁(17:00)�
 hint_evening,evening,1,0,,first_intake_done,45,손님이 오면 문돌이가 카드를 물어 옵니다. 빈 침대가 있어야 받을 수 있어요.
 hint_night,night,1,2,,,20,밤에는 하숙생이 사연을 꺼냅니다. 들어주면 호감도가 오르고 하숙부에 기록됩니다.
 hint_beds,any,2,0,,first_extra_bed,35,침대가 꽉 찼습니다. 객실을 하나 더 지으면 손님을 받을 수 있어요.
+hint_move,morning,1,1,,first_region_change,60,A/D로 걷고 E로 상호작용합니다. 대문간에서 E를 누르면 마당으로 나갑니다.

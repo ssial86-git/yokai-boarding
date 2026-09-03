@@ -10,3 +10,30 @@ record_piece,기록 조각,key,0
 t_throw,투척 부적,talisman,15
 t_gather,채집 부적,talisman,12
 t_return,귀환 부적,talisman,20
+m_namul,나물,material,4
+m_mushroom,버섯,material,5
+m_branch,나뭇가지,material,2
+m_stone,돌,material,2
+m_acorn,도토리,material,3
+m_herb,약초,material,9
+m_bamboo,대나무,material,7
+m_ore,철광석,material,10
+m_clay,찰흙,material,4
+m_spring_water,샘물,material,3
+m_ash_grass,잿빛 풀,material,8
+m_ember_stone,잿불돌,material,14
+m_shadow_moss,그늘이끼,material,20
+seed_radish,무 씨앗,seed,3
+seed_cabbage,배추 씨앗,seed,4
+seed_perilla,깻잎 씨앗,seed,3
+seed_garlic,마늘 씨앗,seed,5
+seed_sweet_potato,고구마 씨앗,seed,5
+seed_moon_melon,달무리 참외 씨앗,seed,12
+seed_ash_pepper,잿빛 고추 씨앗,seed,14
+radish,무,crop,8
+cabbage,배추,crop,10
+perilla,깻잎,crop,6
+garlic,마늘,crop,12
+sweet_potato,고구마,crop,11
+moon_melon,달무리 참외,crop,30
+ash_pepper,잿빛 고추,crop,26

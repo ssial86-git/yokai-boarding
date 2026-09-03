@@ -22,3 +22,15 @@ extends Resource
 @export var stamina_enter_cost: int = 0
 ## P1 에 실제로 등장하는 구역인지 (false 면 스키마·케이던스 검증용 자리)
 @export var in_p1: bool = true
+# --- 레이아웃 (P1-S2). RegionLayout 이 푼다. house 는 방 그리드에서 계산한다 ---
+@export var width_px: int = 0
+## 바닥 구간 "x0:x1:y" 목록 (y 는 기준 바닥 0 에서의 오프셋, 위가 음수)
+@export var ground: Array = []
+## 문 "region_id:x" 목록
+@export var doors: Array = []
+## 채집 포인트가 놓이는 x 범위 "x0:x1"
+@export var gather_span: String = ""
+## 텃밭 첫 칸 x (yard)
+@export var farm_x: int = 0
+## 배경색 hex (팔레트)
+@export var sky_color: String = "8fb0b8"

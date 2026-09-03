@@ -4,11 +4,11 @@
 
 [resource]
 script = ExtResource("1_script")
-id = "u_farm_plots_3"
+id = "u_farm_plots_6"
 day_min = 1
 expected_day = 1
 timeband = "morning"
 condition = ""
 unlock_type = "feature"
-unlock_id = "farm_plots_3"
-hint_ko = "마당 텃밭 3칸이 열렸다. 괭이질부터."
+unlock_id = "farm_plots_6"
+hint_ko = "마당 텃밭 6칸. 괭이질부터."

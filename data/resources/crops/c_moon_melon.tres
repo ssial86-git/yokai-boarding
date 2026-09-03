@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CropData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/crop_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "c_moon_melon"
+name_ko = "달무리 참외"
+realm = "demon"
+seed_item = "seed_moon_melon"
+harvest_item = "moon_melon"
+grow_days = 4
+water_per_day = 1
+yield_min = 1
+yield_max = 1
+yin_growth_bonus = 1.0
+season = "any"

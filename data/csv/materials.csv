@@ -1,1 +1,15 @@
 id,name_ko,realm,source,tool_kind,min_tool_level,season,yin_condition,rarity
+m_namul,나물,mortal,gather,none,0,spring,any,common
+m_mushroom,버섯,mortal,gather,none,0,any,any,common
+m_branch,나뭇가지,mortal,gather,none,0,any,any,common
+m_stone,돌,mortal,gather,none,0,any,any,common
+m_acorn,도토리,mortal,gather,none,0,any,any,common
+m_herb,약초,mortal,gather,none,0,any,any,uncommon
+wood,목재,mortal,chop,axe,1,any,any,common
+m_bamboo,대나무,mortal,chop,axe,1,any,any,uncommon
+m_ore,철광석,mortal,mine,pickaxe,1,any,any,uncommon
+m_clay,찰흙,mortal,mine,pickaxe,1,any,any,common
+m_spring_water,샘물,mortal,gather,none,0,any,any,common
+m_ash_grass,잿빛 풀,demon,gather,none,0,any,high,common
+m_ember_stone,잿불돌,demon,mine,pickaxe,1,any,any,uncommon
+m_shadow_moss,그늘이끼,demon,gather,none,0,any,high,rare

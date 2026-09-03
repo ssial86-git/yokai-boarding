@@ -32,3 +32,4 @@ combat_hit,verb,enemy;source;damage,적 피격 (source = companion / talisman)
 enemy_defeated,verb,enemy;region,적 처치
 talisman_used,verb,talisman,부적 사용
 stamina,verb,value,스태미너가 문턱(tuning)을 넘음
+region_entered,day,region,구역 진입 (하숙집·마당·뒷산 등 모든 구역)
