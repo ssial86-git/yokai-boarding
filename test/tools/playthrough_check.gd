@@ -234,6 +234,20 @@ func _initialize() -> void:
 	hub.call("close")
 	await _frames(1)
 
+	# --- P3-S4: 위임 슬롯 (채집·낚시·판매) — 아침 배치 줄에 자리가 생기고 낮에 대신 일한다 ---
+	for unlock_id in ["u_delegate_gather", "u_delegate_fishing", "u_delegate_market"]:
+		(gs.get("unlocked") as Dictionary)[unlock_id] = int(gs.get("day"))
+	(root.get_node("Events") as Node).emit_signal("unlocked", "u_delegate_market")
+	await _frames(2)
+	_check("delegation_zones_open", int(panel.call("open_delegation_zones")) == 3, "배치 패널에 채집·낚시·판매 위임 자리 3개")
+	_check("delegation_zones_on_screen", bool(panel.call("zones_on_screen")), "위임 줄이 늘어도 드롭존이 화면 안")
+	_check("assign_gather_delegation", int(assign.call("try_assign", "y01_ttukttagi", Vector2i(-4, -4))) == 0, "뚝딱이 → 채집 위임")
+	await _frames(2)
+	await _shot("24_delegation_zones")
+	var auto_gathered := int(gather_system.call("auto_gather"))
+	_check("auto_gather_works", auto_gathered >= 1, "낮이 오면 뚝딱이가 뒷산에서 대신 캔다 (%d개)" % auto_gathered)
+	_check("assign_back_to_rest", int(assign.call("try_rest", "y01_ttukttagi")) == 0, "다시 휴식 (뒤 검사는 뚝딱이가 쉬는 전제)")
+
 	# --- P2-S3: 회색 시장 (음기 짙은 날에만 문이 열림) + 가호 접붙이기 ---
 	for unlock_id in ["u_well", "u_gray_market", "u_blessings"]:
 		(gs.get("unlocked") as Dictionary)[unlock_id] = int(gs.get("day"))
