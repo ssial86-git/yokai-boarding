@@ -38,8 +38,8 @@ extends Resource
 @export var fishing_x: int = 0
 ## 들어갈 때 enemy_pool 에서 뽑아 놓는 적 수 (탐험지, 미니보스 제외)
 @export var enemy_count: int = 0
-## 회색 장꾼 NPC 자리 x (0 = 없음). P2-S3
-@export var merchant_x: int = 0
+## 구역 NPC "spirit_id:shop_id:x" 목록 (P2-S3 회색 장꾼, P3-S2 마을 상점 2). RegionLayout.npcs() 가 푼다
+@export var npcs: Array = []
 # --- 밤 변형 (P2-S4). 채집 풀이 비면 변형 없음. DataRegistry 가 "<id>@night" 로 파생 리소스를 만든다 ---
 @export var night_gather_pool: Array = []
 @export var night_enemy_pool: Array = []

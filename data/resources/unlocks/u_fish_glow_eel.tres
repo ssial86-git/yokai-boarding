@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_fish_glow_eel"
+day_min = 84
+expected_day = 84
+timeband = "evening"
+condition = "unlock:u_moon_marsh"
+unlock_type = "fish"
+unlock_id = "f_glow_eel"
+hint_ko = "밤 늪에 빛장어가 떠오른다 (낚싯대 Lv2)."

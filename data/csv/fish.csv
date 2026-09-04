@@ -12,3 +12,6 @@ m_shadow_moss,그늘이끼,fish,r_well,9,any,1,,any
 f_wet_visitor,물에 젖은 손님,fish,r_well,1,any,1,g_usanson,any
 f_eel,뱀장어,fish,r_stream,2,night,2,,summer
 f_smelt,빙어,fish,r_stream,3,day,1,,winter
+f_mud_carp,진흙붕어,fish,r_moon_marsh,5,any,1,,any
+f_glow_eel,빛장어,fish,r_moon_marsh,2,night,2,,any
+j_bone,뼈다귀,junk,r_moon_marsh,3,any,1,,any

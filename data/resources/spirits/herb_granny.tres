@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SpiritData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/spirit_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "herb_granny"
+name_ko = "약방 할미"
+role_ko = "마을 상점가의 약방. 약초와 물고기를 사고 샘물을 판다. 눈치가 빠르다"
+room_id = ""

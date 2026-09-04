@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_village"
+day_min = 58
+expected_day = 58
+timeband = "day"
+condition = ""
+unlock_type = "region"
+unlock_id = "r_village"
+hint_ko = "마당 왼쪽 길 끝에 마을 상점가가 있다. 낮에만 문을 연다 — 씨앗·곡식·약초."

@@ -19,3 +19,9 @@ m_wild_berry,산딸기,mortal,gather,none,0,summer,any,common
 m_chestnut,밤,mortal,gather,none,0,autumn,any,common
 m_pine_mushroom,송이,mortal,gather,none,0,autumn,high,rare
 m_ice_shard,얼음조각,mortal,gather,none,0,winter,any,uncommon
+m_marsh_reed,늪갈대,demon,gather,none,0,any,any,common
+m_bog_light,늪불 심지,demon,gather,none,0,any,high,uncommon
+m_marsh_pearl,늪진주,demon,gather,none,0,any,any,rare
+m_ash_paper,잿빛 종이,demon,gather,none,0,any,any,common
+m_ink_stone,먹돌,demon,mine,pickaxe,2,any,any,uncommon
+m_ledger_scrap,장부 조각,demon,gather,none,0,any,any,rare

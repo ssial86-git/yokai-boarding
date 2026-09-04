@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/enemy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "e_auditor"
+name_ko = "회수 집행관"
+tier = "boss"
+hp = 120
+attack = 5
+speed_px = 40.0
+aggro_radius_px = 150
+drop_material = "m_ledger_scrap"
+drop_chance = 1.0
+sprite_size = 32

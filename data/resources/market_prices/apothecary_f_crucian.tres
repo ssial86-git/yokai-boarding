@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MarketPriceData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/market_price_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "apothecary_f_crucian"
+shop = "apothecary"
+item_id = "f_crucian"
+sell_mult = 1.2
+buy_mult = 0.0
+swing = 0.1
+stock = 0
+note_ko = "약방 할미 — 약초·물고기"

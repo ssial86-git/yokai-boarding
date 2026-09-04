@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="RegionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/region_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_moon_marsh"
+name_ko = "달무리 늪"
+realm = "demon"
+kind = "expedition"
+parent_id = "r_gray_market"
+gather_point_count = 6
+gather_pool = ["m_marsh_reed", "m_bog_light", "m_marsh_pearl"]
+enemy_pool = ["e_marsh_leech", "e_bog_lantern"]
+boss_id = "e_marsh_mother"
+stamina_enter_cost = 12
+in_p1 = false
+width_px = 800
+ground = ["0:800:0"]
+doors = ["r_gray_market:32"]
+gather_span = "96:704"
+farm_x = 0
+sky_color = "3b3f5c"
+fishing_x = 420
+enemy_count = 3
+npcs = []
+night_gather_pool = ["m_marsh_reed", "m_marsh_pearl", "m_shadow_moss"]
+night_enemy_pool = ["e_marsh_leech", "e_marsh_wraith"]
+night_enemy_count = 4
+night_sky_color = "1f2238"

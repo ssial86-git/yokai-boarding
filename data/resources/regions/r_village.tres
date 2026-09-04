@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="RegionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/region_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_village"
+name_ko = "마을 상점가"
+realm = "mortal"
+kind = "village"
+parent_id = "r_yard"
+gather_point_count = 0
+gather_pool = []
+enemy_pool = []
+boss_id = ""
+stamina_enter_cost = 0
+in_p1 = false
+width_px = 480
+ground = ["0:480:0"]
+doors = ["r_yard:32"]
+gather_span = ""
+farm_x = 0
+sky_color = "c7d48f"
+fishing_x = 0
+enemy_count = 0
+npcs = ["village_grocer:village:200", "herb_granny:apothecary:360"]
+night_gather_pool = []
+night_enemy_pool = []
+night_enemy_count = 0
+night_sky_color = ""

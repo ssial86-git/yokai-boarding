@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_enemy_lantern"
+day_min = 65
+expected_day = 65
+timeband = "night"
+condition = "unlock:u_moon_marsh"
+unlock_type = "enemy"
+unlock_id = "e_bog_lantern"
+hint_ko = "늪등불이 떠돈다. 불을 따라가면 길을 잃는다."

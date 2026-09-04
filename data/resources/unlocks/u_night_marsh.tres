@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_night_marsh"
+day_min = 76
+expected_day = 76
+timeband = "day"
+condition = "unlock:u_moon_marsh"
+unlock_type = "feature"
+unlock_id = "night_r_moon_marsh"
+hint_ko = "밤의 달무리 늪 — 늪귓것이 나오고 늪진주가 더 잘 보인다."

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MarketPriceData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/market_price_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "village_perilla"
+shop = "village"
+item_id = "perilla"
+sell_mult = 1.1
+buy_mult = 0.0
+swing = 0.1
+stock = 0
+note_ko = "마을 잡화상 — 이승 씨앗·곡식"

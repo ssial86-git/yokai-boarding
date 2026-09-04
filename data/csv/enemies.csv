@@ -2,3 +2,11 @@ id,name_ko,tier,hp,attack,speed_px,aggro_radius_px,drop_material,drop_chance,spr
 e_ash_wisp,잿불 도깨비불,normal,6,1,45,80,m_ash_grass,0.7,16
 e_cinder_hound,재구렁 개,normal,12,2,60,96,m_ember_stone,0.6,32
 e_ash_warden,잿빛 파수꾼,boss,60,4,35,128,m_shadow_moss,1.0,32
+e_marsh_leech,늪거머리,normal,10,1,40,72,m_marsh_reed,0.7,16
+e_bog_lantern,늪등불,normal,14,2,50,96,m_bog_light,0.6,16
+e_marsh_wraith,늪귓것,normal,18,3,55,110,m_marsh_pearl,0.4,32
+e_marsh_mother,늪어미,boss,80,4,30,140,m_marsh_pearl,1.0,32
+e_clerk_shade,서기 그림자,normal,16,2,65,100,m_ash_paper,0.7,32
+e_stamp_golem,도장 골렘,normal,26,3,30,90,m_ink_stone,0.6,32
+e_ledger_wisp,장부 불꽃,normal,12,3,70,120,m_ledger_scrap,0.5,16
+e_auditor,회수 집행관,boss,120,5,40,150,m_ledger_scrap,1.0,32

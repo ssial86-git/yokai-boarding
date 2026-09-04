@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_village_grocer_greet"
+nodes = [{
+"node": "start",
+"speaker": "village_grocer",
+"text_ko": "어서 오슈. …언덕 위 그 낡은 집 사람이지? 밤마다 불이 켜지길래.",
+"portrait": "village_grocer",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "village_grocer",
+"text_ko": "씨앗이랑 곡식 팔아. 무·배추·마늘·오이·호박·메밀 — 철에 맞는 것만. 수확한 건 여기 가져오면 값을 쳐 주지.",
+"portrait": "village_grocer",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "village_grocer",
+"text_ko": "밤엔 문 닫으니 낮에 오슈. 그리고… 그 집 손님들 얘기는 묻지 않을게.",
+"portrait": "village_grocer",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "flag:village_grocer_met"
+}]

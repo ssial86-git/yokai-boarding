@@ -23,7 +23,7 @@ g_l_species,long,명부에 네 종족,species>=4,1,0,,100,2,날씨·음기에 �
 g_l_festival,long,동지 만점,festival:f_dongji>=11,1,0,,200,5,팥죽 셋·손님 둘·객실 둘.
 g_c1_residents,long,하숙생 셋,residents>=3,1,0,,0,2,뜨내기가 자주 오면 장기 계약을 청한다.
 g_c1_floor,long,2층 결계,floors>=2,1,0,,0,2,집이 클수록 결계가 단단하다.
-g_c1_market,long,회색 장꾼과 인사,flag:merchant_met,1,0,,0,1,음기 짙은 날이나 밤에 우물 아래로.
+g_c1_market,long,회색 장꾼과 인사,flag:gray_merchant_met,1,0,,0,1,음기 짙은 날이나 밤에 우물 아래로.
 g_c1_festival,long,동지 6점 이상,festival:f_dongji>=6,1,0,,0,2,팥죽·손님·객실.
 g_s2_tteok,season,단오 수리취떡 세 그릇,item:dish_surichwi_tteok>=3,29,33,f_dano,0,2,약초 둘·밥 하나. 단옷날 저녁에 나눈다.
 g_s2_guests,season,손님 여덟 번 맞이,ledger>=8,29,56,f_dano,0,2,저녁 심사에서 받은 손님 누계.

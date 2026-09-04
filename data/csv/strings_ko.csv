@@ -318,3 +318,9 @@ weather_wind,갈바람
 weather_frost,서리
 weather_snow,눈
 weather_blizzard,눈보라
+shop_gray,회색 시장
+shop_village,마을 잡화점
+shop_apothecary,약방
+ui_shop_title,{shop} — {npc} · {weather} · 음기 {yin}
+prompt_npc,E: {name} (거래)
+prompt_village_closed,{name} — 밤에는 문을 닫는다

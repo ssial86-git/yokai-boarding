@@ -150,7 +150,7 @@ def economy_curve(tune: dict, unlocks, crops, items, materials, regions, species
     expand_day = unlock_day(unlocks, "u_farm_plots_12", 8)
     # 회색 시장 (P2-S3): 열린 뒤로는 채집물을 시세 배율(market_prices.csv 재료 행 평균)로 판다고 가정
     market_day = unlock_day(unlocks, "u_gray_market", 13)
-    market_rows = [r for r in read_rows("market_prices.csv") if r["item_id"].startswith("m_")]
+    market_rows = [r for r in read_rows("market_prices.csv") if r["item_id"].startswith("m_") and r["shop"] == "gray"]
     market_mult = (sum(float(r["sell_mult"]) for r in market_rows) / len(market_rows)) if market_rows else 1.0
     curve: list[dict] = []
     for day in range(1, days + 1):
@@ -169,9 +169,9 @@ def economy_curve(tune: dict, unlocks, crops, items, materials, regions, species
 
 
 def main(argv: list[str]) -> int:
-    parser = argparse.ArgumentParser(description="자동 플레이 시뮬레이터 (기본 56일 = 봄·여름, P3-S1)")
+    parser = argparse.ArgumentParser(description="자동 플레이 시뮬레이터 (기본 84일 = 봄·여름·가을, P3-S2)")
     parser.add_argument("--check", action="store_true", help="케이던스·위임 교차점이 목표 밖이면 종료 코드 1")
-    parser.add_argument("--days", type=int, default=56)
+    parser.add_argument("--days", type=int, default=84)
     args = parser.parse_args(argv)
 
     tune = tuning()

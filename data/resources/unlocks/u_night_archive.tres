@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_night_archive"
+day_min = 80
+expected_day = 80
+timeband = "day"
+condition = "unlock:u_archive_gate"
+unlock_type = "feature"
+unlock_id = "night_r_archive_gate"
+hint_ko = "밤의 문서고 외곽 — 장부 불꽃이 날아다닌다."

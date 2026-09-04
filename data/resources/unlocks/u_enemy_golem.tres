@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_enemy_golem"
+day_min = 70
+expected_day = 70
+timeband = "day"
+condition = "unlock:u_archive_gate"
+unlock_type = "enemy"
+unlock_id = "e_stamp_golem"
+hint_ko = "도장 골렘 — 느리지만 단단하다. 먹돌을 떨어뜨린다."

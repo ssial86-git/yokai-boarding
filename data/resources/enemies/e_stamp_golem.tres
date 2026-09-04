@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/enemy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "e_stamp_golem"
+name_ko = "도장 골렘"
+tier = "normal"
+hp = 26
+attack = 3
+speed_px = 30.0
+aggro_radius_px = 90
+drop_material = "m_ink_stone"
+drop_chance = 0.6
+sprite_size = 32

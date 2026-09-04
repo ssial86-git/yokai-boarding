@@ -12,9 +12,9 @@ y02_act3,story,y02_eoduki,night,5,0,2,,,true,10,d_y02_act3,어둑이 3막 — �
 y03_act1,story,y03_dalgael,night,2,0,0,,,true,10,d_y03_act1,달갤 1막 — 김서림
 y03_act2,story,y03_dalgael,night,4,0,1,record_piece,,true,10,d_y03_act2,달갤 2막 — 찢긴 페이지
 y03_act3,story,y03_dalgael,night,6,0,2,record_piece,,true,10,d_y03_act3,달갤 3막 — 서명
-ev_merchant_greet,npc,,any,1,0,0,,,true,50,d_merchant_greet,회색 장꾼의 첫 인사
+ev_gray_merchant_greet,npc,,any,1,0,0,,,true,50,d_merchant_greet,회색 장꾼의 첫 인사
 c1_e1_inherit,chapter,,night,3,0,0,,,true,20,d_c1_inherit,결계의 상속
-c1_e2_rumor,chapter,,night,1,0,0,,merchant_met,true,20,d_c1_rumor,회색 시장의 소문
+c1_e2_rumor,chapter,,night,1,0,0,,gray_merchant_met,true,20,d_c1_rumor,회색 시장의 소문
 c1_e3_ledger,chapter,,night,1,0,0,,rumor_ledger,true,20,d_c1_ledger,하숙부의 진실
 c1_e4_letter,chapter,,evening,10,0,0,,ledger_truth,true,20,d_c1_letter,회수 집행관의 편지
 c1_e5_fear,chapter,y01_ttukttagi,night,1,0,0,,collector_letter,true,20,d_c1_fear,뚝딱이의 두려움
@@ -22,3 +22,5 @@ c1_e6_dalgael,chapter,y03_dalgael,night,1,0,0,,ledger_truth,true,15,d_c1_dalgael
 c1_e7_audit,chapter,,evening,20,0,0,,collector_letter,true,20,d_c1_audit,회수 집행관 3급의 감사
 c1_e8_ward,chapter,,night,1,0,0,,chapter_c2,true,30,d_c1_ward,결계가 단단해졌다
 y05_act1,story,y05_geumjuri,night,1,0,0,,,true,10,d_y05_act1,금줄이 1막 — 문턱
+ev_village_grocer_greet,npc,,any,1,0,0,,,true,50,d_village_grocer_greet,마을 잡화상의 첫 인사
+ev_herb_granny_greet,npc,,any,1,0,0,,,true,50,d_herb_granny_greet,약방 할미의 첫 인사

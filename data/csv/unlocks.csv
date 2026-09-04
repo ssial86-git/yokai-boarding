@@ -81,3 +81,13 @@ u_material_ice,91,91,day,unlock:u_season_winter,material,m_ice_shard,뒷산에 �
 u_fish_smelt,93,93,day,unlock:u_fishing,fish,f_smelt,겨울 낮 개울에 빙어.
 u_se_blizzard,104,104,morning,,season_event,se_blizzard,눈보라. 이틀 동안 음기가 짙다.
 u_year_end,112,112,morning,,feature,year_end,겨울 마지막 날. 내일은 다시 봄 — 한 해가 돌았다.
+u_village,58,58,day,,region,r_village,마당 왼쪽 길 끝에 마을 상점가가 있다. 낮에만 문을 연다 — 씨앗·곡식·약초.
+u_moon_marsh,63,63,evening,unlock:u_gray_market,region,r_moon_marsh,회색 시장 너머 달무리 늪. 늪거머리와 늪등불, 그리고 낚시 자리.
+u_enemy_lantern,65,65,night,unlock:u_moon_marsh,enemy,e_bog_lantern,늪등불이 떠돈다. 불을 따라가면 길을 잃는다.
+u_archive_gate,68,68,day,unlock:u_ash_field_deep,region,r_archive_gate,잿빛 들 심부 너머 문서고 외곽. 서기 그림자와 도장 골렘.
+u_enemy_golem,70,70,day,unlock:u_archive_gate,enemy,e_stamp_golem,도장 골렘 — 느리지만 단단하다. 먹돌을 떨어뜨린다.
+u_auditor,72,72,day,unlock:u_archive_gate,enemy,e_auditor,문서고 외곽 끝에 회수 집행관이 서 있다. 장부 조각을 지킨다.
+u_night_marsh,76,76,day,unlock:u_moon_marsh,feature,night_r_moon_marsh,밤의 달무리 늪 — 늪귓것이 나오고 늪진주가 더 잘 보인다.
+u_night_archive,80,80,day,unlock:u_archive_gate,feature,night_r_archive_gate,밤의 문서고 외곽 — 장부 불꽃이 날아다닌다.
+u_material_pearl,82,82,day,unlock:u_night_marsh,material,m_marsh_pearl,늪진주 — 달갤이 좋아한다.
+u_fish_glow_eel,84,84,evening,unlock:u_moon_marsh,fish,f_glow_eel,밤 늪에 빛장어가 떠오른다 (낚싯대 Lv2).

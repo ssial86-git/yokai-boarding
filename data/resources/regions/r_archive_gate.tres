@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="RegionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/region_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_archive_gate"
+name_ko = "문서고 외곽"
+realm = "demon"
+kind = "expedition"
+parent_id = "r_ash_field_deep"
+gather_point_count = 6
+gather_pool = ["m_ash_paper", "m_ink_stone", "m_ledger_scrap"]
+enemy_pool = ["e_clerk_shade", "e_stamp_golem"]
+boss_id = "e_auditor"
+stamina_enter_cost = 20
+in_p1 = false
+width_px = 960
+ground = ["0:320:0", "320:640:-32", "640:960:0"]
+doors = ["r_ash_field_deep:32"]
+gather_span = "96:880"
+farm_x = 0
+sky_color = "2a2a3a"
+fishing_x = 0
+enemy_count = 4
+npcs = []
+night_gather_pool = ["m_ash_paper", "m_ledger_scrap", "m_ink_stone"]
+night_enemy_pool = ["e_clerk_shade", "e_ledger_wisp"]
+night_enemy_count = 5
+night_sky_color = "141420"

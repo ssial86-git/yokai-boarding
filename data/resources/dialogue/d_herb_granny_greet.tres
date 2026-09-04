@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_herb_granny_greet"
+nodes = [{
+"node": "start",
+"speaker": "herb_granny",
+"text_ko": "…약초 냄새가 나는구나. 뒷산 다니는 아이지? 앉아라.",
+"portrait": "herb_granny",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "herb_granny",
+"text_ko": "약초·나물·물고기는 내가 사마. 샘물과 약초는 팔고. 약초차 끓일 줄 알면 값을 더 쳐 주지.",
+"portrait": "herb_granny",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "herb_granny",
+"text_ko": "네 아비도 여기 자주 왔어. 요괴 손님 먹일 약초를 사러. …내가 모를 줄 알았니.",
+"portrait": "herb_granny",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "flag:herb_granny_met"
+}]

@@ -78,3 +78,12 @@ dish_cucumber_pickle,오이지,food,20
 dish_pumpkin_jeon,호박전,food,34
 f_eel,뱀장어,fish,40
 f_smelt,빙어,fish,14
+m_marsh_reed,늪갈대,material,9
+m_bog_light,늪불 심지,material,18
+m_marsh_pearl,늪진주,material,45
+m_ash_paper,잿빛 종이,material,8
+m_ink_stone,먹돌,material,20
+m_ledger_scrap,장부 조각,material,40
+f_mud_carp,진흙붕어,fish,12
+f_glow_eel,빛장어,fish,48
+j_bone,뼈다귀,misc,1

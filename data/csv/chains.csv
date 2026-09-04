@@ -59,3 +59,9 @@ recipe,r_surichwi_tteok,event:f_dano,buff:courage,sell:market
 recipe,r_chestnut_rice,event:f_baekjung,buff:strength,sell:market
 recipe,r_cucumber_pickle,buff:skill,sell:market,feed:g_ibulnang
 recipe,r_pumpkin_jeon,buff:sight,sell:market,gift:y01_ttukttagi
+material,m_marsh_reed,craft:talisman_ward,sell:market,gift:y02_eoduki
+material,m_bog_light,buff:sight,sell:market,quest:chapter2
+material,m_marsh_pearl,sell:market,gift:y03_dalgael,quest:chapter2
+material,m_ash_paper,craft:talisman_paper,sell:market,quest:chapter2
+material,m_ink_stone,upgrade:tool_lv4,sell:market,craft:talisman_ink
+material,m_ledger_scrap,quest:chapter2,event:c2_archive,sell:market

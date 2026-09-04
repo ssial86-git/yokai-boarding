@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MarketPriceData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/market_price_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "gray_m_ash_grass"
+shop = "gray"
+item_id = "m_ash_grass"
+sell_mult = 1.4
+buy_mult = 0.0
+swing = 0.2
+stock = 0
+note_ko = "마계 재료는 마계 장터에서 비싸다"

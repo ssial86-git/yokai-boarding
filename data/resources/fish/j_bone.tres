@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="FishData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/fish_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "j_bone"
+name_ko = "뼈다귀"
+kind = "junk"
+region_id = "r_moon_marsh"
+weight = 3
+timeband = "any"
+min_rod_level = 1
+visitor_species = ""
+season = "any"

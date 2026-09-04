@@ -46,7 +46,8 @@ ENUMS: dict[str, set[str]] = {
     "yin_condition": {"any", "low", "high"},
     "fish_kind": {"fish", "junk"},
     "talisman_effect": {"throw", "gather", "return"},
-    "region_kind": {"house", "yard", "wild", "gate", "expedition", "market"},
+    "region_kind": {"house", "yard", "wild", "gate", "expedition", "market", "village"},
+    "shop": {"gray", "village", "apothecary"},
     "enemy_tier": {"normal", "boss"},
     "unlock_type": {"region", "tool", "talisman", "enemy", "yokai", "event", "crop", "material", "fish", "verb", "feature",
                     "season_event", "festival", "recipe"},
@@ -193,6 +194,26 @@ def parse_span(value: str) -> str:
 
 
 def door_ids(value: list[str]) -> list[str]:
+    return [part.split(":")[0] for part in value]
+
+
+NPC_PATTERN = re.compile(r"^[a-z0-9_]+:[a-z0-9_]+:\d+$")
+
+
+def parse_npc_list(value: str) -> list[str]:
+    """구역 NPC 'spirit_id:shop_id:x' 목록 (regions.npcs). shop 은 ENUMS['shop']."""
+    result: list[str] = []
+    for part in filter(None, (p.strip() for p in value.split(LIST_SEPARATOR))):
+        if not NPC_PATTERN.match(part):
+            raise ValueError(f"npcs 형식 오류: {part!r} (spirit_id:shop_id:x)")
+        shop = part.split(":")[1]
+        if shop not in ENUMS["shop"]:
+            raise ValueError(f"npcs 의 shop {shop!r} 는 허용값 {sorted(ENUMS['shop'])} 밖")
+        result.append(part)
+    return result
+
+
+def npc_ids(value: list[str]) -> list[str]:
     return [part.split(":")[0] for part in value]
 
 
@@ -589,8 +610,8 @@ TABLES: list[Table] = [
             Column("fishing_x", int),
             # 들어갈 때 enemy_pool 에서 뽑아 놓는 적 수 (탐험지). P1-S4
             Column("enemy_count", int),
-            # 회색 장꾼 NPC 자리 x (0 = 없음). P2-S3
-            Column("merchant_x", int),
+            # 구역 NPC 'spirit_id:shop_id:x' 목록 (P2-S3 회색 장꾼 → P3-S2 마을 상점 2). 비우면 없음
+            Column("npcs", parse_npc_list, ref="spirits", ref_ids=npc_ids),
             # 밤 변형 (P2-S4): 밤에 문을 지나면 이 풀·색으로 조립된 "<id>@night" 가 된다. 채집 풀이 비면 변형 없음
             Column("night_gather_pool", parse_id_list, ref="materials", ref_ids=lambda v: v),
             Column("night_enemy_pool", parse_id_list, ref="enemies", ref_ids=lambda v: v),
@@ -786,8 +807,9 @@ TABLES: list[Table] = [
         csv_file="market_prices.csv",
         script_class="MarketPriceData",
         script_file="market_price_data.gd",
-        key="item_id",
         columns=[
+            Column("id", parse_str),  # "<shop>_<item_id>"
+            Column("shop", parse_enum("shop")),
             Column("item_id", parse_str, ref="items"),
             Column("sell_mult", float),
             Column("buy_mult", float),
@@ -1022,6 +1044,8 @@ def check_synergies(tables: dict[str, Table]) -> None:
         if row["delta"] == 0:
             raise BuildError(f"synergies.csv {line}행: delta 0 은 뜻이 없음")
     for row in tables["market_prices"].rows:
+        if row["id"] != f"{row['shop']}_{row['item_id']}":
+            raise BuildError(f"market_prices.csv {row['_line']}행: id 는 '<shop>_<item_id>' 여야 함 ({row['id']!r})")
         if row["sell_mult"] < 0 or row["buy_mult"] < 0 or row["swing"] < 0 or row["stock"] < 0:
             raise BuildError(f"market_prices.csv {row['_line']}행: 음수 값")
         if row["swing"] >= 1.0:

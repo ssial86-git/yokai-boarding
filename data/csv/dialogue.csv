@@ -42,7 +42,7 @@ d_y03_act3,start,y03_dalgael,(두 번째 조각. 입이 돌아왔다.),y03_dalga
 d_y03_act3,2,y03_dalgael,"…고마워. 말소를 멈춘 사람이 있었어. 서명은 네 아버지야. 하숙비, 밀린 거 갚을게.",y03_dalgael,end,,,,,affinity:+1;money:+50;item:record_piece:-1;flag:clue_y03
 d_merchant_greet,start,gray_merchant,…이승 냄새. 하숙집 사람이군. 여긴 회색 시장이다 — 음기가 짙은 날과 밤에만 문이 열려.,gray_merchant,2,,,,,
 d_merchant_greet,2,gray_merchant,마계 재료·발효 음식은 후하게 사고 씨앗과 천은 판다. 값은 날마다 흔들리니 달력을 보고 오게.,gray_merchant,3,,,,,
-d_merchant_greet,3,gray_merchant,소문도 판다만… 그건 다음에. 자 — 볼 텐가?,gray_merchant,end,,,,,flag:merchant_met
+d_merchant_greet,3,gray_merchant,소문도 판다만… 그건 다음에. 자 — 볼 텐가?,gray_merchant,end,,,,,flag:gray_merchant_met
 d_c1_inherit,start,seongju,대들보가 좀 덜 삐걱거리는군. 자네가 손을 대서 그런가.,seongju,2,,,,,
 d_c1_inherit,2,seongju,이 집엔 계약이 걸려 있어. 자네 아버지가 나와 맺은 것. 문턱 안에서는 어떤 요괴도 해치지 못하고 해침당하지 않는다.,seongju,3,,,,,
 d_c1_inherit,3,player,…그걸 제가 물려받았다는 겁니까.,,4,,,,,
@@ -99,3 +99,9 @@ d_y05_act1,2,y05_geumjuri,나는 새끼줄이다. 사람들이 문에 걸어 액
 d_y05_act1,3,player,그런데 이 집에 오래 머물기로 했잖아.,,4,,,,,
 d_y05_act1,4,y05_geumjuri,걸 곳이 있으니까. 이 문턱은 아직 액을 막을 줄 안다. 내가 좀 손보면 더 잘 막겠지.,y05_geumjuri,5,,,,,
 d_y05_act1,5,y05_geumjuri,대신 하숙비는 그걸로 치자. 돈은 없어. 새끼줄한테 돈이 있겠나.,y05_geumjuri,end,,,,,affinity:+1
+d_village_grocer_greet,start,village_grocer,어서 오슈. …언덕 위 그 낡은 집 사람이지? 밤마다 불이 켜지길래.,village_grocer,2,,,,,
+d_village_grocer_greet,2,village_grocer,씨앗이랑 곡식 팔아. 무·배추·마늘·오이·호박·메밀 — 철에 맞는 것만. 수확한 건 여기 가져오면 값을 쳐 주지.,village_grocer,3,,,,,
+d_village_grocer_greet,3,village_grocer,밤엔 문 닫으니 낮에 오슈. 그리고… 그 집 손님들 얘기는 묻지 않을게.,village_grocer,end,,,,,flag:village_grocer_met
+d_herb_granny_greet,start,herb_granny,…약초 냄새가 나는구나. 뒷산 다니는 아이지? 앉아라.,herb_granny,2,,,,,
+d_herb_granny_greet,2,herb_granny,약초·나물·물고기는 내가 사마. 샘물과 약초는 팔고. 약초차 끓일 줄 알면 값을 더 쳐 주지.,herb_granny,3,,,,,
+d_herb_granny_greet,3,herb_granny,네 아비도 여기 자주 왔어. 요괴 손님 먹일 약초를 사러. …내가 모를 줄 알았니.,herb_granny,end,,,,,flag:herb_granny_met

@@ -3,8 +3,11 @@ extends Resource
 ## 회색 시장 시세 행. data/csv/market_prices.csv 한 행 = 이 리소스 하나 (P2-S3).
 ## build_resources.py 가 생성한다. 손으로 편집하지 않는다.
 
+## "<shop>_<item_id>"
 @export var id: String = ""
-## items.csv id (= id)
+## gray(회색 시장) / village(마을 잡화점) / apothecary(약방) — P3-S2
+@export var shop: String = "gray"
+## items.csv id
 @export var item_id: String = ""
 ## 판매가 배율 (대문간 가격 = base_value × sell_price_ratio 기준)
 @export var sell_mult: float = 1.0

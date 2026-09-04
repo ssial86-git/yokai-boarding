@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MarketPriceData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/market_price_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "gray_seed_sweet_potato"
+shop = "gray"
+item_id = "seed_sweet_potato"
+sell_mult = 0.5
+buy_mult = 2.0
+swing = 0.2
+stock = 3
+note_ko = ""

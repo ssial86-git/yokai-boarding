@@ -1,20 +1,54 @@
-item_id,sell_mult,buy_mult,swing,stock,note_ko
-m_ash_grass,1.4,0.0,0.2,0,마계 재료는 마계 장터에서 비싸다
-m_ember_stone,1.5,0.0,0.2,0,
-m_shadow_moss,1.8,0.0,0.3,0,
-dish_kimchi,1.3,0.0,0.2,0,이승 발효 음식은 마계에서 귀하다
-dish_patjuk,1.5,0.0,0.2,0,액을 물리는 죽
-dish_shadow_stew,1.2,0.0,0.3,0,
-f_carp,1.4,0.0,0.3,0,
-seed_cabbage,0.5,2.0,0.2,3,씨앗은 사기만 한다
-seed_garlic,0.5,2.0,0.2,3,
-seed_sweet_potato,0.5,2.0,0.2,3,
-seed_moon_melon,0.5,2.5,0.3,2,마계 씨앗
-seed_ash_pepper,0.5,2.5,0.3,2,마계 씨앗
-cloth,0.6,2.0,0.2,4,부적 재료
-meal,0.6,2.0,0.1,5,
-seed_cucumber,0.5,2.0,0.2,3,여름 씨앗
-seed_pumpkin,0.5,2.0,0.2,2,여름 씨앗
-seed_buckwheat,0.5,2.0,0.2,3,가을 씨앗
-m_pine_mushroom,1.6,0.0,0.3,0,가을 귀한 것
-f_eel,1.5,0.0,0.3,0,
+id,shop,item_id,sell_mult,buy_mult,swing,stock,note_ko
+gray_m_ash_grass,gray,m_ash_grass,1.4,0.0,0.2,0,마계 재료는 마계 장터에서 비싸다
+gray_m_ember_stone,gray,m_ember_stone,1.5,0.0,0.2,0,
+gray_m_shadow_moss,gray,m_shadow_moss,1.8,0.0,0.3,0,
+gray_dish_kimchi,gray,dish_kimchi,1.3,0.0,0.2,0,이승 발효 음식은 마계에서 귀하다
+gray_dish_patjuk,gray,dish_patjuk,1.5,0.0,0.2,0,액을 물리는 죽
+gray_dish_shadow_stew,gray,dish_shadow_stew,1.2,0.0,0.3,0,
+gray_f_carp,gray,f_carp,1.4,0.0,0.3,0,
+gray_seed_cabbage,gray,seed_cabbage,0.5,2.0,0.2,3,씨앗은 사기만 한다
+gray_seed_garlic,gray,seed_garlic,0.5,2.0,0.2,3,
+gray_seed_sweet_potato,gray,seed_sweet_potato,0.5,2.0,0.2,3,
+gray_seed_moon_melon,gray,seed_moon_melon,0.5,2.5,0.3,2,마계 씨앗
+gray_seed_ash_pepper,gray,seed_ash_pepper,0.5,2.5,0.3,2,마계 씨앗
+gray_cloth,gray,cloth,0.6,2.0,0.2,4,부적 재료
+gray_meal,gray,meal,0.6,2.0,0.1,5,
+gray_seed_cucumber,gray,seed_cucumber,0.5,2.0,0.2,3,여름 씨앗
+gray_seed_pumpkin,gray,seed_pumpkin,0.5,2.0,0.2,2,여름 씨앗
+gray_seed_buckwheat,gray,seed_buckwheat,0.5,2.0,0.2,3,가을 씨앗
+gray_m_pine_mushroom,gray,m_pine_mushroom,1.6,0.0,0.3,0,가을 귀한 것
+gray_f_eel,gray,f_eel,1.5,0.0,0.3,0,
+village_seed_radish,village,seed_radish,0.5,1.5,0.1,4,마을 잡화상 — 이승 씨앗·곡식
+village_seed_cabbage,village,seed_cabbage,0.5,1.5,0.1,3,마을 잡화상 — 이승 씨앗·곡식
+village_seed_perilla,village,seed_perilla,0.5,1.5,0.1,4,마을 잡화상 — 이승 씨앗·곡식
+village_seed_garlic,village,seed_garlic,0.5,1.5,0.1,3,마을 잡화상 — 이승 씨앗·곡식
+village_seed_sweet_potato,village,seed_sweet_potato,0.5,1.5,0.1,3,마을 잡화상 — 이승 씨앗·곡식
+village_seed_cucumber,village,seed_cucumber,0.5,1.5,0.1,3,마을 잡화상 — 이승 씨앗·곡식
+village_seed_pumpkin,village,seed_pumpkin,0.5,1.5,0.1,2,마을 잡화상 — 이승 씨앗·곡식
+village_seed_buckwheat,village,seed_buckwheat,0.5,1.5,0.1,3,마을 잡화상 — 이승 씨앗·곡식
+village_meal,village,meal,0.6,1.5,0.1,6,마을 잡화상 — 이승 씨앗·곡식
+village_cloth,village,cloth,0.6,1.8,0.1,3,마을 잡화상 — 이승 씨앗·곡식
+village_radish,village,radish,1.1,0.0,0.1,0,마을 잡화상 — 이승 씨앗·곡식
+village_cabbage,village,cabbage,1.1,0.0,0.1,0,마을 잡화상 — 이승 씨앗·곡식
+village_perilla,village,perilla,1.1,0.0,0.1,0,마을 잡화상 — 이승 씨앗·곡식
+village_garlic,village,garlic,1.1,0.0,0.1,0,마을 잡화상 — 이승 씨앗·곡식
+village_sweet_potato,village,sweet_potato,1.1,0.0,0.1,0,마을 잡화상 — 이승 씨앗·곡식
+village_cucumber,village,cucumber,1.1,0.0,0.1,0,마을 잡화상 — 이승 씨앗·곡식
+village_pumpkin,village,pumpkin,1.1,0.0,0.1,0,마을 잡화상 — 이승 씨앗·곡식
+village_buckwheat,village,buckwheat,1.1,0.0,0.1,0,마을 잡화상 — 이승 씨앗·곡식
+village_dish_kimchi,village,dish_kimchi,1.2,0.0,0.1,0,마을 잡화상 — 이승 씨앗·곡식
+village_dish_cucumber_pickle,village,dish_cucumber_pickle,1.2,0.0,0.1,0,마을 잡화상 — 이승 씨앗·곡식
+village_dish_pumpkin_jeon,village,dish_pumpkin_jeon,1.2,0.0,0.1,0,마을 잡화상 — 이승 씨앗·곡식
+apothecary_m_herb,apothecary,m_herb,1.4,2.0,0.1,3,약방 할미 — 약초·물고기
+apothecary_m_spring_water,apothecary,m_spring_water,1.0,1.5,0.0,5,약방 할미 — 약초·물고기
+apothecary_m_namul,apothecary,m_namul,1.2,0.0,0.1,0,약방 할미 — 약초·물고기
+apothecary_m_mushroom,apothecary,m_mushroom,1.2,0.0,0.1,0,약방 할미 — 약초·물고기
+apothecary_m_red_bean,apothecary,m_red_bean,1.2,0.0,0.1,0,약방 할미 — 약초·물고기
+apothecary_m_wild_berry,apothecary,m_wild_berry,1.3,0.0,0.1,0,약방 할미 — 약초·물고기
+apothecary_m_chestnut,apothecary,m_chestnut,1.2,0.0,0.1,0,약방 할미 — 약초·물고기
+apothecary_f_minnow,apothecary,f_minnow,1.2,0.0,0.1,0,약방 할미 — 약초·물고기
+apothecary_f_crucian,apothecary,f_crucian,1.2,0.0,0.1,0,약방 할미 — 약초·물고기
+apothecary_f_catfish,apothecary,f_catfish,1.3,0.0,0.1,0,약방 할미 — 약초·물고기
+apothecary_f_sweetfish,apothecary,f_sweetfish,1.3,0.0,0.1,0,약방 할미 — 약초·물고기
+apothecary_f_carp,apothecary,f_carp,1.3,0.0,0.1,0,약방 할미 — 약초·물고기
+apothecary_dish_herb_tea,apothecary,dish_herb_tea,1.3,0.0,0.1,0,약방 할미 — 약초·물고기

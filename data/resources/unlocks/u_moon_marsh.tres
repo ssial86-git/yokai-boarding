@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_moon_marsh"
+day_min = 63
+expected_day = 63
+timeband = "evening"
+condition = "unlock:u_gray_market"
+unlock_type = "region"
+unlock_id = "r_moon_marsh"
+hint_ko = "회색 시장 너머 달무리 늪. 늪거머리와 늪등불"

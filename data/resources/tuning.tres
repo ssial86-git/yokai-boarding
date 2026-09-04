@@ -173,5 +173,6 @@ values = {
 "market_yin_threshold": 2,
 "merchant_color": "d4a5c4",
 "promote_visits": 2,
-"promote_reputation": 5
+"promote_reputation": 5,
+"village_closed_band": "night"
 }
