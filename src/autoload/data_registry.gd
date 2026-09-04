@@ -39,6 +39,11 @@ var festivals: Dictionary = {}  # id -> FestivalData
 var blessings: Dictionary = {}  # id -> BlessingData
 var synergies: Dictionary = {}  # id -> SynergyData
 var market_prices: Dictionary = {}  # item_id -> MarketPriceData
+# --- P2-S4: 챕터·밤 변형 ---
+var chapters: Dictionary = {}  # id -> ChapterData
+## 밤 변형 구역 id 접미. "<base>@night" 는 base 의 밤 풀·색으로 파생한 RegionData
+const NIGHT_SUFFIX := "@night"
+var _night_variants: Dictionary = {}  # variant id -> RegionData
 var tuning: TuningData = TuningData.new()
 var strings: StringTableData = StringTableData.new()
 
@@ -77,6 +82,8 @@ func reload() -> void:
 	blessings = _load_dir(RESOURCE_ROOT + "blessings")
 	synergies = _load_dir(RESOURCE_ROOT + "synergies")
 	market_prices = _load_dir(RESOURCE_ROOT + "market_prices")
+	chapters = _load_dir(RESOURCE_ROOT + "chapters")
+	_night_variants.clear()
 	tuning = _load_single(TUNING_PATH, TuningData.new()) as TuningData
 	strings = _load_single(STRINGS_PATH, StringTableData.new()) as StringTableData
 
@@ -154,8 +161,45 @@ func get_tool(id: String) -> ToolData:
 	return tools.get(id) as ToolData
 
 
+## 밤 변형 id("<base>@night")도 받는다 — base 의 밤 풀·색으로 파생한 리소스를 만들어 캐시한다 (P2-S4).
 func get_region(id: String) -> RegionData:
+	if id.ends_with(NIGHT_SUFFIX):
+		if _night_variants.has(id):
+			return _night_variants[id]
+		var base := regions.get(base_region_id(id)) as RegionData
+		if base == null or not has_night_variant(base):
+			return null
+		var variant := base.duplicate() as RegionData
+		variant.id = id
+		variant.name_ko = text("region_night_name", {"name": base.name_ko})
+		variant.parent_id = base.id
+		variant.gather_pool = base.night_gather_pool.duplicate()
+		variant.enemy_pool = base.night_enemy_pool.duplicate()
+		variant.enemy_count = base.night_enemy_count
+		variant.sky_color = base.night_sky_color
+		# 적이 나오는 밤은 탐험지 규칙(동료 전투·진입 비용)을 따른다
+		if not base.night_enemy_pool.is_empty():
+			variant.kind = "expedition"
+		_night_variants[id] = variant
+		return variant
 	return regions.get(id) as RegionData
+
+
+func has_night_variant(region: RegionData) -> bool:
+	return region != null and not region.night_gather_pool.is_empty()
+
+
+func night_variant_id(base_id: String) -> String:
+	return base_id + NIGHT_SUFFIX
+
+
+## 변형 id 를 기본 구역 id 로. 변형이 아니면 그대로.
+func base_region_id(id: String) -> String:
+	return id.trim_suffix(NIGHT_SUFFIX)
+
+
+func get_chapter(id: String) -> ChapterData:
+	return chapters.get(id) as ChapterData
 
 
 func get_enemy(id: String) -> EnemyData:

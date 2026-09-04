@@ -9,8 +9,9 @@ extends Node
 ## v6: game_state.calendar(절기·절기 안 날짜) / yin(음기 지수) 추가 (P2-S1)
 ## v7: game_state.counters(활동 누계) / goals_done(완료 목표) / festival_results(명절 점수) 추가 (P2-S2)
 ## v8: game_state.blessings_today / blessing_log / market_bought 추가 (P2-S3)
+## v9: game_state.chapter(현재 챕터 id) 추가 (P2-S4)
 
-const SAVE_VERSION := 8
+const SAVE_VERSION := 9
 const SAVE_DIR := "user://saves"
 const SLOT_FILE_FORMAT := "slot_%d.json"
 
@@ -89,8 +90,18 @@ func _migrate(data: Dictionary) -> Dictionary:
 		_migrate_6_to_7(result)
 	if version < 8:
 		_migrate_7_to_8(result)
+	if version < 9:
+		_migrate_8_to_9(result)
 	result["version"] = SAVE_VERSION
 	return result
+
+
+## v8 에는 챕터가 없다. 비워 두면 GameState.from_dict 가 첫 챕터로 채운다.
+func _migrate_8_to_9(data: Dictionary) -> void:
+	var game_state: Dictionary = data.get("game_state", {})
+	if not game_state.has("chapter"):
+		game_state["chapter"] = ""
+	data["game_state"] = game_state
 
 
 ## v7 에는 가호·시장 기록이 없다. 비워 두면 빈 상태.

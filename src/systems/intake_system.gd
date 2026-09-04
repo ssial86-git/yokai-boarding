@@ -5,6 +5,7 @@ extends Node
 
 const ERASED_VISITOR_ID := "v_erased"
 const GUEST_VISITOR_ID := "v_guest"
+const PROMOTION_VISITOR_ID := "v_promotion"
 ## 오늘 밤 반드시 오는 손님 종족 (플래그 값 = guest_species id). 명절 만점·우물 낚시가 심는다. 심사 추첨이 소모한다
 const FLAG_FORCED_VISITOR := "forced_visitor_species"
 const JOINED_FLAG_FORMAT := "joined_%s"
@@ -30,6 +31,8 @@ func has_pending() -> bool:
 func roll_visitor() -> void:
 	var visitor := VisitorRoll.scripted(DataRegistry.yokai, GameState.residents, GameState.day, ERASED_VISITOR_ID)
 	if visitor == null:
+		visitor = _promotion_visitor()
+	if visitor == null:
 		visitor = _festival_rare_visitor()
 	if visitor == null:
 		# 음기 배율 (P2-S1): 날씨의 이승/마계 손님 배율 × 소절기 이벤트의 마계 배율
@@ -47,6 +50,25 @@ func roll_visitor() -> void:
 	GameState.pending_visitor = visitor.to_dict()
 	_knock_pending = true
 	_try_knock()
+
+
+## 장기 계약 (P2-S4): PromotionSystem 이 아침에 플래그(값 = 하숙생 id)를 심으면 그날 저녁 그 종족이 kind promotion 카드로 온다.
+## 받으면 하숙생으로 입주, 거절하면 다음 날 다시 청할 수 있다.
+func _promotion_visitor() -> VisitorRoll.Visitor:
+	var yokai_id := str(GameState.flags.get(PromotionSystem.FLAG_PENDING, ""))
+	if yokai_id.is_empty():
+		return null
+	GameState.flags.erase(PromotionSystem.FLAG_PENDING)
+	var species := ChapterRules.species_for_yokai(DataRegistry.guest_species, yokai_id)
+	if species == null or GameState.residents.has(yokai_id):
+		return null
+	var visitor := VisitorRoll.Visitor.new()
+	visitor.visitor_id = PROMOTION_VISITOR_ID
+	visitor.kind = Intake.KIND_PROMOTION
+	visitor.species_id = species.id
+	visitor.yokai_id = yokai_id
+	visitor.omen = species.omen
+	return visitor
 
 
 ## 예약된 손님 (P2-S2 명절 만점 · P2-S3 우물 낚시): 그날 밤 그 종족이 반드시 문을 두드린다. 플래그 값이 종족 id.
@@ -85,6 +107,9 @@ func decide(decision: Intake.Decision) -> Intake.Outcome:
 			# events.csv 의 requires_flag 로 도착 이벤트를 걸 수 있도록 joined_<yokai_id> 플래그를 남긴다
 			GameState.flags[JOINED_FLAG_FORMAT % result.joined_yokai_id] = true
 			GameState.add_resident(result.joined_yokai_id)
+			if visitor.kind == Intake.KIND_PROMOTION:
+				Events.message_posted.emit(DataRegistry.text("msg_promoted", {"name": DataRegistry.yokai_name(result.joined_yokai_id)}))
+				Metrics.record("promotion_accepted", {"yokai": result.joined_yokai_id})
 		else:
 			GameState.guests.append(result.guest)
 			var species_id := str(result.guest.get("species_id", ""))

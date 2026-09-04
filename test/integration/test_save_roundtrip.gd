@@ -36,6 +36,7 @@ func test_round_trip_through_file_is_identical() -> void:
 	GameState.blessing_log["b_ttukttagi"] = 4
 	GameState.market_bought["seed_cabbage"] = 2
 	GameState.inventory.add("seed_radish@b_ttukttagi", 1)  # 가호 합성 id 도 창고에 그대로 남는다
+	GameState.chapter_id = "c2"
 	GameState.rng.seed = 777
 	var grid := GameState.room_grid
 	assert_int(grid.add_floor(GameState.money)).is_equal(RoomGrid.Outcome.OK)
@@ -99,7 +100,21 @@ func test_round_trip_through_file_is_identical() -> void:
 	assert_int(int(GameState.blessing_log["b_ttukttagi"])).is_equal(4)
 	assert_int(int(GameState.market_bought["seed_cabbage"])).is_equal(2)
 	assert_int(GameState.inventory.get_count("seed_radish@b_ttukttagi")).is_equal(1)
+	assert_str(GameState.chapter_id).is_equal("c2")
 	assert_str(str(GameState.pending_visitor.get("species_id"))).is_equal("g_mongdanggwi")
+
+
+## v8 에는 챕터가 없다 → 첫 챕터(c1). 모르는 챕터 id 도 첫 챕터로 (P2-S4).
+func test_v8_save_gets_first_chapter() -> void:
+	GameState.reset_new_game()
+	var v8 := {"version": 8, "game_state": GameState.to_dict(), "clock": {"elapsed_seconds": 10.0}}
+	(v8["game_state"] as Dictionary).erase("chapter")
+	assert_bool(SaveManager.apply_save_data(v8)).is_true()
+	assert_str(GameState.chapter_id).is_equal("c1")
+	var bad_chapter := SaveManager.build_save_data()
+	(bad_chapter["game_state"] as Dictionary)["chapter"] = "c99"
+	assert_bool(SaveManager.apply_save_data(bad_chapter)).is_true()
+	assert_str(GameState.chapter_id).is_equal("c1")
 
 
 ## v7 에는 가호·시장 기록이 없다 → 빈 상태 (P2-S3).

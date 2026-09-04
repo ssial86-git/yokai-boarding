@@ -99,6 +99,11 @@ signal blessing_granted(yokai_id: String, item_id: String)
 ## 회색 시장 거래. kind 는 "buy" / "sell".
 signal market_traded(kind: String, item_id: String, count: int, money: int)
 
+# --- 챕터·승격 (P2-S4) ---
+signal chapter_changed(chapter_id: String)
+## 뜨내기가 장기 계약을 청한다 (오늘 저녁 심사 카드로 온다).
+signal promotion_offered(yokai_id: String)
+
 # --- 세이브 ---
 signal game_saved(slot: int)
 signal game_loaded(slot: int)

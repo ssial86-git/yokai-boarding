@@ -6,7 +6,7 @@ extends GdUnitTestSuite
 func test_registry_loaded_sample_rows() -> void:
 	# 하숙생은 슬라이스 3명 + 파이프라인 검증용 데이터만 있는 행(Y04~)이 늘 수 있으므로 슬라이스 수만 고정한다
 	assert_int(DataRegistry.yokai.size()).is_greater_equal(3)
-	assert_int(DataRegistry.slice_yokai_ids().size()).is_equal(3)
+	assert_int(DataRegistry.slice_yokai_ids().size()).is_equal(4)  # P2-S4: 승격 하숙생 금줄이(intake)
 	assert_int(DataRegistry.starting_yokai_ids().size()).is_equal(2)
 	assert_int(DataRegistry.guest_species.size()).is_equal(4)
 	assert_int(DataRegistry.rooms.size()).is_equal(6)
@@ -109,6 +109,39 @@ func test_p2_blessing_market_tables_loaded_and_typed() -> void:
 	assert_str(DataRegistry.get_event("ev_merchant_greet").kind).is_equal("npc")
 	assert_str(DataRegistry.item_name("seed_radish@b_ttukttagi")).is_equal("[뚝] 무 씨앗")
 	assert_str(DataRegistry.get_item("seed_radish@b_ttukttagi").kind).is_equal("seed")
+
+
+## P2-S4 챕터·승격·밤 변형 데이터: 챕터 1 게이트 4 중 2, 금줄이 승격 행, 뒷산 밤 변형 파생 리소스, 챕터 대화 8 + 금줄이 1막.
+func test_p2_chapter_promotion_night_tables() -> void:
+	assert_int(DataRegistry.chapters.size()).is_equal(2)
+	var c1 := DataRegistry.get_chapter("c1")
+	assert_str(c1.name_ko).is_equal("폭군의 장부")
+	assert_int(c1.gate_goals.size()).is_equal(4)
+	assert_int(c1.gate_required).is_equal(2)
+	assert_str(c1.next_id).is_equal("c2")
+	assert_str(ChapterRules.first(DataRegistry.chapters).id).is_equal("c1")
+	assert_str(DataRegistry.get_guest_species("g_geumjuri").promotes_to).is_equal("y05_geumjuri")
+	assert_str(DataRegistry.get_yokai("y05_geumjuri").join_mode).is_equal("intake")
+	assert_str(DataRegistry.get_visitor("v_promotion").kind).is_equal("promotion")
+	var chapter_events := 0
+	for event: EventData in DataRegistry.events.values():
+		if event.kind == "chapter":
+			chapter_events += 1
+	assert_int(chapter_events).is_equal(8)
+	assert_array(DataRegistry.story_event_ids("y05_geumjuri")).contains_exactly(["y05_act1"])
+	# 밤 변형: 기본 뒷산은 wild, 밤 뒷산은 expedition(도깨비불 2) + 달빛 이슬 풀
+	var hill := DataRegistry.get_region("r_back_hill")
+	assert_bool(DataRegistry.has_night_variant(hill)).is_true()
+	var night := DataRegistry.get_region("r_back_hill@night")
+	assert_that(night).is_not_null()
+	assert_str(night.kind).is_equal("expedition")
+	assert_int(night.enemy_count).is_equal(2)
+	assert_bool(night.gather_pool.has("m_moon_dew")).is_true()
+	assert_str(night.name_ko).is_equal("뒷산 (밤)")
+	assert_str(night.sky_color).is_equal("2b3f55")
+	assert_int(night.doors.size()).is_equal(hill.doors.size())
+	assert_that(DataRegistry.get_region("r_yard@night")).is_null()  # 변형 없는 구역
+	assert_str(DataRegistry.base_region_id("r_back_hill@night")).is_equal("r_back_hill")
 
 
 ## P1 신설 스키마 10종이 로드되고 타입이 맞는지 (행 수는 콘텐츠 수를 고정하지 않도록 최소치만 본다).

@@ -56,6 +56,12 @@ func points_for(region_id: String) -> GatherPoints:
 ## 모든 채집 구역의 재료를 다시 뽑고 포인트를 채운다 (일일 리스폰).
 func respawn_all() -> void:
 	_cache.clear()
+	# 밤 변형 구역은 들어갈 때 새로 뽑도록 상태만 비운다 (P2-S4)
+	for region_id: String in GameState.region_states:
+		if region_id.ends_with(DataRegistry.NIGHT_SUFFIX):
+			var state: Dictionary = GameState.region_states[region_id]
+			state["gather_materials"] = []
+			state["gather_taken"] = []
 	for region: RegionData in DataRegistry.regions.values():
 		if region.gather_point_count <= 0 or region.gather_pool.is_empty():
 			continue

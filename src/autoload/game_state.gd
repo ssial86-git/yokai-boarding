@@ -79,6 +79,10 @@ var blessing_log: Dictionary = {}
 ## 오늘 회색 시장에서 산 수 item_id -> n (하루 재고, 하루 시작에 비운다)
 var market_bought: Dictionary = {}
 
+# --- P2-S4: 챕터 ---
+## 현재 챕터 (chapters.csv id). 비어 있으면 첫 챕터
+var chapter_id: String = ""
+
 
 func reset_new_game() -> void:
 	day = 1
@@ -111,6 +115,7 @@ func reset_new_game() -> void:
 	blessings_today.clear()
 	blessing_log.clear()
 	market_bought.clear()
+	chapter_id = _first_chapter_id()
 	var start_items := _parse_levels(DataRegistry.tuning.get_string("start_items"))
 	for item_id: String in start_items:
 		inventory.add(item_id, int(start_items[item_id]))
@@ -135,6 +140,15 @@ func advance_day() -> void:
 ## 오늘이 음기 짙은 날인가 (마계 작물 가속·마계 손님↑·음기 조건 재료).
 func is_yin_high() -> bool:
 	return WeatherRoll.is_yin_high(yin, DataRegistry.tuning.get_int("yin_high_threshold"))
+
+
+func current_chapter() -> ChapterData:
+	return DataRegistry.get_chapter(chapter_id)
+
+
+func _first_chapter_id() -> String:
+	var first := ChapterRules.first(DataRegistry.chapters)
+	return first.id if first != null else ""
 
 
 ## 활동 카운터를 올리고 누계를 돌려준다 (GoalSystem 이 activity_done 마다 부른다).
@@ -222,6 +236,7 @@ func to_dict() -> Dictionary:
 		"blessings_today": blessings_today.duplicate(),
 		"blessing_log": blessing_log.duplicate(),
 		"market_bought": market_bought.duplicate(),
+		"chapter": chapter_id,
 	}
 
 
@@ -432,6 +447,9 @@ func from_dict(data: Dictionary) -> bool:
 	blessings_today = _int_dict(data.get("blessings_today", {}))
 	blessing_log = _int_dict(data.get("blessing_log", {}))
 	market_bought = _int_dict(data.get("market_bought", {}))
+	chapter_id = str(data.get("chapter", ""))
+	if chapter_id.is_empty() or not DataRegistry.chapters.has(chapter_id):
+		chapter_id = _first_chapter_id()
 	if data.has("rng_state"):
 		rng.state = str(data["rng_state"]).to_int()
 	else:
