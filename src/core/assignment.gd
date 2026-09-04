@@ -14,13 +14,22 @@ const PARTY := Vector2i(-3, -3)
 const WORKPLACE_KINDS: Array[String] = ["production", "service", "gate", "storage"]
 
 ## 텃밭 슬롯 정원 (tuning field_workers_max). 0 이면 텃밭 배치 불가.
+## 위임 슬롯 (P3-S4 자동화 전환): 뒷산 채집 · 개울 낚시 · 대문간 판매. 정원은 tuning *_workers_max
+const GATHER := Vector2i(-4, -4)
+const FISHING := Vector2i(-5, -5)
+const MARKET := Vector2i(-6, -6)
+const VIRTUAL_CELLS: Array[Vector2i] = [FIELD, PARTY, GATHER, FISHING, MARKET]
+
+var gather_capacity: int = 1
+var fishing_capacity: int = 1
+var market_capacity: int = 1
 var field_capacity: int = 1
 ## 동행 슬롯 정원 (tuning party_max).
 var party_capacity: int = 2
 
 
 static func is_virtual(cell: Vector2i) -> bool:
-	return cell == FIELD or cell == PARTY
+	return VIRTUAL_CELLS.has(cell)
 
 
 func virtual_capacity(cell: Vector2i) -> int:
@@ -28,6 +37,12 @@ func virtual_capacity(cell: Vector2i) -> int:
 		return field_capacity
 	if cell == PARTY:
 		return party_capacity
+	if cell == GATHER:
+		return gather_capacity
+	if cell == FISHING:
+		return fishing_capacity
+	if cell == MARKET:
+		return market_capacity
 	return 0
 
 var _slots: Dictionary = {}  # yokai_id -> Vector2i (REST 는 저장하지 않음)

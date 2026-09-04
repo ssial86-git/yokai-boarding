@@ -15,6 +15,12 @@ static func assignment(yokai_id: String, cell: Vector2i) -> String:
 	var yokai_name := DataRegistry.yokai_name(yokai_id)
 	if cell == Assignment.REST:
 		return DataRegistry.text("msg_rested", {"name": yokai_name})
+	if cell == Assignment.GATHER:
+		return DataRegistry.text("msg_assigned_gather", {"name": DataRegistry.yokai_name(yokai_id)})
+	if cell == Assignment.FISHING:
+		return DataRegistry.text("msg_assigned_fishing", {"name": DataRegistry.yokai_name(yokai_id)})
+	if cell == Assignment.MARKET:
+		return DataRegistry.text("msg_assigned_market", {"name": DataRegistry.yokai_name(yokai_id)})
 	if cell == Assignment.FIELD:
 		return DataRegistry.text("msg_assigned_field", {"name": yokai_name})
 	if cell == Assignment.PARTY:

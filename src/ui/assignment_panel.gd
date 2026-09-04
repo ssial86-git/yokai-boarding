@@ -20,6 +20,18 @@ var _guest_cards: Array[YokaiCard] = []
 var _rest_zone: Label
 var _field_zone: FieldZone
 var _party_zone: FieldZone
+var _delegation_row: HBoxContainer
+var _delegation_zones: Dictionary = {}  # Vector2i -> FieldZone
+## (cell: Vector2i) -> bool. 위임 슬롯이 해금됐는가. main.gd 가 넣는다 (없으면 전부 보임)
+var delegation_open_check: Callable
+
+## 위임 슬롯 -> 해금 feature id / 드롭존 문구 키 (P3-S4)
+const DELEGATION_FEATURES: Dictionary = {
+	Assignment.GATHER: "delegate_gather", Assignment.FISHING: "delegate_fishing", Assignment.MARKET: "delegate_market",
+}
+const DELEGATION_ZONE_KEYS: Dictionary = {
+	Assignment.GATHER: "ui_gather_zone", Assignment.FISHING: "ui_fishing_zone", Assignment.MARKET: "ui_market_zone",
+}
 var _card_size: int = 40
 ## 카드 줄 높이 = 카드 아이콘 + 이름·상태 두 줄 여유
 const CARD_ROW_EXTRA_PX := 40
@@ -109,6 +121,24 @@ func _ready() -> void:
 	_party_zone.can_accept = func(yokai_id: String) -> bool:
 		return controller.can_assign(yokai_id, Assignment.PARTY) == AssignmentController.Outcome.OK
 	row.add_child(_party_zone)
+	# 위임 줄 (P3-S4 자동화 전환): 채집 · 낚시 · 판매 — 해금(feature delegate_*)되면 보인다
+	_delegation_row = HBoxContainer.new()
+	_body.add_child(_delegation_row)
+	for cell: Vector2i in DELEGATION_FEATURES:
+		var zone := FieldZone.new()
+		zone.text = DataRegistry.text(DELEGATION_ZONE_KEYS[cell])
+		zone.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		zone.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		zone.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		zone.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		zone.custom_minimum_size = Vector2(DataRegistry.tuning.get_int("rest_zone_min_width_px"), 0)
+		var target := cell
+		zone.on_drop = func(yokai_id: String) -> void: controller.try_assign(yokai_id, target)
+		zone.can_accept = func(yokai_id: String) -> bool:
+			return controller.can_assign(yokai_id, target) == AssignmentController.Outcome.OK
+		_delegation_row.add_child(zone)
+		_delegation_zones[cell] = zone
+	Events.unlocked.connect(func(_id: String) -> void: _refresh_delegation_row())
 	# 배치 패널은 집 안에서만 (마당·뒷산에서는 화면을 비운다)
 	Events.region_entered.connect(func(region_id: String) -> void: visible = region_id == HouseRegion.REGION_ID)
 
@@ -120,6 +150,8 @@ func _ready() -> void:
 	Events.game_loaded.connect(func(_slot: int) -> void: rebuild())
 	Events.yokai_arrived.connect(func(_id: String) -> void: rebuild())
 	Events.guests_changed.connect(rebuild)
+	Events.game_loaded.connect(func(_slot: int) -> void: _refresh_delegation_row())
+	_refresh_delegation_row()
 	rebuild()
 
 
@@ -173,6 +205,30 @@ func refresh() -> void:
 		card.refresh()
 	for card: YokaiCard in _guest_cards:
 		card.refresh()
+
+
+## 해금된 위임 슬롯만 보인다. 하나도 없으면 줄 자체를 숨긴다.
+func _refresh_delegation_row() -> void:
+	var any_open := false
+	for cell: Vector2i in _delegation_zones:
+		var open := not delegation_open_check.is_valid() or bool(delegation_open_check.call(cell))
+		(_delegation_zones[cell] as Control).visible = open
+		any_open = any_open or open
+	_delegation_row.visible = any_open
+
+
+## 보이는 위임 슬롯 수 (검증용).
+func open_delegation_zones() -> int:
+	var count := 0
+	for cell: Vector2i in _delegation_zones:
+		if (_delegation_zones[cell] as Control).visible:
+			count += 1
+	return count
+
+
+func delegation_zone_rect(cell: Vector2i) -> Rect2:
+	var zone := _delegation_zones.get(cell) as Control
+	return zone.get_global_rect() if zone != null else Rect2()
 
 
 ## 드롭존 화면 사각형 (검증용 — 실제 마우스 드래그를 재현할 때 목적지로 쓴다).

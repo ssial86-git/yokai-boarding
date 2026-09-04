@@ -9,6 +9,8 @@ const PLACEHOLDER_COLORS: Array[String] = ["6b8e5a", "9bb572", "c7d48f", "7a5c8f
 
 var _cache: Dictionary = {}  # region_id -> GatherPoints
 var _stamina_cost: float = 5.0
+## 위임 효율 (P3-S4 채집 위임): 남은 포인트 × 효율 만큼만 캐 온다
+var _efficiency: float = 0.6
 ## 채집 부적 효과: 남은 초와 추가 개수 (P1-S4)
 var _bonus_remaining: float = 0.0
 var _bonus_amount: int = 0
@@ -20,6 +22,10 @@ func _ready() -> void:
 		if day > 1 or _cache.is_empty():
 			respawn_all())
 	Events.game_loaded.connect(func(_slot: int) -> void: _cache.clear())
+	_efficiency = DataRegistry.tuning.get_float("automation_efficiency", _efficiency)
+	Events.timeband_changed.connect(func(band: int, _day: int) -> void:
+		if band == Clock.Band.DAY:
+			auto_gather())
 
 
 func _process(delta: float) -> void:
@@ -117,6 +123,38 @@ func gather(region_id: String, index: int) -> bool:
 	Events.activity_done.emit("gather", material_id, count)
 	Events.gather_point_changed.emit(region_id, index)
 	return true
+
+
+## 채집 위임 (P3-S4): 채집(GATHER) 슬롯의 하숙생이 낮에 tuning delegate_gather_region 의 포인트를 효율 계수만큼 대신 캔다.
+## 도구가 필요한 재료는 집 도구(GameState.tools)로 판정한다. 캔 개수를 돌려준다.
+func auto_gather() -> int:
+	var region_id := DataRegistry.tuning.get_string("delegate_gather_region", "r_back_hill")
+	var total := 0
+	for yokai_id in GameState.assignment.workers_at(Assignment.GATHER):
+		if not GameState.residents.has(yokai_id):
+			continue
+		var points := points_for(region_id)
+		var quota := int(floor(points.remaining() * _efficiency + 0.0001))
+		var gathered := 0
+		for index in points.size():
+			if gathered >= quota:
+				break
+			if points.check(index, DataRegistry.materials, GameState.tools) != GatherPoints.Outcome.OK:
+				continue
+			var material_id := points.take(index)
+			GameState.inventory.add(material_id, 1)
+			Events.item_added.emit(material_id, 1)
+			Metrics.record("gather", {"material": material_id, "region": region_id, "tool": "auto"})
+			Events.activity_done.emit("gather", material_id, 1)
+			gathered += 1
+		GameState.region_state(region_id)["gather_taken"] = points.taken_indices()
+		if gathered > 0:
+			Events.message_posted.emit(DataRegistry.text("msg_auto_gathered", {
+				"name": DataRegistry.yokai_name(yokai_id), "count": gathered, "percent": roundi(_efficiency * 100.0)}))
+			Events.gather_point_changed.emit(region_id, -1)
+		Metrics.record("delegation", {"slot": "gather", "yokai": yokai_id, "amount": gathered})
+		total += gathered
+	return total
 
 
 func material_color(material_id: String) -> Color:

@@ -17,6 +17,9 @@ var _cycles_per_second: float = 0.8
 var _max_seconds: float = 6.0
 var _stamina_cost: float = 3.0
 var _junk_chance: float = 0.5
+## 낚시 위임 (P3-S4): 낮에 던지는 횟수와 성공 확률(automation_efficiency)
+var _auto_casts: int = 2
+var _efficiency: float = 0.6
 
 
 func _ready() -> void:
@@ -26,6 +29,11 @@ func _ready() -> void:
 	_max_seconds = tuning.get_float("fishing_max_seconds", _max_seconds)
 	_stamina_cost = tuning.get_float("fishing_stamina_cost", _stamina_cost)
 	_junk_chance = tuning.get_float("fishing_miss_junk_chance", _junk_chance)
+	_auto_casts = tuning.get_int("delegate_fishing_casts", _auto_casts)
+	_efficiency = tuning.get_float("automation_efficiency", _efficiency)
+	Events.timeband_changed.connect(func(band: int, _day: int) -> void:
+		if band == Clock.Band.DAY:
+			auto_fish())
 	Events.region_entered.connect(func(_id: String) -> void: cancel())
 
 
@@ -97,6 +105,38 @@ func strike() -> String:
 func cancel() -> void:
 	cast = null
 	region_id = ""
+
+
+## 낚시 위임 (P3-S4): 낚시(FISHING) 슬롯의 하숙생이 낮에 tuning delegate_fishing_region 에서 delegate_fishing_casts 번 던진다.
+## 던질 때마다 효율 확률로 고물이 아닌 어종을 낚는다 (집 낚싯대 레벨·절기·시간대 규칙 그대로). 낚은 수를 돌려준다.
+func auto_fish() -> int:
+	var target_region := DataRegistry.tuning.get_string("delegate_fishing_region", "r_stream")
+	var region := DataRegistry.get_region(target_region)
+	if region == null or not has_spot(region) or not is_verb_unlocked():
+		return 0
+	var rod_level := int(GameState.tools.get(TOOL_ROD, 0))
+	var pool := Fishing.candidates(DataRegistry.fish, target_region, Clock.band_name(), rod_level, false, GameState.calendar.season_id)
+	var total := 0
+	for yokai_id in GameState.assignment.workers_at(Assignment.FISHING):
+		if not GameState.residents.has(yokai_id):
+			continue
+		var caught := 0
+		for _cast in _auto_casts:
+			if pool.is_empty() or GameState.rng.randf() >= _efficiency:
+				continue
+			var fish := Fishing.roll(pool, GameState.rng)
+			if fish == null or not fish.visitor_species.is_empty():
+				continue
+			GameState.inventory.add(fish.id, 1)
+			Events.item_added.emit(fish.id, 1)
+			Metrics.record("fish", {"result": fish.id, "region": target_region})
+			Events.activity_done.emit("fish", fish.id, 1)
+			caught += 1
+		Events.message_posted.emit(DataRegistry.text("msg_auto_fished" if caught > 0 else "msg_auto_fished_none", {
+			"name": DataRegistry.yokai_name(yokai_id), "count": caught}))
+		Metrics.record("delegation", {"slot": "fishing", "yokai": yokai_id, "amount": caught})
+		total += caught
+	return total
 
 
 func _finish(hit: bool) -> String:

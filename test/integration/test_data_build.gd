@@ -132,7 +132,7 @@ func test_p3_season_content_tables() -> void:
 
 ## P2-S4 챕터·승격·밤 변형 데이터: 챕터 1 게이트 4 중 2, 금줄이 승격 행, 뒷산 밤 변형 파생 리소스, 챕터 대화 8 + 금줄이 1막.
 func test_p2_chapter_promotion_night_tables() -> void:
-	assert_int(DataRegistry.chapters.size()).is_equal(2)
+	assert_int(DataRegistry.chapters.size()).is_equal(3)  # c1 폭군의 장부 · c2 문서고로 가는 길(P3-S4 게이트) · c3 자리표시
 	var c1 := DataRegistry.get_chapter("c1")
 	assert_str(c1.name_ko).is_equal("폭군의 장부")
 	assert_int(c1.gate_goals.size()).is_equal(4)
@@ -146,7 +146,7 @@ func test_p2_chapter_promotion_night_tables() -> void:
 	for event: EventData in DataRegistry.events.values():
 		if event.kind == "chapter":
 			chapter_events += 1
-	assert_int(chapter_events).is_equal(8)
+	assert_int(chapter_events).is_equal(9)  # 챕터 1 8편 + 챕터 2 '바리의 지도' (P3-S4)
 	assert_array(DataRegistry.story_event_ids("y05_geumjuri")).contains_exactly(["y05_act1", "y05_act2", "y05_act3"])
 	# 밤 변형: 기본 뒷산은 wild, 밤 뒷산은 expedition(도깨비불 2) + 달빛 이슬 풀
 	var hill := DataRegistry.get_region("r_back_hill")

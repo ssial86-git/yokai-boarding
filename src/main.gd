@@ -270,6 +270,9 @@ func _build_ui() -> void:
 
 	build_menu = BuildMenu.new()
 	build_menu.name = "BuildMenu"
+	assignment_panel.delegation_open_check = func(cell: Vector2i) -> bool:
+		return unlock_system.is_feature_open(str(AssignmentPanel.DELEGATION_FEATURES[cell]))
+	assignment_panel._refresh_delegation_row()
 	build_menu.controller = house_controller
 	build_menu.room_open_check = func(room_id: String) -> bool: return unlock_system.is_target_open("room", room_id)
 	ui_root.add_child(build_menu)

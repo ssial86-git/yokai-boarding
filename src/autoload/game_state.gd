@@ -91,8 +91,7 @@ func reset_new_game() -> void:
 	affinity.clear()
 	inventory = Inventory.new()
 	assignment = Assignment.new()
-	assignment.field_capacity = DataRegistry.tuning.get_int("field_workers_max")
-	assignment.party_capacity = DataRegistry.tuning.get_int("party_max")
+	_configure_assignment(assignment)
 	guests.clear()
 	ledger.clear()
 	flags.clear()
@@ -187,6 +186,16 @@ func add_resident(yokai_id: String) -> void:
 	if not affinity.has(yokai_id):
 		affinity[yokai_id] = 0
 	Events.yokai_arrived.emit(yokai_id)
+
+
+## 가상 슬롯 정원을 tuning 에서 (텃밭·동행 + P3-S4 채집·낚시·판매).
+func _configure_assignment(target: Assignment) -> void:
+	var tuning := DataRegistry.tuning
+	target.field_capacity = tuning.get_int("field_workers_max")
+	target.party_capacity = tuning.get_int("party_max")
+	target.gather_capacity = tuning.get_int("gather_workers_max", 1)
+	target.fishing_capacity = tuning.get_int("fishing_workers_max", 1)
+	target.market_capacity = tuning.get_int("market_workers_max", 1)
 
 
 ## DataRegistry 의 방 카탈로그·tuning 으로 빈 그리드를 만든다.
@@ -355,8 +364,7 @@ func from_dict(data: Dictionary) -> bool:
 	if not new_inventory.from_dict(data.get("inventory", {})):
 		return false
 	var new_assignment := Assignment.new()
-	new_assignment.field_capacity = DataRegistry.tuning.get_int("field_workers_max")
-	new_assignment.party_capacity = DataRegistry.tuning.get_int("party_max")
+	_configure_assignment(new_assignment)
 	if not new_assignment.from_dict(data.get("assignment", {})):
 		return false
 

@@ -10,6 +10,9 @@ const SHOP_GRAY := MarketPrices.SHOP_GRAY
 var _gate_ratio: float = 1.0
 var _default_mult: float = 1.0
 var _yin_threshold: int = 2
+var _efficiency: float = 0.6
+var _auto_sell_keep: int = 3
+var _auto_sell_kinds: Array[String] = []
 
 
 func _ready() -> void:
@@ -17,6 +20,44 @@ func _ready() -> void:
 	_gate_ratio = tuning.get_float("sell_price_ratio", _gate_ratio)
 	_default_mult = tuning.get_float("market_default_sell_mult", _default_mult)
 	_yin_threshold = tuning.get_int("market_yin_threshold", _yin_threshold)
+	_efficiency = tuning.get_float("automation_efficiency", _efficiency)
+	_auto_sell_keep = tuning.get_int("auto_sell_keep", _auto_sell_keep)
+	for part in tuning.get_string("auto_sell_kinds").split(";", false):
+		_auto_sell_kinds.append(part.strip_edges())
+	Events.day_settled.connect(func(_summary: Dictionary) -> void: auto_sell())
+
+
+## 판매 위임 (P3-S4): 판매(MARKET) 슬롯의 하숙생이 저녁 정산 뒤 tuning auto_sell_kinds 종류를 종류별 auto_sell_keep 개만 남기고
+## 대문간 값 × 효율로 행상에게 판다. 받은 돈을 돌려준다.
+func auto_sell() -> int:
+	var total_money := 0
+	for yokai_id in GameState.assignment.workers_at(Assignment.MARKET):
+		if not GameState.residents.has(yokai_id):
+			continue
+		var money := 0
+		var count := 0
+		for item_id: String in GameState.inventory.items().keys():
+			var item := DataRegistry.get_item(item_id)
+			if item == null or not _auto_sell_kinds.has(item.kind) or not Market.is_sellable(item):
+				continue
+			var surplus := GameState.inventory.get_count(item_id) - _auto_sell_keep
+			if surplus <= 0:
+				continue
+			var price := maxi(int(floor(gate_price(item_id) * _efficiency + 0.5)), 1)
+			if not GameState.inventory.remove(item_id, surplus):
+				continue
+			Events.item_removed.emit(item_id, surplus)
+			money += price * surplus
+			count += surplus
+			Metrics.record("sell", {"item": BlessingRules.base_id(item_id), "count": surplus, "money": price * surplus})
+			Events.activity_done.emit("sell", BlessingRules.base_id(item_id), surplus)
+		if money > 0:
+			GameState.add_money(money)
+			Events.message_posted.emit(DataRegistry.text("msg_auto_sold", {
+				"name": DataRegistry.yokai_name(yokai_id), "count": count, "money": money}))
+		Metrics.record("delegation", {"slot": "market", "yokai": yokai_id, "amount": count})
+		total_money += money
+	return total_money
 
 
 ## 회색 시장 문이 열려 있는가: 음기 짙은 날 또는 밤.
