@@ -5,6 +5,9 @@ extends RefCounted
 enum Decision { ACCEPT, DECLINE }
 enum Outcome { ACCEPTED, DECLINED, NO_BED }
 
+const KIND_ERASED := "erased"
+const KIND_PROMOTION := "promotion"
+
 
 class Params:
 	extends RefCounted
@@ -43,7 +46,8 @@ static func decide(visitor: VisitorRoll.Visitor, decision: Decision, free_beds: 
 		return result
 	result.outcome = Outcome.ACCEPTED
 	result.reputation_delta = params.accept_reputation_gain
-	if visitor.kind == "erased":
+	# 빈 카드(erased)와 장기 계약(promotion)은 손님이 아니라 하숙생으로 들어온다
+	if visitor.kind == KIND_ERASED or visitor.kind == KIND_PROMOTION:
 		result.joined_yokai_id = visitor.yokai_id
 	else:
 		result.guest = {

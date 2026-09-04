@@ -1,7 +1,7 @@
 class_name GoalRules
 extends RefCounted
 ## goals.csv 조건 평가 (P2-S2 목표 층위 3). 문법(세미콜론 AND), build_resources.py 가 검증한다:
-##   item:<id>>=n / count:<key>>=n / ledger>=n / species>=n / rooms:<room>>=n / floors>=n / beds>=n / money>=n / reputation>=n
+##   item:<id>>=n / count:<key>>=n / ledger>=n / species>=n / residents>=n / rooms:<room>>=n / floors>=n / beds>=n / money>=n / reputation>=n
 ##   affinity:<yokai>>=n / festival:<id>>=n / resident:<yokai> / unlock:<id> / flag:<name>
 ## 순수 로직 — 완료 기록·보상·알림은 GoalSystem 이 한다.
 
@@ -80,6 +80,8 @@ static func current_value(clause: Clause, ctx: Context) -> int:
 			return total
 		"species":
 			return ctx.ledger.size()
+		"residents":
+			return ctx.residents.size()
 		"rooms":
 			return ctx.room_grid.count_rooms(clause.target) if ctx.room_grid != null else 0
 		"floors":
