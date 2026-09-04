@@ -74,7 +74,8 @@ static func rent_lines(rent: Dictionary) -> Array[String]:
 
 static func intake(visitor: Dictionary, outcome: int) -> String:
 	var name := DataRegistry.species_name(str(visitor.get("species_id", "")))
-	if str(visitor.get("kind", "")) == "erased":
+	var kind := str(visitor.get("kind", ""))
+	if kind == Intake.KIND_ERASED or kind == Intake.KIND_PROMOTION:
 		name = DataRegistry.yokai_name(str(visitor.get("yokai_id", "")))
 	match outcome:
 		Intake.Outcome.ACCEPTED:

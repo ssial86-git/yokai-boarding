@@ -19,6 +19,7 @@ const UPCOMING_SEPARATOR := "  ·  "
 ## 할 일 탭·달력 명절 줄의 출처 (P2-S2). main.gd 가 넣는다.
 var goal_system: GoalSystem
 var festival_system: FestivalSystem
+var chapter_system: ChapterSystem
 ## 창고 표시 순서 (items.kind)
 const KIND_ORDER: Array[String] = ["food", "crop", "material", "fish", "seed", "talisman", "misc", "key"]
 
@@ -193,6 +194,13 @@ func _build_goals() -> void:
 				add_header(DataRegistry.text("ui_goal_festival", {
 					"name": festival.name_ko, "season": GameState.calendar.season_name(), "day": festival.day_of_season,
 					"met": prep.x, "total": prep.y}))
+		if tier == GoalRules.TIER_LONG and chapter_system != null and chapter_system.current() != null:
+			# 챕터 게이트 (P2-S4): 병렬 목표 중 n개
+			var chapter := chapter_system.current()
+			var gate := chapter_system.gate_progress(chapter)
+			var key := "ui_goal_chapter" if not chapter.gate_goals.is_empty() else "ui_goal_chapter_done"
+			add_header(DataRegistry.text(key, {
+				"order": chapter.order, "name": chapter.name_ko, "met": gate.x, "total": gate.y, "required": chapter.gate_required}))
 		var goals := goal_system.visible([tier])
 		if goals.is_empty():
 			add_row(DataRegistry.text("ui_goals_none"))

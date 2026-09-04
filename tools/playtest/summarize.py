@@ -47,7 +47,20 @@ def summarize(rows: list[dict]) -> dict:
     verbs_used = sorted({r["data"].get("verb", r["kind"]) for r in rows
                          if r["kind"] in ("verb_started", "verb_ended", "gather", "farm", "cook", "fish", "craft",
                                           "explore_enter", "talisman_used", "serve", "upgrade")})
+    # P2 게이트 (docs/08 7절): 달력·할 일을 스스로 열어 보는가, 명절을 준비했는가(당일 아침 준비 목표 충족 수), 시장·가호·챕터
+    festival_prep = [(int(r["data"].get("met", 0)), int(r["data"].get("total", 0))) for r in rows if r["kind"] == "festival_started"]
+    festival_score = max((int(r["data"].get("score", 0)) for r in rows if r["kind"] == "festival_scored"), default=None)
+    chapter = next((r["data"].get("chapter") for r in reversed(rows) if r["kind"] == "chapter_advanced"), "c1")
     return {
+        "calendar_opened": kinds.get("calendar_opened", 0),
+        "goals_opened": kinds.get("goals_opened", 0),
+        "goals_completed": kinds.get("goal_completed", 0),
+        "festival_prep": "/".join(f"{m}of{t}" for m, t in festival_prep) if festival_prep else "-",
+        "festival_score": festival_score if festival_score is not None else "-",
+        "market_trades": kinds.get("market_trade", 0),
+        "blessings": kinds.get("blessing_granted", 0),
+        "night_regions": kinds.get("night_region_entered", 0),
+        "chapter": chapter,
         "days_ended": len(activities_by_day),
         "days_4plus_activities": sum(1 for n in activities_by_day.values() if n >= 4),
         "max_activities": max(activities_by_day.values(), default=0),
@@ -80,6 +93,8 @@ def main(argv: list[str]) -> int:
         print(f"[summarize] 로그 없음: {log_dir}")
         return 1
     columns = ["minutes", "max_day", "days_ended", "days_4plus_activities", "max_activities", "verbs_used",
+               "calendar_opened", "goals_opened", "goals_completed", "festival_prep", "festival_score",
+               "market_trades", "blessings", "night_regions", "chapter",
                "assignments", "days_with_assignment", "rooms_built", "guest_rooms_built",
                "floors_added", "intake_accepted", "intake_declined", "intake_no_bed", "visitors_when_full",
                "dialogues", "eoduki_affinity_max", "saves", "money_end", "gonogo2_pressure_seen", "gonogo2_expanded"]
@@ -97,6 +112,10 @@ def main(argv: list[str]) -> int:
     print(f"세션 {len(totals)}개 · 3일차 도달 {reached_day3} · 침대 압박 경험 {pressure} · 증축 실행 {expanded}")
     print(f"P1 게이트 2번(하루 4개 이상 활동): 해당 날이 있는 세션 {gate_sessions}/{len(totals)} — days_4plus_activities 열 참조")
     print("P1 게이트 1번(\"오늘 할 일이 밀려서 즐거웠다\")은 설문/관찰 시트로 판정 (docs/playtest/questionnaire.md, observer_sheet.md)")
+    planners = sum(1 for s in totals if s["calendar_opened"] > 0 and s["goals_opened"] > 0)
+    prepared = sum(1 for s in totals if s["festival_prep"] != "-" and not s["festival_prep"].startswith("0of"))
+    print(f"P2 게이트(명절을 스스로 준비함): 달력+할 일을 연 세션 {planners}/{len(totals)} · 동지 아침에 준비 목표 1개 이상 충족 {prepared}/{len(totals)} — calendar_opened/goals_opened/festival_prep 열 참조")
+    print("P2 게이트(\"다음에 할 일 3개\")는 설문 9번으로 판정")
     return 0
 
 

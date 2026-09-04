@@ -81,7 +81,9 @@ func _on_visitor_knocked(visitor: Dictionary) -> void:
 		var species := DataRegistry.get_guest_species(data.species_id)
 		var path := GUEST_SPRITE_PATH % data.species_id
 		_icon.texture = load(path) if ResourceLoader.exists(path) else null
-		_card.text = DataRegistry.text("ui_intake_card", {
+		# 장기 계약(P2-S4)은 액운 대신 "받으면 하숙생" 안내
+		var card_key := "ui_intake_card_promotion" if data.kind == Intake.KIND_PROMOTION else "ui_intake_card"
+		_card.text = DataRegistry.text(card_key, {
 			"name": species.name_ko if species != null else data.species_id,
 			"first_words": species.first_words_ko if species != null else "",
 			"omen": data.omen,

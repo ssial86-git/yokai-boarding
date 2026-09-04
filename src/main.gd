@@ -63,6 +63,8 @@ var goal_system: GoalSystem
 var festival_system: FestivalSystem
 var blessing_system: BlessingSystem
 var market_system: MarketSystem
+var chapter_system: ChapterSystem
+var promotion_system: PromotionSystem
 var blessing_menu: BlessingMenu
 var market_menu: MarketMenu
 
@@ -149,6 +151,13 @@ func _ready() -> void:
 	market_system = MarketSystem.new()
 	market_system.name = "MarketSystem"
 	add_child(market_system)
+	chapter_system = ChapterSystem.new()
+	chapter_system.name = "ChapterSystem"
+	add_child(chapter_system)
+	promotion_system = PromotionSystem.new()
+	promotion_system.name = "PromotionSystem"
+	promotion_system.unlock_system = unlock_system
+	add_child(promotion_system)
 
 	_build_world()
 	_build_ui()
@@ -290,6 +299,7 @@ func _build_ui() -> void:
 
 	menu_hub.goal_system = goal_system
 	menu_hub.festival_system = festival_system
+	menu_hub.chapter_system = chapter_system
 	ui_root.add_child(menu_hub)  # 장부 메뉴는 작업 메뉴보다 위, 대화창보다 아래
 
 	dialogue_box = DialogueBox.new()

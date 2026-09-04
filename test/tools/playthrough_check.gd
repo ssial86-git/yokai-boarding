@@ -304,6 +304,23 @@ func _initialize() -> void:
 	_check("back_home", str(gs.get("player_region")) == "r_house", "집에 있다")
 	await _frames(2)
 
+	# --- P2-S4: 밤의 뒷산 (변형 구역) + 챕터. 배치(아침 전용) 검사 뒤에 밤으로 넘긴다 ---
+	_check("chapter_is_c1", str(gs.get("chapter_id")) == "c1", "새 게임은 챕터 1 폭군의 장부")
+	(gs.get("unlocked") as Dictionary)["u_night_hill"] = int(gs.get("day"))
+	clock.call("advance_to_band", 3)  # NIGHT
+	await _frames(2)
+	_drain(story, intake)
+	await _frames(2)
+	_check("night_variant_resolves", str(region_manager.call("resolve_variant", "r_back_hill")) == "r_back_hill@night", "밤에는 뒷산 문이 밤 변형으로 이어진다")
+	_check("travel_night_hill", bool(region_manager.call("travel", "r_back_hill")), "집 → 밤의 뒷산")
+	await _wait_until(func() -> bool: return (expedition.get("enemies") as Array).size() >= 2, 2.0)
+	_check("night_hill_region", str(gs.get("player_region")) == "r_back_hill@night", "플레이어 구역이 뒷산 (밤)")
+	_check("night_hill_enemies", (expedition.get("enemies") as Array).size() == 2, "밤 뒷산에 도깨비불 2")
+	_check("night_hill_points", int(gather_system.call("points_for", "r_back_hill@night").call("size")) == 8, "밤 채집 포인트 8")
+	await _shot("21_night_back_hill")
+	_check("travel_home_from_night", bool(region_manager.call("travel", "r_house")), "밤의 뒷산 → 집")
+	await _frames(2)
+
 	_write_report()
 
 
