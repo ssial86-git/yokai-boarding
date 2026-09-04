@@ -19,23 +19,29 @@ func test_manifest_rows_resolve_to_placeholders() -> void:
 	assert_that(ArtLibrary.texture("illust.y01_ttukttagi")).is_not_null()
 	assert_that(ArtLibrary.texture("room.kitchen")).is_not_null()
 	assert_that(ArtLibrary.texture("char.player")).is_not_null()
-	# 자리표시가 없는 키(적·소품·배경·UI)는 행이 비어 있고 has() 가 false — 렌더러가 코드 자리표시를 그린다
-	assert_bool(ArtLibrary.has("enemy.e_ash_wisp")).is_false()
-	assert_bool(ArtLibrary.has("prop.door")).is_false()
-	assert_bool(ArtLibrary.has("region.r_yard.sky")).is_false()
-	assert_that(ArtLibrary.texture("enemy.e_ash_wisp")).is_null()
-	assert_that(ArtLibrary.make_sprite("enemy.e_ash_wisp")).is_null()
+	# CC0 팩 충전(import_free_packs.py) 뒤에는 적·소품·배경·UI 키도 실재 파일로 풀린다
+	assert_bool(ArtLibrary.has("enemy.e_ash_wisp")).is_true()
+	assert_bool(ArtLibrary.has("prop.door")).is_true()
+	assert_bool(ArtLibrary.has("region.r_yard.sky")).is_true()
+	assert_that(ArtLibrary.frame_size("enemy.e_ash_wisp")).is_equal(Vector2i(16, 16))
+	assert_bool(ArtLibrary.has_anim("char.y01_ttukttagi", "walk")).is_true()
+	assert_int(ArtLibrary.frames("char.y01_ttukttagi").get_frame_count("idle")).is_equal(4)
+	# 매니페스트에 없는 키는 has() 가 false, texture/make_sprite 가 null — 렌더러가 코드 자리표시를 그린다
+	assert_bool(ArtLibrary.has("enemy.e_not_in_manifest")).is_false()
+	assert_that(ArtLibrary.texture("enemy.e_not_in_manifest")).is_null()
+	assert_that(ArtLibrary.make_sprite("enemy.e_not_in_manifest")).is_null()
 
 
 func test_frames_default_idle_and_sprite_feet_at_origin() -> void:
-	var frames := ArtLibrary.frames("guest.g_mongdanggwi")
+	# anims 가 빈 행(prop.merchant, 32x32 한 장): idle 1프레임 기본, walk 없음, 발이 원점
+	var frames := ArtLibrary.frames("prop.merchant")
 	assert_that(frames).is_not_null()
 	assert_bool(frames.has_animation("idle")).is_true()
 	assert_int(frames.get_frame_count("idle")).is_equal(1)
-	assert_bool(ArtLibrary.has_anim("guest.g_mongdanggwi", "walk")).is_false()
-	var sprite: AnimatedSprite2D = auto_free(ArtLibrary.make_sprite("guest.g_mongdanggwi"))
+	assert_bool(ArtLibrary.has_anim("prop.merchant", "walk")).is_false()
+	var sprite: AnimatedSprite2D = auto_free(ArtLibrary.make_sprite("prop.merchant"))
 	assert_that(sprite).is_not_null()
-	assert_float(sprite.offset.y).is_equal(-8.0)  # 16px 소형종: 발이 원점
+	assert_float(sprite.offset.y).is_equal(-16.0)
 	ArtLibrary.play(sprite, "walk")  # walk 가 없으면 idle 유지
 	assert_str(sprite.animation).is_equal("idle")
 

@@ -255,7 +255,14 @@ func _build_door(door: RegionLayout.Door, travel: Callable) -> void:
 			var count := sprite.sprite_frames.get_frame_count(sprite.animation)
 			sprite.frame = 0 if open or count < 2 else 1
 		pick_frame.call()
-		Events.unlocked.connect(func(_id: String) -> void: pick_frame.call())
+		# Events 는 autoload 라 구역이 사라진 뒤에도 연결이 남는다 — 스프라이트가 트리를 떠날 때 끊는다
+		var on_unlocked := func(_id: String) -> void:
+			if is_instance_valid(sprite) and is_instance_valid(node):
+				pick_frame.call()
+		Events.unlocked.connect(on_unlocked)
+		sprite.tree_exiting.connect(func() -> void:
+			if Events.unlocked.is_connected(on_unlocked):
+				Events.unlocked.disconnect(on_unlocked))
 		node.add_child(sprite)
 	else:
 		var marker := DoorMarker.new()

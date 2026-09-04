@@ -37,6 +37,11 @@ python tools/data/build_resources.py
 # 아트 검증 (규격/팔레트/파일명)
 python tools/art/validate_assets.py
 
+# 무료 CC0 팩(assets/art/packs)에서 게임 규격 시트 조립 + art_assets.csv 채우기 (팔레트 양자화 포함)
+python tools/art/import_free_packs.py
+# 단일 이미지 팔레트 양자화 (에셋팩·AI 산출물 → art_generated)
+python tools/art/palette_quantize.py <in.png> <out.png> [--tint RRGGBB:0.8]
+
 # 아트 매니페스트 동기화 (콘텐츠 CSV 의 모든 그림 키를 art_assets.csv 에 채움, 새 요괴·방·구역 추가 뒤)
 python tools/art/manifest_sync.py
 
