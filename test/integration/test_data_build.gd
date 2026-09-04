@@ -6,10 +6,10 @@ extends GdUnitTestSuite
 func test_registry_loaded_sample_rows() -> void:
 	# 하숙생은 슬라이스 3명 + 파이프라인 검증용 데이터만 있는 행(Y04~)이 늘 수 있으므로 슬라이스 수만 고정한다
 	assert_int(DataRegistry.yokai.size()).is_greater_equal(3)
-	assert_int(DataRegistry.slice_yokai_ids().size()).is_equal(4)  # P2-S4: 승격 하숙생 금줄이(intake)
+	assert_int(DataRegistry.slice_yokai_ids().size()).is_equal(10)  # P3-S3: 장기 하숙생 10 (시작 2 + 도착 5 + 승격 3)
 	assert_int(DataRegistry.starting_yokai_ids().size()).is_equal(2)
-	assert_int(DataRegistry.guest_species.size()).is_equal(4)
-	assert_int(DataRegistry.rooms.size()).is_equal(6)
+	assert_int(DataRegistry.guest_species.size()).is_equal(12)  # P3-S3: 뜨내기 12종 (희귀도 4단계)
+	assert_int(DataRegistry.rooms.size()).is_equal(8)  # P3-S3: 서고·온돌방
 
 
 func test_yokai_fields_typed() -> void:
@@ -83,11 +83,11 @@ func test_p2_goal_and_festival_tables_loaded_and_typed() -> void:
 
 ## P2-S3 가호·시너지·시세 스키마, 회색 시장 구역, 우물 어종(손님 낚임 포함), NPC 대화.
 func test_p2_blessing_market_tables_loaded_and_typed() -> void:
-	assert_int(DataRegistry.blessings.size()).is_equal(3)
+	assert_int(DataRegistry.blessings.size()).is_equal(10)  # 장기 하숙생 10명 각 1개 (P3-S3)
 	var ttuk := DataRegistry.blessing_of_yokai("y01_ttukttagi")
 	assert_str(ttuk.id).is_equal("b_ttukttagi")
 	assert_int(ttuk.talisman_power_bonus).is_equal(2)
-	assert_int(DataRegistry.synergies.size()).is_equal(10)
+	assert_int(DataRegistry.synergies.size()).is_equal(31)
 	var positive := 0
 	var negative := 0
 	for synergy: SynergyData in DataRegistry.synergies.values():
@@ -95,8 +95,8 @@ func test_p2_blessing_market_tables_loaded_and_typed() -> void:
 			positive += 1
 		else:
 			negative += 1
-	assert_int(positive).is_equal(6)  # 시너지 6쌍
-	assert_int(negative).is_equal(4)  # 간섭 4쌍
+	assert_int(positive).is_equal(20)  # 시너지 6 + P3-S3 14
+	assert_int(negative).is_equal(11)  # 간섭 4 + P3-S3 7
 	assert_int(DataRegistry.market_prices.size()).is_greater_equal(10)
 	assert_float(DataRegistry.get_market_price("seed_cabbage").buy_mult).is_equal(2.0)
 	assert_int(DataRegistry.get_market_price("seed_cabbage").stock).is_equal(3)
@@ -147,7 +147,7 @@ func test_p2_chapter_promotion_night_tables() -> void:
 		if event.kind == "chapter":
 			chapter_events += 1
 	assert_int(chapter_events).is_equal(8)
-	assert_array(DataRegistry.story_event_ids("y05_geumjuri")).contains_exactly(["y05_act1"])
+	assert_array(DataRegistry.story_event_ids("y05_geumjuri")).contains_exactly(["y05_act1", "y05_act2", "y05_act3"])
 	# 밤 변형: 기본 뒷산은 wild, 밤 뒷산은 expedition(도깨비불 2) + 달빛 이슬 풀
 	var hill := DataRegistry.get_region("r_back_hill")
 	assert_bool(DataRegistry.has_night_variant(hill)).is_true()

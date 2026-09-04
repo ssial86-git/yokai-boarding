@@ -170,6 +170,7 @@ func _ready() -> void:
 		return build_menu.is_open() or station_menu.is_open() or menu_hub.is_open() or intake_panel.visible \
 			or blessing_menu.is_open() or market_menu.is_open()
 	region_manager.merchant_action = _on_merchant_talk
+	intake_system.unlock_system = unlock_system
 	player.movement_locked_check = fishing_system.is_active
 	region_manager.fishing_system = fishing_system
 	expedition_system.region_manager = region_manager
@@ -270,6 +271,7 @@ func _build_ui() -> void:
 	build_menu = BuildMenu.new()
 	build_menu.name = "BuildMenu"
 	build_menu.controller = house_controller
+	build_menu.room_open_check = func(room_id: String) -> bool: return unlock_system.is_target_open("room", room_id)
 	ui_root.add_child(build_menu)
 
 	intake_panel = IntakePanel.new()

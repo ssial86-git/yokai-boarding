@@ -6,6 +6,8 @@ extends Control
 const PANEL_MARGIN_PX := 4.0
 
 var controller: HouseController
+## (room_id: String) -> bool. 해금되지 않은 방을 숨긴다. main.gd 가 넣는다.
+var room_open_check: Callable
 
 var _backdrop: Control
 var _panel: PanelContainer
@@ -107,6 +109,9 @@ func _add_room_options(grid: RoomGrid) -> void:
 	var current_id := grid.get_room_id(_coords)
 	for room in DataRegistry.rooms_buildable_sorted():
 		if room.id == current_id:
+			continue
+		# unlocks room 행이 가리키는 방은 열려야 보인다 (P3-S3 온돌방·서고)
+		if room_open_check.is_valid() and not bool(room_open_check.call(room.id)):
 			continue
 		var outcome := grid.check_place(_coords, room.id, GameState.money)
 		var button := _add_button(

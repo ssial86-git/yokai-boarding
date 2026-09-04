@@ -6,12 +6,15 @@ extends Node
 const ERASED_VISITOR_ID := "v_erased"
 const GUEST_VISITOR_ID := "v_guest"
 const PROMOTION_VISITOR_ID := "v_promotion"
+const UNLOCK_TYPE_SPECIES := "species"
 ## 오늘 밤 반드시 오는 손님 종족 (플래그 값 = guest_species id). 명절 만점·우물 낚시가 심는다. 심사 추첨이 소모한다
 const FLAG_FORCED_VISITOR := "forced_visitor_species"
 const JOINED_FLAG_FORMAT := "joined_%s"
 
 ## 대화 진행 중 여부를 묻는 콜백 (StorySystem.is_busy). main.gd 가 넣는다.
 var is_dialogue_busy: Callable
+## unlocks.csv 의 species 행이 가리키는 종족은 열려야 추첨에 든다 (P3-S3). 없으면 전부 열림
+var unlock_system: UnlockSystem
 
 var _knock_pending: bool = false
 
@@ -40,7 +43,7 @@ func roll_visitor() -> void:
 			DataRegistry.get_weather(GameState.weather),
 			GameState.calendar.demon_guest_multiplier(DataRegistry.season_events))
 		visitor = VisitorRoll.roll(
-			DataRegistry.visitors, DataRegistry.guest_species, GameState.rng,
+			DataRegistry.visitors, open_species(), GameState.rng,
 			DataRegistry.tuning.get_float("visitor_chance"), GameState.weather, multipliers,
 		)
 	if visitor == null:
@@ -86,6 +89,17 @@ func _festival_rare_visitor() -> VisitorRoll.Visitor:
 	visitor.species_id = species_id
 	visitor.omen = species.omen
 	return visitor
+
+
+## 추첨에 드는 종족: unlocks species 행이 가리키지 않거나 열린 것.
+func open_species() -> Dictionary:
+	if unlock_system == null:
+		return DataRegistry.guest_species
+	var result: Dictionary = {}
+	for species: GuestSpeciesData in DataRegistry.guest_species.values():
+		if unlock_system.is_target_open(UNLOCK_TYPE_SPECIES, species.id):
+			result[species.id] = species
+	return result
 
 
 func free_beds() -> int:

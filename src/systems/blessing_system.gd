@@ -4,6 +4,7 @@ extends Node
 ## 다른 시스템(텃밭·배식·부적)은 static 효과 계산만 부른다. 순수 규칙은 BlessingRules.
 
 const FEATURE_BLESSINGS := "blessings"
+const FEATURE_TWO_PER_DAY := "blessing_two_per_day"
 
 var unlock_system: UnlockSystem
 var _per_day: int = 1
@@ -17,7 +18,10 @@ func is_open() -> bool:
 	return unlock_system == null or unlock_system.is_feature_open(FEATURE_BLESSINGS)
 
 
+## 하루 한도. feature blessing_two_per_day 가 열리면 tuning blessing_per_day_bonus 만큼 더 (P3-S3).
 func per_day() -> int:
+	if unlock_system != null and unlock_system.is_feature_open(FEATURE_TWO_PER_DAY):
+		return _per_day + DataRegistry.tuning.get_int("blessing_per_day_bonus", 1)
 	return _per_day
 
 
@@ -26,13 +30,13 @@ func blessing_for(yokai_id: String) -> BlessingData:
 
 
 func remaining(yokai_id: String) -> int:
-	return maxi(_per_day - int(GameState.blessings_today.get(yokai_id, 0)), 0)
+	return maxi(per_day() - int(GameState.blessings_today.get(yokai_id, 0)), 0)
 
 
 ## 호감도가 되고 오늘 한도가 남았는가.
 func can_grant_any(yokai_id: String) -> bool:
 	return BlessingRules.can_grant(
-		int(GameState.affinity.get(yokai_id, 0)), blessing_for(yokai_id), int(GameState.blessings_today.get(yokai_id, 0)), _per_day)
+		int(GameState.affinity.get(yokai_id, 0)), blessing_for(yokai_id), int(GameState.blessings_today.get(yokai_id, 0)), per_day())
 
 
 func target_kind_of(item_id: String) -> String:
