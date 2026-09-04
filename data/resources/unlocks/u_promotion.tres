@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_promotion"
+day_min = 25
+expected_day = 25
+timeband = "evening"
+condition = ""
+unlock_type = "feature"
+unlock_id = "promotion"
+hint_ko = "자주 온 손님이 장기 계약을 청할 수 있다 (금줄이: 방문 2회·평판 5)."

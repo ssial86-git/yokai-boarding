@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "c1_e1_inherit"
+kind = "chapter"
+yokai_id = ""
+timeband = "night"
+day_min = 3
+day_max = 0
+min_affinity = 0
+requires_item = ""
+requires_flag = ""
+once = true
+priority = 20
+dialogue_id = "d_c1_inherit"
+title_ko = "결계의 상속"

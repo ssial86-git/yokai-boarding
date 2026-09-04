@@ -24,3 +24,7 @@ sky_color = "2b3f55"
 fishing_x = 0
 enemy_count = 0
 merchant_x = 0
+night_gather_pool = []
+night_enemy_pool = []
+night_enemy_count = 0
+night_sky_color = ""

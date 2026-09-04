@@ -1,0 +1,74 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_c1_fear"
+nodes = [{
+"node": "start",
+"speaker": "y01_ttukttagi",
+"text_ko": "…그 편지 봤어. 회수국이라고 적혀 있던 거.",
+"portrait": "y01_ttukttagi",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y01_ttukttagi",
+"text_ko": "나 씨름에서 진 적 없어. 진짜야. 그런데 그 사람들은 씨름을 안 해. 종이를 내밀어. 종이에 내 이름이 있으면 나는 없어지는 거야.",
+"portrait": "y01_ttukttagi",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "(뚝딱이가 방망이를 꽉 쥐고 있다.)",
+"portrait": "",
+"next": "",
+"option1_ko": "여기 이름은 지워지지 않아. 조왕 아주머니가 그랬어.",
+"option1_next": "4",
+"option2_ko": "네가 지켜 줘. 방망이가 있잖아.",
+"option2_next": "5",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y01_ttukttagi",
+"text_ko": "…그래? 그럼 나 여기 계속 있어도 돼? 시끄러워도?",
+"portrait": "y01_ttukttagi",
+"next": "6",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}, {
+"node": "5",
+"speaker": "y01_ttukttagi",
+"text_ko": "맞아! 종이 따위 뚝딱 부숴 버릴게. …부수면 안 되는 거지? 그럼 문 앞에 서 있을게.",
+"portrait": "y01_ttukttagi",
+"next": "6",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:ttukttagi_guard"
+}, {
+"node": "6",
+"speaker": "y01_ttukttagi",
+"text_ko": "집행관이 오면 말해. 내가 제일 먼저 나갈 거야. 힘은 이럴 때 쓰는 거니까.",
+"portrait": "y01_ttukttagi",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}]

@@ -1,0 +1,85 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_c1_audit"
+nodes = [{
+"node": "start",
+"speaker": "collector",
+"text_ko": "실례합니다. 마계 회수국 3급 집행관입니다. 사전 통지 받으셨죠? 자산 실사 나왔습니다.",
+"portrait": "collector",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "collector",
+"text_ko": "서류 세 가지만 확인하겠습니다. 요괴 수용 명세, 공포 산출 실적, 그리고… 이 집 결계의 등록 증명.",
+"portrait": "collector",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "(집행관이 문턱 앞에서 장부를 펼친다.)",
+"portrait": "",
+"next": "",
+"option1_ko": "(하숙부를 내보인다) 명세라면 이겁니다.",
+"option1_next": "4",
+"option2_ko": "문턱 밖에서 말씀하세요. 들일 수 없습니다.",
+"option2_next": "6",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "collector",
+"text_ko": "…이건 양식이 다릅니다. 수치가 없어요. 사연? 사연은 계정 항목이 아닙니다. 본부에 문의해야…",
+"portrait": "collector",
+"next": "5",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "5",
+"speaker": "collector",
+"text_ko": "오늘은 열람 수수료만 받겠습니다. 100. 다음 분기에 다시 옵니다. 그때까지 양식을 맞추세요. 저도 실적이 있어서요.",
+"portrait": "collector",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "money:-100;flag:audit_fee"
+}, {
+"node": "6",
+"speaker": "collector",
+"text_ko": "…문턱을 못 넘는군요. 정말 결계가 있어요. 보고서에 그렇게 적으면 저는 강등인데.",
+"portrait": "collector",
+"next": "7",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "7",
+"speaker": "collector",
+"text_ko": "다음 분기에 다시 옵니다. 그때는 등록 증명이 필요할 겁니다. 아, 그리고 — 여기 따뜻하네요. 보고서엔 안 적겠습니다.",
+"portrait": "collector",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "flag:audit_refused"
+}]

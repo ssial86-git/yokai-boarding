@@ -21,3 +21,4 @@ promotable = false
 sprite_size = 32
 liked_recipe = "r_radish_soup"
 realm = "mortal"
+promotes_to = ""

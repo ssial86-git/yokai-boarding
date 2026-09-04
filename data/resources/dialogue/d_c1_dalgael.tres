@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_c1_dalgael"
+nodes = [{
+"node": "start",
+"speaker": "y03_dalgael",
+"text_ko": "(달갤이 하숙부를 들여다보고 있다. 얼굴 없는 얼굴이 김서림처럼 흔들린다.)",
+"portrait": "y03_dalgael",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y03_dalgael",
+"text_ko": "…여기 내 이름이 있어. 저쪽 장부에서는 반쯤 지워졌는데.",
+"portrait": "y03_dalgael",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "그래서 얼굴이 돌아오는 거야. 사연을 적을수록.",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y03_dalgael",
+"text_ko": "무서웠어. 숫자로만 남는 게. 몇 개를 겁줬나 몇 번 실패했나. 여기선 무를 심었다고 적혀 있네.",
+"portrait": "y03_dalgael",
+"next": "5",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "5",
+"speaker": "y03_dalgael",
+"text_ko": "…고마워. 내일은 물을 줄게.",
+"portrait": "y03_dalgael",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

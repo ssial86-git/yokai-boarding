@@ -40,3 +40,8 @@ extends Resource
 @export var enemy_count: int = 0
 ## 회색 장꾼 NPC 자리 x (0 = 없음). P2-S3
 @export var merchant_x: int = 0
+# --- 밤 변형 (P2-S4). 채집 풀이 비면 변형 없음. DataRegistry 가 "<id>@night" 로 파생 리소스를 만든다 ---
+@export var night_gather_pool: Array = []
+@export var night_enemy_pool: Array = []
+@export var night_enemy_count: int = 0
+@export var night_sky_color: String = ""

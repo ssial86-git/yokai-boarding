@@ -21,3 +21,4 @@ promotable = true
 sprite_size = 16
 liked_recipe = "r_kimchi"
 realm = "demon"
+promotes_to = "y05_geumjuri"

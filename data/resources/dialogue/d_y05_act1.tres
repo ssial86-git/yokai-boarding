@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y05_act1"
+nodes = [{
+"node": "start",
+"speaker": "y05_geumjuri",
+"text_ko": "문턱이 낡았군. 몇 번을 넘었는데도 그때마다 삐걱거려.",
+"portrait": "y05_geumjuri",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y05_geumjuri",
+"text_ko": "나는 새끼줄이다. 사람들이 문에 걸어 액을 막던. 요즘은 아무도 걸지 않아서 마계로 떨어졌지.",
+"portrait": "y05_geumjuri",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "그런데 이 집에 오래 머물기로 했잖아.",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y05_geumjuri",
+"text_ko": "걸 곳이 있으니까. 이 문턱은 아직 액을 막을 줄 안다. 내가 좀 손보면 더 잘 막겠지.",
+"portrait": "y05_geumjuri",
+"next": "5",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "5",
+"speaker": "y05_geumjuri",
+"text_ko": "대신 하숙비는 그걸로 치자. 돈은 없어. 새끼줄한테 돈이 있겠나.",
+"portrait": "y05_geumjuri",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

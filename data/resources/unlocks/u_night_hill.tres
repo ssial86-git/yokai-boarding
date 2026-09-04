@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_night_hill"
+day_min = 21
+expected_day = 21
+timeband = "night"
+condition = "unlock:u_back_hill"
+unlock_type = "feature"
+unlock_id = "night_r_back_hill"
+hint_ko = "밤의 뒷산 — 밤에 문을 지나면 다른 곳이 된다. 달빛 이슬과 도깨비불."

@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_c1_rumor"
+nodes = [{
+"node": "start",
+"speaker": "gray_merchant",
+"text_ko": "…낮에 온 하숙집 사람. 밤에도 여기 냄새가 나는군. 소문을 사겠다고 했지?",
+"portrait": "gray_merchant",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "gray_merchant",
+"text_ko": "마계는 이제 왕이 다스린다. 이름은 없어. 다들 대차대조표의 왕이라 부르지. 늘 장부를 끼고 다녀.",
+"portrait": "gray_merchant",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "gray_merchant",
+"text_ko": "두려움도 자원이다 — 그게 그 왕의 말이야. 요괴마다 공포 생산량을 할당하고 분기마다 실적을 매긴다.",
+"portrait": "gray_merchant",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "player",
+"text_ko": "실적이 모자라면?",
+"portrait": "",
+"next": "5",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "5",
+"speaker": "gray_merchant",
+"text_ko": "감가상각. 장부에서 이름과 얼굴과 전승을 지운다. 지워진 요괴는 흐려지다가… 사라져.",
+"portrait": "gray_merchant",
+"next": "6",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "6",
+"speaker": "gray_merchant",
+"text_ko": "그래서 도망치는 거야. 자네 집 문턱 안으로. 지운 이름을 다시 적어 주는 장부가 거기 있다는 소문이 있어.",
+"portrait": "gray_merchant",
+"next": "7",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "7",
+"speaker": "player",
+"text_ko": "아버지의 하숙부…",
+"portrait": "",
+"next": "8",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "8",
+"speaker": "gray_merchant",
+"text_ko": "값은 이걸로 됐어. 다음 소문은 더 비쌀 거다. 집행관이 움직이기 시작했으니까.",
+"portrait": "gray_merchant",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "flag:rumor_ledger"
+}]

@@ -32,3 +32,5 @@ extends Resource
 @export var liked_recipe: String = ""
 ## mortal(이승 손님) / demon(마계 손님). 날씨의 음기 배율(weather.csv)이 갈래별로 가중치에 곱해진다 (P2-S1)
 @export var realm: String = "mortal"
+## 승격(장기 계약)하면 되는 하숙생(yokai.csv id). promotable 인 종족만 뜻이 있다 (P2-S4)
+@export var promotes_to: String = ""

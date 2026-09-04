@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="VisitorData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/visitor_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "v_promotion"
+kind = "promotion"
+weight = 0
+omen_min = 0
+omen_max = 0
+name_ko = "장기 계약"
+intro_ko = "문 두드리는 소리. …낯익은 손님이야. 이번엔 짐이 많아. 오래 머물 생각인가 봐."
+mishap_money = 0
+mishap_text_ko = ""

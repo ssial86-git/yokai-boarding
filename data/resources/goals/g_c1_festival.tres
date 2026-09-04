@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_c1_festival"
+tier = "long"
+name_ko = "동지 6점 이상"
+condition = "festival:f_dongji>=6"
+day_min = 1
+day_max = 0
+festival_id = ""
+reward_money = 0
+reward_reputation = 2
+hint_ko = "팥죽·손님·객실."

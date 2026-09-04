@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="YokaiData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/yokai_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "y05_geumjuri"
+name_ko = "금줄이"
+species_ko = "새끼줄 요괴"
+preferred_room = "gate"
+work_bonus = 0.1
+noise = 0
+night_worker = false
+rent_type = "buff"
+rent_note_ko = "문턱에 액막이를 건다(모두의 컨디션 회복)"
+rent_item = ""
+rent_amount = 15
+rent_interval_days = 2
+join_mode = "intake"
+join_day = 0
+stat_strength = 2
+stat_skill = 3
+stat_sight = 2
+stat_courage = 3
+sprite_size = 16
+clarity_by_affinity = false
+in_slice = true

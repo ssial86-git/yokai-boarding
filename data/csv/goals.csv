@@ -21,3 +21,7 @@ g_s_second_floor,season,2층 올리기,floors>=2,5,28,,100,2,점선 칸에서 E 
 g_l_settle,long,하숙생과 호감도 3,affinity:y01_ttukttagi>=3,1,0,,0,3,밤 사연을 들어주면 오른다.
 g_l_species,long,명부에 네 종족,species>=4,1,0,,100,2,날씨·음기에 따라 오는 손님이 다르다.
 g_l_festival,long,동지 만점,festival:f_dongji>=11,1,0,,200,5,팥죽 셋·손님 둘·객실 둘.
+g_c1_residents,long,하숙생 셋,residents>=3,1,0,,0,2,뜨내기가 자주 오면 장기 계약을 청한다.
+g_c1_floor,long,2층 결계,floors>=2,1,0,,0,2,집이 클수록 결계가 단단하다.
+g_c1_market,long,회색 장꾼과 인사,flag:merchant_met,1,0,,0,1,음기 짙은 날이나 밤에 우물 아래로.
+g_c1_festival,long,동지 6점 이상,festival:f_dongji>=6,1,0,,0,2,팥죽·손님·객실.

@@ -47,3 +47,4 @@ recipe,r_red_bean_rice,feed:g_geumjuri,buff:courage,sell:market
 blessing,b_ttukttagi,farm:seed_yield,buff:dish_strength,combat:talisman_throw
 blessing,b_eoduki,farm:seed_yield,buff:dish_courage,gather:talisman_gather
 blessing,b_dalgael,farm:demon_seed,buff:dish_sight,sell:market
+material,m_moon_dew,sell:market,gift:y03_dalgael,buff:sight

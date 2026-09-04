@@ -1,0 +1,74 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_c1_letter"
+nodes = [{
+"node": "start",
+"speaker": "mundori",
+"text_ko": "멍! 문 앞에 편지가 놓여 있었어. 냄새가… 종이가 차가워.",
+"portrait": "mundori",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "(봉투에 도장이 찍혀 있다. 「마계 회수국 — 감사 사전 통지」)",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "(…귀 하숙집은 장부 미등록 요괴를 다수 수용하고 있어 자산 실사 대상이 됩니다. 담당: 회수 집행관 3급.)",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "mundori",
+"text_ko": "그거 나쁜 거야? 물어 버릴까?",
+"portrait": "mundori",
+"next": "5",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "5",
+"speaker": "player",
+"text_ko": "…편지는 물면 안 돼. 하지만 준비는 해 두자. 결계를 단단하게. 침대를 늘리고 사연을 적자.",
+"portrait": "",
+"next": "6",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "6",
+"speaker": "mundori",
+"text_ko": "멍. 문턱은 내가 지켜.",
+"portrait": "mundori",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "item:letter_collector:+1;flag:collector_letter"
+}]

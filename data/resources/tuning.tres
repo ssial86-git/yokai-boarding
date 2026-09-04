@@ -171,5 +171,7 @@ values = {
 "blessing_per_day": 1,
 "market_default_sell_mult": 1.0,
 "market_yin_threshold": 2,
-"merchant_color": "d4a5c4"
+"merchant_color": "d4a5c4",
+"promote_visits": 2,
+"promote_reputation": 5
 }

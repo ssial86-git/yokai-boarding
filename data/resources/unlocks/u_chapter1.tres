@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_chapter1"
+day_min = 3
+expected_day = 3
+timeband = "night"
+condition = ""
+unlock_type = "feature"
+unlock_id = "chapter_c1"
+hint_ko = "성주 영감이 결계 이야기를 꺼낸다 — 할 일 [H] 장기에 챕터 목표가 적혔다."

@@ -24,3 +24,7 @@ sky_color = "8fb0b8"
 fishing_x = 0
 enemy_count = 0
 merchant_x = 0
+night_gather_pool = ["m_mushroom", "m_herb", "m_shadow_moss", "m_moon_dew"]
+night_enemy_pool = ["e_ash_wisp"]
+night_enemy_count = 2
+night_sky_color = "2b3f55"

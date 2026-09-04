@@ -166,3 +166,5 @@ blessing_per_day,1,int,하숙생 한 명이 하루에 붙여 줄 수 있는 가�
 market_default_sell_mult,1.0,float,market_prices.csv 에 행이 없는 아이템의 회색 시장 판매 배율 (대문간 가격 기준)
 market_yin_threshold,2,int,회색 시장 문이 열리는 음기 지수 (이상). 밤에는 음기와 무관하게 열린다
 merchant_color,d4a5c4,string,회색 장꾼 자리표시 색(hex — 팔레트)
+promote_visits,2,int,뜨내기가 장기 계약을 청하는 데 필요한 방문 횟수(명부 누계)
+promote_reputation,5,int,뜨내기 승격에 필요한 평판

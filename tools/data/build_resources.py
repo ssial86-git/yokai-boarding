@@ -35,8 +35,8 @@ ENUMS: dict[str, set[str]] = {
     "tuning_type": {"int", "float", "bool", "string"},
     "sprite_size": {"16", "32"},
     "join_mode": {"start", "intake"},
-    "visitor_kind": {"guest", "troublemaker", "erased"},
-    "event_kind": {"tutorial", "story", "arrival", "npc"},
+    "visitor_kind": {"guest", "troublemaker", "erased", "promotion"},
+    "event_kind": {"tutorial", "story", "arrival", "npc", "chapter"},
     "timeband": {"morning", "day", "evening", "night", "any"},
     # --- P1 신설 ---
     "realm": {"mortal", "demon", "both"},
@@ -82,7 +82,7 @@ UNLOCK_REF_TABLES: dict[str, str] = {
 }
 # 목표 조건 문법 (세미콜론 AND): 정량 절 <name>[:<target>]>=<n>, 불리언 절 resident:/unlock:/flag:
 GOAL_CONDITION_PATTERN = re.compile(
-    r"^((item|count|rooms|affinity|festival):[a-z0-9_.]+>=\d+|(ledger|species|floors|beds|money|reputation)>=\d+"
+    r"^((item|count|rooms|affinity|festival):[a-z0-9_.]+>=\d+|(ledger|species|residents|floors|beds|money|reputation)>=\d+"
     r"|(resident|unlock|flag):[a-z0-9_]+)$"
 )
 
@@ -380,6 +380,8 @@ TABLES: list[Table] = [
             Column("liked_recipe", parse_str, ref="recipes"),
             # 이승/마계 손님 갈래 — 날씨 음기 배율의 대상 (P2-S1)
             Column("realm", parse_enum("guest_realm")),
+            # 승격(장기 계약)하면 이 하숙생이 된다 (P2-S4). promotable 인 종족만 뜻이 있다
+            Column("promotes_to", parse_str, ref="yokai"),
         ],
     ),
     Table(
@@ -587,6 +589,11 @@ TABLES: list[Table] = [
             Column("enemy_count", int),
             # 회색 장꾼 NPC 자리 x (0 = 없음). P2-S3
             Column("merchant_x", int),
+            # 밤 변형 (P2-S4): 밤에 문을 지나면 이 풀·색으로 조립된 "<id>@night" 가 된다. 채집 풀이 비면 변형 없음
+            Column("night_gather_pool", parse_id_list, ref="materials", ref_ids=lambda v: v),
+            Column("night_enemy_pool", parse_id_list, ref="enemies", ref_ids=lambda v: v),
+            Column("night_enemy_count", int),
+            Column("night_sky_color", parse_str),
         ],
     ),
     Table(
@@ -785,6 +792,22 @@ TABLES: list[Table] = [
             Column("swing", float),
             Column("stock", int),
             Column("note_ko", parse_str),
+        ],
+    ),
+    # ------------------------------------------------------------ P2-S4: 챕터
+    Table(
+        name="chapters",
+        csv_file="chapters.csv",
+        script_class="ChapterData",
+        script_file="chapter_data.gd",
+        columns=[
+            Column("id", parse_str),
+            Column("order", int),
+            Column("name_ko", parse_str),
+            Column("gate_goals", parse_id_list, ref="goals", ref_ids=lambda v: v),
+            Column("gate_required", int),
+            Column("next_id", parse_str, ref="chapters"),
+            Column("summary_ko", parse_str),
         ],
     ),
     Table(
@@ -1003,6 +1026,23 @@ def check_synergies(tables: dict[str, Table]) -> None:
             raise BuildError(f"market_prices.csv {row['_line']}행: swing 은 1 미만 (가격이 0 이 되지 않도록)")
 
 
+def check_chapters(tables: dict[str, Table]) -> None:
+    """게이트 필요 수가 목표 수를 넘지 않고, 다음 챕터가 있으면 게이트도 있어야 하며, 밤 변형은 하늘색을 가진다."""
+    for row in tables["chapters"].rows:
+        line = row["_line"]
+        if row["gate_required"] > len(row["gate_goals"]):
+            raise BuildError(f"chapters.csv {line}행: gate_required({row['gate_required']}) > 게이트 목표 수({len(row['gate_goals'])})")
+        if row["next_id"] and (not row["gate_goals"] or row["gate_required"] <= 0):
+            raise BuildError(f"chapters.csv {line}행: next_id 가 있으면 게이트 목표와 gate_required 가 필요")
+        if row["next_id"] == row["id"]:
+            raise BuildError(f"chapters.csv {line}행: 자기 자신을 다음 챕터로 건다")
+    for row in tables["regions"].rows:
+        if row["night_gather_pool"] and not row["night_sky_color"]:
+            raise BuildError(f"regions.csv {row['_line']}행: 밤 변형에는 night_sky_color 가 필요")
+        if row["night_enemy_pool"] and row["night_enemy_count"] <= 0:
+            raise BuildError(f"regions.csv {row['_line']}행: night_enemy_pool 이 있으면 night_enemy_count 는 1 이상")
+
+
 def check_chains(tables: dict[str, Table]) -> None:
     """재미 원칙 3 의 기계 강제: 용도 3칸이 전부 차야 하고(서로 다른 갈래), 대상 콘텐츠 전부가 사슬 행을 가져야 한다."""
     chains = tables["chains"]
@@ -1141,6 +1181,7 @@ def main(argv: list[str]) -> int:
         check_seasons(tables)
         check_goals(tables)
         check_synergies(tables)
+        check_chapters(tables)
         check_chains(tables)
         for table in tables.values():
             if table.dict_value is not None:

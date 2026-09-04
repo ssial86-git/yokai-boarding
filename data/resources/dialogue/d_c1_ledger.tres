@@ -1,0 +1,74 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_c1_ledger"
+nodes = [{
+"node": "start",
+"speaker": "jowang",
+"text_ko": "장꾼한테 들었죠? 장부 이야기. 그럼 이쪽 이야기도 들어야 해요.",
+"portrait": "jowang",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "jowang",
+"text_ko": "그 왕의 장부는 요괴를 쓸모로 적어요. 얼마를 벌었나 얼마나 무서웠나. 아버님의 하숙부는 요괴를 사연으로 적었어요.",
+"portrait": "jowang",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "jowang",
+"text_ko": "이름·얼굴·전승 대신 어디서 왔고 무엇을 좋아하고 왜 여기 왔는지. 그렇게 적힌 이름은 저쪽에서 지워도 지워지지 않아요.",
+"portrait": "jowang",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "player",
+"text_ko": "그래서 밤마다 사연을 듣는 거군요.",
+"portrait": "",
+"next": "5",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "5",
+"speaker": "jowang",
+"text_ko": "네. 하숙부는 결계의 다른 이름이에요. 그리고… 아버님은 그걸 들고 마계 심부로 가셨어요. 문서고를 찾으러.",
+"portrait": "jowang",
+"next": "6",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "6",
+"speaker": "jowang",
+"text_ko": "돌아오지 않으셨지만 하숙부는 남았죠. 이제 적는 사람은 당신이에요.",
+"portrait": "jowang",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "flag:ledger_truth"
+}]

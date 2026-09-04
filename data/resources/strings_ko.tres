@@ -309,5 +309,13 @@ values = {
 "msg_blessing_granted": "{yokai}이(가) {item}에 가호를 붙였다",
 "msg_fish_visitor": "물에서 누가 올라왔다… 젖은 {name}이(가) 오늘 밤 문을 두드릴 것 같다",
 "ui_roster_blessings": "· 가호 {count}회",
-"prompt_fish_spot_locked": "아직 이곳에선 낚을 수 없다"
+"prompt_fish_spot_locked": "아직 이곳에선 낚을 수 없다",
+"region_night_name": "{name} (밤)",
+"msg_night_variant_entered": "밤의 {name}. 낮과 다른 것이 난다 — 그리고 나온다.",
+"msg_chapter_advanced": "챕터 {order} 「{name}」 — 결계가 한 단계 단단해졌다",
+"ui_goal_chapter": "챕터 {order} 「{name}」 — 게이트 {met}/{total} (필요 {required})",
+"ui_goal_chapter_done": "챕터 {order} 「{name}」 — 진행 중 (P3)",
+"msg_promotion_offer": "{name}이(가) 오늘 저녁 장기 계약을 청하러 온다",
+"ui_intake_card_promotion": "{name}\n{first_words}\n장기 계약을 청한다 — 받으면 하숙생이 된다",
+"msg_promoted": "{name}이(가) 장기 계약을 맺고 하숙생이 되었다"
 }

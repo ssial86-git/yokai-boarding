@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/item_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "letter_collector"
+name_ko = "회수 집행관의 통지서"
+kind = "key"
+base_value = 0

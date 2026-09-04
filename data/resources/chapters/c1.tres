@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ChapterData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/chapter_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "c1"
+order = 1
+name_ko = "폭군의 장부"
+gate_goals = ["g_c1_residents", "g_c1_floor", "g_c1_market", "g_c1_festival"]
+gate_required = 2
+next_id = "c2"
+summary_ko = "상속받은 결계 — 회색 시장의 소문 — 첫 회수 집행관의 편지"

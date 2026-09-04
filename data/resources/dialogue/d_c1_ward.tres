@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_c1_ward"
+nodes = [{
+"node": "start",
+"speaker": "seongju",
+"text_ko": "느꼈나? 대들보가 울렸어. 결계가 한 단계 올라갔네.",
+"portrait": "seongju",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "seongju",
+"text_ko": "하숙생이 늘고 집이 서고 이름이 적혔어. 저쪽에서 온 집행관이 문턱을 넘지 못한 게 그 증거야.",
+"portrait": "seongju",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "아버지는 이 다음에 어디로 갔습니까.",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "seongju",
+"text_ko": "문서고. 왕의 장부가 보관된 곳. 지워진 이름의 원본이 거기 있다지. 길은 잿빛 들 너머야.",
+"portrait": "seongju",
+"next": "5",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "5",
+"speaker": "seongju",
+"text_ko": "서두를 것 없네. 결계는 하루씩 쌓이는 것이니. 오늘은 자게.",
+"portrait": "seongju",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "flag:chapter1_done"
+}]

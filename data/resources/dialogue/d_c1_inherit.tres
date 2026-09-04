@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_c1_inherit"
+nodes = [{
+"node": "start",
+"speaker": "seongju",
+"text_ko": "대들보가 좀 덜 삐걱거리는군. 자네가 손을 대서 그런가.",
+"portrait": "seongju",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "seongju",
+"text_ko": "이 집엔 계약이 걸려 있어. 자네 아버지가 나와 맺은 것. 문턱 안에서는 어떤 요괴도 해치지 못하고 해침당하지 않는다.",
+"portrait": "seongju",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "…그걸 제가 물려받았다는 겁니까.",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "seongju",
+"text_ko": "핏줄이니 저절로 넘어왔지. 다만 결계는 집이 튼튼하고 평판이 좋은 만큼만 강해. 증축·수리·돌봄이 곧 결계일세.",
+"portrait": "seongju",
+"next": "5",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "5",
+"speaker": "seongju",
+"text_ko": "마계에서 도망쳐 온 것들이 이 문을 두드리는 이유가 그거야. 그 집 문턱만 넘으면 산다 — 그런 소문이 돈다더군.",
+"portrait": "seongju",
+"next": "6",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "6",
+"speaker": "player",
+"text_ko": "도망쳐 온다니. 무엇에게서요?",
+"portrait": "",
+"next": "7",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "7",
+"speaker": "seongju",
+"text_ko": "…그 이야기는 우물 아래서 듣는 게 빠르겠지. 음기 짙은 날에 문이 열리는 장터가 있어. 장꾼이 소문을 팔거든.",
+"portrait": "seongju",
+"next": "8",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "8",
+"speaker": "seongju",
+"text_ko": "자네 아버지도 거기서 처음 들었어. 그 왕의 장부 이야기를.",
+"portrait": "seongju",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "flag:heard_market"
+}]

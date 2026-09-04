@@ -43,3 +43,59 @@ d_y03_act3,2,y03_dalgael,"…고마워. 말소를 멈춘 사람이 있었어. �
 d_merchant_greet,start,gray_merchant,…이승 냄새. 하숙집 사람이군. 여긴 회색 시장이다 — 음기가 짙은 날과 밤에만 문이 열려.,gray_merchant,2,,,,,
 d_merchant_greet,2,gray_merchant,마계 재료·발효 음식은 후하게 사고 씨앗과 천은 판다. 값은 날마다 흔들리니 달력을 보고 오게.,gray_merchant,3,,,,,
 d_merchant_greet,3,gray_merchant,소문도 판다만… 그건 다음에. 자 — 볼 텐가?,gray_merchant,end,,,,,flag:merchant_met
+d_c1_inherit,start,seongju,대들보가 좀 덜 삐걱거리는군. 자네가 손을 대서 그런가.,seongju,2,,,,,
+d_c1_inherit,2,seongju,이 집엔 계약이 걸려 있어. 자네 아버지가 나와 맺은 것. 문턱 안에서는 어떤 요괴도 해치지 못하고 해침당하지 않는다.,seongju,3,,,,,
+d_c1_inherit,3,player,…그걸 제가 물려받았다는 겁니까.,,4,,,,,
+d_c1_inherit,4,seongju,핏줄이니 저절로 넘어왔지. 다만 결계는 집이 튼튼하고 평판이 좋은 만큼만 강해. 증축·수리·돌봄이 곧 결계일세.,seongju,5,,,,,
+d_c1_inherit,5,seongju,마계에서 도망쳐 온 것들이 이 문을 두드리는 이유가 그거야. 그 집 문턱만 넘으면 산다 — 그런 소문이 돈다더군.,seongju,6,,,,,
+d_c1_inherit,6,player,도망쳐 온다니. 무엇에게서요?,,7,,,,,
+d_c1_inherit,7,seongju,…그 이야기는 우물 아래서 듣는 게 빠르겠지. 음기 짙은 날에 문이 열리는 장터가 있어. 장꾼이 소문을 팔거든.,seongju,8,,,,,
+d_c1_inherit,8,seongju,자네 아버지도 거기서 처음 들었어. 그 왕의 장부 이야기를.,seongju,end,,,,,flag:heard_market
+d_c1_rumor,start,gray_merchant,…낮에 온 하숙집 사람. 밤에도 여기 냄새가 나는군. 소문을 사겠다고 했지?,gray_merchant,2,,,,,
+d_c1_rumor,2,gray_merchant,마계는 이제 왕이 다스린다. 이름은 없어. 다들 대차대조표의 왕이라 부르지. 늘 장부를 끼고 다녀.,gray_merchant,3,,,,,
+d_c1_rumor,3,gray_merchant,두려움도 자원이다 — 그게 그 왕의 말이야. 요괴마다 공포 생산량을 할당하고 분기마다 실적을 매긴다.,gray_merchant,4,,,,,
+d_c1_rumor,4,player,실적이 모자라면?,,5,,,,,
+d_c1_rumor,5,gray_merchant,감가상각. 장부에서 이름과 얼굴과 전승을 지운다. 지워진 요괴는 흐려지다가… 사라져.,gray_merchant,6,,,,,
+d_c1_rumor,6,gray_merchant,그래서 도망치는 거야. 자네 집 문턱 안으로. 지운 이름을 다시 적어 주는 장부가 거기 있다는 소문이 있어.,gray_merchant,7,,,,,
+d_c1_rumor,7,player,아버지의 하숙부…,,8,,,,,
+d_c1_rumor,8,gray_merchant,값은 이걸로 됐어. 다음 소문은 더 비쌀 거다. 집행관이 움직이기 시작했으니까.,gray_merchant,end,,,,,flag:rumor_ledger
+d_c1_ledger,start,jowang,장꾼한테 들었죠? 장부 이야기. 그럼 이쪽 이야기도 들어야 해요.,jowang,2,,,,,
+d_c1_ledger,2,jowang,그 왕의 장부는 요괴를 쓸모로 적어요. 얼마를 벌었나 얼마나 무서웠나. 아버님의 하숙부는 요괴를 사연으로 적었어요.,jowang,3,,,,,
+d_c1_ledger,3,jowang,이름·얼굴·전승 대신 어디서 왔고 무엇을 좋아하고 왜 여기 왔는지. 그렇게 적힌 이름은 저쪽에서 지워도 지워지지 않아요.,jowang,4,,,,,
+d_c1_ledger,4,player,그래서 밤마다 사연을 듣는 거군요.,,5,,,,,
+d_c1_ledger,5,jowang,네. 하숙부는 결계의 다른 이름이에요. 그리고… 아버님은 그걸 들고 마계 심부로 가셨어요. 문서고를 찾으러.,jowang,6,,,,,
+d_c1_ledger,6,jowang,돌아오지 않으셨지만 하숙부는 남았죠. 이제 적는 사람은 당신이에요.,jowang,end,,,,,flag:ledger_truth
+d_c1_letter,start,mundori,멍! 문 앞에 편지가 놓여 있었어. 냄새가… 종이가 차가워.,mundori,2,,,,,
+d_c1_letter,2,player,(봉투에 도장이 찍혀 있다. 「마계 회수국 — 감사 사전 통지」),,3,,,,,
+d_c1_letter,3,player,(…귀 하숙집은 장부 미등록 요괴를 다수 수용하고 있어 자산 실사 대상이 됩니다. 담당: 회수 집행관 3급.),,4,,,,,
+d_c1_letter,4,mundori,그거 나쁜 거야? 물어 버릴까?,mundori,5,,,,,
+d_c1_letter,5,player,…편지는 물면 안 돼. 하지만 준비는 해 두자. 결계를 단단하게. 침대를 늘리고 사연을 적자.,,6,,,,,
+d_c1_letter,6,mundori,멍. 문턱은 내가 지켜.,mundori,end,,,,,item:letter_collector:+1;flag:collector_letter
+d_c1_fear,start,y01_ttukttagi,…그 편지 봤어. 회수국이라고 적혀 있던 거.,y01_ttukttagi,2,,,,,
+d_c1_fear,2,y01_ttukttagi,나 씨름에서 진 적 없어. 진짜야. 그런데 그 사람들은 씨름을 안 해. 종이를 내밀어. 종이에 내 이름이 있으면 나는 없어지는 거야.,y01_ttukttagi,3,,,,,
+d_c1_fear,3,player,(뚝딱이가 방망이를 꽉 쥐고 있다.),,,여기 이름은 지워지지 않아. 조왕 아주머니가 그랬어.,4,네가 지켜 줘. 방망이가 있잖아.,5,
+d_c1_fear,4,y01_ttukttagi,…그래? 그럼 나 여기 계속 있어도 돼? 시끄러워도?,y01_ttukttagi,6,,,,,affinity:+1
+d_c1_fear,5,y01_ttukttagi,맞아! 종이 따위 뚝딱 부숴 버릴게. …부수면 안 되는 거지? 그럼 문 앞에 서 있을게.,y01_ttukttagi,6,,,,,affinity:+1;flag:ttukttagi_guard
+d_c1_fear,6,y01_ttukttagi,집행관이 오면 말해. 내가 제일 먼저 나갈 거야. 힘은 이럴 때 쓰는 거니까.,y01_ttukttagi,end,,,,,
+d_c1_dalgael,start,y03_dalgael,(달갤이 하숙부를 들여다보고 있다. 얼굴 없는 얼굴이 김서림처럼 흔들린다.),y03_dalgael,2,,,,,
+d_c1_dalgael,2,y03_dalgael,…여기 내 이름이 있어. 저쪽 장부에서는 반쯤 지워졌는데.,y03_dalgael,3,,,,,
+d_c1_dalgael,3,player,그래서 얼굴이 돌아오는 거야. 사연을 적을수록.,,4,,,,,
+d_c1_dalgael,4,y03_dalgael,무서웠어. 숫자로만 남는 게. 몇 개를 겁줬나 몇 번 실패했나. 여기선 무를 심었다고 적혀 있네.,y03_dalgael,5,,,,,
+d_c1_dalgael,5,y03_dalgael,…고마워. 내일은 물을 줄게.,y03_dalgael,end,,,,,affinity:+1
+d_c1_audit,start,collector,실례합니다. 마계 회수국 3급 집행관입니다. 사전 통지 받으셨죠? 자산 실사 나왔습니다.,collector,2,,,,,
+d_c1_audit,2,collector,"서류 세 가지만 확인하겠습니다. 요괴 수용 명세, 공포 산출 실적, 그리고… 이 집 결계의 등록 증명.",collector,3,,,,,
+d_c1_audit,3,player,(집행관이 문턱 앞에서 장부를 펼친다.),,,(하숙부를 내보인다) 명세라면 이겁니다.,4,문턱 밖에서 말씀하세요. 들일 수 없습니다.,6,
+d_c1_audit,4,collector,…이건 양식이 다릅니다. 수치가 없어요. 사연? 사연은 계정 항목이 아닙니다. 본부에 문의해야…,collector,5,,,,,
+d_c1_audit,5,collector,오늘은 열람 수수료만 받겠습니다. 100. 다음 분기에 다시 옵니다. 그때까지 양식을 맞추세요. 저도 실적이 있어서요.,collector,end,,,,,money:-100;flag:audit_fee
+d_c1_audit,6,collector,…문턱을 못 넘는군요. 정말 결계가 있어요. 보고서에 그렇게 적으면 저는 강등인데.,collector,7,,,,,
+d_c1_audit,7,collector,"다음 분기에 다시 옵니다. 그때는 등록 증명이 필요할 겁니다. 아, 그리고 — 여기 따뜻하네요. 보고서엔 안 적겠습니다.",collector,end,,,,,flag:audit_refused
+d_c1_ward,start,seongju,느꼈나? 대들보가 울렸어. 결계가 한 단계 올라갔네.,seongju,2,,,,,
+d_c1_ward,2,seongju,하숙생이 늘고 집이 서고 이름이 적혔어. 저쪽에서 온 집행관이 문턱을 넘지 못한 게 그 증거야.,seongju,3,,,,,
+d_c1_ward,3,player,아버지는 이 다음에 어디로 갔습니까.,,4,,,,,
+d_c1_ward,4,seongju,문서고. 왕의 장부가 보관된 곳. 지워진 이름의 원본이 거기 있다지. 길은 잿빛 들 너머야.,seongju,5,,,,,
+d_c1_ward,5,seongju,서두를 것 없네. 결계는 하루씩 쌓이는 것이니. 오늘은 자게.,seongju,end,,,,,flag:chapter1_done
+d_y05_act1,start,y05_geumjuri,문턱이 낡았군. 몇 번을 넘었는데도 그때마다 삐걱거려.,y05_geumjuri,2,,,,,
+d_y05_act1,2,y05_geumjuri,나는 새끼줄이다. 사람들이 문에 걸어 액을 막던. 요즘은 아무도 걸지 않아서 마계로 떨어졌지.,y05_geumjuri,3,,,,,
+d_y05_act1,3,player,그런데 이 집에 오래 머물기로 했잖아.,,4,,,,,
+d_y05_act1,4,y05_geumjuri,걸 곳이 있으니까. 이 문턱은 아직 액을 막을 줄 안다. 내가 좀 손보면 더 잘 막겠지.,y05_geumjuri,5,,,,,
+d_y05_act1,5,y05_geumjuri,대신 하숙비는 그걸로 치자. 돈은 없어. 새끼줄한테 돈이 있겠나.,y05_geumjuri,end,,,,,affinity:+1

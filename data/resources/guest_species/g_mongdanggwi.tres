@@ -21,3 +21,4 @@ promotable = false
 sprite_size = 16
 liked_recipe = "r_acorn_jelly"
 realm = "mortal"
+promotes_to = ""

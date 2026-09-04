@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SpiritData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/spirit_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "collector"
+name_ko = "회수 집행관 3급"
+role_ko = "폭군의 장부를 들고 감사를 나온 중간관리자. 실적에 쫓긴다"
+room_id = ""

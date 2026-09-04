@@ -50,3 +50,6 @@ u_festival_dongji,28,28,morning,,festival,f_dongji,동짓날. 저녁에 팥죽�
 u_gray_market,12,13,night,unlock:u_well,region,r_gray_market,우물 아래에 회색 시장 문이 보인다. 음기 짙은 날이나 밤에만 열린다.
 u_blessings,16,16,morning,affinity:y01_ttukttagi>=1,feature,blessings,하숙생 앞에서 E — 가호 접붙이기. 씨앗·요리·부적에 하숙생의 힘을 붙인다.
 u_well_fishing,19,19,day,unlock:u_fishing,feature,fishing_r_well,우물에 낚싯줄을 내릴 수 있다. 고물·기억 조각… 가끔 이상한 것.
+u_chapter1,3,3,night,,feature,chapter_c1,성주 영감이 결계 이야기를 꺼낸다 — 할 일 [H] 장기에 챕터 목표가 적혔다.
+u_night_hill,21,21,night,unlock:u_back_hill,feature,night_r_back_hill,밤의 뒷산 — 밤에 문을 지나면 다른 곳이 된다. 달빛 이슬과 도깨비불.
+u_promotion,25,25,evening,,feature,promotion,자주 온 손님이 장기 계약을 청할 수 있다 (금줄이: 방문 2회·평판 5).
