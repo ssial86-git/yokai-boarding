@@ -43,6 +43,11 @@ func apply_bonus(amount: int, seconds: float) -> void:
 	_bonus_remaining = maxf(seconds, 0.0)
 
 
+## 캐시를 비워 다음 조회 때 GameState.region_states 에서 다시 읽게 한다 (테스트·로드용).
+func reset_cache() -> void:
+	_cache.clear()
+
+
 func points_for(region_id: String) -> GatherPoints:
 	if _cache.has(region_id):
 		return _cache[region_id]

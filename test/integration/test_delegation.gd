@@ -52,13 +52,16 @@ func test_delegation_slots_unlock_and_work() -> void:
 	assert_int(assign.try_assign("y02_eoduki", Assignment.GATHER)).is_not_equal(AssignmentController.Outcome.OK)  # 정원 1
 	assert_int(assign.try_assign("y02_eoduki", Assignment.FISHING)).is_equal(AssignmentController.Outcome.OK)
 	assert_that(GameState.assignment.get_cell("y01_ttukttagi")).is_equal(Assignment.GATHER)
-	# 낮: 채집 위임은 뒷산 남은 포인트 × 효율 만큼 캐 온다 (8 × 0.6 → 4, 도구 필요 재료는 건너뛴다)
-	var before := GameState.inventory.items().size()
+	# 낮: 채집 위임은 뒷산 남은 포인트 × 효율 만큼 캐 온다 (8 × 0.6 → 4). 무작위 추첨에 기대지 않도록 포인트를 고정한다
+	var state := GameState.region_state("r_back_hill")
+	state["gather_materials"] = ["m_namul", "m_namul", "m_stone", "m_mushroom", "wood", "m_acorn", "m_herb", "m_branch"]
+	state["gather_taken"] = []
+	gather.reset_cache()
 	var gathered := gather.auto_gather()
-	assert_int(gathered).is_between(1, 4)
-	assert_int(gather.points_for("r_back_hill").remaining()).is_equal(8 - gathered)
-	assert_int(int(GameState.counters.get("gather", 0))).is_equal(gathered)
-	assert_bool(GameState.inventory.items().size() >= before).is_true()
+	assert_int(gathered).is_equal(4)
+	assert_int(gather.points_for("r_back_hill").remaining()).is_equal(4)
+	assert_int(GameState.inventory.get_count("wood")).is_equal(0)  # 도끼가 없어 나무는 건너뛴다
+	assert_int(int(GameState.counters.get("gather", 0))).is_equal(4)
 	# 낚시 위임: 두 번 던져 효율 확률로 낚는다 (시드 고정 없이 0~2)
 	var caught := fishing.auto_fish()
 	assert_int(caught).is_between(0, 2)
