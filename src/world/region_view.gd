@@ -26,10 +26,11 @@ var _doors: Array[Interactable] = []
 var is_region_open: Callable
 ## 낚시 자리를 만들 때 필요. RegionManager 가 setup 전에 넣는다 (null 이면 낚시 자리 없음).
 var fishing_system: FishingSystem
-## () -> void. 회색 장꾼 앞에서 E (P2-S3). RegionManager 가 넣는다.
+## (npc_id: String, shop_id: String) -> void. 상점 NPC 앞에서 E. RegionManager 가 넣는다.
 var merchant_action: Callable
 
 const REGION_KIND_MARKET := "market"
+const REGION_KIND_VILLAGE := "village"
 
 
 ## 낚시 자리 자리표시 (물 웅덩이).
@@ -65,25 +66,30 @@ func setup(region_data: RegionData, travel: Callable, farm_system: FarmSystem, g
 	_build_gather_points(gather_system)
 	if fishing_system != null and fishing_system.has_spot(region):
 		_build_fishing_spot()
-	if region.merchant_x > 0:
-		_build_merchant()
+	for entry: Variant in region.npcs:
+		_build_npc(str(entry))
 	Events.farm_changed.connect(func(index: int) -> void:
 		if index < 0 and region.kind == "yard":
 			_build_farm(farm_system))
 
 
-## 회색 장꾼 NPC (P2-S3): E 로 첫 인사 대화 → 이후 거래 메뉴. 그림은 자리표시 사각.
-func _build_merchant() -> void:
+## 상점 NPC (P2-S3 회색 장꾼, P3-S2 마을 잡화상·약방 할미): "spirit_id:shop_id:x". E 로 첫 인사 대화 → 이후 거래 메뉴. 그림은 자리표시 사각.
+func _build_npc(entry: String) -> void:
+	var parts := entry.split(":")
+	if parts.size() != 3:
+		return
+	var npc_id := parts[0]
+	var shop_id := parts[1]
 	var node := Interactable.new()
-	node.name = "Merchant"
-	var x := float(region.merchant_x)
+	node.name = "Npc_%s" % npc_id
+	var x := float(parts[2])
 	node.position = Vector2(x, ground_y_at(x))
 	node.set_box(Vector2(40.0, 32.0), Vector2(0, -16.0))
 	node.interact_priority = 1
-	node.prompt_provider = func() -> String: return DataRegistry.text("prompt_merchant")
+	node.prompt_provider = func() -> String: return DataRegistry.text("prompt_npc", {"name": DataRegistry.speaker_name(npc_id)})
 	node.action = func(_player: Node) -> void:
 		if merchant_action.is_valid():
-			merchant_action.call()
+			merchant_action.call(npc_id, shop_id)
 	add_child(node)
 	var marker := SpotMarker.new()
 	marker.color = Color.html(DataRegistry.tuning.get_string("merchant_color", "d4a5c4"))
@@ -188,13 +194,14 @@ func _build_door(door: RegionLayout.Door, travel: Callable) -> void:
 	node.set_box(DOOR_SIZE + Vector2(8.0, 0.0), Vector2(0, -DOOR_SIZE.y * 0.5))
 	node.interact_priority = 2
 	var target_name := target.name_ko if target != null else door.region_id
-	var is_market := target != null and target.kind == REGION_KIND_MARKET
+	var locked_key := "prompt_door_locked"
+	if target != null and target.kind == REGION_KIND_MARKET:
+		locked_key = "prompt_market_closed"  # 회색 시장: 음기·밤 조건 (P2-S3)
+	elif target != null and target.kind == REGION_KIND_VILLAGE:
+		locked_key = "prompt_village_closed"  # 마을 상점가: 밤에 닫힘 (P3-S2)
 	node.prompt_provider = func() -> String:
 		var open := not is_region_open.is_valid() or bool(is_region_open.call(door.region_id))
-		if open:
-			return DataRegistry.text("prompt_door", {"name": target_name})
-		# 회색 시장은 시간·음기 조건이 있어 문구가 다르다 (P2-S3)
-		return DataRegistry.text("prompt_market_closed" if is_market else "prompt_door_locked", {"name": target_name})
+		return DataRegistry.text("prompt_door" if open else locked_key, {"name": target_name})
 	node.enabled_check = func() -> bool:
 		return not is_region_open.is_valid() or bool(is_region_open.call(door.region_id))
 	node.action = func(_player: Node) -> void: travel.call(door.region_id)

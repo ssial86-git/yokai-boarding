@@ -5,6 +5,7 @@ extends RefCounted
 ## 판매 기준가는 대문간 가격(base_value × sell_price_ratio), 구매 기준가는 base_value.
 
 const MIN_PRICE := 1
+const SHOP_GRAY := "gray"
 
 
 ## 그날의 흔들림 [-1, 1].
@@ -35,19 +36,19 @@ static func buy_price(item: ItemData, row: MarketPriceData, seed: int, day: int)
 	return maxi(int(floor(item.base_value * row.buy_mult * _factor(row, seed, day) + 0.5)), MIN_PRICE)
 
 
-## 오늘 살 수 있는 시세 행 (item_id 순).
-static func buyable_rows(prices: Dictionary) -> Array[MarketPriceData]:
+## 오늘 살 수 있는 시세 행 (item_id 순). shop_id 를 주면 그 상점만.
+static func buyable_rows(prices: Dictionary, shop_id: String = "") -> Array[MarketPriceData]:
 	var result: Array[MarketPriceData] = []
 	for row: MarketPriceData in prices.values():
-		if row.buy_mult > 0.0 and row.stock > 0:
+		if row.buy_mult > 0.0 and row.stock > 0 and (shop_id.is_empty() or row.shop == shop_id):
 			result.append(row)
 	result.sort_custom(func(a: MarketPriceData, b: MarketPriceData) -> bool: return a.item_id < b.item_id)
 	return result
 
 
-## 남은 재고. bought 는 item_id -> 오늘 산 수.
+## 남은 재고. bought 는 시세 행 id("<shop>_<item>") -> 오늘 산 수 (상점마다 따로).
 static func stock_left(row: MarketPriceData, bought: Dictionary) -> int:
-	return maxi(row.stock - int(bought.get(row.item_id, 0)), 0)
+	return maxi(row.stock - int(bought.get(row.id, 0)), 0)
 
 
 ## 구매. 돈·재고가 되면 인벤토리에 넣고 낸 돈을 돌려준다. 안 되면 0.
@@ -56,7 +57,7 @@ static func buy(inventory: Inventory, item: ItemData, row: MarketPriceData, boug
 	if price <= 0 or money < price or stock_left(row, bought) <= 0:
 		return 0
 	inventory.add(item.id, 1)
-	bought[row.item_id] = int(bought.get(row.item_id, 0)) + 1
+	bought[row.id] = int(bought.get(row.id, 0)) + 1
 	return price
 
 

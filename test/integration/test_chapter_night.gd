@@ -111,7 +111,7 @@ func test_promotion_and_chapter_gate() -> void:
 	goal_system.evaluate()
 	assert_bool(goal_system.is_done("g_c1_residents")).is_true()
 	assert_str(GameState.chapter_id).is_equal("c1")  # 아직 1개
-	GameState.flags["merchant_met"] = true
+	GameState.flags["gray_merchant_met"] = true
 	goal_system.evaluate()
 	assert_bool(goal_system.is_done("g_c1_market")).is_true()
 	assert_str(GameState.chapter_id).is_equal("c2")
@@ -122,4 +122,4 @@ func test_promotion_and_chapter_gate() -> void:
 	assert_bool(night_ids.has("c1_e8_ward")).is_true()
 	assert_bool(chapter_system.evaluate()).is_false()  # 마지막 챕터는 더 넘어가지 않는다
 	# NPC 대화(회색 장꾼)는 시간대 트리거로 뜨지 않는다
-	assert_bool(night_ids.has("ev_merchant_greet")).is_false()
+	assert_bool(night_ids.has("ev_gray_merchant_greet")).is_false()

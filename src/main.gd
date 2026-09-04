@@ -68,9 +68,9 @@ var promotion_system: PromotionSystem
 var blessing_menu: BlessingMenu
 var market_menu: MarketMenu
 
-## 회색 장꾼 첫 인사 대화(events.csv kind npc)와 그 대화가 남기는 플래그
-const MERCHANT_GREET_EVENT := "ev_merchant_greet"
-const FLAG_MERCHANT_MET := "merchant_met"
+## 상점 NPC 첫 인사 대화(events.csv kind npc "ev_<npc>_greet")와 그 대화가 남기는 플래그("<npc>_met")
+const NPC_GREET_EVENT_FORMAT := "ev_%s_greet"
+const NPC_MET_FLAG_FORMAT := "%s_met"
 var station_menu: StationMenu
 var fishing_bar: FishingBar
 var region_manager: RegionManager
@@ -430,14 +430,14 @@ func _on_yokai_talk(yokai_id: String) -> void:
 		blessing_menu.open_for(yokai_id)
 
 
-## 회색 장꾼 앞에서 E: 첫 만남은 인사 대화(플래그 merchant_met), 그 뒤로는 거래 메뉴.
-func _on_merchant_talk() -> void:
-	if not GameState.flags.has(FLAG_MERCHANT_MET):
-		var event := DataRegistry.get_event(MERCHANT_GREET_EVENT)
+## 상점 NPC 앞에서 E: 첫 만남은 인사 대화(플래그 <npc>_met), 그 뒤로는 그 상점의 거래 메뉴.
+func _on_merchant_talk(npc_id: String, shop_id: String) -> void:
+	if not GameState.flags.has(NPC_MET_FLAG_FORMAT % npc_id):
+		var event := DataRegistry.get_event(NPC_GREET_EVENT_FORMAT % npc_id)
 		if event != null and not story_system.is_busy():
 			story_system.start_event(event)
 			return
-	market_menu.open()
+	market_menu.open(shop_id, npc_id)
 
 
 func _open_room_menu(coords: Vector2i) -> void:

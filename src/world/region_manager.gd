@@ -6,6 +6,7 @@ extends Node2D
 const HOUSE_REGION_ID := HouseRegion.REGION_ID
 const EXPEDITION_KIND := "expedition"
 const REGION_KIND_MARKET := "market"
+const REGION_KIND_VILLAGE := "village"
 ## 밤 변형을 여는 unlocks feature id 형식 (P2-S4). 가리키는 행이 없으면 늘 열림
 const NIGHT_FEATURE_FORMAT := "night_%s"
 
@@ -16,7 +17,7 @@ var gather_system: GatherSystem
 var unlock_system: UnlockSystem
 var fishing_system: FishingSystem
 var camera: HouseCamera
-## () -> void. 회색 장꾼 앞에서 E (P2-S3). main.gd 가 넣는다.
+## (npc_id: String, shop_id: String) -> void. 상점 NPC 앞에서 E (P2-S3·P3-S2). main.gd 가 넣는다.
 var merchant_action: Callable
 
 var current_region_id: String = ""
@@ -57,12 +58,16 @@ func resolve_variant(region_id: String) -> String:
 	return DataRegistry.night_variant_id(base_id)
 
 
-## 시간·날씨 조건 (P2-S3): 회색 시장(kind market)은 음기 짙은 날 또는 밤에만 문이 열린다.
+## 시간·날씨 조건: 회색 시장(kind market)은 음기 짙은 날 또는 밤에만(P2-S3), 마을 상점가(kind village)는 밤에 닫힌다(P3-S2).
 func is_region_open_now(region_id: String) -> bool:
 	var region := DataRegistry.get_region(region_id)
-	if region == null or region.kind != REGION_KIND_MARKET:
+	if region == null:
 		return true
-	return MarketPrices.is_open(GameState.yin, DataRegistry.tuning.get_int("market_yin_threshold", 2), Clock.band == Clock.Band.NIGHT)
+	if region.kind == REGION_KIND_MARKET:
+		return MarketPrices.is_open(GameState.yin, DataRegistry.tuning.get_int("market_yin_threshold", 2), Clock.band == Clock.Band.NIGHT)
+	if region.kind == REGION_KIND_VILLAGE:
+		return Clock.band_name() != DataRegistry.tuning.get_string("village_closed_band", "night")
+	return true
 
 
 ## region_id 로 이동. 잠겨 있으면 false. at 이 주어지면 그 발 위치에, 아니면 from 쪽 문 앞에 선다.

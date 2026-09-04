@@ -117,8 +117,19 @@ func blessing_of_yokai(yokai_id: String) -> BlessingData:
 	return null
 
 
-func get_market_price(item_id: String) -> MarketPriceData:
-	return market_prices.get(BlessingRules.base_id(item_id)) as MarketPriceData
+## 상점별 시세 행 ("<shop>_<item>"). 가호 합성 id 는 기본 아이템으로.
+func get_market_price(item_id: String, shop_id: String = MarketPrices.SHOP_GRAY) -> MarketPriceData:
+	return market_prices.get("%s_%s" % [shop_id, BlessingRules.base_id(item_id)]) as MarketPriceData
+
+
+## 한 상점의 시세 행 전부 (item_id 순).
+func market_rows(shop_id: String) -> Array[MarketPriceData]:
+	var result: Array[MarketPriceData] = []
+	for row: MarketPriceData in market_prices.values():
+		if row.shop == shop_id:
+			result.append(row)
+	result.sort_custom(func(a: MarketPriceData, b: MarketPriceData) -> bool: return a.item_id < b.item_id)
+	return result
 
 
 func get_visitor(id: String) -> VisitorData:
