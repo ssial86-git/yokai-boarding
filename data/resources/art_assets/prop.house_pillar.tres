@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ArtAssetData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/art_asset_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "prop.house_pillar"
+key = "prop.house_pillar"
+track = "pixel"
+file = "res://assets/art_generated/packs/prop_house_pillar.png"
+frame_w = 16
+frame_h = 48
+anims = ""
+parallax = 1.0
+repeat = false
+note = ""

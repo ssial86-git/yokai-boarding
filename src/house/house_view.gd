@@ -54,6 +54,12 @@ func _ready() -> void:
 	_lantern_texture = _make_lantern_texture()
 	_lantern_scale = float(tuning.get_int("lantern_radius_px") * 2) / float(_lantern_texture.width)
 	_lanterns_enabled = _is_lantern_band(Clock.band)
+	# 배경(하늘·원경·바닥)은 방 뒤에 별도 노드로 — 집 뼈대는 _draw 에서 방 위에
+	var backdrop := HouseBackdrop.new()
+	backdrop.name = "Backdrop"
+	backdrop.columns = grid().columns
+	backdrop.cell_size = cell_size
+	add_child(backdrop)
 	# 명절 장식 (P2-S2): 당일 아침 festival_started 의 decorated 로 켜고, 하루가 끝나면 내린다
 	_decor_color = UiStyles.color("ui_accent_color", "f2a65a")
 	Events.festival_started.connect(func(_id: String, decorated: bool) -> void:
@@ -146,6 +152,7 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	var g := grid()
+	HouseBackdrop.draw_frame(self, g.columns, g.built_floors, cell_size)
 	var locked_color := Color(1, 1, 1, LOCKED_OUTLINE_ALPHA)
 	for floor in range(g.built_floors, g.floors):
 		for column in g.columns:

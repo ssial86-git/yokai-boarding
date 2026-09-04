@@ -20,7 +20,11 @@ CSV_DIR = ROOT / "data" / "csv"
 MANIFEST = CSV_DIR / "art_assets.csv"
 COLUMNS = ["key", "track", "file", "frame_w", "frame_h", "anims", "parallax", "repeat", "note"]
 GENERATED = "res://assets/art_generated/"
-PROP_KEYS = ["prop.gather_point", "prop.farm_plot", "prop.door", "prop.water", "prop.merchant"]
+PROP_KEYS = [
+    "prop.gather_point", "prop.farm_plot", "prop.door", "prop.water", "prop.merchant",
+    # 하숙집 뼈대 (HouseBackdrop): 지붕 64x32 / 기둥 16x48 / 주춧돌 64x16
+    "prop.house_roof", "prop.house_pillar", "prop.house_base",
+]
 UI_KEYS = ["ui.panel", "ui.chip", "ui.button"]
 REGION_LAYERS = ["sky", "far", "ground"]
 
@@ -73,8 +77,7 @@ def wanted_keys() -> list[str]:
     for r in read_rows("rooms.csv"):
         keys.append(f"room.{r['id']}")
     for r in read_rows("regions.csv"):
-        if r["kind"] == "house":
-            continue
+        # 하숙집(r_house)도 배경 3레이어를 가진다 — HouseBackdrop 이 그린다
         for layer in REGION_LAYERS:
             keys.append(f"region.{r['id']}.{layer}")
     keys.extend(PROP_KEYS)

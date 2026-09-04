@@ -243,6 +243,7 @@ function sceneSlots() {
     const layout = String(tuning('start_layout_floor0', 'gate,guest_room,kitchen,empty_lot')).replace(/"/g, '').split(',').map(s => s.trim());
     const slots = layout.map(id => `room.${id}`);
     for (const y of d.csv.yokai.filter(y => y.join_mode === 'start' && y.in_slice === 'true')) slots.push(`char.${y.id}`);
+    slots.push('region.r_house.sky', 'region.r_house.far', 'region.r_house.ground', 'prop.house_roof', 'prop.house_pillar', 'prop.house_base');
     slots.push('char.player', 'ui.panel', 'ui.chip', 'ui.button');
     return [...new Set(slots)];
   }
@@ -321,10 +322,22 @@ function drawComposer(ctx) {
   if (tint.toLowerCase() !== '#ffffff') { ctx.save(); ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = tint; ctx.fillRect(0, 0, VIEW_W, VIEW_H); ctx.restore(); }
 }
 
+function imgFor(key) {
+  const row = rowFor(key);
+  const img = row && row.file ? image(row.file) : null;
+  return img && img.complete && img.naturalWidth ? img : null;
+}
+
 function drawHouse(ctx) {
   ctx.fillStyle = '#' + (state.data.csv.regions.find(r => r.id === 'r_house') || { sky_color: '2b3f55' }).sky_color; ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   const cols = Number(tuning('grid_columns', 4)), floors = Number(tuning('grid_floors', 3));
   const layout = String(tuning('start_layout_floor0', 'gate,guest_room,kitchen,empty_lot')).replace(/"/g, '').split(',').map(s => s.trim());
+  ctx.imageSmoothingEnabled = false;
+  // 배경 3레이어 (HouseBackdrop 과 같은 규칙: 하늘 늘림, 원경은 바닥선에 발 딛고 가로 반복, 바닥 띠는 바닥선 중앙)
+  const sky = imgFor('region.r_house.sky'); if (sky) ctx.drawImage(sky, 0, 0, VIEW_W, GROUND_SCREEN_Y);
+  const far = imgFor('region.r_house.far'); if (far) for (let x = 0; x < VIEW_W; x += far.naturalWidth) ctx.drawImage(far, x, GROUND_SCREEN_Y - far.naturalHeight);
+  const ground = imgFor('region.r_house.ground');
+  if (ground) { ctx.fillStyle = '#2a1e1a'; ctx.fillRect(0, GROUND_SCREEN_Y, VIEW_W, VIEW_H - GROUND_SCREEN_Y); for (let x = 0; x < VIEW_W; x += ground.naturalWidth) ctx.drawImage(ground, x, GROUND_SCREEN_Y - ground.naturalHeight / 2); }
   for (let f = 0; f < floors; f++) for (let c = 0; c < cols; c++) {
     const x = HOUSE_X0 + c * CELL_W, y = GROUND_SCREEN_Y - (f + 1) * CELL_H;
     if (f === 0) {
@@ -334,6 +347,11 @@ function drawHouse(ctx) {
     } else { ctx.setLineDash([4, 4]); ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.strokeRect(x + 0.5, y + 0.5, CELL_W - 1, CELL_H - 1); ctx.setLineDash([]); }
   }
   ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.beginPath(); ctx.moveTo(HOUSE_X0, GROUND_SCREEN_Y - floors * CELL_H + 0.5); ctx.lineTo(HOUSE_X0 + cols * CELL_W, GROUND_SCREEN_Y - floors * CELL_H + 0.5); ctx.stroke();
+  // 집 뼈대: 주춧돌(바닥선 아래) · 기둥(칸 경계, 지어진 층) · 지붕(지어진 맨 위층 위). 시작 상태 = 1층
+  const built = 1;
+  const base = imgFor('prop.house_base'); if (base) for (let c = 0; c < cols; c++) ctx.drawImage(base, HOUSE_X0 + c * CELL_W, GROUND_SCREEN_Y);
+  const pillar = imgFor('prop.house_pillar'); if (pillar) for (let f = 0; f < built; f++) for (let c = 0; c <= cols; c++) ctx.drawImage(pillar, HOUSE_X0 + c * CELL_W - pillar.naturalWidth / 2, GROUND_SCREEN_Y - (f + 1) * CELL_H);
+  const roof = imgFor('prop.house_roof'); if (roof) for (let c = 0; c < cols; c++) ctx.drawImage(roof, HOUSE_X0 + c * CELL_W, GROUND_SCREEN_Y - built * CELL_H - roof.naturalHeight);
   // 하숙생: 휴식처(첫 객실) 앞, 슬롯 간격 tuning
   const spacing = Number(tuning('yokai_slot_spacing_px', 16));
   const restCol = Math.max(0, layout.indexOf('guest_room'));

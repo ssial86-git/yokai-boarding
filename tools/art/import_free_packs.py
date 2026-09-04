@@ -297,14 +297,16 @@ def build_regions(regions: list[dict[str, str]], rows: dict[str, dict[str, str]]
     grass = ground_tile(COUNTRY(80), COUNTRY(102))
     stone = ground_tile(TD(14), TD(13))
     market = ground_tile(TT(97), TT(109))
+    yard_sky = next((r["sky_color"] for r in regions if r["id"] == "r_yard"), "8fb0b8")
     for region in regions:
         rid = region["id"]
-        if region["kind"] == "house":
-            continue
         tint, strength = DEMON_TINT.get(rid, (None, 1.0))
         kind = region["kind"]
         # 하늘은 regions.csv 의 sky_color 그라데이션 — 시간대 색조는 게임이 곱한다 (팩의 보라 석양 하늘은 낮에 안 맞음)
-        if rid in ("r_yard", "r_village"):
+        if kind == "house":
+            # 하숙집 뒤는 마당과 같은 풍경 (r_house 의 sky_color 는 밤색이라 마당 값을 쓴다)
+            sky, far, ground = gradient_sky(hex_rgb(yard_sky)), far_mountain(), grass
+        elif rid in ("r_yard", "r_village"):
             sky, far, ground = gradient_sky(hex_rgb(region["sky_color"])), far_mountain(), grass
             if rid == "r_village":
                 far = far_town()
@@ -352,6 +354,21 @@ def build_props(rows: dict[str, dict[str, str]]) -> None:
     put("prop.door", "prop_door", [fit(scale(TD(46), 2), 32), fit(scale(TD(45), 2), 32)])
     put("prop.water", "prop_water", water_frames(), "idle:0-1:2")
     put("prop.merchant", "prop_merchant", [fit(scale(TT(57), 2), 32)])
+    # 하숙집 뼈대: 지붕(회색 기와 2단, 칸당 64x32) / 기둥(세로 목재 16x48) / 주춧돌(돌바닥 64x16)
+    roof = Image.new("RGBA", (64, 32), (0, 0, 0, 0))
+    for c, t in enumerate((48, 49, 49, 50)):
+        roof.alpha_composite(TT(t), (c * TILE, 0))
+    for c, t in enumerate((60, 61, 61, 62)):
+        roof.alpha_composite(TT(t), (c * TILE, TILE))
+    pillar = Image.new("RGBA", (16, 48), (0, 0, 0, 0))
+    for r in range(3):
+        pillar.alpha_composite(TT(47), (0, r * TILE))
+    base = Image.new("RGBA", (64, 16), (0, 0, 0, 0))
+    for c in range(4):
+        base.alpha_composite(TT(97), (c * TILE, 0))
+    put("prop.house_roof", "prop_house_roof", [roof])
+    put("prop.house_pillar", "prop_house_pillar", [pillar])
+    put("prop.house_base", "prop_house_base", [base])
 
 
 def build_ui(rows: dict[str, dict[str, str]]) -> None:
