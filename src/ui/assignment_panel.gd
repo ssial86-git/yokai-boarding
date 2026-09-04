@@ -165,14 +165,14 @@ func rebuild() -> void:
 	_guest_cards.clear()
 	for yokai_id in GameState.residents:
 		var card := YokaiCard.new()
-		card.setup(yokai_id, _texture(SPRITE_PATH % yokai_id), _card_size)
+		card.setup(yokai_id, ArtLibrary.icon("char.%s" % yokai_id), _card_size)
 		card.rest_requested.connect(_on_rest_requested)
 		_cards_box.add_child(card)
 		_cards[yokai_id] = card
 	var index := 0
 	for guest: Dictionary in GameState.guests:
 		var card := YokaiCard.new()
-		card.setup_guest(guest, index, _texture(GUEST_SPRITE_PATH % str(guest.get("species_id", ""))), _card_size)
+		card.setup_guest(guest, index, ArtLibrary.icon("guest.%s" % str(guest.get("species_id", ""))), _card_size)
 		_cards_box.add_child(card)
 		_guest_cards.append(card)
 		index += 1

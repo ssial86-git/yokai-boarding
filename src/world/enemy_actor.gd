@@ -24,6 +24,7 @@ var _cooldown: float = 0.0
 var _knockback_px: float = 24.0
 var _size: float = 32.0
 var _color: Color = Color.PURPLE
+var _sprite: AnimatedSprite2D
 
 
 func setup(id: String, data: EnemyData, start_hp: int, ground: Callable) -> void:
@@ -39,6 +40,12 @@ func setup(id: String, data: EnemyData, start_hp: int, ground: Callable) -> void
 	_knockback_px = tuning.get_float("enemy_knockback_px", _knockback_px)
 	_size = float(data.sprite_size)
 	_color = Color.html(BOSS_COLOR if data.tier == "boss" else NORMAL_COLOR)
+	# 아트 매니페스트 enemy.<id> 가 있으면 시트로 그리고, 없으면 _draw 의 자리표시 사각
+	var art_key := "enemy.%s" % data.id
+	if ArtLibrary.has(art_key):
+		_sprite = ArtLibrary.make_sprite(art_key)
+		_size = float(ArtLibrary.frame_size(art_key).y)
+		add_child(_sprite)
 
 
 func is_alive() -> bool:
@@ -99,12 +106,15 @@ func _settle_y() -> void:
 
 
 func _draw() -> void:
-	var body := Rect2(Vector2(-_size * 0.4, -_size), Vector2(_size * 0.8, _size))
-	draw_rect(body, _color)
-	draw_rect(body, Color(0.1, 0.08, 0.12), false, 1.0)
-	# 눈
-	var eye_y := -_size * 0.7
-	draw_rect(Rect2(Vector2(facing * _size * 0.15 - 1.0, eye_y), Vector2(2.0, 2.0)), Color(1, 0.9, 0.6))
+	if _sprite != null:
+		_sprite.flip_h = facing < 0
+	else:
+		var body := Rect2(Vector2(-_size * 0.4, -_size), Vector2(_size * 0.8, _size))
+		draw_rect(body, _color)
+		draw_rect(body, Color(0.1, 0.08, 0.12), false, 1.0)
+		# 눈
+		var eye_y := -_size * 0.7
+		draw_rect(Rect2(Vector2(facing * _size * 0.15 - 1.0, eye_y), Vector2(2.0, 2.0)), Color(1, 0.9, 0.6))
 	# 체력 바
 	var ratio := float(hp) / float(maxi(max_hp, 1))
 	var bar := Rect2(Vector2(-HP_BAR_WIDTH * 0.5, -_size - 6.0), Vector2(HP_BAR_WIDTH, 3.0))

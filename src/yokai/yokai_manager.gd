@@ -74,9 +74,7 @@ func respawn() -> void:
 	var slot := 0
 	for yokai_id in GameState.residents:
 		var actor := YokaiActor.new()
-		var path := SPRITE_PATH % yokai_id
-		var texture: Texture2D = load(path) if ResourceLoader.exists(path) else null
-		actor.setup(yokai_id, texture, _walk_speed, _bob_px, _bob_seconds)
+		actor.setup(yokai_id, "char.%s" % yokai_id, _walk_speed, _bob_px, _bob_seconds)
 		actor.anchor_for = _anchor_for
 		add_child(actor)
 		actor.place_at(home, slot, YokaiActor.State.RESTING)
@@ -88,10 +86,8 @@ func respawn() -> void:
 	for guest: Dictionary in GameState.guests:
 		var species_id := str(guest.get("species_id", ""))
 		var actor := YokaiActor.new()
-		var path := GUEST_SPRITE_PATH % species_id
-		var texture: Texture2D = load(path) if ResourceLoader.exists(path) else null
 		var actor_id := "guest_%d_%s" % [guest_index, species_id]
-		actor.setup(actor_id, texture, _walk_speed, _bob_px, _bob_seconds)
+		actor.setup(actor_id, "guest.%s" % species_id, _walk_speed, _bob_px, _bob_seconds)
 		actor.anchor_for = _anchor_for
 		add_child(actor)
 		actor.place_at(home, slot, YokaiActor.State.RESTING)

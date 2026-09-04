@@ -27,7 +27,27 @@ static func padding() -> float:
 	return float(_tuning().get_int("ui_panel_padding_px", 6))
 
 
-static func panel() -> StyleBoxFlat:
+## 아트 매니페스트 ui.<name> 이 있으면 9-patch 텍스처 스타일 (여백 = 이미지 1/3), 없으면 null → 색 상자.
+static func texture_style(key: String) -> StyleBoxTexture:
+	if not ArtLibrary.has(key):
+		return null
+	var tex := ArtLibrary.texture(key)
+	var style := StyleBoxTexture.new()
+	style.texture = tex
+	var margin_x := float(tex.get_width()) / 3.0
+	var margin_y := float(tex.get_height()) / 3.0
+	style.texture_margin_left = margin_x
+	style.texture_margin_right = margin_x
+	style.texture_margin_top = margin_y
+	style.texture_margin_bottom = margin_y
+	style.set_content_margin_all(padding())
+	return style
+
+
+static func panel() -> StyleBox:
+	var textured := texture_style("ui.panel")
+	if textured != null:
+		return textured
 	var style := StyleBoxFlat.new()
 	var background := color("ui_panel_color", "2e2733")
 	background.a = _tuning().get_float("ui_panel_alpha", 1.0)
@@ -40,7 +60,10 @@ static func panel() -> StyleBoxFlat:
 
 
 ## 칩: 상태 하나(돈·평판·침대)를 담는 작은 상자. 패널보다 어둡고 테두리 없음.
-static func chip() -> StyleBoxFlat:
+static func chip() -> StyleBox:
+	var textured := texture_style("ui.chip")
+	if textured != null:
+		return textured
 	var style := StyleBoxFlat.new()
 	style.bg_color = color("ui_chip_color", "1a1620")
 	style.set_corner_radius_all(CORNER_RADIUS)

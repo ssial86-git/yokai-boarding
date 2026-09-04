@@ -31,6 +31,9 @@ var merchant_action: Callable
 
 const REGION_KIND_MARKET := "market"
 const REGION_KIND_VILLAGE := "village"
+## 아트 매니페스트 소품 키
+const PROP_DOOR := "prop.door"
+const PROP_WATER := "prop.water"
 
 
 ## 낚시 자리 자리표시 (물 웅덩이).
@@ -91,10 +94,15 @@ func _build_npc(entry: String) -> void:
 		if merchant_action.is_valid():
 			merchant_action.call(npc_id, shop_id)
 	add_child(node)
-	var marker := SpotMarker.new()
-	marker.color = Color.html(DataRegistry.tuning.get_string("merchant_color", "d4a5c4"))
-	marker.position = Vector2(0, -12.0)
-	node.add_child(marker)
+	# 아트 매니페스트 npc.<id> 가 있으면 시트(발이 바닥), 없으면 자리표시 사각
+	var art_key := "npc.%s" % npc_id
+	if ArtLibrary.has(art_key):
+		node.add_child(ArtLibrary.make_sprite(art_key))
+	else:
+		var marker := SpotMarker.new()
+		marker.color = Color.html(DataRegistry.tuning.get_string("merchant_color", "d4a5c4"))
+		marker.position = Vector2(0, -12.0)
+		node.add_child(marker)
 
 
 ## 낚시 자리 (P1-S3): E 로 찌 던지기, 던진 뒤 E 는 판정. 그림은 물 자리표시.
@@ -113,9 +121,13 @@ func _build_fishing_spot() -> void:
 		else:
 			fishing_system.start(region.id)
 	add_child(node)
-	var marker := SpotMarker.new()
-	marker.color = Color.html(DataRegistry.tuning.get_string("region_water_color", "5f8090"))
-	node.add_child(marker)
+	# 아트 매니페스트 prop.water 가 있으면 시트, 없으면 물 자리표시 사각
+	if ArtLibrary.has(PROP_WATER):
+		node.add_child(ArtLibrary.make_sprite(PROP_WATER))
+	else:
+		var marker := SpotMarker.new()
+		marker.color = Color.html(DataRegistry.tuning.get_string("region_water_color", "5f8090"))
+		node.add_child(marker)
 
 
 ## 카메라 경계. 바닥 아래에 여유(GROUND_BELOW_PX)를 두어 바닥이 화면 맨 아래에 붙지 않게 한다 — 왼쪽 아래 로그가 배우를 가리지 않도록.
@@ -140,9 +152,22 @@ func _draw() -> void:
 	# 구역이 화면보다 좁아도 양옆이 비지 않도록 배경·바닥 그림은 벽 밖으로 넉넉히 늘린다 (충돌 벽은 그대로)
 	var area := bounds().grow_individual(EDGE_FILL_PX, 0.0, EDGE_FILL_PX, 0.0)
 	draw_rect(area, _sky_color)
+	# 아트 매니페스트 배경 레이어 (region.<base>.sky/far/ground). 없으면 색·선 자리표시 그대로
+	var art_base := DataRegistry.base_region_id(region.id)
+	var sky_key := "region.%s.sky" % art_base
+	if ArtLibrary.has(sky_key):
+		draw_texture_rect(ArtLibrary.texture(sky_key), area, false)
 	var profile := layout.profile(_ramp_px)
 	if profile.size() < 2:
 		return
+	var far_key := "region.%s.far" % art_base
+	if ArtLibrary.has(far_key):
+		var far_tex := ArtLibrary.texture(far_key)
+		var far_top := profile[0].y - float(far_tex.get_height())
+		var x := area.position.x
+		while x < area.end.x:
+			draw_texture(far_tex, Vector2(x, far_top))
+			x += float(far_tex.get_width())
 	var bottom := area.end.y
 	var extended := PackedVector2Array([Vector2(profile[0].x - EDGE_FILL_PX, profile[0].y)])
 	extended.append_array(profile)
@@ -152,6 +177,20 @@ func _draw() -> void:
 	polygon.append(Vector2(extended[0].x, bottom))
 	draw_colored_polygon(polygon, _dirt_color)
 	draw_polyline(extended, _ground_color, 4.0)
+	# 바닥 띠 타일: 평평한 구간 위에 가로로 반복 (경사로는 자리표시 선 그대로)
+	var ground_key := "region.%s.ground" % art_base
+	if ArtLibrary.has(ground_key):
+		var tile := ArtLibrary.texture(ground_key)
+		var tile_w := float(tile.get_width())
+		for i in range(1, extended.size()):
+			var a := extended[i - 1]
+			var b := extended[i]
+			if not is_equal_approx(a.y, b.y):
+				continue
+			var x := a.x
+			while x + tile_w <= b.x + 0.5:
+				draw_texture(tile, Vector2(x, a.y - float(tile.get_height()) * 0.5))
+				x += tile_w
 
 
 func _build_ground() -> void:
@@ -207,11 +246,23 @@ func _build_door(door: RegionLayout.Door, travel: Callable) -> void:
 	node.action = func(_player: Node) -> void: travel.call(door.region_id)
 	add_child(node)
 	_doors.append(node)
-	var marker := DoorMarker.new()
-	marker.color_open = _door_color
-	marker.color_locked = _door_locked_color
-	marker.is_open = node.enabled_check
-	node.add_child(marker)
+	if ArtLibrary.has(PROP_DOOR):
+		# 시트 프레임 0 = 열림, 1 = 잠김. 해금될 때 다시 고른다
+		var sprite := ArtLibrary.make_sprite(PROP_DOOR)
+		sprite.stop()
+		var pick_frame := func() -> void:
+			var open := not node.enabled_check.is_valid() or bool(node.enabled_check.call())
+			var count := sprite.sprite_frames.get_frame_count(sprite.animation)
+			sprite.frame = 0 if open or count < 2 else 1
+		pick_frame.call()
+		Events.unlocked.connect(func(_id: String) -> void: pick_frame.call())
+		node.add_child(sprite)
+	else:
+		var marker := DoorMarker.new()
+		marker.color_open = _door_color
+		marker.color_locked = _door_locked_color
+		marker.is_open = node.enabled_check
+		node.add_child(marker)
 
 
 func _build_farm(farm_system: FarmSystem) -> void:

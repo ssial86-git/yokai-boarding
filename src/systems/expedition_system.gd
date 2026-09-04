@@ -11,7 +11,6 @@ const FEATURE_BOSS_REMATCH := "boss_rematch"
 const TALISMAN_THROW := "t_throw"
 const TALISMAN_RETURN := "t_return"
 const TALISMAN_GATHER := "t_gather"
-const SPRITE_PATH := "res://assets/art_generated/yokai_%s.png"
 const HOME_REGION := HouseRegion.REGION_ID
 const EXIT_NORMAL := "exit"
 const EXIT_RETURN := "return_talisman"
@@ -238,9 +237,7 @@ func _spawn_companions() -> void:
 		if not GameState.residents.has(yokai_id):
 			continue
 		var actor := CompanionActor.new()
-		var path := SPRITE_PATH % yokai_id
-		var texture: Texture2D = load(path) if ResourceLoader.exists(path) else null
-		actor.setup(yokai_id, texture,
+		actor.setup(yokai_id,
 			Combat.companion_hp(GameState.stat_of(yokai_id, "courage"), _params),
 			Combat.companion_damage(GameState.stat_of(yokai_id, "strength"), _params),
 			Combat.companion_attack_interval(GameState.stat_of(yokai_id, "skill"), _params),

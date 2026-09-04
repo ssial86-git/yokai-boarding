@@ -187,12 +187,10 @@ func _set_cell(coords: Vector2i, room_id: String) -> void:
 		sprite.position = cell_rect(coords).position
 		add_child(sprite)
 		_sprites[coords] = sprite
-	var path := ROOM_SPRITE_PATH % room_id
-	if ResourceLoader.exists(path):
-		sprite.texture = load(path) as Texture2D
-	else:
-		sprite.texture = null
-		push_warning("HouseView: 방 스프라이트 없음 %s" % path)
+	# 아트 매니페스트 room.<id> (없으면 자리표시 폴백)
+	sprite.texture = ArtLibrary.icon("room.%s" % room_id)
+	if sprite.texture == null:
+		push_warning("HouseView: 방 그림 없음 room.%s" % room_id)
 
 	var room := grid().get_room(coords)
 	var wants_lantern := room != null and room.kind != RoomGrid.ROOM_KIND_EMPTY

@@ -3,8 +3,11 @@ extends Interactable
 ## 텃밭 한 칸의 화면 표현 + 상호작용. 상태는 GameState.farm 이 갖고, 규칙은 FarmSystem 이 판단한다.
 ## 그림은 코드 자리표시(팔레트 색 사각형·새싹) — 정식 타일은 아트 트랙 몫.
 
+const ART_KEY := "prop.farm_plot"
+
 var index: int = 0
 var plot_width: float = 16.0
+var _sprite: AnimatedSprite2D
 
 var _farm_system: FarmSystem
 var _color_empty: Color = Color.SADDLE_BROWN
@@ -30,11 +33,20 @@ func setup(plot_index: int, farm_system: FarmSystem) -> void:
 	Events.farm_changed.connect(func(changed: int) -> void:
 		if changed == index or changed < 0:
 			queue_redraw())
+	# 아트 매니페스트 prop.farm_plot: 프레임 0 빈 칸 / 1 갈아 둠 / 2 자라는 중 / 3 다 자람. 없으면 _draw 의 자리표시
+	if ArtLibrary.has(ART_KEY):
+		_sprite = ArtLibrary.make_sprite(ART_KEY)
+		_sprite.stop()
+		add_child(_sprite)
 
 
 func _draw() -> void:
 	var plot := GameState.farm.get_plot(index)
 	if plot == null:
+		return
+	if _sprite != null:
+		var count := _sprite.sprite_frames.get_frame_count(_sprite.animation)
+		_sprite.frame = mini(int(plot.state), count - 1)
 		return
 	var half := plot_width * 0.5
 	var soil := Rect2(Vector2(-half, -6.0), Vector2(plot_width, 6.0))

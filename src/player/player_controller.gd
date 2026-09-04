@@ -8,7 +8,8 @@ signal interacted(target: Interactable)
 ## 부적 사용 요청: "throw" / "return" / "gather" (Q / R / G). ExpeditionSystem 이 받는다.
 signal talisman_requested(kind: String)
 
-const SPRITE_PATH := "res://assets/art_generated/player.png"
+## 아트 매니페스트 키 (art_assets.csv). 자리표시 폴백은 ArtLibrary 가 맡는다
+const ART_KEY := "char.player"
 const ACTION_THROW := &"talisman_throw"
 const ACTION_RETURN := &"talisman_return"
 const ACTION_GATHER := &"talisman_gather"
@@ -41,7 +42,7 @@ var _run_speed: float = 120.0
 var _climb_speed: float = 55.0
 var _gravity: float = 900.0
 var _max_fall: float = 400.0
-var _sprite: Sprite2D
+var _sprite: AnimatedSprite2D
 var _sensor: Area2D
 var _ladder_sensor: Area2D
 var _ladders: int = 0
@@ -68,11 +69,10 @@ func _ready() -> void:
 	collider.position = Vector2(0, -body.size.y * 0.5)  # 발이 position
 	add_child(collider)
 
-	_sprite = Sprite2D.new()
-	if ResourceLoader.exists(SPRITE_PATH):
-		_sprite.texture = load(SPRITE_PATH) as Texture2D
-		_sprite.position = Vector2(0, -_sprite.texture.get_height() * 0.5)
-	add_child(_sprite)
+	# 아트 매니페스트 char.player (없으면 자리표시 폴백). idle/walk 시트가 있으면 걷는 동안 walk 재생
+	_sprite = ArtLibrary.make_sprite(ART_KEY)
+	if _sprite != null:
+		add_child(_sprite)
 
 	_sensor = _make_sensor(Interactable.LAYER_BIT, tuning.get_float("player_interact_radius_px"), body.size.y * 0.5)
 	# 계단 겹침은 신호 카운트가 아니라 매 물리 프레임 겹친 영역 수로 본다 — place() 로 순간이동해도 어긋나지 않게
@@ -148,6 +148,8 @@ func _physics_process(delta: float) -> void:
 		facing = 1 if axis.x > 0.0 else -1
 		if _sprite != null:
 			_sprite.flip_h = facing < 0
+	if _sprite != null:
+		ArtLibrary.play(_sprite, ArtLibrary.ANIM_WALK if axis != Vector2.ZERO else ArtLibrary.ANIM_IDLE)
 	_refresh_target()
 
 

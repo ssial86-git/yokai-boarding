@@ -4,6 +4,9 @@ extends Interactable
 ## 자리표시: 재료별 팔레트 색 원. 캐고 나면 흐린 X.
 
 const TAKEN_ALPHA := 0.35
+const ART_KEY := "prop.gather_point"
+
+var _sprite: AnimatedSprite2D
 
 var region_id: String = ""
 var index: int = 0
@@ -24,12 +27,24 @@ func setup(region: String, point_index: int, gather_system: GatherSystem) -> voi
 	Events.gather_point_changed.connect(func(changed_region: String, changed: int) -> void:
 		if changed_region == region_id and (changed == index or changed < 0):
 			queue_redraw())
+	# 아트 매니페스트 prop.gather_point: 프레임 0 = 채집 가능, 1 = 캔 자리. 없으면 _draw 의 자리표시 원
+	if ArtLibrary.has(ART_KEY):
+		_sprite = ArtLibrary.make_sprite(ART_KEY)
+		_sprite.stop()
+		add_child(_sprite)
 
 
 func _draw() -> void:
 	var points := _gather_system.points_for(region_id)
 	var material_id := points.material_at(index)
 	if material_id.is_empty():
+		if _sprite != null:
+			_sprite.visible = false
+		return
+	if _sprite != null:
+		_sprite.visible = true
+		_sprite.frame = 1 if points.is_taken(index) and _sprite.sprite_frames.get_frame_count(_sprite.animation) > 1 else 0
+		_sprite.modulate = _gather_system.material_color(material_id)
 		return
 	var color := _gather_system.material_color(material_id)
 	var center := Vector2(0.0, -_size * 0.5)

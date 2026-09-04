@@ -41,6 +41,8 @@ var synergies: Dictionary = {}  # id -> SynergyData
 var market_prices: Dictionary = {}  # item_id -> MarketPriceData
 # --- P2-S4: 챕터·밤 변형 ---
 var chapters: Dictionary = {}  # id -> ChapterData
+## 아트 매니페스트 key -> ArtAssetData (ArtLibrary 가 푼다)
+var art_assets: Dictionary = {}
 ## 밤 변형 구역 id 접미. "<base>@night" 는 base 의 밤 풀·색으로 파생한 RegionData
 const NIGHT_SUFFIX := "@night"
 var _night_variants: Dictionary = {}  # variant id -> RegionData
@@ -83,6 +85,8 @@ func reload() -> void:
 	synergies = _load_dir(RESOURCE_ROOT + "synergies")
 	market_prices = _load_dir(RESOURCE_ROOT + "market_prices")
 	chapters = _load_dir(RESOURCE_ROOT + "chapters")
+	art_assets = _load_dir(RESOURCE_ROOT + "art_assets")
+	ArtLibrary.clear_cache()
 	_night_variants.clear()
 	tuning = _load_single(TUNING_PATH, TuningData.new()) as TuningData
 	strings = _load_single(STRINGS_PATH, StringTableData.new()) as StringTableData
@@ -211,6 +215,10 @@ func base_region_id(id: String) -> String:
 
 func get_chapter(id: String) -> ChapterData:
 	return chapters.get(id) as ChapterData
+
+
+func get_art_asset(key: String) -> ArtAssetData:
+	return art_assets.get(key) as ArtAssetData
 
 
 func get_enemy(id: String) -> EnemyData:

@@ -63,8 +63,7 @@ func _on_node_entered(node: DialogueGraph.DialogueNode, _event: EventData) -> vo
 	visible = true
 	_speaker.text = DataRegistry.speaker_name(node.speaker)
 	_text.text = node.text
-	var path := PORTRAIT_PATH % node.portrait
-	_portrait.texture = load(path) if not node.portrait.is_empty() and ResourceLoader.exists(path) else null
+	_portrait.texture = ArtLibrary.texture("illust.%s" % node.portrait) if not node.portrait.is_empty() else null
 	for child in _buttons.get_children():
 		_buttons.remove_child(child)
 		child.queue_free()

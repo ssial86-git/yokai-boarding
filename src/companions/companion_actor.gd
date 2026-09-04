@@ -18,7 +18,7 @@ var slot_index: int = 0
 ## (x: float) -> float 바닥 y
 var ground_y: Callable
 
-var _sprite: Sprite2D
+var _sprite: AnimatedSprite2D
 var _speed: float = 90.0
 var _leash: float = 140.0
 var _attack_range: float = 18.0
@@ -27,7 +27,7 @@ var _cooldown: float = 0.0
 var _size: float = 32.0
 
 
-func setup(id: String, texture: Texture2D, start_hp: int, attack_damage: int, interval: float, index: int, ground: Callable) -> void:
+func setup(id: String, start_hp: int, attack_damage: int, interval: float, index: int, ground: Callable) -> void:
 	yokai_id = id
 	name = "Companion_%s" % id
 	hp = start_hp
@@ -41,12 +41,12 @@ func setup(id: String, texture: Texture2D, start_hp: int, attack_damage: int, in
 	_leash = tuning.get_float("companion_leash_px", _leash)
 	_attack_range = tuning.get_float("companion_attack_range_px", _attack_range)
 	_follow_offset = tuning.get_float("companion_follow_offset_px", _follow_offset)
-	_sprite = Sprite2D.new()
-	_sprite.texture = texture
-	if texture != null:
-		_size = float(texture.get_height())
-		_sprite.position = Vector2(0, -_size * 0.5)
-	add_child(_sprite)
+	# 아트 매니페스트 char.<yokai_id> — 집 안 액터와 같은 시트를 쓴다 (없으면 자리표시 폴백)
+	var art_key := "char.%s" % id
+	_sprite = ArtLibrary.make_sprite(art_key)
+	if _sprite != null:
+		_size = float(ArtLibrary.frame_size(art_key).y)
+		add_child(_sprite)
 
 
 func is_alive() -> bool:
@@ -81,6 +81,9 @@ func tick(delta: float, player: Node2D, enemies: Array[EnemyActor]) -> void:
 		global_position.x += signf(to_goal) * minf(step, absf(to_goal))
 		if _sprite != null:
 			_sprite.flip_h = to_goal < 0.0
+			ArtLibrary.play(_sprite, ArtLibrary.ANIM_WALK)
+	elif _sprite != null:
+		ArtLibrary.play(_sprite, ArtLibrary.ANIM_IDLE)
 	if ground_y.is_valid():
 		global_position.y = float(ground_y.call(global_position.x))
 	queue_redraw()

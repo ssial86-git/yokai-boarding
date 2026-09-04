@@ -16,7 +16,10 @@ var state: State = State.IDLE
 ## (cell: Vector2i, slot: int) -> Vector2 발 위치(월드). YokaiManager 가 넣는다.
 var anchor_for: Callable
 
-var _sprite: Sprite2D
+## 아트 매니페스트 키(char.<id> / guest.<species>)로 만든 애니메이션 스프라이트. 그림이 없으면 null (보이지 않지만 규칙은 돈다)
+var _sprite: AnimatedSprite2D
+var _art_key: String = ""
+var _frame_h: float = 32.0
 ## 실수 위치. position 은 픽셀 스냅을 위해 여기서 반올림한 값만 받는다 (프레임당 이동량이 1px 미만이어도 누적되게).
 var _exact_position: Vector2 = Vector2.ZERO
 var _path: Array[Vector2i] = []
@@ -27,18 +30,18 @@ var _bob_seconds: float = 0.5
 var _time: float = 0.0
 
 
-func setup(id: String, texture: Texture2D, walk_speed: float, bob_px: float, bob_seconds: float) -> void:
+## art_key: ArtLibrary 키 (char.<yokai_id> / guest.<species_id>). 시트에 idle/walk/work 가 있으면 상태에 따라 재생한다.
+func setup(id: String, art_key: String, walk_speed: float, bob_px: float, bob_seconds: float) -> void:
 	yokai_id = id
 	name = "Yokai_%s" % id
 	_walk_speed = walk_speed
 	_bob_px = bob_px
 	_bob_seconds = bob_seconds
-	_sprite = Sprite2D.new()
-	_sprite.texture = texture
-	if texture != null:
-		# 발이 position 에 오도록 스프라이트를 위로 올린다
-		_sprite.position = Vector2(0, -texture.get_height() * 0.5)
-	add_child(_sprite)
+	_art_key = art_key
+	_sprite = ArtLibrary.make_sprite(art_key)
+	if _sprite != null:
+		_frame_h = float(ArtLibrary.frame_size(art_key).y)
+		add_child(_sprite)
 
 
 ## '또렷함' (어둑이): 스프라이트 투명도.
@@ -67,7 +70,7 @@ func set_glow(energy: float, radius_px: int, color: Color, texture: Texture2D) -
 	light.energy = energy
 	light.color = color
 	light.texture_scale = float(radius_px * 2) / float(texture.get_width()) if texture != null else 1.0
-	light.position = Vector2(0, -(_sprite.texture.get_height() * 0.5 if _sprite != null and _sprite.texture != null else 0.0))
+	light.position = Vector2(0, -(_frame_h * 0.5 if _sprite != null else 0.0))
 
 
 func place_at(cell: Vector2i, slot: int, then_state: State) -> void:
@@ -101,9 +104,10 @@ func _process(delta: float) -> void:
 		State.WALKING:
 			_step(delta)
 		State.WORKING:
-			if _sprite != null and _bob_seconds > 0.0:
+			# 시트에 work 애니메이션이 없으면(자리표시) 들썩임으로 대신한다
+			if _sprite != null and _bob_seconds > 0.0 and not ArtLibrary.has_anim(_art_key, ArtLibrary.ANIM_WORK):
 				var bob := absf(sin(_time * PI / _bob_seconds)) * _bob_px
-				_sprite.position.y = -_sprite.texture.get_height() * 0.5 - bob
+				_sprite.offset.y = -_frame_h * 0.5 - bob
 		_:
 			pass
 
@@ -140,8 +144,15 @@ func _finish_walk() -> void:
 func _set_state(new_state: State) -> void:
 	state = new_state
 	_time = 0.0
-	if _sprite != null and _sprite.texture != null:
-		_sprite.position.y = -_sprite.texture.get_height() * 0.5
+	if _sprite != null:
+		_sprite.offset.y = -_frame_h * 0.5
+		match new_state:
+			State.WALKING:
+				ArtLibrary.play(_sprite, ArtLibrary.ANIM_WALK)
+			State.WORKING:
+				ArtLibrary.play(_sprite, ArtLibrary.ANIM_WORK)
+			_:
+				ArtLibrary.play(_sprite, ArtLibrary.ANIM_IDLE)
 
 
 func _anchor(cell: Vector2i) -> Vector2:
