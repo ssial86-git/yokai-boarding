@@ -52,6 +52,7 @@ ENUMS: dict[str, set[str]] = {
     "unlock_type": {"region", "tool", "talisman", "enemy", "yokai", "event", "crop", "material", "fish", "verb", "feature",
                     "season_event", "festival", "recipe", "room", "species"},
     "goal_tier": {"today", "season", "long"},
+    "art_track": {"pixel", "illust", "ui"},
     "verb": {"walk", "gather", "farm", "cook", "fish", "craft", "talk", "intake", "assign", "build", "explore", "fight", "sleep"},
     "chain_content_type": {"material", "crop", "talisman", "fish", "recipe", "blessing"},
     "chain_use_kind": {"cook", "craft", "sell", "gift", "buff", "quest", "feed", "bait", "decor", "combat", "gather", "travel", "upgrade", "event", "farm"},
@@ -196,6 +197,19 @@ def parse_span(value: str) -> str:
 
 def door_ids(value: list[str]) -> list[str]:
     return [part.split(":")[0] for part in value]
+
+
+ANIM_PATTERN = re.compile(r"^[a-z_]+:\d+(-\d+)?(:\d+(\.\d+)?)?$")
+ART_KEY_PATTERN = re.compile(r"^(char|guest|enemy|npc|room|illust|region|prop|ui)\.[a-z0-9_.]+$")
+
+
+def parse_anims(value: str) -> str:
+    """애니메이션 구간 'name:first-last:fps;...' (art_assets.anims)."""
+    v = value.strip()
+    for part in filter(None, (p.strip() for p in v.split(LIST_SEPARATOR))):
+        if not ANIM_PATTERN.match(part):
+            raise ValueError(f"anims 형식 오류: {part!r} (name:first-last:fps)")
+    return v
 
 
 NPC_PATTERN = re.compile(r"^[a-z0-9_]+:[a-z0-9_]+:\d+$")
@@ -835,6 +849,25 @@ TABLES: list[Table] = [
             Column("summary_ko", parse_str),
         ],
     ),
+    # ------------------------------------------------------------ 아트 매니페스트 (tools/art/manifest_sync.py · Asset Studio)
+    Table(
+        name="art_assets",
+        csv_file="art_assets.csv",
+        script_class="ArtAssetData",
+        script_file="art_asset_data.gd",
+        key="key",
+        columns=[
+            Column("key", parse_str),
+            Column("track", parse_enum("art_track")),
+            Column("file", parse_str),  # 빈 값 = 자리표시 폴백 / 코드 그림
+            Column("frame_w", int),
+            Column("frame_h", int),
+            Column("anims", parse_anims),
+            Column("parallax", float),
+            Column("repeat", parse_bool),
+            Column("note", parse_str),
+        ],
+    ),
     Table(
         name="tuning",
         csv_file="tuning.csv",
@@ -1070,6 +1103,40 @@ def check_chapters(tables: dict[str, Table]) -> None:
             raise BuildError(f"regions.csv {row['_line']}행: night_enemy_pool 이 있으면 night_enemy_count 는 1 이상")
 
 
+def check_art_assets(tables: dict[str, Table]) -> None:
+    """키 형식, 파일 실재(res:// → 저장소 경로), 프레임이 이미지를 나누는지, 애니메이션 구간이 프레임 수 안인지."""
+    try:
+        from PIL import Image
+    except ImportError:  # Pillow 는 아트 검증에만 필요
+        Image = None
+    for row in tables["art_assets"].rows:
+        line, key, file = row["_line"], row["key"], row["file"]
+        if not ART_KEY_PATTERN.match(key):
+            raise BuildError(f"art_assets.csv {line}행: key 형식 오류 {key!r}")
+        if not file:
+            continue
+        if not file.startswith("res://"):
+            raise BuildError(f"art_assets.csv {line}행: file 은 res:// 경로여야 함 ({file!r})")
+        path = ROOT / file[len("res://"):]
+        if not path.exists():
+            raise BuildError(f"art_assets.csv {line}행: 파일 없음 {file}")
+        if (row["frame_w"] > 0) != (row["frame_h"] > 0):
+            raise BuildError(f"art_assets.csv {line}행: frame_w·frame_h 는 함께 0 이거나 함께 양수")
+        if Image is None or row["frame_w"] <= 0:
+            continue
+        with Image.open(path) as img:
+            width, height = img.size
+        if width % row["frame_w"] or height % row["frame_h"]:
+            raise BuildError(f"art_assets.csv {line}행: 이미지 {width}x{height} 가 프레임 {row['frame_w']}x{row['frame_h']} 로 나뉘지 않음")
+        total = (width // row["frame_w"]) * (height // row["frame_h"])
+        for part in filter(None, (p.strip() for p in row["anims"].split(LIST_SEPARATOR))):
+            _, span, *_ = part.split(":")
+            first, _, last = span.partition("-")
+            last_index = int(last) if last else int(first)
+            if last_index >= total:
+                raise BuildError(f"art_assets.csv {line}행: anims {part!r} 가 프레임 수 {total} 를 넘음")
+
+
 def check_chains(tables: dict[str, Table]) -> None:
     """재미 원칙 3 의 기계 강제: 용도 3칸이 전부 차야 하고(서로 다른 갈래), 대상 콘텐츠 전부가 사슬 행을 가져야 한다."""
     chains = tables["chains"]
@@ -1209,6 +1276,7 @@ def main(argv: list[str]) -> int:
         check_goals(tables)
         check_synergies(tables)
         check_chapters(tables)
+        check_art_assets(tables)
         check_chains(tables)
         for table in tables.values():
             if table.dict_value is not None:
