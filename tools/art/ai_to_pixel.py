@@ -2,7 +2,8 @@
 """AI 생성 이미지(ChatGPT 등) → 게임 규격 픽셀 이미지.
 
 생성 모델은 정확한 픽셀 격자를 못 지키므로, 큰 그림을 목표 크기로 상자(box) 축소한 뒤 공통 팔레트로 양자화한다.
-결과는 assets/art_generated/ai/ 에 두고, --key 를 주면 art_assets.csv 의 그 키에 바로 꽂는다 (빌드는 따로).
+--key 를 주면 assets/art_generated/ai/ 에 저장하고 art_assets.csv 의 그 키에 꽂는다 (빌드는 따로).
+키 없이 쓰면 비교용 목업이라 assets/art/mockups/ 에 둔다 (규격 검증 대상 아님 — 640x360 같은 비격자 크기 허용).
 
 예:
   python tools/art/ai_to_pixel.py shot.png --size 640x360 --name mock_house_day          # 화면 목업 비교용
@@ -30,6 +31,7 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "assets" / "art_generated" / "ai"
+MOCK_OUT = ROOT / "assets" / "art" / "mockups"
 MANIFEST = ROOT / "data" / "csv" / "art_assets.csv"
 RES_PREFIX = "res://assets/art_generated/ai/"
 GRID = 16
@@ -73,8 +75,9 @@ def main() -> int:
         small = im.resize((w, h), Image.BOX)
         result = quantize(small, load_palette(), tint, strength)
 
-    OUT.mkdir(parents=True, exist_ok=True)
-    dst = OUT / f"{name}.png"
+    out_dir = OUT if args.key else MOCK_OUT
+    out_dir.mkdir(parents=True, exist_ok=True)
+    dst = out_dir / f"{name}.png"
     result.save(dst)
     print(f"[ai_to_pixel] {args.src} -> {dst.relative_to(ROOT)} ({w}x{h})")
 
