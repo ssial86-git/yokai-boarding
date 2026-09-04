@@ -36,7 +36,15 @@ python tools/data/build_resources.py
 
 # 아트 검증 (규격/팔레트/파일명)
 python tools/art/validate_assets.py
+
+# 아트 매니페스트 동기화 (콘텐츠 CSV 의 모든 그림 키를 art_assets.csv 에 채움, 새 요괴·방·구역 추가 뒤)
+python tools/art/manifest_sync.py
+
+# 웹 Asset Studio (에셋 서재·스프라이트 테스트·화면 배치 A/B·매니페스트 저장) → http://127.0.0.1:8765
+python tools/art/studio/server.py
 ```
+
+그림은 코드에서 파일 경로를 직접 열지 않고 `ArtLibrary` 키(`char.<id>` / `room.<id>` / `region.<id>.sky` …)로만 얻는다. 키 규칙은 `src/core/resources/art_asset_data.gd`, 매니페스트는 `data/csv/art_assets.csv`.
 
 작업 완료 전 반드시 `--import` → 데이터 빌드 → 테스트 순으로 실행하고 결과를 보고한다. 테스트를 돌리지 않고 "될 것이다"라고 보고하지 않는다.
 
