@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="FestivalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/festival_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "f_baekjung"
+name_ko = "백중"
+season = "autumn"
+day_of_season = 15
+dish_recipe = "r_chestnut_rice"
+dish_target = 3
+guest_target = 2
+goal_ids = ["g_s3_rice", "g_s3_guests", "g_s3_species"]
+score_per_goal = 2
+score_per_guest = 1
+score_per_dish = 1
+reward_money = 350
+reward_reputation = 5
+perfect_reward_reputation = 5
+rare_guest_species = "g_geumjuri"
+decor_goal = "g_s3_rice"
+hint_ko = "백중. 밤밥을 지어 떠난 이들을 기린다 — 밤밥 3그릇·손님 둘·명부 네 종족이면 만점."

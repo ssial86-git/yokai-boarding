@@ -525,6 +525,8 @@ TABLES: list[Table] = [
             Column("min_rod_level", int),
             # 낚이면 아이템 대신 그날 밤 이 종족이 문을 두드린다 (P2-S3 우물 낚시 1% 손님). 비우면 보통 어종
             Column("visitor_species", parse_str, ref="guest_species"),
+            # 절기 어종 (P3-S1). any 면 늘
+            Column("season", parse_enum("season")),
         ],
     ),
     Table(

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_crop_pumpkin"
+day_min = 35
+expected_day = 35
+timeband = "morning"
+condition = "unlock:u_season_summer"
+unlock_type = "crop"
+unlock_id = "c_pumpkin"
+hint_ko = "호박 — 닷새. 호박전."

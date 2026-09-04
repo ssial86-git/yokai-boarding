@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/recipe_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "r_surichwi_tteok"
+name_ko = "수리취떡"
+tier = 3
+output_item = "dish_surichwi_tteok"
+output_count = 1
+ingredients = ["m_herb:2", "meal:1"]
+cook_seconds = 50.0
+buff_stat = "courage"
+buff_amount = 2

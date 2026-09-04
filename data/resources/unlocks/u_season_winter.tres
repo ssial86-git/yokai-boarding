@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_season_winter"
+day_min = 85
+expected_day = 85
+timeband = "morning"
+condition = ""
+unlock_type = "feature"
+unlock_id = "season_winter"
+hint_ko = "겨울이 왔다. 이승 작물은 쉬고 마계 작물만 자란다. 뒷산에 얼음조각."

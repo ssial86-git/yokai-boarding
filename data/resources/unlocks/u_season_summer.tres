@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_season_summer"
+day_min = 29
+expected_day = 29
+timeband = "morning"
+condition = ""
+unlock_type = "feature"
+unlock_id = "season_summer"
+hint_ko = "여름이 왔다. 오이·호박 씨앗은 회색 시장에서. 뒷산엔 산딸기가 열린다."

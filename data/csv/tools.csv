@@ -7,3 +7,7 @@ pickaxe_1,pickaxe,1,낡은 곡괭이,6,1,,
 pickaxe_2,pickaxe,2,벼린 곡괭이,5,2,wood:2;scrap:4,pickaxe_1
 rod_1,rod,1,대나무 낚싯대,3,1,,
 rod_2,rod,2,실 감은 낚싯대,3,2,wood:2;cloth:2,rod_1
+axe_3,axe,3,벼린 도끼,2,3,m_ore:2;m_ember_stone:1,axe_2
+hoe_3,hoe,3,벼린 괭이,2,3,m_ore:2;wood:2,hoe_2
+pickaxe_3,pickaxe,3,벼린 곡괭이,2,3,m_ember_stone:2;m_ore:2,pickaxe_2
+rod_3,rod,3,명주실 낚싯대,2,3,m_bamboo:2;cloth:1,rod_2

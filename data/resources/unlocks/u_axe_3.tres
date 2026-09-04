@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_axe_3"
+day_min = 39
+expected_day = 39
+timeband = "any"
+condition = "unlock:u_axe_2"
+unlock_type = "tool"
+unlock_id = "axe_3"
+hint_ko = "도끼를 한 번 더 벼릴 수 있다 (잿불돌)."

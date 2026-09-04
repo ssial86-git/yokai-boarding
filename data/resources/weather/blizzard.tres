@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="WeatherData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/weather_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "blizzard"
+name_ko = "눈보라"
+season = "winter"
+weight = 10
+yin_min = 3
+yin_max = 3
+mortal_guest_multiplier = 0.2
+demon_guest_multiplier = 2.0
+crop_water_bonus = 0.0

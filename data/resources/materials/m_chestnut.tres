@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="MaterialData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/material_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "m_chestnut"
+name_ko = "밤"
+realm = "mortal"
+source = "gather"
+tool_kind = "none"
+min_tool_level = 0
+season = "autumn"
+yin_condition = "any"
+rarity = "common"

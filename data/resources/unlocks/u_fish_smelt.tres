@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_fish_smelt"
+day_min = 93
+expected_day = 93
+timeband = "day"
+condition = "unlock:u_fishing"
+unlock_type = "fish"
+unlock_id = "f_smelt"
+hint_ko = "겨울 낮 개울에 빙어."

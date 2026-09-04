@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_se_meteor"
+day_min = 43
+expected_day = 43
+timeband = "day"
+condition = ""
+unlock_type = "season_event"
+unlock_id = "se_meteor"
+hint_ko = "유성우. 이틀 동안 채집물이 늘고 마계 손님이 별을 따라온다."

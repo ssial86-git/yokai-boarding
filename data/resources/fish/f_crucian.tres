@@ -12,3 +12,4 @@ weight = 4
 timeband = "any"
 min_rod_level = 1
 visitor_species = ""
+season = "any"

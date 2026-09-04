@@ -1,12 +1,14 @@
-id,name_ko,kind,region_id,weight,timeband,min_rod_level,visitor_species
-f_minnow,피라미,fish,r_stream,5,any,1,
-f_crucian,붕어,fish,r_stream,4,any,1,
-f_catfish,메기,fish,r_stream,2,night,1,
-f_sweetfish,은어,fish,r_stream,2,day,2,
-j_straw_shoe,낡은 짚신,junk,r_stream,3,any,1,
-j_clay_bottle,흙병,junk,r_stream,2,any,1,
-f_carp,잉어,fish,r_stream,2,evening,2,
-trinket,고물,junk,r_well,50,any,1,
-record_piece,기억 조각,fish,r_well,20,night,1,
-m_shadow_moss,그늘이끼,fish,r_well,9,any,1,
-f_wet_visitor,물에 젖은 손님,fish,r_well,1,any,1,g_usanson
+id,name_ko,kind,region_id,weight,timeband,min_rod_level,visitor_species,season
+f_minnow,피라미,fish,r_stream,5,any,1,,any
+f_crucian,붕어,fish,r_stream,4,any,1,,any
+f_catfish,메기,fish,r_stream,2,night,1,,any
+f_sweetfish,은어,fish,r_stream,2,day,2,,any
+j_straw_shoe,낡은 짚신,junk,r_stream,3,any,1,,any
+j_clay_bottle,흙병,junk,r_stream,2,any,1,,any
+f_carp,잉어,fish,r_stream,2,evening,2,,any
+trinket,고물,junk,r_well,50,any,1,,any
+record_piece,기억 조각,fish,r_well,20,night,1,,any
+m_shadow_moss,그늘이끼,fish,r_well,9,any,1,,any
+f_wet_visitor,물에 젖은 손님,fish,r_well,1,any,1,g_usanson,any
+f_eel,뱀장어,fish,r_stream,2,night,2,,summer
+f_smelt,빙어,fish,r_stream,3,day,1,,winter

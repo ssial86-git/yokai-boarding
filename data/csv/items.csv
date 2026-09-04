@@ -62,3 +62,19 @@ f_carp,잉어,fish,30
 f_wet_visitor,물에 젖은 손님,misc,0
 letter_collector,회수 집행관의 통지서,key,0
 m_moon_dew,달빛 이슬,material,12
+seed_cucumber,오이 씨앗,seed,4
+cucumber,오이,crop,7
+seed_pumpkin,호박 씨앗,seed,6
+pumpkin,호박,crop,12
+seed_buckwheat,메밀 씨앗,seed,5
+buckwheat,메밀,crop,9
+m_wild_berry,산딸기,material,8
+m_chestnut,밤,material,7
+m_pine_mushroom,송이,material,30
+m_ice_shard,얼음조각,material,10
+dish_surichwi_tteok,수리취떡,food,36
+dish_chestnut_rice,밤밥,food,30
+dish_cucumber_pickle,오이지,food,20
+dish_pumpkin_jeon,호박전,food,34
+f_eel,뱀장어,fish,40
+f_smelt,빙어,fish,14

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_hoe_3"
+day_min = 47
+expected_day = 47
+timeband = "any"
+condition = "unlock:u_hoe_2"
+unlock_type = "tool"
+unlock_id = "hoe_3"
+hint_ko = "괭이를 한 번 더 벼릴 수 있다."

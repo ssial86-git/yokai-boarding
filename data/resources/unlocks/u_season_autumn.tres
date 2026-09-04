@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_season_autumn"
+day_min = 57
+expected_day = 57
+timeband = "morning"
+condition = ""
+unlock_type = "feature"
+unlock_id = "season_autumn"
+hint_ko = "가을이 왔다. 뒷산에 밤과 송이. 메밀 씨앗은 회색 시장에서."

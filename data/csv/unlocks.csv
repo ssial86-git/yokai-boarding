@@ -53,3 +53,31 @@ u_well_fishing,19,19,day,unlock:u_fishing,feature,fishing_r_well,우물에 낚�
 u_chapter1,3,3,night,,feature,chapter_c1,성주 영감이 결계 이야기를 꺼낸다 — 할 일 [H] 장기에 챕터 목표가 적혔다.
 u_night_hill,21,21,night,unlock:u_back_hill,feature,night_r_back_hill,밤의 뒷산 — 밤에 문을 지나면 다른 곳이 된다. 달빛 이슬과 도깨비불.
 u_promotion,25,25,evening,,feature,promotion,자주 온 손님이 장기 계약을 청할 수 있다 (금줄이: 방문 2회·평판 5).
+u_season_summer,29,29,morning,,feature,season_summer,여름이 왔다. 오이·호박 씨앗은 회색 시장에서. 뒷산엔 산딸기가 열린다.
+u_crop_cucumber,31,31,morning,unlock:u_season_summer,crop,c_cucumber,오이 — 사흘이면 자란다. 오이지의 재료.
+u_festival_dano,33,33,morning,,festival,f_dano,단옷날. 저녁에 수리취떡을 나누고 채점한다.
+u_crop_pumpkin,35,35,morning,unlock:u_season_summer,crop,c_pumpkin,호박 — 닷새. 호박전.
+u_material_berry,37,37,day,unlock:u_season_summer,material,m_wild_berry,뒷산에 산딸기가 열렸다.
+u_axe_3,39,39,any,unlock:u_axe_2,tool,axe_3,도끼를 한 번 더 벼릴 수 있다 (잿불돌).
+u_recipe_pickle,41,41,day,unlock:u_recipes_tier2,recipe,r_cucumber_pickle,오이지 — 여름 저장 음식.
+u_se_meteor,43,43,day,,season_event,se_meteor,유성우. 이틀 동안 채집물이 늘고 마계 손님이 별을 따라온다.
+u_recipe_pumpkin_jeon,45,45,day,unlock:u_recipes_tier3,recipe,r_pumpkin_jeon,호박전 — 눈이 밝아지는 요리.
+u_hoe_3,47,47,any,unlock:u_hoe_2,tool,hoe_3,괭이를 한 번 더 벼릴 수 있다.
+u_fish_eel,49,49,day,unlock:u_rod_2,fish,f_eel,여름 밤 개울에 뱀장어가 올라온다 (낚싯대 Lv2).
+u_se_heat,51,51,morning,,season_event,se_heat,삼복. 이틀 동안 폭염 — 텃밭에 물을 자주 줘야 한다.
+u_pickaxe_3,53,53,any,unlock:u_pickaxe_2,tool,pickaxe_3,곡괭이를 한 번 더 벼릴 수 있다.
+u_autumn_notice,55,55,morning,,feature,autumn_notice,이틀 뒤 가을. 메밀 씨앗과 밤·송이가 온다.
+u_season_autumn,57,57,morning,,feature,season_autumn,가을이 왔다. 뒷산에 밤과 송이. 메밀 씨앗은 회색 시장에서.
+u_crop_buckwheat,59,59,morning,unlock:u_season_autumn,crop,c_buckwheat,메밀 — 나흘.
+u_material_chestnut,61,61,day,unlock:u_season_autumn,material,m_chestnut,뒷산에 밤이 떨어진다.
+u_se_typhoon,64,64,morning,,season_event,se_typhoon,태풍. 이틀 동안 비 — 채집물이 반으로 준다.
+u_recipe_chestnut_rice,66,66,day,unlock:u_recipes_tier3,recipe,r_chestnut_rice,밤밥 — 백중 음식.
+u_festival_baekjung,71,71,morning,,festival,f_baekjung,백중. 저녁에 밤밥을 나누고 채점한다.
+u_se_foliage,74,74,morning,,season_event,se_foliage,단풍 절정. 이틀 동안 채집물이 늘고 손님이 구경 온다.
+u_rod_3,78,78,any,unlock:u_rod_2,tool,rod_3,낚싯대에 명주실을 감았다.
+u_season_winter,85,85,morning,,feature,season_winter,겨울이 왔다. 이승 작물은 쉬고 마계 작물만 자란다. 뒷산에 얼음조각.
+u_se_first_snow,89,89,morning,,season_event,se_first_snow,첫눈. 이틀 동안 눈 — 음기가 오른다.
+u_material_ice,91,91,day,unlock:u_season_winter,material,m_ice_shard,뒷산에 얼음조각이 맺혔다.
+u_fish_smelt,93,93,day,unlock:u_fishing,fish,f_smelt,겨울 낮 개울에 빙어.
+u_se_blizzard,104,104,morning,,season_event,se_blizzard,눈보라. 이틀 동안 음기가 짙다.
+u_year_end,112,112,morning,,feature,year_end,겨울 마지막 날. 내일은 다시 봄 — 한 해가 돌았다.

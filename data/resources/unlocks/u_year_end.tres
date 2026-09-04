@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_year_end"
+day_min = 112
+expected_day = 112
+timeband = "morning"
+condition = ""
+unlock_type = "feature"
+unlock_id = "year_end"
+hint_ko = "겨울 마지막 날. 내일은 다시 봄 — 한 해가 돌았다."

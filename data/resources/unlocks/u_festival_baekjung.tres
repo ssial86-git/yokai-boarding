@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_festival_baekjung"
+day_min = 71
+expected_day = 71
+timeband = "morning"
+condition = ""
+unlock_type = "festival"
+unlock_id = "f_baekjung"
+hint_ko = "백중. 저녁에 밤밥을 나누고 채점한다."

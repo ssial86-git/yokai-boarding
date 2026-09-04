@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SeasonEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/season_event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "se_heat"
+name_ko = "삼복"
+season = "summer"
+day_of_season = 23
+duration_days = 2
+weather_override = "heat"
+gather_multiplier = 1.0
+demon_guest_multiplier = 0.8
+hint_ko = "삼복 더위. 이틀 동안 폭염 — 텃밭에 물을 자주 줘야 한다."

@@ -317,5 +317,11 @@ values = {
 "ui_goal_chapter_done": "챕터 {order} 「{name}」 — 진행 중 (P3)",
 "msg_promotion_offer": "{name}이(가) 오늘 저녁 장기 계약을 청하러 온다",
 "ui_intake_card_promotion": "{name}\n{first_words}\n장기 계약을 청한다 — 받으면 하숙생이 된다",
-"msg_promoted": "{name}이(가) 장기 계약을 맺고 하숙생이 되었다"
+"msg_promoted": "{name}이(가) 장기 계약을 맺고 하숙생이 되었다",
+"weather_heat": "폭염",
+"weather_shower": "소나기",
+"weather_wind": "갈바람",
+"weather_frost": "서리",
+"weather_snow": "눈",
+"weather_blizzard": "눈보라"
 }

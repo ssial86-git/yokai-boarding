@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SeasonEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/season_event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "se_meteor"
+name_ko = "유성우"
+season = "summer"
+day_of_season = 15
+duration_days = 2
+weather_override = ""
+gather_multiplier = 1.3
+demon_guest_multiplier = 1.2
+hint_ko = "별이 떨어진다. 이틀 동안 채집물이 늘고 마계 손님이 별을 따라온다."

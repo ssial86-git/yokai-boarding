@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_s2_guests"
+tier = "season"
+name_ko = "손님 여덟 번 맞이"
+condition = "ledger>=8"
+day_min = 29
+day_max = 56
+festival_id = "f_dano"
+reward_money = 0
+reward_reputation = 2
+hint_ko = "저녁 심사에서 받은 손님 누계."

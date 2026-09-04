@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_festival_dano"
+day_min = 33
+expected_day = 33
+timeband = "morning"
+condition = ""
+unlock_type = "festival"
+unlock_id = "f_dano"
+hint_ko = "단옷날. 저녁에 수리취떡을 나누고 채점한다."

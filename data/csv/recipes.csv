@@ -13,3 +13,7 @@ r_ash_pepper_stew,잿빛 고추찜,2,dish_ash_pepper_stew,1,ash_pepper:1;meal:1;
 r_shadow_stew,그늘탕,2,dish_shadow_stew,1,m_shadow_moss:1;m_mushroom:1,60,skill,2
 r_patjuk,동지 팥죽,3,dish_patjuk,1,m_red_bean:2;meal:1,60,courage,2
 r_red_bean_rice,팥밥,3,dish_red_bean_rice,2,m_red_bean:1;meal:1,30,none,0
+r_surichwi_tteok,수리취떡,3,dish_surichwi_tteok,1,m_herb:2;meal:1,50,courage,2
+r_chestnut_rice,밤밥,3,dish_chestnut_rice,2,m_chestnut:2;meal:1,40,strength,1
+r_cucumber_pickle,오이지,2,dish_cucumber_pickle,2,cucumber:2;m_spring_water:1,30,skill,1
+r_pumpkin_jeon,호박전,3,dish_pumpkin_jeon,1,pumpkin:1;meal:1,45,sight,2

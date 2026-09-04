@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_se_heat"
+day_min = 51
+expected_day = 51
+timeband = "morning"
+condition = ""
+unlock_type = "season_event"
+unlock_id = "se_heat"
+hint_ko = "삼복. 이틀 동안 폭염 — 텃밭에 물을 자주 줘야 한다."

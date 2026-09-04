@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_rod_3"
+day_min = 78
+expected_day = 78
+timeband = "any"
+condition = "unlock:u_rod_2"
+unlock_type = "tool"
+unlock_id = "rod_3"
+hint_ko = "낚싯대에 명주실을 감았다."

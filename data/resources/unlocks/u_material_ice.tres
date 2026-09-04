@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_material_ice"
+day_min = 91
+expected_day = 91
+timeband = "day"
+condition = "unlock:u_season_winter"
+unlock_type = "material"
+unlock_id = "m_ice_shard"
+hint_ko = "뒷산에 얼음조각이 맺혔다."

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_s3_species"
+tier = "season"
+name_ko = "명부 네 종족 (가을)"
+condition = "species>=4"
+day_min = 57
+day_max = 84
+festival_id = "f_baekjung"
+reward_money = 0
+reward_reputation = 2
+hint_ko = "절기·음기에 따라 오는 손님이 다르다."

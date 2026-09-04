@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_se_first_snow"
+day_min = 89
+expected_day = 89
+timeband = "morning"
+condition = ""
+unlock_type = "season_event"
+unlock_id = "se_first_snow"
+hint_ko = "첫눈. 이틀 동안 눈 — 음기가 오른다."

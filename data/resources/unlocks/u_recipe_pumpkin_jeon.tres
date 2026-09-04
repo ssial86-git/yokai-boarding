@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_recipe_pumpkin_jeon"
+day_min = 45
+expected_day = 45
+timeband = "day"
+condition = "unlock:u_recipes_tier3"
+unlock_type = "recipe"
+unlock_id = "r_pumpkin_jeon"
+hint_ko = "호박전 — 눈이 밝아지는 요리."

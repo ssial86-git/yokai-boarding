@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="FestivalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/festival_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "f_dano"
+name_ko = "단오"
+season = "summer"
+day_of_season = 5
+dish_recipe = "r_surichwi_tteok"
+dish_target = 3
+guest_target = 2
+goal_ids = ["g_s2_tteok", "g_s2_guests", "g_s2_floor"]
+score_per_goal = 2
+score_per_guest = 1
+score_per_dish = 1
+reward_money = 300
+reward_reputation = 5
+perfect_reward_reputation = 5
+rare_guest_species = "g_geumjuri"
+decor_goal = "g_s2_tteok"
+hint_ko = "단옷날. 수리취떡을 나누고 그네를 맨다 — 떡 3그릇·손님 둘·2층이면 만점."

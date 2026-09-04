@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_chestnut"
+tier = "today"
+name_ko = "밤 열 개"
+condition = "count:gather.m_chestnut>=10"
+day_min = 61
+day_max = 75
+festival_id = ""
+reward_money = 60
+reward_reputation = 1
+hint_ko = "가을 뒷산."

@@ -15,3 +15,7 @@ m_ember_stone,잿불돌,demon,mine,pickaxe,1,any,any,uncommon
 m_shadow_moss,그늘이끼,demon,gather,none,0,any,high,rare
 m_red_bean,팥,mortal,gather,none,0,spring,any,uncommon
 m_moon_dew,달빛 이슬,mortal,gather,none,0,any,any,uncommon
+m_wild_berry,산딸기,mortal,gather,none,0,summer,any,common
+m_chestnut,밤,mortal,gather,none,0,autumn,any,common
+m_pine_mushroom,송이,mortal,gather,none,0,autumn,high,rare
+m_ice_shard,얼음조각,mortal,gather,none,0,winter,any,uncommon

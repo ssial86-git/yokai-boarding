@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_s3_rice"
+tier = "season"
+name_ko = "백중 밤밥 세 그릇"
+condition = "item:dish_chestnut_rice>=3"
+day_min = 57
+day_max = 71
+festival_id = "f_baekjung"
+reward_money = 0
+reward_reputation = 2
+hint_ko = "뒷산 밤 둘·밥 하나."

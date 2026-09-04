@@ -25,3 +25,15 @@ g_c1_residents,long,하숙생 셋,residents>=3,1,0,,0,2,뜨내기가 자주 오�
 g_c1_floor,long,2층 결계,floors>=2,1,0,,0,2,집이 클수록 결계가 단단하다.
 g_c1_market,long,회색 장꾼과 인사,flag:merchant_met,1,0,,0,1,음기 짙은 날이나 밤에 우물 아래로.
 g_c1_festival,long,동지 6점 이상,festival:f_dongji>=6,1,0,,0,2,팥죽·손님·객실.
+g_s2_tteok,season,단오 수리취떡 세 그릇,item:dish_surichwi_tteok>=3,29,33,f_dano,0,2,약초 둘·밥 하나. 단옷날 저녁에 나눈다.
+g_s2_guests,season,손님 여덟 번 맞이,ledger>=8,29,56,f_dano,0,2,저녁 심사에서 받은 손님 누계.
+g_s2_floor,season,2층 (여름),floors>=2,29,56,f_dano,0,2,점선 칸에서 E — 증축.
+g_s3_rice,season,백중 밤밥 세 그릇,item:dish_chestnut_rice>=3,57,71,f_baekjung,0,2,뒷산 밤 둘·밥 하나.
+g_s3_guests,season,손님 열두 번 맞이,ledger>=12,57,84,f_baekjung,0,2,저녁 심사에서 받은 손님 누계.
+g_s3_species,season,명부 네 종족 (가을),species>=4,57,84,f_baekjung,0,2,절기·음기에 따라 오는 손님이 다르다.
+g_t_cucumber,today,오이 수확,count:farm.harvest.c_cucumber>=1,31,40,,60,1,회색 시장에서 오이 씨앗을 산다. 사흘이면 자란다.
+g_t_berry,today,산딸기 다섯,count:gather.m_wild_berry>=5,37,48,,50,1,여름 뒷산.
+g_t_pickle,today,오이지 담그기,count:cook.r_cucumber_pickle>=1,41,50,,60,1,오이 둘·샘물 하나.
+g_t_eel,today,뱀장어 낚기,count:fish.f_eel>=1,49,56,,80,1,여름 밤 개울. 낚싯대 Lv2.
+g_t_chestnut,today,밤 열 개,count:gather.m_chestnut>=10,61,75,,60,1,가을 뒷산.
+g_t_smelt,today,빙어 낚기,count:fish.f_smelt>=1,93,112,,80,1,겨울 낮 개울.

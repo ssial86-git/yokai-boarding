@@ -16,3 +16,5 @@ extends Resource
 @export var min_rod_level: int = 1
 ## 낚이면 아이템 대신 그날 밤 이 종족(guest_species.csv)이 문을 두드린다. 비우면 보통 어종 (P2-S3)
 @export var visitor_species: String = ""
+## any 또는 절기 id — 그 절기에만 걸린다 (P3-S1)
+@export var season: String = "any"

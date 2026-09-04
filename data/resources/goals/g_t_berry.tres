@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="GoalData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/goal_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_t_berry"
+tier = "today"
+name_ko = "산딸기 다섯"
+condition = "count:gather.m_wild_berry>=5"
+day_min = 37
+day_max = 48
+festival_id = ""
+reward_money = 50
+reward_reputation = 1
+hint_ko = "여름 뒷산."

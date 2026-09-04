@@ -48,3 +48,14 @@ blessing,b_ttukttagi,farm:seed_yield,buff:dish_strength,combat:talisman_throw
 blessing,b_eoduki,farm:seed_yield,buff:dish_courage,gather:talisman_gather
 blessing,b_dalgael,farm:demon_seed,buff:dish_sight,sell:market
 material,m_moon_dew,sell:market,gift:y03_dalgael,buff:sight
+crop,c_cucumber,cook:cucumber_pickle,sell:market,feed:g_ibulnang
+crop,c_pumpkin,cook:pumpkin_jeon,sell:market,gift:y01_ttukttagi
+crop,c_buckwheat,cook:buckwheat_noodle,sell:market,feed:guests
+material,m_wild_berry,sell:market,gift:y03_dalgael,buff:skill
+material,m_chestnut,cook:chestnut_rice,sell:market,event:f_baekjung
+material,m_pine_mushroom,sell:market,gift:y02_eoduki,buff:sight
+material,m_ice_shard,sell:market,craft:talisman_cold,quest:chapter2
+recipe,r_surichwi_tteok,event:f_dano,buff:courage,sell:market
+recipe,r_chestnut_rice,event:f_baekjung,buff:strength,sell:market
+recipe,r_cucumber_pickle,buff:skill,sell:market,feed:g_ibulnang
+recipe,r_pumpkin_jeon,buff:sight,sell:market,gift:y01_ttukttagi

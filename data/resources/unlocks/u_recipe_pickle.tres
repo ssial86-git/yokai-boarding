@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_recipe_pickle"
+day_min = 41
+expected_day = 41
+timeband = "day"
+condition = "unlock:u_recipes_tier2"
+unlock_type = "recipe"
+unlock_id = "r_cucumber_pickle"
+hint_ko = "오이지 — 여름 저장 음식."

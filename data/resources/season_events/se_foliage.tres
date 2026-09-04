@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="SeasonEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/season_event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "se_foliage"
+name_ko = "단풍 절정"
+season = "autumn"
+day_of_season = 18
+duration_days = 2
+weather_override = ""
+gather_multiplier = 1.2
+demon_guest_multiplier = 1.0
+hint_ko = "뒷산이 붉다. 이틀 동안 채집물이 늘고 손님이 구경 온다."
