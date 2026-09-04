@@ -128,7 +128,7 @@ func material_color(material_id: String) -> Color:
 func _roll(region: RegionData) -> GatherPoints:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash("%d:%d:%s" % [GameState.rng.seed, GameState.day, region.id])
-	var points := GatherPoints.roll(region, DataRegistry.materials, rng, GameState.is_yin_high())
+	var points := GatherPoints.roll(region, DataRegistry.materials, rng, GameState.is_yin_high(), GameState.calendar.season_id)
 	var state := GameState.region_state(region.id)
 	state["gather_materials"] = Array(points.material_ids)
 	state["gather_taken"] = []

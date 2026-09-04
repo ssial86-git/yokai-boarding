@@ -102,7 +102,7 @@ func cancel() -> void:
 func _finish(hit: bool) -> String:
 	var finished_region := region_id
 	var rod_level := int(GameState.tools.get(TOOL_ROD, 0))
-	var pool := Fishing.candidates(DataRegistry.fish, finished_region, Clock.band_name(), rod_level)
+	var pool := Fishing.candidates(DataRegistry.fish, finished_region, Clock.band_name(), rod_level, true, GameState.calendar.season_id)
 	if unlock_system != null:
 		# unlocks.csv 가 가리키는 어종(fish 타입)은 열려야 걸린다 (P2-S2 잉어)
 		pool = pool.filter(func(fish: FishData) -> bool: return unlock_system.is_target_open(UNLOCK_TYPE_FISH, fish.id))

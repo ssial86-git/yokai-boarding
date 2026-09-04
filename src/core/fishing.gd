@@ -36,12 +36,17 @@ static func new_cast(rng: RandomNumberGenerator, window_ratio: float, cycles_per
 
 
 ## 이 구역·시간대·낚싯대로 낚을 수 있는 어종(고물 포함).
-static func candidates(fish_catalog: Dictionary, region_id: String, timeband: String, rod_level: int, include_junk: bool = true) -> Array[FishData]:
+## season_id 를 주면 절기 어종(fish.season)은 그 절기에만 걸린다 (P3-S1).
+static func candidates(
+	fish_catalog: Dictionary, region_id: String, timeband: String, rod_level: int, include_junk: bool = true, season_id: String = ""
+) -> Array[FishData]:
 	var result: Array[FishData] = []
 	for fish: FishData in fish_catalog.values():
 		if fish.region_id != region_id:
 			continue
 		if fish.timeband != TIMEBAND_ANY and fish.timeband != timeband:
+			continue
+		if not season_id.is_empty() and fish.season != TIMEBAND_ANY and fish.season != season_id:
 			continue
 		if fish.min_rod_level > rod_level:
 			continue

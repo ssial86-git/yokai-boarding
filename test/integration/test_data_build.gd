@@ -43,12 +43,12 @@ func test_p2_season_tables_loaded_and_typed() -> void:
 	assert_int(spring.length_days).is_equal(28)
 	assert_str(spring.next_id).is_equal("summer")
 	assert_str(DataRegistry.get_season("winter").next_id).is_equal("spring")
-	assert_int(DataRegistry.weather.size()).is_equal(4)
+	assert_int(DataRegistry.weather.size()).is_equal(10)  # 봄 4 + 여름·가을·겨울 6 (P3-S1)
 	var haze := DataRegistry.get_weather("moon_haze")
 	assert_int(haze.yin_min).is_equal(3)
 	assert_float(haze.demon_guest_multiplier).is_equal(2.0)
 	assert_float(DataRegistry.get_weather("rain").crop_water_bonus).is_equal(1.0)
-	assert_int(DataRegistry.season_events.size()).is_equal(2)
+	assert_int(DataRegistry.season_events.size()).is_equal(8)  # 소절기 8 (P3-S1 로 완성)
 	var monsoon := DataRegistry.get_season_event("se_rain_start")
 	assert_str(monsoon.weather_override).is_equal("rain")
 	assert_int(monsoon.day_of_season).is_equal(10)
@@ -68,7 +68,7 @@ func test_p2_goal_and_festival_tables_loaded_and_typed() -> void:
 	var patjuk_goal := DataRegistry.get_goal("g_s_patjuk")
 	assert_str(patjuk_goal.condition).is_equal("item:dish_patjuk>=3")
 	assert_str(patjuk_goal.festival_id).is_equal("f_dongji")
-	assert_int(DataRegistry.festivals.size()).is_equal(1)
+	assert_int(DataRegistry.festivals.size()).is_equal(3)  # 동지 + 단오·백중 (P3-S1)
 	var dongji := DataRegistry.get_festival("f_dongji")
 	assert_str(dongji.season).is_equal("spring")
 	assert_int(dongji.day_of_season).is_equal(28)
@@ -111,6 +111,24 @@ func test_p2_blessing_market_tables_loaded_and_typed() -> void:
 	assert_str(DataRegistry.get_item("seed_radish@b_ttukttagi").kind).is_equal("seed")
 
 
+## P3-S1 4절기 콘텍츠: 절기별 날씨·소절기 8·명절 3, 절기 작물 3·재료 4·어종 2, 도구 Lv3.
+func test_p3_season_content_tables() -> void:
+	for season_id in ["summer", "autumn", "winter"]:
+		assert_int(WeatherRoll.eligible(DataRegistry.weather, season_id).size()).is_greater_equal(4)
+		var events := Calendar.start(DataRegistry.seasons, season_id).events_in_season(DataRegistry.season_events)
+		assert_int(events.size()).is_equal(2)
+	assert_str(DataRegistry.get_festival("f_dano").season).is_equal("summer")
+	assert_int(DataRegistry.get_festival("f_dano").day_of_season).is_equal(5)
+	assert_str(DataRegistry.get_festival("f_baekjung").season).is_equal("autumn")
+	assert_str(DataRegistry.get_crop("c_cucumber").season).is_equal("summer")
+	assert_str(DataRegistry.get_crop("c_buckwheat").season).is_equal("autumn")
+	assert_str(DataRegistry.get_material("m_chestnut").season).is_equal("autumn")
+	assert_str(DataRegistry.get_fish("f_eel").season).is_equal("summer")
+	assert_str(DataRegistry.get_fish("f_minnow").season).is_equal("any")
+	assert_int(DataRegistry.get_tool("axe_3").level).is_equal(3)
+	assert_int(DataRegistry.get_unlock("u_year_end").expected_day).is_equal(112)
+
+
 ## P2-S4 챕터·승격·밤 변형 데이터: 챕터 1 게이트 4 중 2, 금줄이 승격 행, 뒷산 밤 변형 파생 리소스, 챕터 대화 8 + 금줄이 1막.
 func test_p2_chapter_promotion_night_tables() -> void:
 	assert_int(DataRegistry.chapters.size()).is_equal(2)
@@ -147,7 +165,7 @@ func test_p2_chapter_promotion_night_tables() -> void:
 ## P1 신설 스키마 10종이 로드되고 타입이 맞는지 (행 수는 콘텐츠 수를 고정하지 않도록 최소치만 본다).
 func test_p1_tables_loaded_and_typed() -> void:
 	assert_int(DataRegistry.talismans.size()).is_equal(3)
-	assert_int(DataRegistry.tools.size()).is_equal(8)
+	assert_int(DataRegistry.tools.size()).is_equal(12)  # 4갈래 × Lv1~3 (P3-S1 에서 Lv3 추가)
 	assert_int(DataRegistry.regions.size()).is_greater_equal(6)
 	assert_int(DataRegistry.enemies.size()).is_greater_equal(3)
 	assert_int(DataRegistry.unlocks.size()).is_greater_equal(20)

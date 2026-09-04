@@ -55,6 +55,39 @@ func test_28_days_roll_spring_into_summer_with_season_events() -> void:
 
 
 ## 같은 시드·같은 날이면 같은 날씨 (tuning visitor_seed 가 0 이면 새 게임마다 무작위라 여기서 시드를 고정한다).
+## P3-S1: 112일 자동 진행 — 4절기가 돌아 다시 봄, 매일 날씨가 그 절기의 표 안, 소절기 8·명절 3이 제 날에 시작한다.
+func test_112_days_cycle_four_seasons_with_events_and_festivals() -> void:
+	var festival_system: FestivalSystem = auto_free(FestivalSystem.new())
+	add_child(festival_system)
+	var log := {"seasons": [], "events": [], "festivals": [], "bad_weather": []}
+	var on_season := func(season_id: String) -> void: (log["seasons"] as Array).append(season_id)
+	var on_event := func(event_id: String) -> void: (log["events"] as Array).append(event_id)
+	var on_festival := func(festival_id: String, _decorated: bool) -> void: (log["festivals"] as Array).append(festival_id)
+	var on_weather := func(weather_id: String, _yin: int) -> void:
+		var weather := DataRegistry.get_weather(weather_id)
+		if weather == null or (weather.season != WeatherRoll.SEASON_ANY and weather.season != GameState.calendar.season_id):
+			(log["bad_weather"] as Array).append("%d:%s" % [GameState.day, weather_id])
+	Events.season_changed.connect(on_season)
+	Events.season_event_started.connect(on_event)
+	Events.festival_started.connect(on_festival)
+	Events.weather_rolled.connect(on_weather)
+	Clock.start_day()
+	for _i in 112:
+		Clock.sleep()
+	Events.season_changed.disconnect(on_season)
+	Events.season_event_started.disconnect(on_event)
+	Events.festival_started.disconnect(on_festival)
+	Events.weather_rolled.disconnect(on_weather)
+	assert_int(GameState.day).is_equal(113)
+	assert_array(log["seasons"]).contains_exactly(["summer", "autumn", "winter", "spring"])
+	assert_str(GameState.calendar.season_id).is_equal("spring")
+	assert_int(GameState.calendar.day_of_season).is_equal(1)
+	assert_array(log["bad_weather"]).is_empty()
+	assert_array(log["events"]).contains_exactly([
+		"se_rain_start", "se_full_moon", "se_meteor", "se_heat", "se_typhoon", "se_foliage", "se_first_snow", "se_blizzard"])
+	assert_array(log["festivals"]).contains_exactly(["f_dongji", "f_dano", "f_baekjung"])
+
+
 func test_weather_roll_is_deterministic_per_seed_and_day() -> void:
 	GameState.rng.seed = 4242
 	Clock.start_day()
