@@ -184,3 +184,11 @@ d_y05_act3,start,y05_geumjuri,새 매듭을 지었다. 문턱·부엌·객실·�
 d_y05_act3,2,y05_geumjuri,새끼줄은 걸어 주는 사람이 있어야 새끼줄이야. 여기 오기 전엔 그냥 짚이었어.,y05_geumjuri,3,,,,,
 d_y05_act3,3,player,오래 걸려 있어 줘.,,4,,,,,
 d_y05_act3,4,y05_geumjuri,"장기 계약이잖나. 하숙부에 적어 둬 — 금줄이, 이 집 문턱 담당.",y05_geumjuri,end,,,,,affinity:+1;flag:clue_y05_done
+d_c2_map,start,seongju,바리가 문서고 자리를 말했다지. 잿빛 들 심부 너머 외곽 관청. 자네 아버지도 그 길로 갔어.,seongju,2,,,,,
+d_c2_map,2,seongju,서두르지 마라. 집행관이 그 문을 지킨다. 하숙생이 여섯은 되고 결계가 두 층은 서야 문턱이 버틴다.,seongju,3,,,,,
+d_c2_map,3,player,여섯. 그리고 두 층.,,4,,,,,
+d_c2_map,4,seongju,그리고 명절 하나쯤은 제대로 치러 보게. 결계는 사람이 모이는 만큼도 강해지니.,seongju,end,,,,,flag:c2_map_heard
+d_y01_epilogue,start,y01_ttukttagi,방망이를 벽에 걸었어. 작업장 위에. …도망칠 때 챙기던 건데.,y01_ttukttagi,2,,,,,
+d_y01_epilogue,2,player,안 챙겨도 돼?,,3,,,,,
+d_y01_epilogue,3,y01_ttukttagi,여기 살 거니까. 도깨비가 방망이를 걸어 두면 그 집이 제 집이라는 뜻이야. 옛날 사람들은 다 알았대.,y01_ttukttagi,4,,,,,
+d_y01_epilogue,4,y01_ttukttagi,하숙부에 적어. 뚝딱이 — 정착. 시끄러운 건 안 고칠 거야.,y01_ttukttagi,end,,,,,affinity:+1;flag:settled_y01

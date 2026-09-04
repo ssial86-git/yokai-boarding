@@ -25,6 +25,8 @@ CSV_DIR = ROOT / "data" / "csv"
 
 CADENCE_WINDOW_MINUTES = 30.0
 DELEGATION_TARGET_DAYS = (6, 8)
+# P3-S4 자동화 전환: 위임 슬롯이 전부 열린 뒤 하루 산출 가치의 절반 이상이 위임으로 나와야 한다 (docs/04 P3-S4)
+DELEGATION_SHARE_TARGET = 0.5
 # 가정: 하루 중 시간대 시작 시각을 분으로 바꿀 때 쓰는 비율 (unlocks.timeband). any 는 하루 시작.
 TIMEBAND_RATIO = {"any": 0.0, "morning": 0.0, "day": 0.2, "evening": 0.6, "night": 0.78}
 
@@ -133,6 +135,49 @@ def delegation_table(tune: dict, unlocks, crops, materials, items, regions, room
     return table, crossover
 
 
+def delegation_share(tune: dict, unlocks, crops, materials, items, regions, fish_rows, days: int) -> tuple[list[dict], float, int | None]:
+    """하루 산출 가치(텃밭·채집·낚시·판매) 중 위임 슬롯이 대신 내는 비율. 슬롯은 해금 날부터 효율 계수로 일한다."""
+    efficiency = float(tune["automation_efficiency"])
+    plots_initial = int(tune["farm_plots_initial"])
+    plots_max = int(tune["farm_plots_max"])
+    expand_day = unlock_day(unlocks, "u_farm_plots_12", 8)
+    crop_value = average_crop_value_per_day(crops, items)
+    gather_value = average_gather_value(regions, materials, items)
+    hill = next((r for r in regions if r["id"] == tune.get("delegate_gather_region", "r_back_hill")), None)
+    gather_points = int(hill["gather_point_count"]) if hill else 0
+    casts = int(tune.get("delegate_fishing_casts", 2))
+    stream_fish = [r for r in fish_rows if r["region_id"] == tune.get("delegate_fishing_region", "r_stream") and r["kind"] == "fish"]
+    fish_value = sum(int(items[r["id"]]["base_value"]) for r in stream_fish) / max(len(stream_fish), 1)
+    sell_ratio = float(tune["sell_price_ratio"])
+    open_days = {
+        "field": unlock_day(unlocks, "u_automation", 7),
+        "gather": unlock_day(unlocks, "u_delegate_gather", 23),
+        "fishing": unlock_day(unlocks, "u_delegate_fishing", 27),
+        "market": unlock_day(unlocks, "u_delegate_market", 36),
+    }
+    all_open_day = max(open_days.values())
+    rows: list[dict] = []
+    for day in range(1, days + 1):
+        plots = plots_max if day >= expand_day else plots_initial
+        farm_total = plots * crop_value
+        gather_total = gather_points * gather_value
+        fish_total = casts * fish_value
+        sell_total = (farm_total + fish_total) * sell_ratio * 0.5  # 산출의 절반을 판다고 가정
+        total = farm_total + gather_total + fish_total + sell_total
+        delegated = 0.0
+        if day >= open_days["field"]:
+            delegated += farm_total * efficiency
+        if day >= open_days["gather"]:
+            delegated += gather_total * efficiency
+        if day >= open_days["fishing"]:
+            delegated += fish_total * efficiency
+        if day >= open_days["market"]:
+            delegated += sell_total * efficiency
+        open_count = sum(1 for d in open_days.values() if day >= d)
+        rows.append({"day": day, "delegated": delegated, "total": total, "share": delegated / total if total else 0.0, "open": open_count})
+    return rows, (rows[-1]["share"] if rows else 0.0), all_open_day
+
+
 # ---------------------------------------------------------------- 3. 경제 곡선
 
 
@@ -180,6 +225,7 @@ def main(argv: list[str]) -> int:
     items = {r["id"]: r for r in read_rows("items.csv")}
     materials = {r["id"]: r for r in read_rows("materials.csv")}
     regions = read_rows("regions.csv")
+    fish_rows = read_rows("fish.csv")
     rooms = read_rows("rooms.csv")
     species = read_rows("guest_species.csv")
     day_minutes = float(tune["day_length_seconds"]) / 60.0
@@ -219,6 +265,20 @@ def main(argv: list[str]) -> int:
     print()
     print("== 3. 경제 곡선 초안 (기대 수입, 지출 없음 — 사람이 확정) ==")
     print("  day  손님   텃밭   채집    누적 돈")
+    # --- 2b. 위임 비중 (P3-S4): 위임 슬롯이 전부 열린 뒤 하루 산출 가치 중 위임으로 나오는 비율 ---
+    print()
+    print(f"== 2b. 위임 비중 (텃밭·채집·낚시·판매 슬롯, 목표: 전부 열린 뒤 {DELEGATION_SHARE_TARGET:.0%} 이상) ==")
+    share_rows, final_share, all_open_day = delegation_share(tune, unlocks, crops, materials, items, regions, fish_rows, args.days)
+    for row in share_rows[::7]:
+        print(f"  {row['day']:>3}일 위임 {row['delegated']:>6.1f} / 전체 {row['total']:>6.1f} = {row['share']:.0%}  (열린 슬롯 {row['open']})")
+    if all_open_day is None or all_open_day > args.days:
+        print(f"  판정: 검사 기간 안에 위임 슬롯이 전부 열리지 않음 (전부 열리는 날 {all_open_day})")
+    else:
+        ok = final_share >= DELEGATION_SHARE_TARGET
+        print(f"  {args.days}일차 위임 비중 {final_share:.0%} → {'PASS' if ok else 'FAIL'} (전부 열린 날 {all_open_day}일차)")
+        if not ok:
+            failures.append(f"위임 비중 {final_share:.0%} < {DELEGATION_SHARE_TARGET:.0%} — automation_efficiency 또는 위임 슬롯 정원 조정")
+    print()
     for row in economy_curve(tune, unlocks, crops, items, materials, regions, species, args.days):
         print(f"  {row['day']:>3}  {row['guest']:>5.1f}  {row['farm']:>5.1f}  {row['gather']:>5.1f}  {row['money']:>8.0f}")
 

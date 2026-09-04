@@ -51,7 +51,13 @@ def summarize(rows: list[dict]) -> dict:
     festival_prep = [(int(r["data"].get("met", 0)), int(r["data"].get("total", 0))) for r in rows if r["kind"] == "festival_started"]
     festival_score = max((int(r["data"].get("score", 0)) for r in rows if r["kind"] == "festival_scored"), default=None)
     chapter = next((r["data"].get("chapter") for r in reversed(rows) if r["kind"] == "chapter_advanced"), "c1")
+    # P3 게이트: 위임을 스스로 하는가(위임 슬롯 자동 작업 결과 수·쓴 슬롯 종류), 재접속(불러오기 수)
+    delegation_rows = [r for r in rows if r["kind"] == "delegation"]
+    delegation_slots = sorted({r["data"].get("slot", "") for r in delegation_rows} | {"field" for r in rows if r["kind"] == "farm" and r["data"].get("action") == "auto_water"})
     return {
+        "delegation_actions": len(delegation_rows),
+        "delegation_slots": "+".join(s for s in delegation_slots if s) or "-",
+        "loads": kinds.get("load", 0),
         "calendar_opened": kinds.get("calendar_opened", 0),
         "goals_opened": kinds.get("goals_opened", 0),
         "goals_completed": kinds.get("goal_completed", 0),
@@ -95,6 +101,7 @@ def main(argv: list[str]) -> int:
     columns = ["minutes", "max_day", "days_ended", "days_4plus_activities", "max_activities", "verbs_used",
                "calendar_opened", "goals_opened", "goals_completed", "festival_prep", "festival_score",
                "market_trades", "blessings", "night_regions", "chapter",
+               "delegation_actions", "delegation_slots", "loads",
                "assignments", "days_with_assignment", "rooms_built", "guest_rooms_built",
                "floors_added", "intake_accepted", "intake_declined", "intake_no_bed", "visitors_when_full",
                "dialogues", "eoduki_affinity_max", "saves", "money_end", "gonogo2_pressure_seen", "gonogo2_expanded"]
@@ -116,6 +123,10 @@ def main(argv: list[str]) -> int:
     prepared = sum(1 for s in totals if s["festival_prep"] != "-" and not s["festival_prep"].startswith("0of"))
     print(f"P2 게이트(명절을 스스로 준비함): 달력+할 일을 연 세션 {planners}/{len(totals)} · 동지 아침에 준비 목표 1개 이상 충족 {prepared}/{len(totals)} — calendar_opened/goals_opened/festival_prep 열 참조")
     print("P2 게이트(\"다음에 할 일 3개\")는 설문 9번으로 판정")
+    delegators = sum(1 for s in totals if s["delegation_actions"] > 0)
+    resumed = sum(1 for s in totals if s["loads"] > 0)
+    print(f"P3 게이트(자동화 위임을 스스로 함): 위임 슬롯을 쓴 세션 {delegators}/{len(totals)} — delegation_actions/delegation_slots 열 참조")
+    print(f"P3 게이트(12시간 뒤 자발 재접속): 불러오기로 이어 한 세션 {resumed}/{len(totals)} + 회차 간 로그 파일 수 — 설문 11·12번과 대조")
     return 0
 
 

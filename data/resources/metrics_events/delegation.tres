@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MetricsEventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/metrics_event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "delegation"
+category = "economy"
+fields = ["slot", "yokai", "amount"]
+description = "위임 슬롯(채집·낚시·판매)의 자동 작업 결과 (P3 게이트: 위임 사용률)"

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_delegate_market"
+day_min = 36
+expected_day = 36
+timeband = "any"
+condition = "unlock:u_gray_market"
+unlock_type = "feature"
+unlock_id = "delegate_market"
+hint_ko = "아침 배치에 '판매' 자리 — 저녁에 물고기·수확물을 행상에게 판다 (종류별 3개는 남긴다)."

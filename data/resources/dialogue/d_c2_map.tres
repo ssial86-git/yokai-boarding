@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_c2_map"
+nodes = [{
+"node": "start",
+"speaker": "seongju",
+"text_ko": "바리가 문서고 자리를 말했다지. 잿빛 들 심부 너머 외곽 관청. 자네 아버지도 그 길로 갔어.",
+"portrait": "seongju",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "seongju",
+"text_ko": "서두르지 마라. 집행관이 그 문을 지킨다. 하숙생이 여섯은 되고 결계가 두 층은 서야 문턱이 버틴다.",
+"portrait": "seongju",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "여섯. 그리고 두 층.",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "seongju",
+"text_ko": "그리고 명절 하나쯤은 제대로 치러 보게. 결계는 사람이 모이는 만큼도 강해지니.",
+"portrait": "seongju",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "flag:c2_map_heard"
+}]

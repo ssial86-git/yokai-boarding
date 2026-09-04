@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y01_epilogue"
+nodes = [{
+"node": "start",
+"speaker": "y01_ttukttagi",
+"text_ko": "방망이를 벽에 걸었어. 작업장 위에. …도망칠 때 챙기던 건데.",
+"portrait": "y01_ttukttagi",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "안 챙겨도 돼?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y01_ttukttagi",
+"text_ko": "여기 살 거니까. 도깨비가 방망이를 걸어 두면 그 집이 제 집이라는 뜻이야. 옛날 사람들은 다 알았대.",
+"portrait": "y01_ttukttagi",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y01_ttukttagi",
+"text_ko": "하숙부에 적어. 뚝딱이 — 정착. 시끄러운 건 안 고칠 거야.",
+"portrait": "y01_ttukttagi",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:settled_y01"
+}]

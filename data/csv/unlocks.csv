@@ -108,3 +108,6 @@ u_species_lantern_fish,103,103,night,,species,g_lantern_fish,눈보라 밤에 �
 u_second_blessing,106,106,morning,affinity:y01_ttukttagi>=3,feature,blessing_two_per_day,하숙생이 하루 두 번 가호를 붙여 준다.
 u_winter_notice,108,108,morning,,feature,winter_notice,나흘 뒤 한 해가 돈다. 봄 씨앗을 미리 사 두자.
 u_promotion_2,110,110,day,unlock:u_promotion,feature,promotion_2,옹기귀·달토끼도 장기 계약을 청할 수 있다.
+u_delegate_gather,23,23,any,affinity:y01_ttukttagi>=1,feature,delegate_gather,아침 배치에 '채집' 자리가 생겼다 — 하숙생이 뒷산을 대신 돈다 (효율 60%).
+u_delegate_fishing,27,27,any,unlock:u_fishing,feature,delegate_fishing,아침 배치에 '낚시' 자리 — 하숙생이 개울에 낚싯대를 드리운다.
+u_delegate_market,36,36,any,unlock:u_gray_market,feature,delegate_market,아침 배치에 '판매' 자리 — 저녁에 물고기·수확물을 행상에게 판다 (종류별 3개는 남긴다).

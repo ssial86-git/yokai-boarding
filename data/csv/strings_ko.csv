@@ -325,3 +325,16 @@ ui_shop_title,{shop} — {npc} · {weather} · 음기 {yin}
 prompt_npc,E: {name} (거래)
 prompt_village_closed,{name} — 밤에는 문을 닫는다
 rarity_legendary,전설
+ui_gather_zone,채집 (여기에 놓기)
+ui_fishing_zone,낚시 (여기에 놓기)
+ui_market_zone,판매 (여기에 놓기)
+card_gather,채집
+card_fishing,낚시
+card_market,판매
+msg_assigned_gather,{name} → 뒷산 채집
+msg_assigned_fishing,{name} → 개울 낚시
+msg_assigned_market,{name} → 대문간 판매
+msg_auto_gathered,{name}이(가) 뒷산에서 {count}개를 캐 왔다 (효율 {percent}%)
+msg_auto_fished,{name}이(가) 개울에서 {count}마리를 낚아 왔다
+msg_auto_fished_none,{name}이(가) 개울에서 빈손으로 돌아왔다
+msg_auto_sold,{name}이(가) 행상에게 {count}개를 팔았다 +{money}

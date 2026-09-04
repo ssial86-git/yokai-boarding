@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_delegate_fishing"
+day_min = 27
+expected_day = 27
+timeband = "any"
+condition = "unlock:u_fishing"
+unlock_type = "feature"
+unlock_id = "delegate_fishing"
+hint_ko = "아침 배치에 '낚시' 자리 — 하숙생이 개울에 낚싯대를 드리운다."

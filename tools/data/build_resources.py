@@ -36,7 +36,7 @@ ENUMS: dict[str, set[str]] = {
     "sprite_size": {"16", "32"},
     "join_mode": {"start", "intake"},
     "visitor_kind": {"guest", "troublemaker", "erased", "promotion"},
-    "event_kind": {"tutorial", "story", "arrival", "npc", "chapter"},
+    "event_kind": {"tutorial", "story", "arrival", "npc", "chapter", "epilogue"},
     "timeband": {"morning", "day", "evening", "night", "any"},
     # --- P1 신설 ---
     "realm": {"mortal", "demon", "both"},

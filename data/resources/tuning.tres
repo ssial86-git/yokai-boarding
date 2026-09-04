@@ -175,5 +175,13 @@ values = {
 "promote_visits": 2,
 "promote_reputation": 5,
 "village_closed_band": "night",
-"blessing_per_day_bonus": 1
+"blessing_per_day_bonus": 1,
+"gather_workers_max": 1,
+"fishing_workers_max": 1,
+"market_workers_max": 1,
+"delegate_gather_region": "r_back_hill",
+"delegate_fishing_region": "r_stream",
+"delegate_fishing_casts": 2,
+"auto_sell_kinds": "fish;crop",
+"auto_sell_keep": 3
 }

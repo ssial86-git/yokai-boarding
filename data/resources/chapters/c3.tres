@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ChapterData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/chapter_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "c3"
+order = 3
+name_ko = "장부 보관소"
+gate_goals = []
+gate_required = 0
+next_id = ""
+summary_ko = "(P4) 문서고 심부와 왕의 장부"

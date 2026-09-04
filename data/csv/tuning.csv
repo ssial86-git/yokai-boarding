@@ -170,3 +170,11 @@ promote_visits,2,int,뜨내기가 장기 계약을 청하는 데 필요한 방�
 promote_reputation,5,int,뜨내기 승격에 필요한 평판
 village_closed_band,night,string,마을 상점가가 문을 닫는 시간대 (night). 그 외 시간대에 열림
 blessing_per_day_bonus,1,int,feature blessing_two_per_day 가 열리면 하루 가호 한도에 더하는 수
+gather_workers_max,1,int,채집 위임 슬롯 정원 (뒷산)
+fishing_workers_max,1,int,낚시 위임 슬롯 정원 (개울)
+market_workers_max,1,int,판매 위임 슬롯 정원 (대문간 행상)
+delegate_gather_region,r_back_hill,string,채집 위임 요괴가 일하는 구역
+delegate_fishing_region,r_stream,string,낚시 위임 요괴가 일하는 구역
+delegate_fishing_casts,2,int,낚시 위임 요괴가 낮에 던지는 횟수 (성공 확률 = automation_efficiency)
+auto_sell_kinds,fish;crop,string,판매 위임 요괴가 저녁에 파는 아이템 종류 (items.kind 목록)
+auto_sell_keep,3,int,판매 위임 때 종류별로 남겨 두는 개수

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_delegate_gather"
+day_min = 23
+expected_day = 23
+timeband = "any"
+condition = "affinity:y01_ttukttagi>=1"
+unlock_type = "feature"
+unlock_id = "delegate_gather"
+hint_ko = "아침 배치에 '채집' 자리가 생겼다 — 하숙생이 뒷산을 대신 돈다 (효율 60%)."

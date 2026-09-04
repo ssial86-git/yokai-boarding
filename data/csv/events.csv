@@ -44,3 +44,5 @@ y10_act2,story,y10_geuseundae,night,1,0,1,,,true,10,d_y10_act2,그슨대 2막 �
 y10_act3,story,y10_geuseundae,night,1,0,2,,,true,10,d_y10_act3,그슨대 3막 — 작아진 그림자
 y05_act2,story,y05_geumjuri,night,1,0,1,,,true,10,d_y05_act2,금줄이 2막 — 끊어진 줄
 y05_act3,story,y05_geumjuri,night,1,0,2,,,true,10,d_y05_act3,금줄이 3막 — 새 매듭
+y01_epilogue,epilogue,y01_ttukttagi,night,1,0,5,,chapter_c3,true,40,d_y01_epilogue,뚝딱이 정착 — 방망이를 걸다
+c2_e1_map,chapter,,night,1,0,0,,archive_location,true,20,d_c2_map,바리의 지도

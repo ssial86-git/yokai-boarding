@@ -1,3 +1,4 @@
 id,order,name_ko,gate_goals,gate_required,next_id,summary_ko
 c1,1,폭군의 장부,g_c1_residents;g_c1_floor;g_c1_market;g_c1_festival,2,c2,상속받은 결계 — 회색 시장의 소문 — 첫 회수 집행관의 편지
-c2,2,문서고로 가는 길,,0,,(P3) 마계 심부의 문서고와 아버지의 행방
+c2,2,문서고로 가는 길,g_c2_archive;g_c2_residents;g_c2_fight;g_c2_festival,2,c3,바리의 지도 — 문서고 외곽 — 회수 집행관과의 첫 대치
+c3,3,장부 보관소,,0,,(P4) 문서고 심부와 왕의 장부

@@ -37,3 +37,7 @@ g_t_pickle,today,오이지 담그기,count:cook.r_cucumber_pickle>=1,41,50,,60,1
 g_t_eel,today,뱀장어 낚기,count:fish.f_eel>=1,49,56,,80,1,여름 밤 개울. 낚싯대 Lv2.
 g_t_chestnut,today,밤 열 개,count:gather.m_chestnut>=10,61,75,,60,1,가을 뒷산.
 g_t_smelt,today,빙어 낚기,count:fish.f_smelt>=1,93,112,,80,1,겨울 낮 개울.
+g_c2_archive,long,문서고의 위치를 듣다,flag:archive_location,1,0,,0,3,바리의 3막 사연.
+g_c2_residents,long,하숙생 여섯,residents>=6,1,0,,0,3,도착과 승격으로 늘어난다.
+g_c2_fight,long,적 서른 물리치기,count:fight>=30,1,0,,0,3,동료와 함께 잿빛 들·늪·외곽에서.
+g_c2_festival,long,단오 6점 이상,festival:f_dano>=6,1,0,,0,2,수리취떡·손님·2층.

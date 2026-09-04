@@ -49,3 +49,4 @@ chapter_advanced,story,chapter,챕터 게이트 통과
 promotion_offered,intake,yokai;species,뜨내기 장기 계약 제안(저녁 심사 카드)
 promotion_accepted,intake,yokai,장기 계약 수락 → 하숙생
 night_region_entered,verb,region,밤 변형 구역 진입
+delegation,economy,slot;yokai;amount,위임 슬롯(채집·낚시·판매)의 자동 작업 결과 (P3 게이트: 위임 사용률)
