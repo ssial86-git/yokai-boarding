@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="YokaiData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/yokai_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "y07_museo"
+name_ko = "무쇠"
+species_ko = "불가사리"
+preferred_room = "workshop"
+work_bonus = 0.3
+noise = 2
+night_worker = false
+rent_type = "items"
+rent_note_ko = "몸에서 떨어지는 쇠부스러기"
+rent_item = "scrap"
+rent_amount = 2
+rent_interval_days = 2
+join_mode = "intake"
+join_day = 58
+stat_strength = 5
+stat_skill = 1
+stat_sight = 1
+stat_courage = 3
+sprite_size = 32
+clarity_by_affinity = false
+in_slice = true

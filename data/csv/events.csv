@@ -24,3 +24,23 @@ c1_e8_ward,chapter,,night,1,0,0,,chapter_c2,true,30,d_c1_ward,결계가 단단�
 y05_act1,story,y05_geumjuri,night,1,0,0,,,true,10,d_y05_act1,금줄이 1막 — 문턱
 ev_village_grocer_greet,npc,,any,1,0,0,,,true,50,d_village_grocer_greet,마을 잡화상의 첫 인사
 ev_herb_granny_greet,npc,,any,1,0,0,,,true,50,d_herb_granny_greet,약방 할미의 첫 인사
+y04_act1,story,y04_bari,night,1,0,0,,,true,10,d_y04_act1,바리 1막 — 마른 논
+y04_act2,story,y04_bari,night,1,0,1,,,true,10,d_y04_act2,바리 2막 — 재해국 명부
+y04_act3,story,y04_bari,night,1,0,2,,,true,10,d_y04_act3,바리 3막 — 문서고의 위치
+y06_act1,story,y06_aheop,night,1,0,0,,,true,10,d_y06_act1,아홉 1막 — 여덟 꼬리
+y06_act2,story,y06_aheop,night,1,0,1,,,true,10,d_y06_act2,아홉 2막 — 둔갑 시험
+y06_act3,story,y06_aheop,night,1,0,2,,,true,10,d_y06_act3,아홉 3막 — 아홉 번째
+y07_act1,story,y07_museo,night,1,0,0,,,true,10,d_y07_act1,무쇠 1막 — 쇠맛
+y07_act2,story,y07_museo,night,1,0,1,,,true,10,d_y07_act2,무쇠 2막 — 불난 밤
+y07_act3,story,y07_museo,night,1,0,2,,,true,10,d_y07_act3,무쇠 3막 — 먹지 않은 것
+y08_act1,story,y08_ongi,night,1,0,0,,,true,10,d_y08_act1,옹기 1막 — 금
+y08_act2,story,y08_ongi,night,1,0,1,,,true,10,d_y08_act2,옹기 2막 — 담아 둔 것
+y08_act3,story,y08_ongi,night,1,0,2,,,true,10,d_y08_act3,옹기 3막 — 비운 항아리
+y09_act1,story,y09_daltokki,night,1,0,0,,,true,10,d_y09_act1,달토끼 1막 — 절구
+y09_act2,story,y09_daltokki,night,1,0,1,,,true,10,d_y09_act2,달토끼 2막 — 달의 장부
+y09_act3,story,y09_daltokki,night,1,0,2,,,true,10,d_y09_act3,달토끼 3막 — 여기서 찧는다
+y10_act1,story,y10_geuseundae,night,1,0,0,,,true,10,d_y10_act1,그슨대 1막 — 올려다보지 마
+y10_act2,story,y10_geuseundae,night,1,0,1,,,true,10,d_y10_act2,그슨대 2막 — 밤길
+y10_act3,story,y10_geuseundae,night,1,0,2,,,true,10,d_y10_act3,그슨대 3막 — 작아진 그림자
+y05_act2,story,y05_geumjuri,night,1,0,1,,,true,10,d_y05_act2,금줄이 2막 — 끊어진 줄
+y05_act3,story,y05_geumjuri,night,1,0,2,,,true,10,d_y05_act3,금줄이 3막 — 새 매듭

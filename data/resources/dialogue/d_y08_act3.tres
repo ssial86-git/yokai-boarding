@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y08_act3"
+nodes = [{
+"node": "start",
+"speaker": "y08_ongi",
+"text_ko": "항아리를 비웠어. 담아 둔 것 전부 하숙부에 옮겨 적었어.",
+"portrait": "y08_ongi",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "비우면 너는?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y08_ongi",
+"text_ko": "가벼워졌어. 금도 조금 붙은 것 같아. 이제 김치만 담을게. 김치는 새도 괜찮아.",
+"portrait": "y08_ongi",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;item:dish_kimchi:+2"
+}]

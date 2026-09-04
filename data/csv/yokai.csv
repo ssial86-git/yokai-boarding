@@ -2,5 +2,10 @@ id,name_ko,species_ko,preferred_room,work_bonus,noise,night_worker,rent_type,ren
 y01_ttukttagi,뚝딱이,애기 도깨비,workshop,0.25,3,false,items,밤새 뚝딱 만든 잡동사니(랜덤 재료 상자),kind:material,1,1,start,0,4,2,1,3,32,false,true
 y02_eoduki,어둑이,어둑시니,gate,0.15,0,true,errand,그림자 심부름(밤 사이 방 정리·배달 대행 — 모두의 컨디션 회복),,10,1,start,0,1,2,4,2,32,true,true
 y03_dalgael,달갤,달걀귀신,guest_room,0.0,0,false,none,지불 불가(말소 미수). 회복 후 소급 지불,,0,1,intake,2,1,1,2,4,32,false,true
-y04_bari,바리,새끼 강철이,kitchen,0.2,1,false,items,비늘 1장(최고급 제작 재료),scrap,1,3,intake,0,3,1,2,4,32,false,false
+y04_bari,바리,새끼 강철이,kitchen,0.2,1,false,items,비늘 1장(최고급 제작 재료),scrap,1,3,intake,30,3,1,2,4,32,false,true
 y05_geumjuri,금줄이,새끼줄 요괴,gate,0.1,0,false,buff,문턱에 액막이를 건다(모두의 컨디션 회복),,15,2,intake,0,2,3,2,3,16,false,true
+y06_aheop,아홉,수습 구미호,gate,0.15,1,false,info,소문 수집(심사 카드의 액운 냄새가 정확해진다),,0,1,intake,44,2,3,5,1,32,false,true
+y07_museo,무쇠,불가사리,workshop,0.3,2,false,items,몸에서 떨어지는 쇠부스러기,scrap,2,2,intake,58,5,1,1,3,32,false,true
+y08_ongi,옹기,옹기귀,storage,0.1,0,false,items,항아리에 절인 김치 한 통,dish_kimchi,1,3,intake,0,2,3,1,2,32,false,true
+y09_daltokki,달토끼,달토끼,kitchen,0.2,0,true,buff,절구질한 떡(모두의 컨디션 회복),,12,2,intake,0,1,4,3,2,16,false,true
+y10_geuseundae,그슨대,그슨대,guest_room,0.0,1,true,none,밤길 호위(밤 파견 보정 — 지불 없음),,0,1,intake,99,4,1,3,5,32,false,true

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BlessingData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/blessing_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "b_geuseundae"
+yokai_id = "y10_geuseundae"
+name_ko = "그슨대의 그늘"
+short_ko = "슨"
+affinity_min = 1
+seed_yield_bonus = 0
+dish_buff_bonus = 1
+talisman_power_bonus = 2
+flavor_ko = "밤 그림자가 덮인다. 투척과 담력에 좋고 금줄이는 싫어한다."

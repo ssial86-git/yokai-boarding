@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SynergyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/synergy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "sy_aheop_eoduki"
+blessing_id = "b_aheop"
+context_kind = "yokai"
+context_id = "y02_eoduki"
+delta = 1
+note_ko = "어둑이가 눈속임 요리를 좋아한다"

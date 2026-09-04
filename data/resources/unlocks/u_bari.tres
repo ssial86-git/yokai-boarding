@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_bari"
+day_min = 30
+expected_day = 30
+timeband = "evening"
+condition = ""
+unlock_type = "yokai"
+unlock_id = "y04_bari"
+hint_ko = "빈 카드가 아닌 낯선 손님 — 새끼 강철이 바리가 찾아온다."

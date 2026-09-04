@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y09_act1"
+nodes = [{
+"node": "start",
+"speaker": "y09_daltokki",
+"text_ko": "쿵. 쿵. …시끄러웠지? 절구질은 밤에 해야 해. 달이 보는 데서.",
+"portrait": "y09_daltokki",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "달에서 왔다는 게 정말이야?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y09_daltokki",
+"text_ko": "달무리 밤에 내려왔어. 원래는 다시 올라가야 하는데… 절구가 무거워서.",
+"portrait": "y09_daltokki",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

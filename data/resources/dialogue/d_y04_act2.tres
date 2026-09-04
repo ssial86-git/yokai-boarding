@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y04_act2"
+nodes = [{
+"node": "start",
+"speaker": "y04_bari",
+"text_ko": "…재해국이라고 들어 봤나. 마계의 부서야. 가뭄 실적을 매기는.",
+"portrait": "y04_bari",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y04_bari",
+"text_ko": "나는 거기 1등이었어. 한 해에 논 서른 마지기를 말렸지. 상을 받았고, 그날 밤 도망쳤어.",
+"portrait": "y04_bari",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "왜?",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y04_bari",
+"text_ko": "명부에 낯선 이름이 하나 있었어. 잠입자 — 이승 사람. 네 아비의 이름이었다. 장부를 훔치려 했다더군.",
+"portrait": "y04_bari",
+"next": "5",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "5",
+"speaker": "y04_bari",
+"text_ko": "그 사람이 무엇을 보았는지 알고 싶어졌어. 그래서 여기로 왔다.",
+"portrait": "y04_bari",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y04"
+}]

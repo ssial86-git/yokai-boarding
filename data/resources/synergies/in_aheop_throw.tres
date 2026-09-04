@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SynergyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/synergy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "in_aheop_throw"
+blessing_id = "b_aheop"
+context_kind = "talisman_effect"
+context_id = "throw"
+delta = -1
+note_ko = "산만해서 던지기가 흐트러진다"

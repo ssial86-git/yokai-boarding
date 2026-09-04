@@ -169,3 +169,4 @@ merchant_color,d4a5c4,string,회색 장꾼 자리표시 색(hex — 팔레트)
 promote_visits,2,int,뜨내기가 장기 계약을 청하는 데 필요한 방문 횟수(명부 누계)
 promote_reputation,5,int,뜨내기 승격에 필요한 평판
 village_closed_band,night,string,마을 상점가가 문을 닫는 시간대 (night). 그 외 시간대에 열림
+blessing_per_day_bonus,1,int,feature blessing_two_per_day 가 열리면 하루 가호 한도에 더하는 수

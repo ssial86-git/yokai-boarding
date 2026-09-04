@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SynergyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/synergy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "sy_aheop_sight"
+blessing_id = "b_aheop"
+context_kind = "recipe_stat"
+context_id = "sight"
+delta = 2
+note_ko = "꼬리 여덟이 눈을 밝힌다"

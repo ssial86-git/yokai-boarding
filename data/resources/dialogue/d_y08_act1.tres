@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y08_act1"
+nodes = [{
+"node": "start",
+"speaker": "y08_ongi",
+"text_ko": "여기 금 간 거 보이지? 내 배야. 담으면 조금 새.",
+"portrait": "y08_ongi",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "무엇을 담아?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y08_ongi",
+"text_ko": "뭐든. 김치도 소문도 비밀도. 항아리는 담으라고 있는 거니까.",
+"portrait": "y08_ongi",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y08_ongi",
+"text_ko": "네 비밀도 하나 담아 줄까. …아니, 아직 이르다.",
+"portrait": "y08_ongi",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

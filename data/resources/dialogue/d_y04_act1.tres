@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y04_act1"
+nodes = [{
+"node": "start",
+"speaker": "y04_bari",
+"text_ko": "부엌이 좋군. 불 곁이 편해. …물독 근처엔 앉지 않을게.",
+"portrait": "y04_bari",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "물이 싫어?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y04_bari",
+"text_ko": "싫은 게 아니라 마른다. 내가 옆에 있으면 물독이 준다. 강철이는 그런 짐승이야. 논을 말리는.",
+"portrait": "y04_bari",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y04_bari",
+"text_ko": "여기선 아무것도 말리고 싶지 않아. 그것만 알아 둬.",
+"portrait": "y04_bari",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

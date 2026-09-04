@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SynergyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/synergy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "in_geumjuri_demon"
+blessing_id = "b_geumjuri"
+context_kind = "crop_realm"
+context_id = "demon"
+delta = -1
+note_ko = "금줄은 마계 씨앗을 밀어낸다"

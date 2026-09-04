@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_second_blessing"
+day_min = 106
+expected_day = 106
+timeband = "morning"
+condition = "affinity:y01_ttukttagi>=3"
+unlock_type = "feature"
+unlock_id = "blessing_two_per_day"
+hint_ko = "하숙생이 하루 두 번 가호를 붙여 준다."

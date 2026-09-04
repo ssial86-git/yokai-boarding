@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EventData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/event_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "y08_act3"
+kind = "story"
+yokai_id = "y08_ongi"
+timeband = "night"
+day_min = 1
+day_max = 0
+min_affinity = 2
+requires_item = ""
+requires_flag = ""
+once = true
+priority = 10
+dialogue_id = "d_y08_act3"
+title_ko = "옹기 3막 — 비운 항아리"

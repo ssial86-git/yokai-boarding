@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="GuestSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/guest_species_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_baram"
+name_ko = "바람뭉치"
+rarity = "uncommon"
+flavor_ko = "바람이 뭉친 것. 문틈으로 든다."
+first_words_ko = "휘— 내일 바람 방향 알려 줄까?"
+rent_type = "info"
+rent_note_ko = "바람 예보"
+rent_money = 35
+rent_item = ""
+rent_amount = 0
+omen = 0
+appear_condition = "wind"
+weight = 15
+promotable = false
+sprite_size = 16
+liked_recipe = "r_herb_tea"
+realm = "mortal"
+promotes_to = ""

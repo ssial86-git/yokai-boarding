@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="GuestSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/guest_species_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_snow_child"
+name_ko = "눈아이"
+rarity = "rare"
+flavor_ko = "첫눈에 생겨 봄에 녹는 아이."
+first_words_ko = "녹기 전에… 따뜻한 방 있어?"
+rent_type = "buff"
+rent_note_ko = "겨울 냉기(모두의 컨디션 회복)"
+rent_money = 50
+rent_item = ""
+rent_amount = 20
+omen = 0
+appear_condition = "snow"
+weight = 6
+promotable = false
+sprite_size = 16
+liked_recipe = "r_patjuk"
+realm = "mortal"
+promotes_to = ""

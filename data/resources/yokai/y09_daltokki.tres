@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="YokaiData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/yokai_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "y09_daltokki"
+name_ko = "달토끼"
+species_ko = "달토끼"
+preferred_room = "kitchen"
+work_bonus = 0.2
+noise = 0
+night_worker = true
+rent_type = "buff"
+rent_note_ko = "절구질한 떡(모두의 컨디션 회복)"
+rent_item = ""
+rent_amount = 12
+rent_interval_days = 2
+join_mode = "intake"
+join_day = 0
+stat_strength = 1
+stat_skill = 4
+stat_sight = 3
+stat_courage = 2
+sprite_size = 16
+clarity_by_affinity = false
+in_slice = true

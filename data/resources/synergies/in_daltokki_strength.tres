@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SynergyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/synergy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "in_daltokki_strength"
+blessing_id = "b_daltokki"
+context_kind = "recipe_stat"
+context_id = "strength"
+delta = -1
+note_ko = "떡은 힘이 못 된다"

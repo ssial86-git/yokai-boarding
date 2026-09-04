@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_species_stone_mireuk"
+day_min = 101
+expected_day = 101
+timeband = "evening"
+condition = ""
+unlock_type = "species"
+unlock_id = "g_stone_mireuk"
+hint_ko = "돌미륵 — 길가 돌부처가 걸어왔다. 전설의 손님."

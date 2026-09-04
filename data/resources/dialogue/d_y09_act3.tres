@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y09_act3"
+nodes = [{
+"node": "start",
+"speaker": "y09_daltokki",
+"text_ko": "다음 달무리 밤에 올라갈 수 있었어. 절구를 두고 가면.",
+"portrait": "y09_daltokki",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "그런데?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y09_daltokki",
+"text_ko": "여기서 찧기로 했어. 떡은 먹어 줄 사람이 있어야 떡이니까.",
+"portrait": "y09_daltokki",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y09_daltokki",
+"text_ko": "하숙부에 적어 줘 — 달토끼, 지상 하숙 중.",
+"portrait": "y09_daltokki",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y09_done"
+}]

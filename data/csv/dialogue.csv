@@ -105,3 +105,82 @@ d_village_grocer_greet,3,village_grocer,밤엔 문 닫으니 낮에 오슈. 그�
 d_herb_granny_greet,start,herb_granny,…약초 냄새가 나는구나. 뒷산 다니는 아이지? 앉아라.,herb_granny,2,,,,,
 d_herb_granny_greet,2,herb_granny,약초·나물·물고기는 내가 사마. 샘물과 약초는 팔고. 약초차 끓일 줄 알면 값을 더 쳐 주지.,herb_granny,3,,,,,
 d_herb_granny_greet,3,herb_granny,네 아비도 여기 자주 왔어. 요괴 손님 먹일 약초를 사러. …내가 모를 줄 알았니.,herb_granny,end,,,,,flag:herb_granny_met
+d_y04_act1,start,y04_bari,부엌이 좋군. 불 곁이 편해. …물독 근처엔 앉지 않을게.,y04_bari,2,,,,,
+d_y04_act1,2,player,물이 싫어?,,3,,,,,
+d_y04_act1,3,y04_bari,싫은 게 아니라 마른다. 내가 옆에 있으면 물독이 준다. 강철이는 그런 짐승이야. 논을 말리는.,y04_bari,4,,,,,
+d_y04_act1,4,y04_bari,여기선 아무것도 말리고 싶지 않아. 그것만 알아 둬.,y04_bari,end,,,,,affinity:+1
+d_y04_act2,start,y04_bari,…재해국이라고 들어 봤나. 마계의 부서야. 가뭄 실적을 매기는.,y04_bari,2,,,,,
+d_y04_act2,2,y04_bari,"나는 거기 1등이었어. 한 해에 논 서른 마지기를 말렸지. 상을 받았고, 그날 밤 도망쳤어.",y04_bari,3,,,,,
+d_y04_act2,3,player,왜?,,4,,,,,
+d_y04_act2,4,y04_bari,명부에 낯선 이름이 하나 있었어. 잠입자 — 이승 사람. 네 아비의 이름이었다. 장부를 훔치려 했다더군.,y04_bari,5,,,,,
+d_y04_act2,5,y04_bari,그 사람이 무엇을 보았는지 알고 싶어졌어. 그래서 여기로 왔다.,y04_bari,end,,,,,affinity:+1;flag:clue_y04
+d_y04_act3,start,y04_bari,결심했어. 말해 줄게. 문서고 — 왕의 장부가 보관된 곳.,y04_bari,2,,,,,
+d_y04_act3,2,y04_bari,잿빛 들 심부를 지나 외곽 관청을 통과하면 문이 있어. 서기들이 지키지. 도장 골렘도.,y04_bari,3,,,,,
+d_y04_act3,3,player,너도 갈 거야?,,4,,,,,
+d_y04_act3,4,y04_bari,가면 논이 마른다. 나는 여기서 불을 지키겨. 대신 비늘을 줄게 — 문을 지날 때 쓸 데가 있을 거야.,y04_bari,5,,,,,
+d_y04_act3,5,y04_bari,네 아비는 거기서 나오지 못했어. 너는 나와야 한다.,y04_bari,end,,,,,affinity:+1;item:scrap:+2;flag:archive_location
+d_y06_act1,start,y06_aheop,…들었지? 꼬리 세는 소리. 여덟이야. 아홉이 못 됐어.,y06_aheop,2,,,,,
+d_y06_act1,2,player,하나가 모자라서 도망친 거야?,,3,,,,,
+d_y06_act1,3,y06_aheop,둔갑 시험에 떨어졌어. 사람으로 변하는 시험. 실적 미달이면 꼬리를 하나씩 뗀다더라.,y06_aheop,4,,,,,
+d_y06_act1,4,y06_aheop,여기선 사람 흉내 안 내도 되지? 그럼 됐어.,y06_aheop,end,,,,,affinity:+1
+d_y06_act2,start,y06_aheop,오늘 손님 카드 봤어? 내가 냄새를 조금 고쳐 놨어. 액운 냄새가 더 정확해졌을 거야.,y06_aheop,2,,,,,
+d_y06_act2,2,player,그게 네 재주야?,,3,,,,,
+d_y06_act2,3,y06_aheop,소문을 모으는 재주. 시험에선 쓸모없다고 했지만.,y06_aheop,4,,,,,
+d_y06_act2,4,y06_aheop,소문 하나 더. 마을 약방 할미가 네 아비를 안다더라. 요괴 손님 약초를 사러 왔다고.,y06_aheop,end,,,,,affinity:+1;flag:clue_y06
+d_y06_act3,start,y06_aheop,아홉 번째 꼬리가… 조금 자란 것 같아. 봐.,y06_aheop,2,,,,,
+d_y06_act3,2,player,시험도 안 봤는데?,,3,,,,,
+d_y06_act3,3,y06_aheop,여기 사람들은 내가 사람이 아니어도 무서워하지 않아. 그게 시험이었던 거야. 아마.,y06_aheop,4,,,,,
+d_y06_act3,4,y06_aheop,하숙부에 적어 줘. 아홉. 꼬리 아홉. 아직 여덟 개 반이지만.,y06_aheop,end,,,,,affinity:+1;flag:clue_y06_done
+d_y07_act1,start,y07_museo,…쇠 냄새. 작업장에 못이 있지? 하나만.,y07_museo,2,,,,,
+d_y07_act1,2,player,먹으려고?,,3,,,,,
+d_y07_act1,3,y07_museo,먹는 게 아니라 큰다. 불가사리는 쇠를 먹으면 커져. 커지면 불을 막고.,y07_museo,4,,,,,
+d_y07_act1,4,y07_museo,많이 먹지 않을게. 부스러기는 돌려줄 테니.,y07_museo,end,,,,,affinity:+1
+d_y07_act2,start,y07_museo,마계에서 불이 났었어. 관청 하나가 다 탔지. 내가 막았어야 했는데.,y07_museo,2,,,,,
+d_y07_act2,2,y07_museo,"막으려면 쇠를 먹어야 했어. 그런데 그 쇠는 회수국 창고 것이었고, 장부에 없는 소비였고.",y07_museo,3,,,,,
+d_y07_act2,3,player,그래서 쫓겨났구나.,,4,,,,,
+d_y07_act2,4,y07_museo,불을 막은 값이 감가상각이었다. 웃기지. 그 창고 문서 더미에서 이승 글씨를 하나 봤어. 네 아비 글씨였을 거야.,y07_museo,end,,,,,affinity:+1;flag:clue_y07
+d_y07_act3,start,y07_museo,결계가 두꺼워졌어. 대들보가 쇠처럼 울려. 내가 먹지 않은 쇠야.,y07_museo,2,,,,,
+d_y07_act3,2,player,먹지 않은 쇠?,,3,,,,,
+d_y07_act3,3,y07_museo,이 집 못은 하나도 안 먹었어. 처음이야. 먹지 않고 지킨 건.,y07_museo,4,,,,,
+d_y07_act3,4,y07_museo,쇠부스러기는 계속 줄게. 부적에 박아 봐. 잘 날아갈 거야.,y07_museo,end,,,,,affinity:+1;item:scrap:+3
+d_y08_act1,start,y08_ongi,여기 금 간 거 보이지? 내 배야. 담으면 조금 새.,y08_ongi,2,,,,,
+d_y08_act1,2,player,무엇을 담아?,,3,,,,,
+d_y08_act1,3,y08_ongi,뭐든. 김치도 소문도 비밀도. 항아리는 담으라고 있는 거니까.,y08_ongi,4,,,,,
+d_y08_act1,4,y08_ongi,"네 비밀도 하나 담아 줄까. …아니, 아직 이르다.",y08_ongi,end,,,,,affinity:+1
+d_y08_act2,start,y08_ongi,손님으로 왔을 때 담아 둔 게 있어. 대문간에서 들은 소리.,y08_ongi,2,,,,,
+d_y08_act2,2,y08_ongi,집행관이 문돌이한테 그랬어. 이 집 장부는 양식이 틀렸다고. 그래서 못 지운다고.,y08_ongi,3,,,,,
+d_y08_act2,3,player,그걸 왜 이제 말해?,,4,,,,,
+d_y08_act2,4,y08_ongi,새는 항아리라서. 다 새기 전에 말해야 했는데. 미안.,y08_ongi,end,,,,,affinity:+1;flag:clue_y08
+d_y08_act3,start,y08_ongi,항아리를 비웠어. 담아 둔 것 전부 하숙부에 옮겨 적었어.,y08_ongi,2,,,,,
+d_y08_act3,2,player,비우면 너는?,,3,,,,,
+d_y08_act3,3,y08_ongi,가벼워졌어. 금도 조금 붙은 것 같아. 이제 김치만 담을게. 김치는 새도 괜찮아.,y08_ongi,end,,,,,affinity:+1;item:dish_kimchi:+2
+d_y09_act1,start,y09_daltokki,쿵. 쿵. …시끄러웠지? 절구질은 밤에 해야 해. 달이 보는 데서.,y09_daltokki,2,,,,,
+d_y09_act1,2,player,달에서 왔다는 게 정말이야?,,3,,,,,
+d_y09_act1,3,y09_daltokki,달무리 밤에 내려왔어. 원래는 다시 올라가야 하는데… 절구가 무거워서.,y09_daltokki,end,,,,,affinity:+1
+d_y09_act2,start,y09_daltokki,달에도 장부가 있어. 내가 찧은 떡 개수를 적는. 모자라면 달에서 떨어져.,y09_daltokki,2,,,,,
+d_y09_act2,2,y09_daltokki,그래서 다들 그 왕의 장부가 하늘 것과 같다고 해. 숫자로 사는 건 어디나 같다고.,y09_daltokki,3,,,,,
+d_y09_act2,3,player,여기 장부는 다르다는 걸 알잖아.,,4,,,,,
+d_y09_act2,4,y09_daltokki,응. 여기선 몇 개 찧었는지 안 적더라. 누구한테 줬는지만 적어.,y09_daltokki,end,,,,,affinity:+1;flag:clue_y09
+d_y09_act3,start,y09_daltokki,다음 달무리 밤에 올라갈 수 있었어. 절구를 두고 가면.,y09_daltokki,2,,,,,
+d_y09_act3,2,player,그런데?,,3,,,,,
+d_y09_act3,3,y09_daltokki,여기서 찧기로 했어. 떡은 먹어 줄 사람이 있어야 떡이니까.,y09_daltokki,4,,,,,
+d_y09_act3,4,y09_daltokki,"하숙부에 적어 줘 — 달토끼, 지상 하숙 중.",y09_daltokki,end,,,,,affinity:+1;flag:clue_y09_done
+d_y10_act1,start,y10_geuseundae,…올려다보지 마. 올려다보면 커져. 커지면 방이 무너져.,y10_geuseundae,2,,,,,
+d_y10_act1,2,player,내려다보면?,,3,,,,,
+d_y10_act1,3,y10_geuseundae,작아진다. 그러니 앉아서 말해. 그래. 그렇게.,y10_geuseundae,end,,,,,affinity:+1
+d_y10_act2,start,y10_geuseundae,밤길을 지켜. 그게 그슨대가 하는 일. 무서워서 올려다본 사람은 다 컸지.,y10_geuseundae,2,,,,,
+d_y10_act2,2,y10_geuseundae,왕의 장부에는 내가 겁준 사람 수만 적혀 있었어. 지켜 준 사람 수는 없었고.,y10_geuseundae,3,,,,,
+d_y10_act2,3,player,여기선 지켜 준 수를 적을게.,,4,,,,,
+d_y10_act2,4,y10_geuseundae,…그럼 오늘 밤 뒷산은 내가 따라가지. 동행에 놓아.,y10_geuseundae,end,,,,,affinity:+1;flag:clue_y10
+d_y10_act3,start,y10_geuseundae,봐. 작아졌어. 네가 자꾸 내려다봐서.,y10_geuseundae,2,,,,,
+d_y10_act3,2,player,그래도 밤길은 지킬 수 있어?,,3,,,,,
+d_y10_act3,3,y10_geuseundae,그림자는 작아도 길다. 걱정 마.,y10_geuseundae,4,,,,,
+d_y10_act3,4,y10_geuseundae,하숙부에 적어 줘. 그슨대 — 이제 아무도 올려다보지 않아도 되는.,y10_geuseundae,end,,,,,affinity:+1;flag:clue_y10_done
+d_y05_act2,start,y05_geumjuri,문턱 매듭 하나가 끊어졌더군. 누가 밤에 당겼어. 집행관 냄새가 났다.,y05_geumjuri,2,,,,,
+d_y05_act2,2,player,다시 묶을 수 있어?,,3,,,,,
+d_y05_act2,3,y05_geumjuri,묶었지. 그런데 알겠나 — 저쪽 장부엔 이 집이 미등록 자산이라 적혀 있어. 줄 하나로는 오래 못 막는다.,y05_geumjuri,4,,,,,
+d_y05_act2,4,y05_geumjuri,네 아비는 알았어. 그래서 사연을 적었지. 줄이 아니라 이름으로 막는 법을.,y05_geumjuri,end,,,,,affinity:+1;flag:clue_y05
+d_y05_act3,start,y05_geumjuri,새 매듭을 지었다. 문턱·부엌·객실·대들보. 네 곳.,y05_geumjuri,2,,,,,
+d_y05_act3,2,y05_geumjuri,새끼줄은 걸어 주는 사람이 있어야 새끼줄이야. 여기 오기 전엔 그냥 짚이었어.,y05_geumjuri,3,,,,,
+d_y05_act3,3,player,오래 걸려 있어 줘.,,4,,,,,
+d_y05_act3,4,y05_geumjuri,"장기 계약이잖나. 하숙부에 적어 둬 — 금줄이, 이 집 문턱 담당.",y05_geumjuri,end,,,,,affinity:+1;flag:clue_y05_done

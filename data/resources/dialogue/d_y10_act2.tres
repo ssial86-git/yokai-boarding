@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y10_act2"
+nodes = [{
+"node": "start",
+"speaker": "y10_geuseundae",
+"text_ko": "밤길을 지켜. 그게 그슨대가 하는 일. 무서워서 올려다본 사람은 다 컸지.",
+"portrait": "y10_geuseundae",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y10_geuseundae",
+"text_ko": "왕의 장부에는 내가 겁준 사람 수만 적혀 있었어. 지켜 준 사람 수는 없었고.",
+"portrait": "y10_geuseundae",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "여기선 지켜 준 수를 적을게.",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y10_geuseundae",
+"text_ko": "…그럼 오늘 밤 뒷산은 내가 따라가지. 동행에 놓아.",
+"portrait": "y10_geuseundae",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y10"
+}]

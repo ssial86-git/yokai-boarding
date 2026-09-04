@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y07_act2"
+nodes = [{
+"node": "start",
+"speaker": "y07_museo",
+"text_ko": "마계에서 불이 났었어. 관청 하나가 다 탔지. 내가 막았어야 했는데.",
+"portrait": "y07_museo",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y07_museo",
+"text_ko": "막으려면 쇠를 먹어야 했어. 그런데 그 쇠는 회수국 창고 것이었고, 장부에 없는 소비였고.",
+"portrait": "y07_museo",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "그래서 쫓겨났구나.",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y07_museo",
+"text_ko": "불을 막은 값이 감가상각이었다. 웃기지. 그 창고 문서 더미에서 이승 글씨를 하나 봤어. 네 아비 글씨였을 거야.",
+"portrait": "y07_museo",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y07"
+}]

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BlessingData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/blessing_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "b_daltokki"
+yokai_id = "y09_daltokki"
+name_ko = "달토끼의 절구"
+short_ko = "토"
+affinity_min = 1
+seed_yield_bonus = 2
+dish_buff_bonus = 2
+talisman_power_bonus = 0
+flavor_ko = "절구질 소리가 난다. 마계 씨앗과 눈 요리에 잘 붙는다."

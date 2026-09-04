@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y10_act1"
+nodes = [{
+"node": "start",
+"speaker": "y10_geuseundae",
+"text_ko": "…올려다보지 마. 올려다보면 커져. 커지면 방이 무너져.",
+"portrait": "y10_geuseundae",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "내려다보면?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y10_geuseundae",
+"text_ko": "작아진다. 그러니 앉아서 말해. 그래. 그렇게.",
+"portrait": "y10_geuseundae",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

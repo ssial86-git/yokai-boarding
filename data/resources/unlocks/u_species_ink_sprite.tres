@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_species_ink_sprite"
+day_min = 67
+expected_day = 67
+timeband = "evening"
+condition = ""
+unlock_type = "species"
+unlock_id = "g_ink_sprite"
+hint_ko = "먹물 요정 — 먹돌을 낸다."

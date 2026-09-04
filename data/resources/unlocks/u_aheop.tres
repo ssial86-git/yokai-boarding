@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_aheop"
+day_min = 44
+expected_day = 44
+timeband = "evening"
+condition = ""
+unlock_type = "yokai"
+unlock_id = "y06_aheop"
+hint_ko = "수습 구미호 아홉이 찾아온다. 심사 카드가 더 정확해진다."

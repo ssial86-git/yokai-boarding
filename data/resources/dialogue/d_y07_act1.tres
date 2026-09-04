@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y07_act1"
+nodes = [{
+"node": "start",
+"speaker": "y07_museo",
+"text_ko": "…쇠 냄새. 작업장에 못이 있지? 하나만.",
+"portrait": "y07_museo",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "먹으려고?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y07_museo",
+"text_ko": "먹는 게 아니라 큰다. 불가사리는 쇠를 먹으면 커져. 커지면 불을 막고.",
+"portrait": "y07_museo",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y07_museo",
+"text_ko": "많이 먹지 않을게. 부스러기는 돌려줄 테니.",
+"portrait": "y07_museo",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BlessingData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/blessing_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "b_museo"
+yokai_id = "y07_museo"
+name_ko = "무쇠의 쇳덩이"
+short_ko = "쇠"
+affinity_min = 1
+seed_yield_bonus = 0
+dish_buff_bonus = 1
+talisman_power_bonus = 3
+flavor_ko = "쇠를 먹은 무게가 실린다. 투척 부적에 으뜸이고 씨앗엔 무겁다."

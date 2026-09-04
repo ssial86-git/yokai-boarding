@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="GuestSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/guest_species_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_ink_sprite"
+name_ko = "먹물 요정"
+rarity = "uncommon"
+flavor_ko = "먹돌에서 나온 작은 요정. 글자를 먹는다."
+first_words_ko = "장부… 냄새가 난다. 한 장만 핥아도 돼?"
+rent_type = "items"
+rent_note_ko = "먹돌 한 조각"
+rent_money = 30
+rent_item = "m_ink_stone"
+rent_amount = 1
+omen = 1
+appear_condition = ""
+weight = 12
+promotable = false
+sprite_size = 16
+liked_recipe = "r_chestnut_rice"
+realm = "demon"
+promotes_to = ""

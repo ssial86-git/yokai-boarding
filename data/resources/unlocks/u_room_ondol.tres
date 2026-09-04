@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_room_ondol"
+day_min = 87
+expected_day = 87
+timeband = "day"
+condition = "unlock:u_season_winter"
+unlock_type = "room"
+unlock_id = "ondol_room"
+hint_ko = "온돌방을 지을 수 있다 — 침대 셋. 겨울 손님이 늘어난다."

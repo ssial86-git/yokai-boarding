@@ -3,3 +3,11 @@ g_mongdanggwi,몽당귀,common,몽당연필 요괴. 어디든 낙서를 남기�
 g_ibulnang,이불낭,common,이불을 뒤집어쓴 무언가. 체크아웃까지 정체 불명.,(이불 속에서) 따뜻한 데 있어?,buff,따뜻한 온기(모두의 컨디션 회복),30,,15,1,,40,false,32,r_radish_soup,mortal,
 g_usanson,우산손,uncommon,버려진 우산 요괴. 비 오는 날만 찾아온다.,내일도 비야. 재워 주면 알려 줄게.,info,비 예보,40,,0,0,rain,15,false,32,r_mushroom_soup,mortal,
 g_geumjuri,금줄이,rare,새끼줄 요괴. 묵은 방에 액막이를 걸어 준다.,문턱이 낡았군. 내가 좀 손보지.,buff,결계 보너스(모두의 컨디션 크게 회복),60,,30,0,,5,true,16,r_kimchi,demon,y05_geumjuri
+g_ongi,옹기귀,common,깨진 항아리 요괴. 뭐든 담아 두려 한다.,…빈 항아리 있어? 하룻밤만 담아 줘.,items,절임 한 통,25,dish_kimchi,1,0,,35,true,32,r_kimchi,mortal,y08_ongi
+g_bobusang,보부상귀,uncommon,등짐 진 장사 요괴. 값을 매기는 버릇이 있다.,자리 값은 얼마? 물건으로 쳐도 되나?,money,잔돈을 후하게 낸다,55,,0,1,,15,false,32,r_radish_soup,mortal,
+g_baram,바람뭉치,uncommon,바람이 뭉친 것. 문틈으로 든다.,휘— 내일 바람 방향 알려 줄까?,info,바람 예보,35,,0,0,wind,15,false,16,r_herb_tea,mortal,
+g_moon_rabbit,달토끼,rare,달에서 내려온 토끼. 절구를 들고 있다.,달무리 밤엔 내려와도 돼. 떡 찧어 줄게.,buff,절구 떡(모두의 컨디션 회복),60,,25,0,moon_haze,6,true,16,r_moon_melon_slice,demon,y09_daltokki
+g_snow_child,눈아이,rare,첫눈에 생겨 봄에 녹는 아이.,녹기 전에… 따뜻한 방 있어?,buff,겨울 냉기(모두의 컨디션 회복),50,,20,0,snow,6,false,16,r_patjuk,mortal,
+g_ink_sprite,먹물 요정,uncommon,먹돌에서 나온 작은 요정. 글자를 먹는다.,장부… 냄새가 난다. 한 장만 핥아도 돼?,items,먹돌 한 조각,30,m_ink_stone,1,1,,12,false,16,r_chestnut_rice,demon,
+g_lantern_fish,등불고기,rare,늪에서 올라온 빛나는 고기.,어둡네. 내가 불을 켤게.,buff,밤 등불(모두의 컨디션 회복),45,,15,0,blizzard,5,false,16,r_shadow_stew,demon,
+g_stone_mireuk,돌미륵,legendary,길가 돌부처가 걸어왔다.,…앉아도 되겠소.,buff,자비(모두의 컨디션 크게 회복),120,,50,0,,1,false,32,r_surichwi_tteok,mortal,

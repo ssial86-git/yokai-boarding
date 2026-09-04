@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y06_act1"
+nodes = [{
+"node": "start",
+"speaker": "y06_aheop",
+"text_ko": "…들었지? 꼬리 세는 소리. 여덟이야. 아홉이 못 됐어.",
+"portrait": "y06_aheop",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "하나가 모자라서 도망친 거야?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y06_aheop",
+"text_ko": "둔갑 시험에 떨어졌어. 사람으로 변하는 시험. 실적 미달이면 꼬리를 하나씩 뗀다더라.",
+"portrait": "y06_aheop",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y06_aheop",
+"text_ko": "여기선 사람 흉내 안 내도 되지? 그럼 됐어.",
+"portrait": "y06_aheop",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1"
+}]

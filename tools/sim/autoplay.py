@@ -169,9 +169,9 @@ def economy_curve(tune: dict, unlocks, crops, items, materials, regions, species
 
 
 def main(argv: list[str]) -> int:
-    parser = argparse.ArgumentParser(description="자동 플레이 시뮬레이터 (기본 84일 = 봄·여름·가을, P3-S2)")
+    parser = argparse.ArgumentParser(description="자동 플레이 시뮬레이터 (기본 112일 = 4절기 한 해, P3-S3)")
     parser.add_argument("--check", action="store_true", help="케이던스·위임 교차점이 목표 밖이면 종료 코드 1")
-    parser.add_argument("--days", type=int, default=84)
+    parser.add_argument("--days", type=int, default=112)
     args = parser.parse_args(argv)
 
     tune = tuning()

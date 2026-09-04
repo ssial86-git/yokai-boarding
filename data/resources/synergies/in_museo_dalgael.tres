@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SynergyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/synergy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "in_museo_dalgael"
+blessing_id = "b_museo"
+context_kind = "yokai"
+context_id = "y03_dalgael"
+delta = -1
+note_ko = "달갤은 쇳내 나는 요리를 못 먹는다"

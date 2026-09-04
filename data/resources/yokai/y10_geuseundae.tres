@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="YokaiData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/yokai_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "y10_geuseundae"
+name_ko = "그슨대"
+species_ko = "그슨대"
+preferred_room = "guest_room"
+work_bonus = 0.0
+noise = 1
+night_worker = true
+rent_type = "none"
+rent_note_ko = "밤길 호위(밤 파견 보정 — 지불 없음)"
+rent_item = ""
+rent_amount = 0
+rent_interval_days = 1
+join_mode = "intake"
+join_day = 99
+stat_strength = 4
+stat_skill = 1
+stat_sight = 3
+stat_courage = 5
+sprite_size = 32
+clarity_by_affinity = false
+in_slice = true

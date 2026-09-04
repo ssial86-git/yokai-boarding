@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="BlessingData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/blessing_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "b_bari"
+yokai_id = "y04_bari"
+name_ko = "바리의 마른 숨"
+short_ko = "바"
+affinity_min = 1
+seed_yield_bonus = 0
+dish_buff_bonus = 2
+talisman_power_bonus = 1
+flavor_ko = "메마른 열기가 스민다. 힘 요리와 던지는 것에 좋고 이승 씨앗은 말린다."

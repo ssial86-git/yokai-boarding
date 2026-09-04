@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="RoomData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/room_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "ondol_room"
+name_ko = "온돌방"
+kind = "lodging"
+build_cost = 180
+capacity = 3
+spirit_id = ""
+quiet = true
+requires_room = "guest_room"
+output_item = ""
+output_amount = 0

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="YokaiData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/yokai_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "y08_ongi"
+name_ko = "옹기"
+species_ko = "옹기귀"
+preferred_room = "storage"
+work_bonus = 0.1
+noise = 0
+night_worker = false
+rent_type = "items"
+rent_note_ko = "항아리에 절인 김치 한 통"
+rent_item = "dish_kimchi"
+rent_amount = 1
+rent_interval_days = 3
+join_mode = "intake"
+join_day = 0
+stat_strength = 2
+stat_skill = 3
+stat_sight = 1
+stat_courage = 2
+sprite_size = 32
+clarity_by_affinity = false
+in_slice = true

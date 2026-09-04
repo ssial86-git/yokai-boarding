@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="GuestSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/guest_species_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_stone_mireuk"
+name_ko = "돌미륵"
+rarity = "legendary"
+flavor_ko = "길가 돌부처가 걸어왔다."
+first_words_ko = "…앉아도 되겠소."
+rent_type = "buff"
+rent_note_ko = "자비(모두의 컨디션 크게 회복)"
+rent_money = 120
+rent_item = ""
+rent_amount = 50
+omen = 0
+appear_condition = ""
+weight = 1
+promotable = false
+sprite_size = 32
+liked_recipe = "r_surichwi_tteok"
+realm = "mortal"
+promotes_to = ""

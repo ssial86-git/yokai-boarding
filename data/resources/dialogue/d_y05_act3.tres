@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y05_act3"
+nodes = [{
+"node": "start",
+"speaker": "y05_geumjuri",
+"text_ko": "새 매듭을 지었다. 문턱·부엌·객실·대들보. 네 곳.",
+"portrait": "y05_geumjuri",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y05_geumjuri",
+"text_ko": "새끼줄은 걸어 주는 사람이 있어야 새끼줄이야. 여기 오기 전엔 그냥 짚이었어.",
+"portrait": "y05_geumjuri",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "오래 걸려 있어 줘.",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y05_geumjuri",
+"text_ko": "장기 계약이잖나. 하숙부에 적어 둬 — 금줄이, 이 집 문턱 담당.",
+"portrait": "y05_geumjuri",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y05_done"
+}]

@@ -9,3 +9,24 @@ in_ttuk_demon,b_ttukttagi,crop_realm,demon,-1,도깨비불이 마계 씨앗을 �
 in_eoduk_courage,b_eoduki,recipe_stat,courage,-1,그림자는 담력 요리를 눅인다
 in_dal_throw,b_dalgael,talisman_effect,throw,-1,달빛은 던지기엔 흐릿하다
 in_ttuk_dal,b_ttukttagi,yokai,y03_dalgael,-1,뚝딱이 가호 요리를 달갤이 먹으면 소란스럽다
+sy_bari_strength,b_bari,recipe_stat,strength,1,마른 열기가 힘 요리를 데운다
+sy_bari_throw,b_bari,talisman_effect,throw,1,열기가 투척에 실린다
+in_bari_mortal,b_bari,crop_realm,mortal,-1,이승 씨앗이 마른다
+sy_aheop_sight,b_aheop,recipe_stat,sight,2,꼬리 여덟이 눈을 밝힌다
+sy_aheop_eoduki,b_aheop,yokai,y02_eoduki,1,어둑이가 눈속임 요리를 좋아한다
+in_aheop_throw,b_aheop,talisman_effect,throw,-1,산만해서 던지기가 흐트러진다
+sy_museo_throw,b_museo,talisman_effect,throw,2,쇳덩이 무게가 실린다
+sy_museo_strength,b_museo,recipe_stat,strength,1,쇠를 먹은 힘
+in_museo_dalgael,b_museo,yokai,y03_dalgael,-1,달갤은 쇳내 나는 요리를 못 먹는다
+sy_ongi_mortal,b_ongi,crop_realm,mortal,1,항아리 흙이 이승 씨앗에 맞다
+sy_ongi_courage,b_ongi,recipe_stat,courage,1,푹 익은 것이 담을 키운다
+in_ongi_gather,b_ongi,talisman_effect,gather,-1,항아리는 들고 다니기 무겁다
+sy_daltokki_demon,b_daltokki,crop_realm,demon,1,달빛 절구가 마계 씨앗을 깨운다
+sy_daltokki_sight,b_daltokki,recipe_stat,sight,1,달을 본 눈
+in_daltokki_strength,b_daltokki,recipe_stat,strength,-1,떡은 힘이 못 된다
+sy_geuseundae_throw,b_geuseundae,talisman_effect,throw,2,그늘이 멀리 뻗는다
+sy_geuseundae_courage,b_geuseundae,recipe_stat,courage,1,어둠에 익숙해진다
+in_geuseundae_geumjuri,b_geuseundae,yokai,y05_geumjuri,-1,금줄이는 그늘 요리를 밀어낸다
+sy_geumjuri_courage,b_geumjuri,recipe_stat,courage,1,액막이 매듭이 담을 지킨다
+sy_geumjuri_gather,b_geumjuri,talisman_effect,gather,1,새끼줄에 채집물이 걸린다
+in_geumjuri_demon,b_geumjuri,crop_realm,demon,-1,금줄은 마계 씨앗을 밀어낸다

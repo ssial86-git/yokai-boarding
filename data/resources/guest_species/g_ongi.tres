@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="GuestSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/guest_species_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_ongi"
+name_ko = "옹기귀"
+rarity = "common"
+flavor_ko = "깨진 항아리 요괴. 뭐든 담아 두려 한다."
+first_words_ko = "…빈 항아리 있어? 하룻밤만 담아 줘."
+rent_type = "items"
+rent_note_ko = "절임 한 통"
+rent_money = 25
+rent_item = "dish_kimchi"
+rent_amount = 1
+omen = 0
+appear_condition = ""
+weight = 35
+promotable = true
+sprite_size = 32
+liked_recipe = "r_kimchi"
+realm = "mortal"
+promotes_to = "y08_ongi"

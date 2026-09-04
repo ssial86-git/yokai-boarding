@@ -65,3 +65,10 @@ material,m_marsh_pearl,sell:market,gift:y03_dalgael,quest:chapter2
 material,m_ash_paper,craft:talisman_paper,sell:market,quest:chapter2
 material,m_ink_stone,upgrade:tool_lv4,sell:market,craft:talisman_ink
 material,m_ledger_scrap,quest:chapter2,event:c2_archive,sell:market
+blessing,b_bari,buff:dish_strength,combat:talisman_throw,sell:market
+blessing,b_aheop,buff:dish_sight,farm:seed_yield,gift:y02_eoduki
+blessing,b_museo,combat:talisman_throw,buff:dish_strength,upgrade:tool_lv4
+blessing,b_ongi,farm:seed_yield,buff:dish_courage,feed:g_ongi
+blessing,b_daltokki,farm:demon_seed,buff:dish_sight,event:f_dano
+blessing,b_geuseundae,combat:talisman_throw,buff:dish_courage,travel:night_regions
+blessing,b_geumjuri,buff:dish_courage,gather:talisman_gather,farm:seed_yield

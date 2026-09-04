@@ -5,3 +5,5 @@ workshop,작업장,production,150,1,,false,,trinket,1
 gate,대문간,gate,120,1,mundori,false,,,0
 storage,창고,storage,80,0,,false,,,0
 empty_lot,빈터,empty,0,0,,false,,,0
+study,서고,service,220,1,,true,workshop,,0
+ondol_room,온돌방,lodging,180,3,,true,guest_room,,0

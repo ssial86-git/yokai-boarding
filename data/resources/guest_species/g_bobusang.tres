@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="GuestSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/guest_species_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_bobusang"
+name_ko = "보부상귀"
+rarity = "uncommon"
+flavor_ko = "등짐 진 장사 요괴. 값을 매기는 버릇이 있다."
+first_words_ko = "자리 값은 얼마? 물건으로 쳐도 되나?"
+rent_type = "money"
+rent_note_ko = "잔돈을 후하게 낸다"
+rent_money = 55
+rent_item = ""
+rent_amount = 0
+omen = 1
+appear_condition = ""
+weight = 15
+promotable = false
+sprite_size = 32
+liked_recipe = "r_radish_soup"
+realm = "mortal"
+promotes_to = ""

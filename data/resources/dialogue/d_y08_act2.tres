@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y08_act2"
+nodes = [{
+"node": "start",
+"speaker": "y08_ongi",
+"text_ko": "손님으로 왔을 때 담아 둔 게 있어. 대문간에서 들은 소리.",
+"portrait": "y08_ongi",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y08_ongi",
+"text_ko": "집행관이 문돌이한테 그랬어. 이 집 장부는 양식이 틀렸다고. 그래서 못 지운다고.",
+"portrait": "y08_ongi",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "그걸 왜 이제 말해?",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y08_ongi",
+"text_ko": "새는 항아리라서. 다 새기 전에 말해야 했는데. 미안.",
+"portrait": "y08_ongi",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y08"
+}]

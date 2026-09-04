@@ -30,7 +30,7 @@ SCRIPT_DIR = "res://src/core/resources/"
 ENUMS: dict[str, set[str]] = {
     "item_kind": {"food", "material", "misc", "key", "talisman", "seed", "crop", "fish"},
     "rent_type": {"money", "items", "errand", "buff", "info", "none"},
-    "rarity": {"common", "uncommon", "rare"},
+    "rarity": {"common", "uncommon", "rare", "legendary"},
     "room_kind": {"lodging", "production", "service", "gate", "storage", "empty"},
     "tuning_type": {"int", "float", "bool", "string"},
     "sprite_size": {"16", "32"},
@@ -50,7 +50,7 @@ ENUMS: dict[str, set[str]] = {
     "shop": {"gray", "village", "apothecary"},
     "enemy_tier": {"normal", "boss"},
     "unlock_type": {"region", "tool", "talisman", "enemy", "yokai", "event", "crop", "material", "fish", "verb", "feature",
-                    "season_event", "festival", "recipe"},
+                    "season_event", "festival", "recipe", "room", "species"},
     "goal_tier": {"today", "season", "long"},
     "verb": {"walk", "gather", "farm", "cook", "fish", "craft", "talk", "intake", "assign", "build", "explore", "fight", "sleep"},
     "chain_content_type": {"material", "crop", "talisman", "fish", "recipe", "blessing"},
@@ -80,6 +80,7 @@ UNLOCK_REF_TABLES: dict[str, str] = {
     "region": "regions", "tool": "tools", "talisman": "talismans", "enemy": "enemies", "yokai": "yokai",
     "event": "events", "crop": "crops", "material": "materials", "fish": "fish",
     "season_event": "season_events", "festival": "festivals", "recipe": "recipes",
+    "room": "rooms", "species": "guest_species",
 }
 # 목표 조건 문법 (세미콜론 AND): 정량 절 <name>[:<target>]>=<n>, 불리언 절 resident:/unlock:/flag:
 GOAL_CONDITION_PATTERN = re.compile(

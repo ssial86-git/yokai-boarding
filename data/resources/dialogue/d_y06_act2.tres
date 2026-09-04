@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y06_act2"
+nodes = [{
+"node": "start",
+"speaker": "y06_aheop",
+"text_ko": "오늘 손님 카드 봤어? 내가 냄새를 조금 고쳐 놨어. 액운 냄새가 더 정확해졌을 거야.",
+"portrait": "y06_aheop",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "그게 네 재주야?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y06_aheop",
+"text_ko": "소문을 모으는 재주. 시험에선 쓸모없다고 했지만.",
+"portrait": "y06_aheop",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y06_aheop",
+"text_ko": "소문 하나 더. 마을 약방 할미가 네 아비를 안다더라. 요괴 손님 약초를 사러 왔다고.",
+"portrait": "y06_aheop",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y06"
+}]

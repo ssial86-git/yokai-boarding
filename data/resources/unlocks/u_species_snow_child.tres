@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_species_snow_child"
+day_min = 95
+expected_day = 95
+timeband = "evening"
+condition = ""
+unlock_type = "species"
+unlock_id = "g_snow_child"
+hint_ko = "눈 오는 날 눈아이가 온다. 봄이 오면 녹는다."

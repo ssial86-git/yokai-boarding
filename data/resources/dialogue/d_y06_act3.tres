@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y06_act3"
+nodes = [{
+"node": "start",
+"speaker": "y06_aheop",
+"text_ko": "아홉 번째 꼬리가… 조금 자란 것 같아. 봐.",
+"portrait": "y06_aheop",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "시험도 안 봤는데?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y06_aheop",
+"text_ko": "여기 사람들은 내가 사람이 아니어도 무서워하지 않아. 그게 시험이었던 거야. 아마.",
+"portrait": "y06_aheop",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y06_aheop",
+"text_ko": "하숙부에 적어 줘. 아홉. 꼬리 아홉. 아직 여덟 개 반이지만.",
+"portrait": "y06_aheop",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y06_done"
+}]

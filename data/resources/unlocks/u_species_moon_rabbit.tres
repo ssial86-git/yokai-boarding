@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_species_moon_rabbit"
+day_min = 62
+expected_day = 62
+timeband = "night"
+condition = ""
+unlock_type = "species"
+unlock_id = "g_moon_rabbit"
+hint_ko = "달무리 밤에 달토끼가 내려온다. 자주 오면 장기 계약을 청한다."

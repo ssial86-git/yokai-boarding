@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_geuseundae"
+day_min = 99
+expected_day = 99
+timeband = "evening"
+condition = ""
+unlock_type = "yokai"
+unlock_id = "y10_geuseundae"
+hint_ko = "밤에 그슨대가 문 앞에 서 있다. 올려다보지 말자."

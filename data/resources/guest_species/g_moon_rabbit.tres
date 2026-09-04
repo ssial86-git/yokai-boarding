@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="GuestSpeciesData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/guest_species_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "g_moon_rabbit"
+name_ko = "달토끼"
+rarity = "rare"
+flavor_ko = "달에서 내려온 토끼. 절구를 들고 있다."
+first_words_ko = "달무리 밤엔 내려와도 돼. 떡 찧어 줄게."
+rent_type = "buff"
+rent_note_ko = "절구 떡(모두의 컨디션 회복)"
+rent_money = 60
+rent_item = ""
+rent_amount = 25
+omen = 0
+appear_condition = "moon_haze"
+weight = 6
+promotable = true
+sprite_size = 16
+liked_recipe = "r_moon_melon_slice"
+realm = "demon"
+promotes_to = "y09_daltokki"

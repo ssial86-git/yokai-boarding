@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_species_bobusang"
+day_min = 46
+expected_day = 46
+timeband = "evening"
+condition = ""
+unlock_type = "species"
+unlock_id = "g_bobusang"
+hint_ko = "보부상귀 — 잔돈을 후하게 내는 손님."

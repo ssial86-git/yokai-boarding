@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y05_act2"
+nodes = [{
+"node": "start",
+"speaker": "y05_geumjuri",
+"text_ko": "문턱 매듭 하나가 끊어졌더군. 누가 밤에 당겼어. 집행관 냄새가 났다.",
+"portrait": "y05_geumjuri",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "다시 묶을 수 있어?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y05_geumjuri",
+"text_ko": "묶었지. 그런데 알겠나 — 저쪽 장부엔 이 집이 미등록 자산이라 적혀 있어. 줄 하나로는 오래 못 막는다.",
+"portrait": "y05_geumjuri",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y05_geumjuri",
+"text_ko": "네 아비는 알았어. 그래서 사연을 적었지. 줄이 아니라 이름으로 막는 법을.",
+"portrait": "y05_geumjuri",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y05"
+}]

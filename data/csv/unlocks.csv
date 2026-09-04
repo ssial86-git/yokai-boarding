@@ -91,3 +91,20 @@ u_night_marsh,76,76,day,unlock:u_moon_marsh,feature,night_r_moon_marsh,밤의 �
 u_night_archive,80,80,day,unlock:u_archive_gate,feature,night_r_archive_gate,밤의 문서고 외곽 — 장부 불꽃이 날아다닌다.
 u_material_pearl,82,82,day,unlock:u_night_marsh,material,m_marsh_pearl,늪진주 — 달갤이 좋아한다.
 u_fish_glow_eel,84,84,evening,unlock:u_moon_marsh,fish,f_glow_eel,밤 늪에 빛장어가 떠오른다 (낚싯대 Lv2).
+u_bari,30,30,evening,,yokai,y04_bari,빈 카드가 아닌 낯선 손님 — 새끼 강철이 바리가 찾아온다.
+u_species_ongi,34,34,evening,,species,g_ongi,깨진 항아리가 문을 두드린다 — 옹기귀. 자주 오면 장기 계약을 청한다.
+u_species_baram,40,40,evening,,species,g_baram,갈바람 날엔 바람뭉치가 문틈으로 든다.
+u_aheop,44,44,evening,,yokai,y06_aheop,수습 구미호 아홉이 찾아온다. 심사 카드가 더 정확해진다.
+u_species_bobusang,46,46,evening,,species,g_bobusang,보부상귀 — 잔돈을 후하게 내는 손님.
+u_museo,58,58,evening,,yokai,y07_museo,불가사리 무쇠가 찾아온다. 쇠를 조금 먹는다.
+u_species_moon_rabbit,62,62,night,,species,g_moon_rabbit,달무리 밤에 달토끼가 내려온다. 자주 오면 장기 계약을 청한다.
+u_species_ink_sprite,67,67,evening,,species,g_ink_sprite,먹물 요정 — 먹돌을 낸다.
+u_room_ondol,87,87,day,unlock:u_season_winter,room,ondol_room,온돌방을 지을 수 있다 — 침대 셋. 겨울 손님이 늘어난다.
+u_species_snow_child,95,95,evening,,species,g_snow_child,눈 오는 날 눈아이가 온다. 봄이 오면 녹는다.
+u_room_study,97,97,day,unlock:u_room_ondol,room,study,서고를 지을 수 있다 — 하숙부를 두는 조용한 방.
+u_geuseundae,99,99,evening,,yokai,y10_geuseundae,밤에 그슨대가 문 앞에 서 있다. 올려다보지 말자.
+u_species_stone_mireuk,101,101,evening,,species,g_stone_mireuk,돌미륵 — 길가 돌부처가 걸어왔다. 전설의 손님.
+u_species_lantern_fish,103,103,night,,species,g_lantern_fish,눈보라 밤에 등불고기가 늪에서 올라온다.
+u_second_blessing,106,106,morning,affinity:y01_ttukttagi>=3,feature,blessing_two_per_day,하숙생이 하루 두 번 가호를 붙여 준다.
+u_winter_notice,108,108,morning,,feature,winter_notice,나흘 뒤 한 해가 돈다. 봄 씨앗을 미리 사 두자.
+u_promotion_2,110,110,day,unlock:u_promotion,feature,promotion_2,옹기귀·달토끼도 장기 계약을 청할 수 있다.

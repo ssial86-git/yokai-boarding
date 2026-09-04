@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y09_act2"
+nodes = [{
+"node": "start",
+"speaker": "y09_daltokki",
+"text_ko": "달에도 장부가 있어. 내가 찧은 떡 개수를 적는. 모자라면 달에서 떨어져.",
+"portrait": "y09_daltokki",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y09_daltokki",
+"text_ko": "그래서 다들 그 왕의 장부가 하늘 것과 같다고 해. 숫자로 사는 건 어디나 같다고.",
+"portrait": "y09_daltokki",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "여기 장부는 다르다는 걸 알잖아.",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y09_daltokki",
+"text_ko": "응. 여기선 몇 개 찧었는지 안 적더라. 누구한테 줬는지만 적어.",
+"portrait": "y09_daltokki",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;flag:clue_y09"
+}]

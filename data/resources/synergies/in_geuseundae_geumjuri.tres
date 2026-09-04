@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SynergyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/synergy_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "in_geuseundae_geumjuri"
+blessing_id = "b_geuseundae"
+context_kind = "yokai"
+context_id = "y05_geumjuri"
+delta = -1
+note_ko = "금줄이는 그늘 요리를 밀어낸다"

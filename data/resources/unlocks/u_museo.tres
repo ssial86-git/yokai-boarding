@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_museo"
+day_min = 58
+expected_day = 58
+timeband = "evening"
+condition = ""
+unlock_type = "yokai"
+unlock_id = "y07_museo"
+hint_ko = "불가사리 무쇠가 찾아온다. 쇠를 조금 먹는다."

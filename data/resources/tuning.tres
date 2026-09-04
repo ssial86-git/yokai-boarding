@@ -174,5 +174,6 @@ values = {
 "merchant_color": "d4a5c4",
 "promote_visits": 2,
 "promote_reputation": 5,
-"village_closed_band": "night"
+"village_closed_band": "night",
+"blessing_per_day_bonus": 1
 }

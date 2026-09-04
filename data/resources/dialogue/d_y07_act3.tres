@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y07_act3"
+nodes = [{
+"node": "start",
+"speaker": "y07_museo",
+"text_ko": "결계가 두꺼워졌어. 대들보가 쇠처럼 울려. 내가 먹지 않은 쇠야.",
+"portrait": "y07_museo",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "player",
+"text_ko": "먹지 않은 쇠?",
+"portrait": "",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "y07_museo",
+"text_ko": "이 집 못은 하나도 안 먹었어. 처음이야. 먹지 않고 지킨 건.",
+"portrait": "y07_museo",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y07_museo",
+"text_ko": "쇠부스러기는 계속 줄게. 부적에 박아 봐. 잘 날아갈 거야.",
+"portrait": "y07_museo",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;item:scrap:+3"
+}]

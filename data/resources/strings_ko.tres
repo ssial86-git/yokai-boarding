@@ -329,5 +329,6 @@ values = {
 "shop_apothecary": "약방",
 "ui_shop_title": "{shop} — {npc} · {weather} · 음기 {yin}",
 "prompt_npc": "E: {name} (거래)",
-"prompt_village_closed": "{name} — 밤에는 문을 닫는다"
+"prompt_village_closed": "{name} — 밤에는 문을 닫는다",
+"rarity_legendary": "전설"
 }

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_species_baram"
+day_min = 40
+expected_day = 40
+timeband = "evening"
+condition = ""
+unlock_type = "species"
+unlock_id = "g_baram"
+hint_ko = "갈바람 날엔 바람뭉치가 문틈으로 든다."

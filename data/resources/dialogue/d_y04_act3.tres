@@ -1,0 +1,63 @@
+[gd_resource type="Resource" script_class="DialogueData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/dialogue_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "d_y04_act3"
+nodes = [{
+"node": "start",
+"speaker": "y04_bari",
+"text_ko": "결심했어. 말해 줄게. 문서고 — 왕의 장부가 보관된 곳.",
+"portrait": "y04_bari",
+"next": "2",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "2",
+"speaker": "y04_bari",
+"text_ko": "잿빛 들 심부를 지나 외곽 관청을 통과하면 문이 있어. 서기들이 지키지. 도장 골렘도.",
+"portrait": "y04_bari",
+"next": "3",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "3",
+"speaker": "player",
+"text_ko": "너도 갈 거야?",
+"portrait": "",
+"next": "4",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "4",
+"speaker": "y04_bari",
+"text_ko": "가면 논이 마른다. 나는 여기서 불을 지키겨. 대신 비늘을 줄게 — 문을 지날 때 쓸 데가 있을 거야.",
+"portrait": "y04_bari",
+"next": "5",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": ""
+}, {
+"node": "5",
+"speaker": "y04_bari",
+"text_ko": "네 아비는 거기서 나오지 못했어. 너는 나와야 한다.",
+"portrait": "y04_bari",
+"next": "end",
+"option1_ko": "",
+"option1_next": "",
+"option2_ko": "",
+"option2_next": "",
+"effect": "affinity:+1;item:scrap:+2;flag:archive_location"
+}]

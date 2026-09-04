@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_species_ongi"
+day_min = 34
+expected_day = 34
+timeband = "evening"
+condition = ""
+unlock_type = "species"
+unlock_id = "g_ongi"
+hint_ko = "깨진 항아리가 문을 두드린다 — 옹기귀. 자주 오면 장기 계약을 청한다."

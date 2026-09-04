@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_promotion_2"
+day_min = 110
+expected_day = 110
+timeband = "day"
+condition = "unlock:u_promotion"
+unlock_type = "feature"
+unlock_id = "promotion_2"
+hint_ko = "옹기귀·달토끼도 장기 계약을 청할 수 있다."

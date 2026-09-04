@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_species_lantern_fish"
+day_min = 103
+expected_day = 103
+timeband = "night"
+condition = ""
+unlock_type = "species"
+unlock_id = "g_lantern_fish"
+hint_ko = "눈보라 밤에 등불고기가 늪에서 올라온다."

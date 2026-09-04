@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UnlockData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/core/resources/unlock_data.gd" id="1_script"]
+
+[resource]
+script = ExtResource("1_script")
+id = "u_winter_notice"
+day_min = 108
+expected_day = 108
+timeband = "morning"
+condition = ""
+unlock_type = "feature"
+unlock_id = "winter_notice"
+hint_ko = "나흘 뒤 한 해가 돈다. 봄 씨앗을 미리 사 두자."
