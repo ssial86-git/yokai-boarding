@@ -25,7 +25,7 @@ extends Node2D
 ##  └ UI (CanvasLayer)
 ##      ├ DropLayer          방 위에 카드 놓기 (투명)
 ##      ├ Hud                시계 카드·상태 칩·안내·체력 바·상호작용 알약
-##      ├ MessageLog         왼쪽 아래 메시지
+##      ├ MessageLog         왼쪽 위(시계 카드 아래) 메시지 토스트
 ##      ├ AssignmentPanel    아침 배치 카드 (집 안에서만)
 ##      ├ BuildMenu
 ##      ├ MenuHub            장부 탭 메뉴: 창고 · 하숙부 · 명부 (Tab / I·J·L)
@@ -251,10 +251,10 @@ func _build_ui() -> void:
 
 	message_log = MessageLog.new()
 	message_log.name = "MessageLog"
-	# 아래쪽에 앵커를 두고 위로 자라게 한다 — 패널이 숨어도(야외) 화면 밖으로 밀리지 않도록
-	message_log.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
-	message_log.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	message_log.alignment = BoxContainer.ALIGNMENT_END  # 줄이 적어도 아래에 붙는다
+	# 시계 카드 아래에 앵커를 두고 아래로 자란다 — 왼쪽 아래에 두면 집 옆 마당 소품(prop.house_deco_left)을 덮는다
+	message_log.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	message_log.grow_vertical = Control.GROW_DIRECTION_END
+	message_log.alignment = BoxContainer.ALIGNMENT_BEGIN
 	ui_root.add_child(message_log)
 
 	assignment_panel = AssignmentPanel.new()
@@ -325,12 +325,12 @@ func _layout_around_panels() -> void:
 	var bottom := clampf(assignment_panel.size.y if assignment_panel.visible else 0.0, 0.0, view_size.y * 0.5)
 	camera.offset = Vector2(0, (bottom - top) * 0.5)
 	message_log.offset_left = MESSAGE_LOG_MARGIN_PX
-	message_log.offset_bottom = -hud.log_bottom_inset(bottom)  # 체력 바 위
-	message_log.offset_top = message_log.offset_bottom - maxf(message_log.size.y, message_log.get_minimum_size().y)
-	# 토스트 더미가 시계 카드·안내 줄까지 올라오지 않도록 (tuning message_log_top_ratio 아래에서만 쌓인다)
+	message_log.offset_top = top + MESSAGE_LOG_MARGIN_PX  # 시계 카드 아래
+	message_log.offset_bottom = message_log.offset_top  # 높이 0 — grow_vertical END 로 내용만큼만 자란다 (이전 크기를 물려받지 않도록)
+	# 토스트 더미가 마당 소품·집 지붕까지 내려오지 않도록 (tuning message_log_bottom_ratio 위에서만 쌓인다)
 	message_log.max_height = maxf(
-		view_size.y - hud.log_bottom_inset(bottom) - view_size.y * DataRegistry.tuning.get_float("message_log_top_ratio", 0.36), 0.0)
-	hud.set_prompt_bottom(bottom + MESSAGE_LOG_MARGIN_PX)
+		view_size.y * DataRegistry.tuning.get_float("message_log_bottom_ratio", 0.44) - message_log.offset_top, 0.0)
+	hud.layout_chips(top + MESSAGE_LOG_MARGIN_PX, bottom + MESSAGE_LOG_MARGIN_PX)
 
 
 ## 창 크기를 뷰포트(640x360)의 정수 배로 맞춘다. tuning window_integer_scale 이 0 이면 화면에 맞는 최대 배율.

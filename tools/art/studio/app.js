@@ -457,15 +457,18 @@ function drawHud(ctx) {
   for (const text of buttons) { const w = ctx.measureText(text).width + pad * 2; bx -= w + 4; panelRect(ctx, 'ui.button', bx, 34, w, fs + pad + 4, color('ui_button_color', '4a4352')); ctx.fillStyle = '#ede6dc'; ctx.fillText(text, bx + pad, 34 + fs + 2); }
   // 안내 줄
   const guide = '성주 영감: 낮에는 배치된 요괴가 일합니다. 저녁(17:00)이 되면 정산하고 손님이 옵니다.';
-  const gw = Math.min(VIEW_W * 0.6, ctx.measureText(guide).width + pad * 2);
-  panelRect(ctx, 'ui.panel', (VIEW_W - gw) / 2, 74, gw, fs * 2 + pad * 2 + 4, panelColor);
+  const gw = Math.min(VIEW_W * 0.4, ctx.measureText(guide).width + pad * 2);
+  panelRect(ctx, 'ui.panel', (VIEW_W - gw) / 2, 74, gw, fs * 3 + pad * 2 + 6, panelColor);
   ctx.fillStyle = '#ede6dc'; wrapText(ctx, guide, (VIEW_W - gw) / 2 + pad, 74 + pad + fs, gw - pad * 2, fs + 2);
-  // 체력 바 · 프롬프트
+  // 메시지 토스트: 왼쪽 위(시계 카드 아래), 아래로 쌓임 — 마당 소품(바닥 y 225 - 64) 위까지만
+  const toasts = ['뚝딱이 → 텃밭 물주기', '뚝딱이 → 휴식']; let ty = 74;
+  for (const text of toasts) { const w = Math.min(ctx.measureText(text).width + pad * 2, VIEW_W * 0.27); panelRect(ctx, 'ui.chip', 4, ty, w, 22, chipColor); ctx.fillStyle = '#ede6dc'; ctx.fillText(text, 4 + pad, ty + 15); ty += 26; }
+  // 체력 바(왼쪽 아래, 패널 위) · 프롬프트(오른쪽 위, 버튼 아래)
   panelRect(ctx, 'ui.chip', 4, VIEW_H - (state.showPanel && state.scene === 'house' ? 148 : 30), 156, 22, chipColor);
   ctx.fillStyle = '#b3adb5'; ctx.fillText('체력', 10, VIEW_H - (state.showPanel && state.scene === 'house' ? 148 : 30) + 15);
   ctx.fillStyle = chipColor; ctx.fillRect(44, VIEW_H - (state.showPanel && state.scene === 'house' ? 148 : 30) + 8, 110, 6); ctx.fillStyle = color('drop_ok_color', '7fb2a6'); ctx.fillRect(44, VIEW_H - (state.showPanel && state.scene === 'house' ? 148 : 30) + 8, 80, 6);
   const prompt = 'E: 마당(으)로'; const pw = ctx.measureText(prompt).width + pad * 2;
-  panelRect(ctx, 'ui.chip', VIEW_W - 4 - pw, VIEW_H - (state.showPanel && state.scene === 'house' ? 148 : 30), pw, 22, chipColor); ctx.fillStyle = accent; ctx.fillText(prompt, VIEW_W - 4 - pw + pad, VIEW_H - (state.showPanel && state.scene === 'house' ? 148 : 30) + 15);
+  panelRect(ctx, 'ui.chip', VIEW_W - 4 - pw, 74, pw, 22, chipColor); ctx.fillStyle = accent; ctx.fillText(prompt, VIEW_W - 4 - pw + pad, 74 + 15);
   // 아침 배치 패널 (하숙집)
   if (state.showPanel && state.scene === 'house') {
     const top = VIEW_H - 122;

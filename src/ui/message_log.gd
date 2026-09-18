@@ -1,12 +1,13 @@
 class_name MessageLog
 extends VBoxContainer
-## 화면 왼쪽 아래 메시지 로그. 새 줄은 아래에 붙고, 일정 시간 뒤 사라진다. 줄 수 상한은 tuning.
+## 화면 왼쪽 위(시계 카드 아래) 메시지 로그. 새 줄은 아래에 붙고, 일정 시간 뒤 사라진다. 줄 수 상한은 tuning.
+## 왼쪽 아래에 두면 집 옆 마당 소품을 덮어 위로 올렸다 (2026-09-18).
 
 var _max_lines: int = 4
 var _fade_seconds: float = 4.0
 ## 한 줄의 최대 폭. 넘치면 줄바꿈 — 집 단면(x≈193) 위로 글자가 흘러가던 문제 (검증 에이전트 08_day2_morning)
 var _line_width: float = 180.0
-## 토스트 더미의 최대 높이. 넘치면 오래된 줄부터 지운다 — 위로 자라 시계 카드·안내 줄을 덮던 문제. main.gd 가 레이아웃 때 넣는다.
+## 토스트 더미의 최대 높이. 넘치면 오래된 줄부터 지운다 — 아래로 자라 마당 소품·지붕을 덮지 않도록. main.gd 가 레이아웃 때 넣는다.
 ## 값이 바뀌면 이미 쌓인 줄도 바로 다듬는다 (첫 아침 토스트는 레이아웃보다 먼저 온다 — 검증 에이전트 02_morning_plain)
 var max_height: float = INF:
 	set(value):

@@ -8,7 +8,8 @@ extends Control
 ## 상단 카드 줄의 실제 높이가 바뀔 때 (레이아웃 확정·안내 줄 표시/숨김). main.gd 가 카메라 오프셋을 다시 잡는다.
 signal bar_resized
 
-const HINT_WIDTH_RATIO := 0.6
+## 안내 줄 폭 = 집 단면 폭(4칸 = 40%). 더 넓으면 왼쪽 위 메시지 토스트와 겹친다
+const HINT_WIDTH_RATIO := 0.4
 const STAMINA_BAR_HEIGHT := 6.0
 const EXPEDITION_KIND := "expedition"
 
@@ -158,20 +159,20 @@ func _build_prompt() -> void:
 	# 상호작용 안내 알약: 오른쪽 아래
 	_prompt_panel = PanelContainer.new()
 	UiStyles.apply_chip(_prompt_panel)
-	_prompt_panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	_prompt_panel.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	_prompt_panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	_prompt_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_prompt_panel.grow_vertical = Control.GROW_DIRECTION_END
 	_prompt_panel.visible = false
 	add_child(_prompt_panel)
 	_prompt_label = Label.new()
 	_prompt_label.add_theme_color_override("font_color", UiStyles.color("ui_accent_color", "f2a65a"))
 	_prompt_panel.add_child(_prompt_label)
-	# 탐험지 조작 칩: 알약 위
+	# 탐험지 조작 칩: 알약 아래
 	_expedition_chip = PanelContainer.new()
 	UiStyles.apply_chip(_expedition_chip)
-	_expedition_chip.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_RIGHT)
+	_expedition_chip.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
 	_expedition_chip.grow_horizontal = Control.GROW_DIRECTION_BEGIN
-	_expedition_chip.grow_vertical = Control.GROW_DIRECTION_BEGIN
+	_expedition_chip.grow_vertical = Control.GROW_DIRECTION_END
 	_expedition_chip.visible = false
 	add_child(_expedition_chip)
 	_expedition_chip.add_child(UiStyles.dim(DataRegistry.text("hud_expedition_chip")))
@@ -225,24 +226,25 @@ func set_prompt(text: String) -> void:
 	_prompt_panel.visible = not text.is_empty()
 
 
-## 아래쪽 요소(체력 바·안내 알약·탐험 칩)를 배치 패널 위로 올린다 (main.gd 가 패널 높이를 잰 뒤 부른다).
-func set_prompt_bottom(bottom_px: float) -> void:
-	var inset := bottom_px + _margin
-	_prompt_panel.offset_bottom = -inset
-	_prompt_panel.offset_top = -inset - _prompt_panel.get_combined_minimum_size().y
+## 안내 알약·탐험 칩은 오른쪽 위(키 버튼 줄 아래)에, 체력 바는 배치 패널 위 왼쪽 아래에 둔다 (main.gd 가 카드 줄·패널 높이를 잰 뒤 부른다).
+## 오른쪽 아래에 두면 집 옆 마당 소품(prop.house_deco_right)을 덮는다.
+func layout_chips(top_px: float, bottom_px: float) -> void:
+	_prompt_panel.offset_top = top_px
+	_prompt_panel.offset_bottom = top_px + _prompt_panel.get_combined_minimum_size().y
 	_prompt_panel.offset_right = -_margin
-	var chip_bottom := inset + _prompt_panel.get_combined_minimum_size().y + _margin
-	_expedition_chip.offset_bottom = -chip_bottom
-	_expedition_chip.offset_top = -chip_bottom - _expedition_chip.get_combined_minimum_size().y
+	var chip_top := _prompt_panel.offset_bottom + _margin
+	_expedition_chip.offset_top = chip_top
+	_expedition_chip.offset_bottom = chip_top + _expedition_chip.get_combined_minimum_size().y
 	_expedition_chip.offset_right = -_margin
+	var inset := bottom_px + _margin
 	_stamina_panel.offset_left = _margin
 	_stamina_panel.offset_bottom = -inset
 	_stamina_panel.offset_top = -inset - _stamina_panel.get_combined_minimum_size().y
 
 
-## 왼쪽 아래 메시지 로그가 앉을 바닥 (체력 바 위).
-func log_bottom_inset(bottom_px: float) -> float:
-	return bottom_px + _margin * 2.0 + _stamina_panel.get_combined_minimum_size().y
+## 안내 알약의 화면 사각형 (검증용 — 마당 소품 위가 아닌 오른쪽 위에 있는지).
+func prompt_rect() -> Rect2:
+	return _prompt_panel.get_global_rect()
 
 
 ## 할 일 칩 문구 (검증용). 숨겨져 있으면 빈 문자열.

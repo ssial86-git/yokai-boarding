@@ -41,6 +41,16 @@ func _initialize() -> void:
 	_check("cards_match_residents", int(panel.call("card_count")) == (gs.get("residents") as Array).size(),
 		"카드 수 == 하숙생 수 (%d)" % (gs.get("residents") as Array).size())
 	await _shot("02_morning_plain")
+	# HUD 칩이 집 옆 마당 소품(바닥선 - 64px 위)을 덮지 않는다: 프롬프트는 오른쪽 위, 토스트는 왼쪽 위에서 아래로
+	var half_h := root.get_visible_rect().size.y / (2.0 * camera.zoom.y)
+	var ground_screen_y := (0.0 - camera.get_screen_center_position().y) * camera.zoom.y + half_h * camera.zoom.y
+	var props_top := ground_screen_y - 64.0
+	var prompt_rect: Rect2 = (main.get("hud") as Control).call("prompt_rect")
+	_check("prompt_above_props", prompt_rect.end.y <= props_top + 0.5,
+		"E 안내 알약이 마당 소품 위쪽에 있다 (bottom=%.0f / props_top=%.0f)" % [prompt_rect.end.y, props_top])
+	var log_rect: Rect2 = (main.get("message_log") as Control).get_global_rect()
+	_check("log_above_props", log_rect.end.y <= props_top + 0.5,
+		"메시지 토스트 더미가 마당 소품 위쪽에 있다 (bottom=%.0f / props_top=%.0f)" % [log_rect.end.y, props_top])
 	gs.set("money", 1000)
 	_check("build_guest_room", int(house.call("try_place_room", Vector2i(3, 0), "guest_room")) == 0, "객실 건설 OK")
 	_check("assign_kitchen", int(assign.call("try_assign", "y02_eoduki", Vector2i(2, 0))) == 0, "어둑이 → 주방 배치 OK")
