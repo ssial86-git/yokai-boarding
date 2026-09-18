@@ -42,6 +42,11 @@ python tools/art/import_free_packs.py
 # 단일 이미지 팔레트 양자화 (에셋팩·AI 산출물 → art_generated)
 python tools/art/palette_quantize.py <in.png> <out.png> [--tint RRGGBB:0.8]
 
+# OpenAI gpt-image-1 로 매니페스트 키 일괄 생성 (프롬프트 tools/art/ai_prompts.py, 원본 assets/art/ai_raw, 키는 사용자 환경변수 OPENAI_API_KEY)
+python tools/art/ai_batch.py --dry-run          # 장수·비용 확인
+python tools/art/ai_batch.py --kind sprite --keys char.y01_ttukttagi   # 일부만
+python tools/art/ai_batch.py --no-generate      # 원본 재후처리만 (비용 0)
+
 # AI 생성 이미지 → 규격 픽셀(상자 축소+양자화) → 매니페스트 키에 꽂기
 python tools/art/ai_to_pixel.py <img.png> --size 320x192 --key region.r_yard.sky
 

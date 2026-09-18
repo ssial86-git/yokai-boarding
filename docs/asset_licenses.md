@@ -19,3 +19,8 @@
 | `assets/art/packs/ansimuz_country_platform/` | 시골 플랫폼 타일·배경 | Luis Zuno (ansimuz), opengameart.org/content/country-side-platform-tiles | CC0 (동봉 license.txt) | 2026-09-04 | 아니오 | 풀 바닥 타일 |
 | `assets/art/packs/oga_slimes/` | 16×16 슬라임 애니메이션 6종 | stealthix, opengameart.org/content/16x16-animated-slimes | CC0 (페이지 표기) | 2026-09-04 | 아니오 | 소형 적 4종·늪어미 |
 | `assets/art_generated/packs/*.png` | 위 팩에서 조립·팔레트 양자화한 게임 규격 시트 | `tools/art/import_free_packs.py` 산출물 | 원본 CC0 → 파생물 프로젝트 소유 | 2026-09-04 | 아니오 | 재생성 가능. 수동 편집 금지. 정식 에셋으로 키 단위 교체 예정 |
+| `assets/art/concepts/*.png` | 컨셉 아트 4장 (요괴 시트·주방·저녁·집 단면) | 사용자가 ChatGPT(OpenAI)로 생성 | OpenAI 약관에 따라 사용자 소유 | 2026-09-18 | **AI 생성** | 스타일 레퍼런스. 인게임 직접 사용 안 함 |
+| `assets/art/ai_raw/*.webp` | AI 생성 원본 (캐릭터·방·배경·소품 115장) | `tools/art/ai_batch.py` → OpenAI gpt-image-1 (컨셉 레퍼런스 + 프롬프트 `tools/art/ai_prompts.py`) | OpenAI 약관에 따라 사용자 소유 | 2026-09-18 | **AI 생성** | 재현·후보정용 원본. 스토어 공개 시 AI 사용 명시 |
+| `assets/art_generated/ai/*.png` | 위 원본을 규격 축소·팔레트 양자화한 게임 시트 | `tools/art/ai_batch.py` 산출물 | 파생물 프로젝트 소유 | 2026-09-18 | **AI 생성** (파생) | 재생성 가능. 수동 편집 금지 |
+| `assets/art/illust/ai_*.png` | 도감·대화 일러스트 1024 (요괴 10·가택신/NPC 7) | `tools/art/ai_batch.py` → gpt-image-1 | OpenAI 약관에 따라 사용자 소유 | 2026-09-18 | **AI 생성** | 후보정 전 초안 |
+
