@@ -243,7 +243,7 @@ function sceneSlots() {
     const layout = String(tuning('start_layout_floor0', 'gate,guest_room,kitchen,empty_lot')).replace(/"/g, '').split(',').map(s => s.trim());
     const slots = layout.map(id => `room.${id}`);
     for (const y of d.csv.yokai.filter(y => y.join_mode === 'start' && y.in_slice === 'true')) slots.push(`char.${y.id}`);
-    slots.push('region.r_house.sky', 'region.r_house.far', 'region.r_house.ground', 'prop.house_roof', 'prop.house_pillar', 'prop.house_base');
+    slots.push('region.r_house.sky', 'region.r_house.far', 'region.r_house.ground', 'prop.house_roof', 'prop.house_pillar', 'prop.house_base', 'prop.house_deco_left', 'prop.house_deco_right');
     slots.push('char.player', 'ui.panel', 'ui.chip', 'ui.button');
     return [...new Set(slots)];
   }
@@ -352,6 +352,8 @@ function drawHouse(ctx) {
   const base = imgFor('prop.house_base'); if (base) for (let c = 0; c < cols; c++) ctx.drawImage(base, HOUSE_X0 + c * CELL_W, GROUND_SCREEN_Y);
   const pillar = imgFor('prop.house_pillar'); if (pillar) for (let f = 0; f < built; f++) for (let c = 0; c <= cols; c++) ctx.drawImage(pillar, HOUSE_X0 + c * CELL_W - pillar.naturalWidth / 2, GROUND_SCREEN_Y - (f + 1) * CELL_H);
   const roof = imgFor('prop.house_roof'); if (roof) for (let c = 0; c < cols; c++) ctx.drawImage(roof, HOUSE_X0 + c * CELL_W, GROUND_SCREEN_Y - built * CELL_H - roof.naturalHeight);
+  const decoL = imgFor('prop.house_deco_left'); if (decoL) ctx.drawImage(decoL, HOUSE_X0 - 12 - decoL.naturalWidth, GROUND_SCREEN_Y - decoL.naturalHeight);
+  const decoR = imgFor('prop.house_deco_right'); if (decoR) ctx.drawImage(decoR, HOUSE_X0 + cols * CELL_W + 12, GROUND_SCREEN_Y - decoR.naturalHeight);
   // 하숙생: 휴식처(첫 객실) 앞, 슬롯 간격 tuning
   const spacing = Number(tuning('yokai_slot_spacing_px', 16));
   const restCol = Math.max(0, layout.indexOf('guest_room'));

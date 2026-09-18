@@ -366,6 +366,26 @@ def build_props(rows: dict[str, dict[str, str]]) -> None:
     base = Image.new("RGBA", (64, 16), (0, 0, 0, 0))
     for c in range(4):
         base.alpha_composite(TT(97), (c * TILE, 0))
+    # 집 양옆 마당 소품 — 왼쪽 144x64: 큰 나무 2 + 작은 나무 + 울타리 / 오른쪽 144x64: 장독(항아리) 3 + 우물(물통) + 나무 + 팻말
+    left = Image.new("RGBA", (144, 64), (0, 0, 0, 0))
+    for x, top, bottom in ((0, 6, 18), (24, 7, 19), (56, 3, 15)):
+        left.alpha_composite(TT(top), (x, 32))
+        left.alpha_composite(TT(bottom), (x, 48))
+    left.alpha_composite(TT(28), (44, 48))
+    for c, t in enumerate((80, 81, 81, 82)):
+        left.alpha_composite(TT(t), (80 + c * TILE, 48))
+    left.alpha_composite(TT(29), (128, 48))
+    right = Image.new("RGBA", (144, 64), (0, 0, 0, 0))
+    for c, t in enumerate((106, 107, 106)):
+        right.alpha_composite(TT(t), (c * TILE, 48))
+    right.alpha_composite(TT(107), (8, 32))
+    right.alpha_composite(TT(131), (56, 48))
+    right.alpha_composite(TT(130), (72, 48))
+    right.alpha_composite(TT(83), (96, 48))
+    right.alpha_composite(TT(5), (120, 32))
+    right.alpha_composite(TT(17), (120, 48))
+    put("prop.house_deco_left", "prop_house_deco_left", [left])
+    put("prop.house_deco_right", "prop_house_deco_right", [right])
     put("prop.house_roof", "prop_house_roof", [roof])
     put("prop.house_pillar", "prop_house_pillar", [pillar])
     put("prop.house_base", "prop_house_base", [base])

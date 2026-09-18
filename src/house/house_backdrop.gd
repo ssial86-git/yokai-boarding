@@ -7,6 +7,10 @@ const REGION_ID := "r_house"
 const KEY_ROOF := "prop.house_roof"
 const KEY_PILLAR := "prop.house_pillar"
 const KEY_BASE := "prop.house_base"
+const KEY_DECO_LEFT := "prop.house_deco_left"
+const KEY_DECO_RIGHT := "prop.house_deco_right"
+## 집 벽과 마당 소품 사이 간격
+const DECO_GAP_PX := 12.0
 ## 카메라가 집 경계 밖(camera_bounds_margin_px + 뷰포트 절반)까지 보므로 뷰포트 너비만큼 양옆을 채운다
 const EDGE_FILL_PX := 640.0
 const SKY_HEIGHT := 400.0
@@ -46,6 +50,13 @@ func _draw() -> void:
 		while x < area.end.x:
 			draw_texture(tile, Vector2(x, -float(tile.get_height()) * 0.5))
 			x += float(tile.get_width())
+	# 마당 소품: 집 양옆, 발이 바닥선(y=0)
+	if ArtLibrary.has(KEY_DECO_LEFT):
+		var deco := ArtLibrary.texture(KEY_DECO_LEFT)
+		draw_texture(deco, Vector2(-DECO_GAP_PX - float(deco.get_width()), -float(deco.get_height())))
+	if ArtLibrary.has(KEY_DECO_RIGHT):
+		var deco := ArtLibrary.texture(KEY_DECO_RIGHT)
+		draw_texture(deco, Vector2(width + DECO_GAP_PX, -float(deco.get_height())))
 
 
 ## 집 뼈대. HouseView._draw 가 호출해 방 스프라이트 위에 그린다 — 기둥이 방 경계를, 지붕이 지어진 맨 위층을 덮는다.

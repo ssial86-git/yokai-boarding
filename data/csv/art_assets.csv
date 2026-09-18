@@ -106,6 +106,8 @@ prop.merchant,pixel,res://assets/art_generated/packs/prop_merchant.png,32,32,,1.
 prop.house_roof,pixel,res://assets/art_generated/packs/prop_house_roof.png,64,32,,1.0,false,
 prop.house_pillar,pixel,res://assets/art_generated/packs/prop_house_pillar.png,16,48,,1.0,false,
 prop.house_base,pixel,res://assets/art_generated/packs/prop_house_base.png,64,16,,1.0,false,
+prop.house_deco_left,pixel,res://assets/art_generated/packs/prop_house_deco_left.png,144,64,,1.0,false,
+prop.house_deco_right,pixel,res://assets/art_generated/packs/prop_house_deco_right.png,144,64,,1.0,false,
 ui.panel,ui,res://assets/art_generated/packs/ui_brown.png,0,0,,1.0,false,
 ui.chip,ui,res://assets/art_generated/packs/ui_grey.png,0,0,,1.0,false,
 ui.button,ui,res://assets/art_generated/packs/ui_tan.png,0,0,,1.0,false,

@@ -34,7 +34,7 @@ func test_manifest_rows_resolve_to_placeholders() -> void:
 
 func test_house_backdrop_keys_resolve() -> void:
 	# 하숙집 씬 배경 3레이어 + 뼈대 3키 (HouseBackdrop). 없으면 이전의 민 배경으로 조용히 폴백하지만, 충전 상태에선 있어야 한다
-	for key: String in ["region.r_house.sky", "region.r_house.far", "region.r_house.ground", HouseBackdrop.KEY_ROOF, HouseBackdrop.KEY_PILLAR, HouseBackdrop.KEY_BASE]:
+	for key: String in ["region.r_house.sky", "region.r_house.far", "region.r_house.ground", HouseBackdrop.KEY_ROOF, HouseBackdrop.KEY_PILLAR, HouseBackdrop.KEY_BASE, HouseBackdrop.KEY_DECO_LEFT, HouseBackdrop.KEY_DECO_RIGHT]:
 		assert_bool(ArtLibrary.has(key)).override_failure_message("키 없음: %s" % key).is_true()
 	assert_that(ArtLibrary.frame_size(HouseBackdrop.KEY_ROOF)).is_equal(Vector2i(64, 32))
 	assert_that(ArtLibrary.frame_size(HouseBackdrop.KEY_PILLAR)).is_equal(Vector2i(16, 48))

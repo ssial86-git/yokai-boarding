@@ -24,6 +24,8 @@ PROP_KEYS = [
     "prop.gather_point", "prop.farm_plot", "prop.door", "prop.water", "prop.merchant",
     # 하숙집 뼈대 (HouseBackdrop): 지붕 64x32 / 기둥 16x48 / 주춧돌 64x16
     "prop.house_roof", "prop.house_pillar", "prop.house_base",
+    # 집 양옆 마당 소품 (HouseBackdrop): 왼쪽 나무·울타리 / 오른쪽 장독대·우물·나무. 발이 바닥선
+    "prop.house_deco_left", "prop.house_deco_right",
 ]
 UI_KEYS = ["ui.panel", "ui.chip", "ui.button"]
 REGION_LAYERS = ["sky", "far", "ground"]
